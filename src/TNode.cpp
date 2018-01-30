@@ -50,4 +50,11 @@ TNode* TNode::GetParent(){
 void TNode::Draw(){
 	// -----------------------------------IMPORTANTE-------------------------------
 	// Aun no se hace nada aqui
+	m_entity->BeginDraw();	//m_entity != NULL?
+	int size = m_children.size();
+	for(int i=0; i<size; i++){
+		TNode* child = m_children[i];	// Pintamos cada uno de los hijos del nodo
+		child->Draw();
+	}
+	m_entity->EndDraw();	//m_entity != NULL?
 }

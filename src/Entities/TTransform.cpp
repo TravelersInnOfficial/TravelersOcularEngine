@@ -52,6 +52,11 @@ void TTransform::Rotate(float X, float Y, float Z, float W){
 	std::cout<<"Por hacer Rotate"<<std::endl;
 }
 
-void TTransform::BeginDraw(){}
+void TTransform::BeginDraw(){
+	// Apilar matriz actual
+	// Multiplicar la matriz de la transformacion a la matriz actual
+}
 
-void TTransform::EndDraw(){}						
+void TTransform::EndDraw(){
+	// Desapilar matriz y ponerla como actual
+}						
