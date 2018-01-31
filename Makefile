@@ -1,5 +1,5 @@
 ifeq ($(OS),Windows_NT)
-    Target				:= WizardsAndWarlocks.exe
+    Target				:= EngineTest.exe
     CXXFLAGS			:= -O3 -ffast-math -Wall -std=c++11 -m64
     CPPFLAGS        	:= -I./src/Includes -I/mingw64/include -I/mingw64/include/bullet
     LDFLAGS				:= -L/mingw64/lib
@@ -7,7 +7,7 @@ ifeq ($(OS),Windows_NT)
 	ICO 				:= assets/game-icon-res.rc
 	ICOOBJ				:= $(patsubst assets/%.rc,obj/%.o,$(ICO))
 else
-    Target				:= WizardsAndWarlocks
+    Target				:= EngineTest
     CXXFLAGS			:= -O3 -g -Wall -std=c++11
     CPPFLAGS        	:= -I/usr/include -I/usr/include/bullet -I./src/Includes
     LDFLAGS				:= -L./libs/Linux
