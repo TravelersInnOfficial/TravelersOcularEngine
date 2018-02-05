@@ -102,17 +102,7 @@ glm::mat4 TCamera::RecalculateProjectionMatrix(){
 }
 
 glm::mat4 TCamera::CalculatePerspectiveMatrix(){
-	glm::mat4 projectionMatrix = glm::mat4(1.0f);
-	
-	// Specifies the field of view angle (in degrees) in the y direction.
-	float fovy = 90;
-	
-	float w = m_right - m_left;
-	float h = m_top - m_bottom;
-	float aspect = w/h;
-
-	projectionMatrix = glm::perspective (fovy, aspect, m_near, m_far);
-	return(projectionMatrix);
+	return(glm::frustum(m_left, m_right, m_bottom, m_top, m_near, m_far));
 }
 
 glm::mat4 TCamera::CalculateOrthogonalMatrix(){
