@@ -31,12 +31,16 @@ void TTransform::Rotate(float X, float Y, float Z, float W){
 }
 
 void TTransform::BeginDraw(){
-	// Apilar matriz actual
 	// Multiplicar la matriz de la transformacion a la matriz actual
+	m_matrix = m_stack.top() * m_matrix;
+
+	// Apilar matriz actual
+	m_stack.push(m_matrix);
 }
 
 void TTransform::EndDraw(){
 	// Desapilar matriz y ponerla como actual
+	m_stack.pop();
 }
 
 void TTransform::PrintMatrix(){
