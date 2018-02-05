@@ -4,8 +4,6 @@ ifeq ($(OS),Windows_NT)
     CPPFLAGS        	:= -I./src/Includes -I/mingw64/include -I/mingw64/include/bullet
     LDFLAGS				:= -L/mingw64/lib
     LIBS 				:= -lopengl32 -lm -lIrrlicht -lBulletDynamics -lBulletCollision -lLinearMath -lRakNet -lfmod64 -lfmodstudio64
-	ICO 				:= assets/game-icon-res.rc
-	ICOOBJ				:= $(patsubst assets/%.rc,obj/%.o,$(ICO))
 else
     Target				:= EngineTest
     CXXFLAGS			:= -O3 -g -Wall -std=c++11
@@ -32,12 +30,12 @@ SOFTCLEAN			 = $(patsubst src/%.cpp,obj/%.o,$(GAMEOBJ))
 SOURCE_DIRS 		:= $(patsubst ./src/%,./obj/%,$(SOURCE_DIRS))
 
 #MAKE OPTIONS
-.PHONY: all clean cleanall ico
+.PHONY: all clean cleanall
 
-all: prepare ico $(OBJ)
+all: prepare $(OBJ)
 	$(info ==============================================)
 	$(info Linking executable $(Target)...)
-	@$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(OBJ) -o $(EXECUTABLE) $(LDFLAGS) $(LIBS) $(ICOOBJ)
+	@$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(OBJ) -o $(EXECUTABLE) $(LDFLAGS) $(LIBS)
 	$(info ==============================================)	
 	$(info Compile OK)
 
@@ -52,18 +50,9 @@ prepare:
 	@mkdir -p $(BinPath)
 	@mkdir -p $(SOURCE_DIRS)
 
-ico:
-    ifeq ($(OS),Windows_NT)
-		$(info ==============================================)
-		$(info Creating ico .o file)
-		$(info Compiling-> $(ICOOBJ))
-		$(info ==============================================)
-		$(shell windres $(ICO) -o $(ICOOBJ))
-    endif
-
 clean:
 	$(info ==============================================)
-	$(info Cleaning Objects (Not Engine ones), Binaries or ICO File... )
+	$(info Cleaning Objects (Not Engine ones), Binaries... )
 	$(info ==============================================)
 	@$(RM) $(SOFTCLEAN)
 	@$(RM) $(EXECUTABLE)
@@ -73,5 +62,4 @@ cleanall:
 	$(info Cleaning every Objects and Binaries... )
 	$(info ==============================================)
 	@$(RM) $(OBJ)
-	@$(RM) $(ICOOBJ)
 	@$(RM) $(EXECUTABLE)

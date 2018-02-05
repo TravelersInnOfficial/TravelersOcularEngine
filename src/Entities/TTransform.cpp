@@ -1,30 +1,16 @@
 #include "./TTransform.h"
 
 TTransform::TTransform(){
-	for(int i=0; i<4; i++){
-		for(int j=0; j<4; j++){
-			m_matrix[i][j] = 0;		// Creamos la matriz vacia, con todo 0
-		}
-	}
+	m_matrix = glm::mat4(1.0f);
 }
 
 TTransform::~TTransform(){}
 
 void TTransform::Identity(){
-	int value = 0;
-	for(int i=0; i<4; i++){
-		for(int j=0; j<4; j++){
-			if(i==j){
-				value = 1;			// En el caso de que la I y la J coincidan cargamos un 1	
-			}else{
-				value = 0;			// En caso contrario un 0
-			}
-			m_matrix[i][j] = value;	// Reseteamos la matriz dejando la matriz identidad
-		}
-	}
+	m_matrix = glm::mat4(1.0f);
 }
 
-void TTransform::Load(float matrix[4][4]){
+void TTransform::Load(glm::mat4 matrix){
 	for(int i=0; i<4; i++){
 		for(int j=0; j<4; j++){
 			m_matrix[i][j] = matrix[i][j];	// Cargamos el valor de la matriz pasado en la propia
@@ -33,23 +19,15 @@ void TTransform::Load(float matrix[4][4]){
 }
 
 void TTransform::Transpose(){
-	// ----------------------------------------------IMPORTANTE-----------------------
-	// Casi seguro que se puede hacer sin utilizar una copia al ser cuadrada
-	float copy[4][4];
-	for(int i=0; i<4; i++){
-		for(int j=0; j<4; j++){
-			copy[j][i] = m_matrix[j][i];	// Transponemos los valores de la matriz
-		}
-	}
-	Load(copy);
+	m_matrix = glm::transpose(m_matrix);
 }
 
 void TTransform::Translate(float X, float Y, float Z){
-	std::cout<<"Por hacer Translate"<<std::endl;
+	m_matrix = glm::translate(m_matrix, glm::vec3(X,Y,Z));
 }
 
 void TTransform::Rotate(float X, float Y, float Z, float W){
-	std::cout<<"Por hacer Rotate"<<std::endl;
+	m_matrix = glm::rotate(m_matrix, W, glm::vec3(X,Y,Z));
 }
 
 void TTransform::BeginDraw(){
@@ -59,4 +37,14 @@ void TTransform::BeginDraw(){
 
 void TTransform::EndDraw(){
 	// Desapilar matriz y ponerla como actual
-}						
+}
+
+void TTransform::PrintMatrix(){
+	for(int i= 0; i<4; i++)
+	{
+		for(int j= 0; j<4; j++)
+			std::cout<<m_matrix[i][j] << " ";
+
+		std::cout<<"\n";
+	}
+}

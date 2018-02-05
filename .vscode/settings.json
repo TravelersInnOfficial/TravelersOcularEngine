@@ -1,0 +1,14 @@
+{
+    "files.associations": {
+        "iostream": "cpp",
+        "limits": "cpp",
+        "system_error": "cpp",
+        "type_traits": "cpp",
+        "xstddef": "cpp",
+        "xtr1common": "cpp",
+        "istream": "cpp",
+        "optional": "cpp",
+        "ostream": "cpp",
+        "ratio": "cpp"
+    }
+}
