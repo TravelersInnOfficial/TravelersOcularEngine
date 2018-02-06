@@ -7,11 +7,11 @@
 
 class TCamera: public TEntity{
 public:
-	TCamera(bool m_perspective, float m_near, float m_far, float m_left, float m_right, float m_top, float m_bottom);
+	TCamera(bool perspective, float near, float far, float left, float right, float top, float bottom);
 	~TCamera();
 
-	void SetPerspectiva(float m_near, float m_far, float m_left, float m_right, float m_top, float m_bottom);
-	void SetParalela(float m_near, float m_far, float m_left, float m_right, float m_top, float m_bottom);
+	void SetPerspectiva(float near, float far, float left, float right, float top, float bottom);
+	void SetParalela(float near, float far, float left, float right, float top, float bottom);
 
 	void SetPerspectiva();
 	void SetParalela();

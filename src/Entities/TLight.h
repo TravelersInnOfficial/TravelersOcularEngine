@@ -2,13 +2,11 @@
 #define TLIGHT_H
 
 #include "./TEntity.h"
-
-// ----------------------------------------------IMPORTANTE-----------------------
-class TColor{};
+#include <TColor.h>
 
 class TLight: public TEntity{
 public:
-	TLight();
+	TLight(TColor intensity = TColor());
 	~TLight();
 
 	void 	SetIntensity(TColor intensity);	// Guarda el color que se le pasa por parametros

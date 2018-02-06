@@ -1,6 +1,8 @@
 #include "TLight.h"
 
-TLight::TLight(){}
+TLight::TLight(TColor intensity){
+	m_intensity = intensity;
+}
 
 TLight::~TLight(){}
 

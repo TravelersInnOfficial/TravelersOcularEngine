@@ -4,9 +4,9 @@
 # NEW/DELETE #################################################################################
 ############################################################################################*/
 
-TCamera::TCamera(bool m_perspective, float m_near, float m_far, float m_left, float m_right, float m_top, float m_bottom){
-	if(m_perspective) SetPerspectiva(m_near, m_far, m_left, m_right, m_top, m_bottom);
-	else SetParalela(m_near, m_far, m_left, m_right, m_top, m_bottom);
+TCamera::TCamera(bool perspective, float near, float far, float left, float right, float top, float bottom){
+	if(perspective) SetPerspectiva(near, far, left, right, top, bottom);
+	else SetParalela(near, far, left, right, top, bottom);
 }
 
 TCamera::~TCamera(){}
@@ -15,13 +15,13 @@ TCamera::~TCamera(){}
 # GETTERS/SETTERS ############################################################################
 ############################################################################################*/
 
-void TCamera::SetPerspectiva(float m_near, float m_far, float m_left, float m_right, float m_top, float m_bottom){
-	SetNear(m_near); SetFar(m_far); SetLeft(m_left); SetRight(m_right); SetTop(m_top); SetBottom(m_bottom);
+void TCamera::SetPerspectiva(float near, float far, float left, float right, float top, float bottom){
+	SetNear(near); SetFar(far); SetLeft(left); SetRight(right); SetTop(top); SetBottom(bottom);
 	SetPerspectiva();
 }
 
-void TCamera::SetParalela(float m_near, float m_far, float m_left, float m_right, float m_top, float m_bottom){
-	SetNear(m_near); SetFar(m_far); SetLeft(m_left); SetRight(m_right); SetTop(m_top); SetBottom(m_bottom);
+void TCamera::SetParalela(float near, float far, float left, float right, float top, float bottom){
+	SetNear(near); SetFar(far); SetLeft(left); SetRight(right); SetTop(top); SetBottom(bottom);
 	SetParalela();
 }
 
