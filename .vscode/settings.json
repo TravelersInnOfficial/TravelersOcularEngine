@@ -59,6 +59,8 @@
         "tuple": "cpp",
         "typeinfo": "cpp",
         "__config": "cpp",
-        "__nullptr": "cpp"
+        "__nullptr": "cpp",
+        "bitset": "cpp",
+        "deque": "cpp"
     }
 }

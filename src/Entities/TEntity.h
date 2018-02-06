@@ -12,15 +12,9 @@ public:
 
 protected:
 
-	static std::stack<glm::mat4> InitializeStack(){
-		static std::stack<glm::mat4> aux;
-		aux.push(glm::mat4(1.0f));
-		return aux;
-	};
-
+	static std::stack<glm::mat4> InitializeStack();
 	static std::stack<glm::mat4> m_stack;
 
 };
-
 
 #endif

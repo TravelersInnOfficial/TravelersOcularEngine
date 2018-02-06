@@ -113,6 +113,6 @@ glm::mat4 TCamera::CalculateOrthogonalMatrix(){
 # BEGIN/END DRAW #############################################################################
 ############################################################################################*/
 
-void TCamera::TCamera::BeginDraw(){}
+void TCamera::BeginDraw(){}
 
-void TCamera::TCamera::EndDraw(){}
+void TCamera::EndDraw(){}

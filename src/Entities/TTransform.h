@@ -2,8 +2,6 @@
 #define TTRANSFORM_H
 
 #include "./TEntity.h"
-//#include <glm/mat4x4.hpp> // glm::mat4
-//#include <glm/vec3.hpp> // glm::mat4
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
