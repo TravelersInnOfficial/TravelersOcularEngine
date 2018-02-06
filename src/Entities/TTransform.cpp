@@ -31,24 +31,24 @@ void TTransform::Rotate(float X, float Y, float Z, float W){
 }
 
 void TTransform::BeginDraw(){
-	// Multiplicar la matriz de la transformacion a la matriz actual
-	m_matrix = m_stack.top() * m_matrix;
-
-	// Apilar matriz actual
-	m_stack.push(m_matrix);
+	// Apilar la multiplicacion de la matriz de la transformacion y la matriz actual
+	m_stack.push(m_stack.top() * m_matrix);
+	//PrintMatrix(m_stack.top());
 }
 
 void TTransform::EndDraw(){
 	// Desapilar matriz y ponerla como actual
 	m_stack.pop();
+	//PrintMatrix(m_stack.top());
 }
 
-void TTransform::PrintMatrix(){
+void TTransform::PrintMatrix(glm::mat4 mat){
 	for(int i= 0; i<4; i++)
 	{
 		for(int j= 0; j<4; j++)
-			std::cout<<m_matrix[i][j] << " ";
+			std::cout<<mat[i][j] << " ";
 
 		std::cout<<"\n";
 	}
+	std::cout<<"\n";
 }

@@ -15,13 +15,12 @@ public:
 	void 	Identity();								// Cargar la matriz identidad
 	void 	Load(glm::mat4 newMatrix);				// Cargar la matriz pasada por parametros
 	void 	Transpose();							// Transponer la matriz
-	//...
-	void 	Translate(float X, float Y, float Z);	// Mover la matriz...
-	void 	Rotate(float, float, float, float);		// Rotar la matriz..
+	void 	Translate(float X, float Y, float Z);	// Mover la matriz
+	void 	Rotate(float, float, float, float);		// Rotar la matriz
 
 	void 	BeginDraw();							// Empezar a pintar la transformacion
 	void 	EndDraw();								// Acabar de pintar la transformacion
-	void 	PrintMatrix();
+	void 	PrintMatrix(glm::mat4);
 
 private:
 	glm::mat4 m_matrix;								// Matriz de transformacion de 4x4
