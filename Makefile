@@ -25,8 +25,6 @@ SRC 	   			:= $(wildcard $(SourcePath)/*.cpp)
 OBJ					:= $(patsubst src/%.cpp,obj/%.o,$(SourcePath))
 
 # Assuming four folders to ignore
-GAMEOBJ				 = $(shell find src \( -path "src/PhysicsEngine" -o -path "src/SoundEngine" -o -path "src/GraphicEngine" -o -path "src/NetworkEngine" \) -prune -o -name "*.cpp" -print)
-SOFTCLEAN			 = $(patsubst src/%.cpp,obj/%.o,$(GAMEOBJ))
 SOURCE_DIRS 		:= $(patsubst ./src/%,./obj/%,$(SOURCE_DIRS))
 
 #MAKE OPTIONS
@@ -51,13 +49,6 @@ prepare:
 	@mkdir -p $(SOURCE_DIRS)
 
 clean:
-	$(info ==============================================)
-	$(info Cleaning Objects (Not Engine ones), Binaries... )
-	$(info ==============================================)
-	@$(RM) $(SOFTCLEAN)
-	@$(RM) $(EXECUTABLE)
-
-cleanall:
 	$(info ==============================================)
 	$(info Cleaning every Objects and Binaries... )
 	$(info ==============================================)
