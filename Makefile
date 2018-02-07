@@ -9,7 +9,7 @@ else
     CXXFLAGS			:= -O3 -g -Wall -std=c++11
     CPPFLAGS        	:= -I/usr/include -I/usr/include/bullet -I./src/Includes -I./src/Common
     LDFLAGS				:= -L./libs/Linux
-    LIBS 				:= -lIrrlicht -lXxf86vm -lXext -lX11 -lXcursor -lGL 
+    LIBS 				:= -lIrrlicht -lXxf86vm -lXext -lX11 -lXcursor -lGL -lsfml-window -lsfml-graphics -lsfml-system
 endif
 
 BinPath 			:= ./bin

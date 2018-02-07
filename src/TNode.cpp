@@ -17,19 +17,18 @@ TNode::TNode(TNode* parent, TEntity* entity){
 // Ninguno se crea directamente detro de la clase
 TNode::~TNode(){
 	int size = m_children.size();
-	//std::cout<<"N hijos de "<< this << ": " << size << "\n";
+	//std::cout<<"Empezamos a borrar "<< this << " | Numero de hijos: " << size << "\n";
 	
 	for(int i=0; i<size; i++){
 		TNode* node = m_children[i];
 		//std::cout<<"Borrando Hijo "<< i << ": " << node << "\n";
 		if(node != NULL){
-			m_children.erase(m_children.begin());
 			delete node;
 			//std::cout<<"Hijo "<< i << ": " << node << " Borrado\n";
 			node = NULL;
 		}
-		//std::cout<<"Vamos a borrar al hijo " << i+1 << " nodo actual: " << node << "\n";
 	}
+	m_children.clear();
 
 	if(m_entity != NULL){
 		delete m_entity;

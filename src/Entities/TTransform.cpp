@@ -22,12 +22,20 @@ void TTransform::Transpose(){
 	m_matrix = glm::transpose(m_matrix);
 }
 
+void TTransform::Inverse(){
+	m_matrix = glm::inverse(m_matrix);
+}
+
 void TTransform::Translate(float X, float Y, float Z){
 	m_matrix = glm::translate(m_matrix, glm::vec3(X,Y,Z));
 }
 
 void TTransform::Rotate(float X, float Y, float Z, float W){
 	m_matrix = glm::rotate(m_matrix, W, glm::vec3(X,Y,Z));
+}
+
+void TTransform::Scale(float X, float Y, float Z){
+	m_matrix = glm::scale(m_matrix, glm::vec3(X,Y,Z));
 }
 
 void TTransform::BeginDraw(){
@@ -43,11 +51,19 @@ void TTransform::EndDraw(){
 }
 
 void TTransform::PrintMatrix(glm::mat4 mat){
-	for(int i= 0; i<4; i++)
-	{
-		for(int j= 0; j<4; j++)
-			std::cout<<mat[i][j] << " ";
+	for(int i= 0; i<4; i++){
+		for(int j= 0; j<4; j++){
+			std::cout<<mat[i][j] << "  "; 
+		}
+		std::cout<<"\n";
+	}
+	std::cout<<"\n";
+}
 
+void TTransform::PrintMatrix(){
+	for(int i= 0; i<4; i++){
+		for(int j= 0; j<4; j++)
+			std::cout<<m_matrix[i][j] << "  ";
 		std::cout<<"\n";
 	}
 	std::cout<<"\n";
