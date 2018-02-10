@@ -14,6 +14,8 @@
 #include <fstream>
 #include <stdexcept>
 
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 GLuint LoadShader(const char *shaderFile, GLenum type)
 {
@@ -101,37 +103,36 @@ int main()
 	glewExperimental = GL_TRUE;
 	glewInit();
 
-	// Create Vertex Array Object
+	// Creamos el Array de vertices del objeto
     GLuint vao;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 	
-	// Asignamos los vertices
-	GLuint vbo;
-
+	// Definimos los vertices del objeto
 	float vertices[] = {
-		 0.0f,  0.5f, 0.5f,  // Vertex 1 (X, Y)
-		-0.5f, -0.5f, 0.1f,  // Vertex 3 (X, Y)
-		 0.5f, -0.5f, 1.0f,  // Vertex 2 (X, Y)
-		 1.0f,  0.5f, 0.1f   // Vertex 4 (X, Y)
+		 0.0f,  0.5f, 0.5f,  // Vertice 0 (X, Y)
+		-0.5f, -0.5f, 0.1f,  // Vertice 1 (X, Y)
+		 0.5f, -0.5f, 1.0f,  // Vertice 2 (X, Y)
+		 1.0f,  0.5f, 0.1f   // Vertice 3 (X, Y)
 	};
 
-	GLuint elements[] = {
-		0,1,2,
-		0,2,3
-	};
-
+	// Definimos el buffer de vertices del objeto
+	GLuint vbo;
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	
+	// Definimos los elementos (los vertices en este caso), que vamos a usar
+	GLuint elements[] = {
+		0,1,2,		// Vertices 0, 1, 2
+		0,2,3		// Vertices 0, 2, 3
+	};
+
+	// Definimos el buffer de elementos del objeto
 	GLuint ebo;
 	glGenBuffers(1, &ebo);
-
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
-
-
 
 	// Cargamos los shaders
 	GLuint vs = LoadShader("../src/Shaders/VShader.glsl", GL_VERTEX_SHADER);
@@ -152,6 +153,11 @@ int main()
 	glVertexAttribPointer(colorAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glVertexAttribPointer(colorAttrib, 1, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)(2*sizeof(float)));
 	glEnableVertexAttribArray(colorAttrib);
+
+	glm::mat4 transfMat = glm::mat4(1.0f);
+	transfMat = glm::rotate(transfMat, glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	GLint transUniform = glGetUniformLocation(program, "transform");
+	glUniformMatrix4fv(transUniform, 1, GL_FALSE, glm::value_ptr(transfMat));
 
 	/*
 	GLint posAttrib = glGetAttribLocation(program, "VertexPosition");

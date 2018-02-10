@@ -4,6 +4,8 @@ TMesh::TMesh(){}
 
 TMesh::~TMesh(){}
 
-void TMesh::BeginDraw(){}
+void TMesh::BeginDraw(){
+    // Dibujar malla
+}
 
 void TMesh::EndDraw(){}

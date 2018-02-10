@@ -5,7 +5,7 @@
 ############################################################################################*/
 
 TColor::TColor(glm::vec4 rgbaData){
-	this->m_rgba = rgbaData;
+	m_rgba = rgbaData;
 }
 
 TColor::~TColor(){}
@@ -16,36 +16,36 @@ TColor::~TColor(){}
 
 void TColor::SetRGBA(glm::vec4 newVal){
 	CapValues(newVal);
-	this->m_rgba = newVal;
+	m_rgba = newVal;
 }
 
 void TColor::SetRGB(glm::vec3 newVal){
 	CapValues(newVal);
-	this->m_rgba = glm::vec4(newVal.x, newVal.y, newVal.z, this->m_rgba.w);
+	m_rgba = glm::vec4(newVal.x, newVal.y, newVal.z, m_rgba.w);
 }
 
 void TColor::SetR(float newVal){
 	CapValues(newVal);
-	this->m_rgba.x = newVal;
+	m_rgba.x = newVal;
 }
 
 void TColor::SetG(float newVal){
 	CapValues(newVal);
-	this->m_rgba.y = newVal;
+	m_rgba.y = newVal;
 }
 
 void TColor::SetB(float newVal){
 	CapValues(newVal);
-	this->m_rgba.z = newVal;
+	m_rgba.z = newVal;
 }
 
 void TColor::SetA(float newVal){
 	CapValues(newVal);
-	this->m_rgba.w = newVal;
+	m_rgba.w = newVal;
 }
 
 glm::vec4 TColor::GetRGBA(){
-	return(this->m_rgba);
+	return(m_rgba);
 }
 
 glm::vec3 TColor::GetRGB(){
@@ -53,19 +53,19 @@ glm::vec3 TColor::GetRGB(){
 }
 
 float TColor::GetR(){
-	return(this->m_rgba.x);
+	return(m_rgba.x);
 }
 
 float TColor::GetG(){
-	return(this->m_rgba.y);
+	return(m_rgba.y);
 }
 
 float TColor::GetB(){
-	return(this->m_rgba.z);
+	return(m_rgba.z);
 }
 
 float TColor::GetA(){
-	return(this->m_rgba.w);
+	return(m_rgba.w);
 }
 
 /*############################################################################################

@@ -36,55 +36,55 @@ void TCamera::SetParalela(){
 }
 
 void TCamera::SetNear(float newVal){
-	this->m_near = newVal;
+	m_near = newVal;
 }
 
 float TCamera::GetNear(){
-	return(this->m_near);
+	return(m_near);
 }
 
 void TCamera::SetFar(float newVal){
-	this->m_far = newVal;
+	m_far = newVal;
 }
 
 float TCamera::GetFar(){
-	return(this->m_far);
+	return(m_far);
 }
 
 void TCamera::SetLeft(float newVal){
-	this->m_left = newVal;
+	m_left = newVal;
 }
 
 float TCamera::GetLeft(){
-	return(this->m_left);
+	return(m_left);
 }
 
 void TCamera::SetRight(float newVal){
-	this->m_right = newVal;
+	m_right = newVal;
 }
 
 float TCamera::GetRight(){
-	return(this->m_right);
+	return(m_right);
 }
 
 void TCamera::SetTop(float newVal){
-	this->m_top = newVal;
+	m_top = newVal;
 }
 
 float TCamera::GetTop(){
-	return(this->m_top);
+	return(m_top);
 }
 
 void TCamera::SetBottom(float newVal){
-	this->m_bottom = newVal;
+	m_bottom = newVal;
 }
 
 float TCamera::GetBottom(){
-	return(this->m_bottom);
+	return(m_bottom);
 }
 
 glm::mat4 TCamera::GetProjectionMatrix(){
-	return(this->m_projectionMatrix);
+	return(m_projectionMatrix);
 }
 
 /*############################################################################################
@@ -94,10 +94,10 @@ glm::mat4 TCamera::GetProjectionMatrix(){
 glm::mat4 TCamera::RecalculateProjectionMatrix(){
 	glm::mat4 projectionMatrix = glm::mat4(1.0f);
 
-	if(this->m_perspective) projectionMatrix = CalculatePerspectiveMatrix();
+	if(m_perspective) projectionMatrix = CalculatePerspectiveMatrix();
 	else projectionMatrix = CalculateOrthogonalMatrix();
 
-	this->m_projectionMatrix = projectionMatrix;
+	m_projectionMatrix = projectionMatrix;
 	return(projectionMatrix);
 }
 
