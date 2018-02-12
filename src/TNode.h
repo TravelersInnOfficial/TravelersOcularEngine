@@ -7,6 +7,7 @@
 
 class TNode{
 public:
+	TNode();
 	TNode(TEntity* entity);
 	TNode(TNode* parent, TEntity* entity);
 	~TNode();

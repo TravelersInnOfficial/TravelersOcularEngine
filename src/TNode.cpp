@@ -1,6 +1,11 @@
 #include "./TNode.h"
 #include <iostream>
 
+TNode::TNode(){
+	m_parent = NULL;
+	m_entity = NULL;
+}
+
 TNode::TNode(TEntity* entity){
 	m_parent = NULL;
 	m_entity = entity;
