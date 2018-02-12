@@ -17,6 +17,7 @@ public:
 
 private:
 	TColor m_intensity;
+	
 };
 
 #endif
