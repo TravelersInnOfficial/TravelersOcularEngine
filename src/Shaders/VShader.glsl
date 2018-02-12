@@ -1,14 +1,13 @@
-#version 150 core
+#version 130
 
-    in vec2 position;
-    in float vertexColor;
+in vec2 position;
+in float vertexColor;
 
-    uniform mat4 transform;
+uniform mat4 transform;
 
-    out float color;
+out float color;
 
-    void main()
-    {
-        color = vertexColor;
-        gl_Position = transform * vec4(position, 0.0, 1.0);
-    }
+void main(){
+    color = vertexColor;
+    gl_Position = transform * vec4(position, 0.0, 1.0);
+}

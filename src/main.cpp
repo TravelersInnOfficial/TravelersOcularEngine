@@ -9,7 +9,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
 
-//#include <iostream>
 #include <iostream>
 #include <fstream>
 #include <stdexcept>
@@ -17,13 +16,11 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-GLuint LoadShader(const char *shaderFile, GLenum type)
-{
+GLuint LoadShader(const char *shaderFile, GLenum type){
     std::ifstream in(shaderFile);
-    std::string src= "";
-    std::string line="";
-    while(std::getline(in,line))
-    	src += line + "\n";
+    std::string src = "";
+    std::string line = "";
+    while(std::getline(in,line)) src += line + "\n";
     std::cout << src;
     
     const char* source = src.c_str();
@@ -32,16 +29,14 @@ GLuint LoadShader(const char *shaderFile, GLenum type)
     glShaderSource(shaderID,1,&source,NULL);
     glCompileShader(shaderID);
     
-	if(!shaderID)
-    {
+	if(!shaderID){
         std::cerr << "Could not compile the shader";
         return 0;
     }
 
     GLint status;
 	glGetShaderiv(shaderID, GL_COMPILE_STATUS, &status);
-	if (status == GL_FALSE)
-	{
+	if (status == GL_FALSE){
 		std::string msg("Compile failure in shader:\n");
 
         GLint infoLogLength;
@@ -58,14 +53,13 @@ GLuint LoadShader(const char *shaderFile, GLenum type)
     return shaderID;
 }
 
-GLuint CreateProgram(GLuint vertexShader, GLuint fragmentShader)
-{	
+GLuint CreateProgram(GLuint vertexShader, GLuint fragmentShader){	
 	// Creamos el programa y le añadimos los shaders
 	GLuint shaderProgram = glCreateProgram();
 	glAttachShader(shaderProgram, vertexShader);
 	glAttachShader(shaderProgram, fragmentShader);
 
-	// no es necesario porque no se escribe en mas de un buffer
+	// No es necesario porque no se escribe en mas de un buffer
 	//glBindFragDataLocation(shaderProgram, 0, "outColor");
 
 	// Se linkea el programa a los shaders
@@ -95,8 +89,7 @@ GLuint CreateProgram(GLuint vertexShader, GLuint fragmentShader)
 	return shaderProgram;
 }
 
-int main() 
-{
+int main(){
     sf::Window App(sf::VideoMode(600, 600, 32), "SFML OpenGL Test", sf::Style::Close);
 
 	// Iniciamos glew
@@ -184,13 +177,10 @@ int main()
 
 	glClearDepth(1.f);
 
-    while (App.isOpen())
-    {
+    while (App.isOpen()){
         sf::Event event;
-		while (App.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                App.close();
+		while (App.pollEvent(event)){
+            if (event.type == sf::Event::Closed) App.close();
             if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape)){
                 App.close();
 			}
