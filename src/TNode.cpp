@@ -95,12 +95,14 @@ TNode* TNode::GetParent(){
 
 void TNode::Draw(){
 	//std::cout<<"Apilamos NODO: "<<this<<"\n";
-	m_entity->BeginDraw();	//m_entity != NULL?
+	if(m_entity != NULL) m_entity->BeginDraw();
+	
 	int size = m_children.size();
 	for(int i=0; i<size; i++){
 		TNode* child = m_children[i];	// Pintamos cada uno de los hijos del nodo
 		child->Draw();
 	}
+	
+	if(m_entity != NULL) m_entity->EndDraw();
 	//std::cout<<"Desapilamos NODO: "<<this<<"\n";
-	m_entity->EndDraw();	//m_entity != NULL?
 }
