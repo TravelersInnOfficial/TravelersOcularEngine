@@ -16,6 +16,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "TResourceManager.h"
+#include "Resources/TResourceMesh.h"
 
 GLuint LoadShader(const char *shaderFile, GLenum type){
     std::ifstream in(shaderFile);
@@ -287,6 +288,7 @@ int main(){
     glDeleteVertexArrays(1, &vao);
 
     App.close();
+	TResourceMesh* newModel = new TResourceMesh("assets/models/cube.obj");
 
     return EXIT_SUCCESS;
 }

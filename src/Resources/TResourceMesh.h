@@ -23,6 +23,15 @@ private:
     GLfloat* m_normTriangles;
     GLfloat* m_texTriangles;
 
+    //static CVertexBufferObject vboModelData;
+    //static UINT uiVAO;
+    //static vector <CTexture> tTextures;
+
+    //vector<int> iMeshStartIndices;
+    //vector<int> iMeshSizes;
+    //vector<int> iMaterialIndices;
+
+    //int iNumMaterials;
 };
 
 #endif
