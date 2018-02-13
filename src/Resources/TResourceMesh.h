@@ -6,16 +6,14 @@
 class TResourceMesh: public TResource {
 
 public:
-    TResourceMesh();
+    TResourceMesh(std::string name);
     ~TResourceMesh();
 
     /*********************************************
 	 * @brief Loads the mesh passed
 	 * @param std::string path of the resource
 	 *********************************************/
-    void loadMesh(std::string);
-
-protected:
+    bool LoadFile();
 
 private:
     GLfloat* m_vertex;
@@ -25,7 +23,6 @@ private:
     GLfloat* m_normTriangles;
     GLfloat* m_texTriangles;
 
-    std::string path;
 };
 
 #endif

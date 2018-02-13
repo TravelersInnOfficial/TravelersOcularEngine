@@ -34,10 +34,26 @@ TResource* TResourceManager::FindResource(std::string name){
 	return output;
 }
 
-TResource* TResourceManager::GetResourceTexture(std::string name){ }
-TResource* TResourceManager::GetResourceMesh(std::string name){ }
-TResource* TResourceManager::GetResourceMaterial(std::string name){ }
-TResource* TResourceManager::GetResourceShader(std::string name){ }
+TResourceTexture* TResourceManager::GetResourceTexture(std::string name){ 
+	TResourceTexture* toRet = NULL;
+	return toRet;
+}
+
+TResourceMesh* TResourceManager::GetResourceMesh(std::string name){ 
+	TResourceMesh* toRet = NULL;
+	return toRet;
+}
+
+TResourceMaterial* TResourceManager::GetResourceMaterial(std::string name){ 
+	TResourceMaterial* toRet = NULL;
+	return toRet;
+}
+
+TResourceShader* TResourceManager::GetResourceShader(std::string name){ 
+	TResourceShader* toRet = NULL;
+	return toRet;
+}
+
 
 std::string TResourceManager::TreatName(std::string newName) {
 

@@ -1,7 +1,11 @@
 #ifndef TRESOURCEMANAGER_H
 #define TRESOURCEMANAGER_H
 
-#include "./Resources/TResource.h"
+#include "Resources/TResource.h"
+#include "Resources/TResourceTexture.h"
+#include "Resources/TResourceMesh.h"
+#include "Resources/TResourceShader.h"
+#include "Resources/TResourceMaterial.h"
 
 #include <iostream>
 #include <vector>
@@ -21,10 +25,10 @@ public:
 	static TResourceManager* GetInstance();	//Singleton class
 
 	//****************** Getters ******************
-	TResource* GetResourceTexture(std::string);
-	TResource* GetResourceMesh(std::string);
-	TResource* GetResourceMaterial(std::string);
-	TResource* GetResourceShader(std::string);
+	TResourceTexture*	GetResourceTexture	(std::string name);
+	TResourceMesh*		GetResourceMesh		(std::string name);
+	TResourceMaterial*	GetResourceMaterial	(std::string name);
+	TResourceShader*	GetResourceShader	(std::string name);
 	//*********************************************
 
 private:
