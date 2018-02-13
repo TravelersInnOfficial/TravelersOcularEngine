@@ -4,38 +4,37 @@ static TResourceManager* instance = NULL;
 
 TResourceManager* TResourceManager::GetInstance() {
 	if (instance == NULL) instance = new TResourceManager();
-	
 	return instance;
 }
 
 TResourceManager::TResourceManager(){}
 
+/*********************************************
+ * @brief Destructor
+ *********************************************/
 TResourceManager::~TResourceManager(){
 	std::map<std::string, TResource*>::iterator it = m_resources.begin();
 
 	for(; it != m_resources.end(); it++){
 		TResource* tResource = it->second;
-		if (tResource != NULL) delete tResource;
+		if (tResource != NULL) delete tResource;	//Delete the resource in the map
 	}
 
-	m_resources.clear();
+	m_resources.clear();		//Clear the map
 }
 
+/*********************************************
+ * @brief Find the resource of the string passed
+ * @param std::string path of the resource
+ *********************************************/
 TResource* TResourceManager::FindResource(std::string name){
 	TResource* output = NULL;
-
-	//Search the resource
-	std::map<std::string, TResource*>::iterator it = m_resources.find(name);
-
+	std::map<std::string, TResource*>::iterator it = m_resources.find(name); //Search the resource
 	if (it != m_resources.end()) output = it->second;
-
 	return output;
 }
 
-TResource* TResourceManager::GetResourceTexture(std::string name){
-
-}
-
+TResource* TResourceManager::GetResourceTexture(std::string name){ }
 TResource* TResourceManager::GetResourceMesh(std::string name){ }
 TResource* TResourceManager::GetResourceMaterial(std::string name){ }
 TResource* TResourceManager::GetResourceShader(std::string name){ }
@@ -56,14 +55,13 @@ std::string TResourceManager::TreatName(std::string newName) {
 
 		//Erase the current position and next (./)
 		if (erase) newName.erase(pos,2); 
-	}
-	while (pos != -1); //While string has characters
+	} while (pos != -1); // While we find "./"
 
-	if (newName.at(0) == '/') newName.erase(0,1); //If there's a slash at the begining, erase it
-
-	bool finish = false;
+	 //If there's a slash at the begining, erase it
+	if (newName.at(0) == '/') newName.erase(0,1);
 
 	//Erase the slashes at the end
+	bool finish = false;
 	do {
 		finish = false;
 		if (newName.at(newName.length()-1) == '/') {
