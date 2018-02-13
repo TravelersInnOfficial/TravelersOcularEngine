@@ -2,6 +2,7 @@
 #define TRESOURCE_H
 
 #include <iostream>
+#include <GL/glew.h>
 
 class TResource{
 public:

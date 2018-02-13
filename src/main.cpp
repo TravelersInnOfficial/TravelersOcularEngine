@@ -15,6 +15,7 @@
 
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "TResourceManager.h"
 
 GLuint LoadShader(const char *shaderFile, GLenum type){
     std::ifstream in(shaderFile);
@@ -284,7 +285,7 @@ int main(){
     //glDeleteBuffers(1, &vbo);
 	//glDeleteBuffers(1, &vbo);
     glDeleteVertexArrays(1, &vao);
-    
+
     App.close();
 
     return EXIT_SUCCESS;
