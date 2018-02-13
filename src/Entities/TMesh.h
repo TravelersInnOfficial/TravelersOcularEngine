@@ -13,7 +13,7 @@ public:
 	void BeginDraw();
 	void EndDraw();
 private:
-	//TRecuersoMalla* m_malla
+	//TResource* m_mesh
 };
 
 #endif

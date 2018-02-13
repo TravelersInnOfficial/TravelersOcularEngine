@@ -5,20 +5,34 @@
 
 #include <iostream>
 #include <vector>
-
-// -----------------------------------IMPORTANTE-------------------------------
-// Singleton? 
+#include <map>
 
 class TResourceManager{
 public:
-	TResourceManager();
+	
 	~TResourceManager();
+	
+	static TResourceManager* GetInstance();	//Singleton class
 
 	TResource* FindResource(std::string);
-	TResource* GetResource(std::string);
+
+	//****************** Getters ******************
+	TResource* GetResourceTexture(std::string);
+	TResource* GetResourceMesh(std::string);
+	TResource* GetResourceMaterial(std::string);
+	TResource* GetResourceShader(std::string);
+	//*********************************************
+
+	/********************************************
+	 * @brief  Modifies the name of the resource
+	 * @param  std::string newName for the resource
+	 ********************************************/
+	std::string TreatName(std::string newName);
 
 private:
-	std::vector<TResource*> m_resources;
+	TResourceManager();
+	std::map<std::string, TResource*> m_resources;
+	
 };
 
 #endif

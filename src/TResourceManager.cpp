@@ -1,42 +1,76 @@
 #include "TResourceManager.h"
 
+static TResourceManager* instance = NULL;
+
+TResourceManager* TResourceManager::GetInstance() {
+	if (instance == NULL) instance = new TResourceManager();
+	
+	return instance;
+}
+
 TResourceManager::TResourceManager(){}
 
 TResourceManager::~TResourceManager(){
-	int size = m_resources.size();
-	for(int i=0; i<size; i++){
-		TResource* resource = m_resources[i];
-		delete resource;
+	std::map<std::string, TResource*>::iterator it = m_resources.begin();
+
+	for(; it != m_resources.end(); it++){
+		TResource* tResource = it->second;
+		if (tResource != NULL) delete tResource;
 	}
+
 	m_resources.clear();
 }
 
 TResource* TResourceManager::FindResource(std::string name){
 	TResource* output = NULL;
 
-	int size = m_resources.size();
-	for(int i=0; i<size; i++){
-		TResource* resource = m_resources[i];
-		std::string resourceName = resource->GetName();
-		if(name.compare(resourceName) == 0){
-			output = m_resources[i];
-			break;
-		}
-	}
+	//Search the resource
+	std::map<std::string, TResource*>::iterator it = m_resources.find(name);
+
+	if (it != m_resources.end()) output = it->second;
 
 	return output;
 }
 
-TResource* TResourceManager::GetResource(std::string name){
-	TResource* resource = FindResource(name);
-	if(resource == NULL){
-		// -----------------------------------IMPORTANTE-------------------------------
-		// Habria que saber que tipo de dato es, ya sea con diferenes metodo para cada
-		// tipo de dato o con un segundo valor que lo especifique. OPTO POR PRIMERO
-		
-		//resource = new TResource();
-		//resource->LoadFile(name);
-		m_resources.push_back(resource);
+TResource* TResourceManager::GetResourceTexture(std::string name){
+
+}
+
+TResource* TResourceManager::GetResourceMesh(std::string name){ }
+TResource* TResourceManager::GetResourceMaterial(std::string name){ }
+TResource* TResourceManager::GetResourceShader(std::string name){ }
+
+std::string TResourceManager::TreatName(std::string newName) {
+
+	std::string toSearch = "./";	//Pattern to delete
+	int pos = 0;
+
+	do {
+		pos = newName.find(toSearch, pos);
+		bool erase = true;
+
+		if (pos == -1) erase = false; 								//If not found
+		else if (pos == 0) erase = true;							//If first position 
+		else if (newName.at(pos-1) != '.') erase = true;			//If hasnt dot behind
+		else if (newName.at(pos-1) == '.') {erase = false; pos++;}	//If has dot behind
+
+		//Erase the current position and next (./)
+		if (erase) newName.erase(pos,2); 
 	}
-	return resource;
+	while (pos != -1); //While string has characters
+
+	if (newName.at(0) == '/') newName.erase(0,1); //If there's a slash at the begining, erase it
+
+	bool finish = false;
+
+	//Erase the slashes at the end
+	do {
+		finish = false;
+		if (newName.at(newName.length()-1) == '/') {
+			newName.erase(newName.length()-1,1);
+			finish = true;
+		} 
+	} while (finish);
+
+	return newName;
 }
