@@ -1,11 +1,11 @@
 #version 130
 
 in vec2 position;
-in float vertexColor;
+in vec3 vertexColor;
 
 uniform mat4 transform;
 
-out float color;
+out vec3 color;
 
 void main(){
     color = vertexColor;

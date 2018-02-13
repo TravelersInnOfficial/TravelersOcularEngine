@@ -61,6 +61,9 @@ GLuint CreateProgram(GLuint vertexShader, GLuint fragmentShader){
 
 	// No es necesario porque no se escribe en mas de un buffer
 	//glBindFragDataLocation(shaderProgram, 0, "outColor");
+	// insert location binding code here
+	//glBindAttribLocation(shaderProgram, 0, "position");
+	//glBindAttribLocation(shaderProgram, 1, "vertexColor");
 
 	// Se linkea el programa a los shaders
 	glLinkProgram(shaderProgram);
@@ -89,135 +92,7 @@ GLuint CreateProgram(GLuint vertexShader, GLuint fragmentShader){
 	return shaderProgram;
 }
 
-int main(){
-    sf::Window App(sf::VideoMode(600, 600, 32), "SFML OpenGL Test", sf::Style::Close);
-
-	// Iniciamos glew
-	glewExperimental = GL_TRUE;
-	glewInit();
-
-	// Creamos el Array de vertices del objeto
-    GLuint vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-	
-	// Definimos los vertices del objeto
-	float vertices[] = {
-		 0.0f,  0.5f, 0.5f,  // Vertice 0 (X, Y)
-		-0.5f, -0.5f, 0.1f,  // Vertice 1 (X, Y)
-		 0.5f, -0.5f, 1.0f,  // Vertice 2 (X, Y)
-		 1.0f,  0.5f, 0.1f   // Vertice 3 (X, Y)
-	};
-
-	// Definimos el buffer de vertices del objeto
-	GLuint vbo;
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	
-	// Definimos los elementos (los vertices en este caso), que vamos a usar
-	GLuint elements[] = {
-		0,1,2,		// Vertices 0, 1, 2
-		0,2,3		// Vertices 0, 2, 3
-	};
-
-	// Definimos el buffer de elementos del objeto
-	GLuint ebo;
-	glGenBuffers(1, &ebo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
-
-	// Cargamos los shaders
-	GLuint vs = LoadShader("../src/Shaders/VShader.glsl", GL_VERTEX_SHADER);
-	GLuint fs = LoadShader("../src/Shaders/FShader.glsl", GL_FRAGMENT_SHADER);
-	
-	// Creamos el programa y lo usamos
-	GLuint program = CreateProgram(vs, fs);
-	
-	// Empezamos a usar los shaders en el programa
-	glUseProgram(program);
-
-	GLint posAttrib = glGetAttribLocation(program, "position");
-	//glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
-	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 3*sizeof(float), 0);
-	glEnableVertexAttribArray(posAttrib);
-
-	GLint colorAttrib = glGetAttribLocation(program, "vertexColor");
-	glVertexAttribPointer(colorAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glVertexAttribPointer(colorAttrib, 1, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)(2*sizeof(float)));
-	glEnableVertexAttribArray(colorAttrib);
-
-	glm::mat4 transfMat = glm::mat4(1.0f);
-	transfMat = glm::rotate(transfMat, glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	GLint transUniform = glGetUniformLocation(program, "transform");
-	glUniformMatrix4fv(transUniform, 1, GL_FALSE, glm::value_ptr(transfMat));
-
-	/*
-	GLint posAttrib = glGetAttribLocation(program, "VertexPosition");
-	GLint normalAttrib = glGetAttribLocation(program, "VertexNormal");
-	GLint textAttrib = glGetAttribLocation(program, "TextureCoords");
-	
-	glVertexAttribPointer(posAttrib,    4, GL_FLOAT, GL_FALSE, 0, 0);
-	glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glVertexAttribPointer(textAttrib,   2, GL_FLOAT, GL_FALSE, 0, 0);
-
-	glEnableVertexAttribArray(posAttrib);
-	glEnableVertexAttribArray(normalAttrib);
-	glEnableVertexAttribArray(textAttrib);
-	*/
-	
-	/*
-	GLdouble h = 0.0f;
-    GLdouble v = 0.0f;
-    GLdouble l = 0.0f;
-	*/
-
-	// Activamos el z buffer
-	glEnable(GL_DEPTH_TEST);
-
-	glClearDepth(1.f);
-
-    while (App.isOpen()){
-        sf::Event event;
-		while (App.pollEvent(event)){
-            if (event.type == sf::Event::Closed) App.close();
-            if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape)){
-                App.close();
-			}
-        }
-
-        glClearColor(0, 0, 0, 0);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-		/*
-        glLoadIdentity();
-        glRotated(l,0.0f,0.0f,0.2f);
-        glRotated(h,0.2f,0.0f,0.0f);
-        glRotated(v,0.0f,0.2f,0.0f);
-		*/
-
-		//drawCube();
-		//glDrawArrays(GL_TRIANGLES, 0, 3);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        //glFlush();
-
-        App.display();       
-    }
-
-	glDeleteProgram(program);
-    glDeleteShader(fs);
-    glDeleteShader(vs);
-
-    glDeleteBuffers(1, &vbo);
-    glDeleteVertexArrays(1, &vao);
-    
-    App.close();
-
-    return EXIT_SUCCESS;
-}
-
-
-/*
+TNode* InitializeTree(){
 	// MAIN MENU
 	TTransform* aux = new TTransform();
 	TNode* parent = new TNode(aux);
@@ -248,4 +123,141 @@ int main(){
 	std::cout<<"mesh1 : "<< mesh1 << " CREADO | Hijo de  NODE3: " << mesh1->GetParent() << "\n";
 
 	std::cout<<"############################################################\n";
-*/
+
+	return parent;
+}
+
+	/// Definimos los vertices del objeto
+	std::vector<float> vertices= {
+		 0.0f,  0.5f,  1.0f, 0.0f, 0.0f,  // Vertice 0 (X, Y)
+		-0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  // Vertice 1 (X, Y)
+		 0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  // Vertice 2 (X, Y)
+		 -1.0f, 0.5f,  1.0f, 1.0f, 0.0f   // Vertice 3 (X, Y)
+	};
+
+	// Definimos los elementos (los vertices en este caso), que vamos a usar
+	std::vector<GLuint> elements= {
+		0,1,2,		// Vertices 0, 1, 2
+		0,1,3		// Vertices 0, 2, 3
+	};
+
+
+void addVertices(){
+	// Definimos los vertices del objeto
+	std::vector<float> auxvertices= {
+		0.0f,  0.5f, 1.0f, 1.0f, 1.0f,  // Vertice 0 (X, Y)
+		0.5f, -0.5f, 1.0f, 1.0f, 1.0f,	// Vertice 1 (X, Y)
+		1.0f,  0.5f, 1.0f, 1.0f, 1.0f	// Vertice 2 (X, Y)
+	};
+
+	std::copy(begin(auxvertices), end(auxvertices), std::back_inserter(vertices));
+
+	// Definimos el buffer de vertices del objeto
+	/*GLuint vbo2;
+	glGenBuffers(1, &vbo2);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo2);*/
+	//glBufferData(GL_ARRAY_BUFFER, auxvertices.size() * sizeof(float), &auxvertices[0], GL_STATIC_DRAW);
+	
+	// Definimos los elementos (los vertices en este caso), que vamos a usar
+	std::vector<GLuint> auxelements= {
+		0,1,3		// Vertices 0, 1, 2
+	};
+
+	std::copy(begin(auxvertices), end(auxvertices), std::back_inserter(vertices));	
+
+	// Definimos el buffer de elementos del objeto
+	/*GLuint ebo2;
+	glGenBuffers(1, &ebo2);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo2);*/
+	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, auxelements.size() * sizeof(float), &auxelements[0], GL_STATIC_DRAW);
+
+	std::cout << "###########################################################\n";
+	std::cout << "Dibujamos los nuevos vertices\n";
+}
+
+int main(){
+    sf::Window App(sf::VideoMode(600, 600, 32), "SFML OpenGL Test", sf::Style::Close);
+
+	/// Iniciamos glew
+	glewExperimental = GL_TRUE;
+	glewInit();
+	
+	glEnable( GL_DEPTH_TEST ); 		// enable depth-testing
+	glDepthFunc( GL_LESS );		 	// depth-testing interprets a smaller value as "closer"
+
+	/// Creamos el Array de vertices del objeto
+    GLuint vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
+	// Generamos el buffer de vertices del objeto
+	GLuint vbo;
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
+
+	// Generamos el buffer de elementos del objeto
+	GLuint ebo;
+	glGenBuffers(1, &ebo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(GLuint), &elements[0], GL_STATIC_DRAW);
+
+	/// Cargamos los shaders
+	GLuint vs = LoadShader("../src/Shaders/VShader.glsl", GL_VERTEX_SHADER);
+	GLuint fs = LoadShader("../src/Shaders/FShader.glsl", GL_FRAGMENT_SHADER);
+	
+	// Creamos el programa y lo usamos
+	GLuint program = CreateProgram(vs, fs);
+
+	// Empezamos a usar los shaders en el programa
+	glUseProgram(program);
+
+	// Obtenemos los atributos del shader
+	// posicion
+	GLint posAttrib = glGetAttribLocation(program, "position");
+	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), 0);
+	glEnableVertexAttribArray(posAttrib);
+
+	// color
+	GLint colorAttrib = glGetAttribLocation(program, "vertexColor");
+	glVertexAttribPointer(colorAttrib, 3, GL_FLOAT, GL_FALSE, 5*sizeof(float), (void*)(2*sizeof(float)));
+	glEnableVertexAttribArray(colorAttrib);
+
+	// enviamos al uniform del shader la transformacion
+	glm::mat4 transfMat = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	GLint viewUniform = glGetUniformLocation(program, "transform");
+	glUniformMatrix4fv(viewUniform, 1, GL_FALSE, glm::value_ptr(transfMat));
+	
+	/// Bucle principal
+	while (App.isOpen()){
+        sf::Event event;
+		while (App.pollEvent(event)){
+            if (event.type == sf::Event::Closed) App.close();
+            if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape)){
+                App.close();
+			}
+			if ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::Space)){
+                addVertices();
+				//rotateModel(viewUniform);
+			}
+        }
+
+        glClearColor(0.1, 0.1, 0.1, 0.1);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		//glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        App.display();       
+    }
+
+	glDeleteProgram(program);
+    glDeleteShader(fs);
+    glDeleteShader(vs);
+
+    glDeleteBuffers(1, &vbo);
+    glDeleteVertexArrays(1, &vao);
+    
+    App.close();
+
+    return EXIT_SUCCESS;
+}

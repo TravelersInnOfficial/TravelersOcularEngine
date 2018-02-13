@@ -1,3 +1,4 @@
+#version 130
 // VERTEX SHADER LIGHTING MAPS
 layout (location = 0) in vec4 VertexPosition;  // VERTICE EN COORDENADAS LOCALES
 layout (location = 1) in vec3 VertexNormal;    // NORMAL EL COORDENADAS LOCALES
