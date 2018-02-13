@@ -54,7 +54,7 @@ GLuint LoadShader(const char *shaderFile, GLenum type){
     return shaderID;
 }
 
-GLuint CreateProgram(GLuint vertexShader, GLuint fragmentShader){	
+GLuint CreateProgram(GLuint vertexShader, GLuint fragmentShader){
 	// Creamos el programa y le añadimos los shaders
 	GLuint shaderProgram = glCreateProgram();
 	glAttachShader(shaderProgram, vertexShader);
@@ -128,56 +128,94 @@ TNode* InitializeTree(){
 	return parent;
 }
 
-	/// Definimos los vertices del objeto
-	std::vector<float> vertices= {
-		 0.0f,  0.5f,  1.0f, 0.0f, 0.0f,  // Vertice 0 (X, Y)
-		-0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  // Vertice 1 (X, Y)
-		 0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  // Vertice 2 (X, Y)
-		 -1.0f, 0.5f,  1.0f, 1.0f, 0.0f   // Vertice 3 (X, Y)
-	};
+GLuint program = 0;
 
-	// Definimos los elementos (los vertices en este caso), que vamos a usar
-	std::vector<GLuint> elements= {
-		0,1,2,		// Vertices 0, 1, 2
-		0,1,3		// Vertices 0, 2, 3
-	};
+/// Definimos los vertices del objeto
+std::vector<float> vertices {
+	 0.0f,  0.5f,  1.0f, 0.0f, 0.0f,  // Vertice 0 (X, Y)
+	-0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  // Vertice 1 (X, Y)
+	 0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  // Vertice 2 (X, Y)
+	-1.0f,  0.5f,  1.0f, 1.0f, 0.0f   // Vertice 3 (X, Y)
+};
 
+// Definimos los elementos (los vertices en este caso), que vamos a usar
+std::vector<GLuint> elements {
+	0,1,2,		// Vertices 0, 1, 2
+	0,1,3		// Vertices 0, 2, 3
+};
+
+GLuint buffers[3];
+
+void printData(bool bol){
+	if (bol){
+		std::cout << "Vertices:";
+		for (int i= 0; i<vertices.size(); i++){
+			if(i%5 == 0)
+				std::cout << "\n";
+
+			std::cout << vertices[i] <<" ";
+		}
+		std::cout << "\n";
+	}
+	else{
+		std::cout << "Elements:";
+		for (int i= 0; i<elements.size(); i++){
+			if(i%5 == 0)
+				std::cout << "\n";
+
+			std::cout << elements[i] <<" ";
+		}
+		std::cout << "\n";
+	}
+}
+
+void sendAtributes2Shader(GLuint prog){
+	// posicion
+	GLint posAttrib = glGetAttribLocation(prog, "position");
+	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), 0);
+	glEnableVertexAttribArray(posAttrib);
+
+	// color
+	GLint colorAttrib = glGetAttribLocation(prog, "vertexColor");
+	glVertexAttribPointer(colorAttrib, 3, GL_FLOAT, GL_FALSE, 5*sizeof(float), (void*)(2*sizeof(float)));
+	glEnableVertexAttribArray(colorAttrib);
+
+	// enviamos al uniform del shader la transformacion
+	//glm::mat4 transfMat = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	glm::mat4 transfMat = glm::mat4(1.0f);
+	GLint viewUniform = glGetUniformLocation(prog, "transform");
+	glUniformMatrix4fv(viewUniform, 1, GL_FALSE, glm::value_ptr(transfMat));
+}
 
 void addVertices(){
 	// Definimos los vertices del objeto
-	std::vector<float> auxvertices= {
-		0.0f,  0.5f, 1.0f, 1.0f, 1.0f,  // Vertice 0 (X, Y)
-		0.5f, -0.5f, 1.0f, 1.0f, 1.0f,	// Vertice 1 (X, Y)
-		1.0f,  0.5f, 1.0f, 1.0f, 1.0f	// Vertice 2 (X, Y)
+	std::vector<float> auxvertices{
+		1.0f,  0.5f, 1.0f, 1.0f, 0.0f	// Vertice 2 (X, Y)
 	};
-
 	std::copy(begin(auxvertices), end(auxvertices), std::back_inserter(vertices));
 
-	// Definimos el buffer de vertices del objeto
-	/*GLuint vbo2;
-	glGenBuffers(1, &vbo2);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo2);*/
-	//glBufferData(GL_ARRAY_BUFFER, auxvertices.size() * sizeof(float), &auxvertices[0], GL_STATIC_DRAW);
-	
 	// Definimos los elementos (los vertices en este caso), que vamos a usar
-	std::vector<GLuint> auxelements= {
-		0,1,3		// Vertices 0, 1, 2
+	std::vector<GLuint> auxelements {
+		0,2,4		// Vertices 0, 1, 2
 	};
+	std::copy(begin(auxelements), end(auxelements), std::back_inserter(elements));
 
-	std::copy(begin(auxvertices), end(auxvertices), std::back_inserter(vertices));	
-
-	// Definimos el buffer de elementos del objeto
-	/*GLuint ebo2;
-	glGenBuffers(1, &ebo2);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo2);*/
-	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, auxelements.size() * sizeof(float), &auxelements[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[1]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(GLuint), &elements[0], GL_STATIC_DRAW);
 
 	std::cout << "###########################################################\n";
 	std::cout << "Dibujamos los nuevos vertices\n";
+
+	printData(true);
+	printData(false);
 }
 
-int main(){
+int main(){			
     sf::Window App(sf::VideoMode(600, 600, 32), "SFML OpenGL Test", sf::Style::Close);
+
+	printData(true);
 
 	/// Iniciamos glew
 	glewExperimental = GL_TRUE;
@@ -192,15 +230,15 @@ int main(){
     glBindVertexArray(vao);
 
 	// Generamos el buffer de vertices del objeto
-	GLuint vbo;
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glGenBuffers(2, buffers);
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
 
 	// Generamos el buffer de elementos del objeto
-	GLuint ebo;
-	glGenBuffers(1, &ebo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	//GLuint ebo;
+	//glGenBuffers(1, &ebo);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[1]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(GLuint), &elements[0], GL_STATIC_DRAW);
 
 	/// Cargamos los shaders
@@ -208,26 +246,14 @@ int main(){
 	GLuint fs = LoadShader("../src/Shaders/FShader.glsl", GL_FRAGMENT_SHADER);
 	
 	// Creamos el programa y lo usamos
-	GLuint program = CreateProgram(vs, fs);
+	program = CreateProgram(vs, fs);
 
 	// Empezamos a usar los shaders en el programa
 	glUseProgram(program);
 
-	// Obtenemos los atributos del shader
-	// posicion
-	GLint posAttrib = glGetAttribLocation(program, "position");
-	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), 0);
-	glEnableVertexAttribArray(posAttrib);
-
-	// color
-	GLint colorAttrib = glGetAttribLocation(program, "vertexColor");
-	glVertexAttribPointer(colorAttrib, 3, GL_FLOAT, GL_FALSE, 5*sizeof(float), (void*)(2*sizeof(float)));
-	glEnableVertexAttribArray(colorAttrib);
-
-	// enviamos al uniform del shader la transformacion
-	glm::mat4 transfMat = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	GLint viewUniform = glGetUniformLocation(program, "transform");
-	glUniformMatrix4fv(viewUniform, 1, GL_FALSE, glm::value_ptr(transfMat));
+	/// Obtenemos los atributos del shader
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+	sendAtributes2Shader(program);
 	
 	/// Bucle principal
 	while (App.isOpen()){
@@ -247,7 +273,7 @@ int main(){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//glDrawArrays(GL_TRIANGLES, 0, 3);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, elements.size(), GL_UNSIGNED_INT, 0);
         App.display();       
     }
 
@@ -255,7 +281,9 @@ int main(){
     glDeleteShader(fs);
     glDeleteShader(vs);
 
-    glDeleteBuffers(1, &vbo);
+    glDeleteBuffers(3, buffers);
+    //glDeleteBuffers(1, &vbo);
+	//glDeleteBuffers(1, &vbo);
     glDeleteVertexArrays(1, &vao);
 
     App.close();
