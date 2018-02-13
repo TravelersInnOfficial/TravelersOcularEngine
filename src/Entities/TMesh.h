@@ -13,6 +13,7 @@ public:
 	void BeginDraw();
 	void EndDraw();
 private:
+	float vertices[];
 	//TRecuersoMalla* m_malla
 };
 
