@@ -189,12 +189,23 @@ void sendAtributes2Shader(GLuint prog){
 
 void addVertices(){
 	// Definimos los vertices del objeto
-	std::vector<float> auxvertices{
+	/*std::vector<float> auxvertices{
 		1.0f,  0.5f, 1.0f, 1.0f, 0.0f	// Vertice 2 (X, Y)
 	};
-	std::copy(begin(auxvertices), end(auxvertices), std::back_inserter(vertices));
+	std::copy(begin(auxvertices), end(auxvertices), std::back_inserter(vertices));*/
 
-	// Definimos los elementos (los vertices en este caso), que vamos a usar
+	std::vector<float> vertices2{
+		 1.0f,  0.5f,  0.0f, 1.0f, 0.0f,  // Vertice 0 (X, Y)
+		 0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  // Vertice 1 (X, Y)
+		 1.5f, -0.5f,  0.0f, 1.0f, 0.0f,  // Vertice 2 (X, Y)
+		 0.0f,  0.5f,  0.0f, 1.0f, 0.0f   // Vertice 3 (X, Y)
+	};
+
+	// Definimos el buffer de vertices del objeto
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
+	glBufferData(GL_ARRAY_BUFFER, vertices2.size() * sizeof(float), &vertices2[0], GL_STATIC_DRAW);
+
+	/*// Definimos los elementos (los vertices en este caso), que vamos a usar
 	std::vector<GLuint> auxelements {
 		0,2,4		// Vertices 0, 1, 2
 	};
@@ -203,7 +214,7 @@ void addVertices(){
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[1]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(GLuint), &elements[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(GLuint), &elements[0], GL_STATIC_DRAW);*/
 
 	std::cout << "###########################################################\n";
 	std::cout << "Dibujamos los nuevos vertices\n";
@@ -212,7 +223,16 @@ void addVertices(){
 	printData(false);
 }
 
-int main(){			
+void updateProgram(){
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+	sendAtributes2Shader(program);
+	glDrawElements(GL_TRIANGLES, elements.size(), GL_UNSIGNED_INT, 0);	
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
+	sendAtributes2Shader(program);
+	glDrawElements(GL_TRIANGLES, elements.size(), GL_UNSIGNED_INT, 0);	
+}
+
+int main(){
     sf::Window App(sf::VideoMode(600, 600, 32), "SFML OpenGL Test", sf::Style::Close);
 
 	printData(true);
@@ -230,9 +250,13 @@ int main(){
     glBindVertexArray(vao);
 
 	// Generamos el buffer de vertices del objeto
-	glGenBuffers(2, buffers);
+	glGenBuffers(3, buffers);
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), NULL, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
 
 	// Generamos el buffer de elementos del objeto
 	//GLuint ebo;
@@ -273,7 +297,7 @@ int main(){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//glDrawArrays(GL_TRIANGLES, 0, 3);
-		glDrawElements(GL_TRIANGLES, elements.size(), GL_UNSIGNED_INT, 0);
+		updateProgram();
         App.display();       
     }
 
@@ -282,8 +306,6 @@ int main(){
     glDeleteShader(vs);
 
     glDeleteBuffers(3, buffers);
-    //glDeleteBuffers(1, &vbo);
-	//glDeleteBuffers(1, &vbo);
     glDeleteVertexArrays(1, &vao);
 
     App.close();
