@@ -13,7 +13,9 @@ public:
 	void BeginDraw();
 	void EndDraw();
 private:
-	//TResource* m_mesh
+
+	float vertices[];
+	//TRecuersoMalla* m_malla
 };
 
 #endif

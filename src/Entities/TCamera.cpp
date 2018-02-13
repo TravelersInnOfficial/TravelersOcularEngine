@@ -16,12 +16,16 @@ TCamera::~TCamera(){}
 ############################################################################################*/
 
 void TCamera::SetPerspectiva(float near, float far, float left, float right, float top, float bottom){
-	SetNear(near); SetFar(far); SetLeft(left); SetRight(right); SetTop(top); SetBottom(bottom);
+	SetNear(near); SetFar(far); 
+	SetLeft(left); SetRight(right); 
+	SetTop(top); SetBottom(bottom);
 	SetPerspectiva();
 }
 
 void TCamera::SetParalela(float near, float far, float left, float right, float top, float bottom){
-	SetNear(near); SetFar(far); SetLeft(left); SetRight(right); SetTop(top); SetBottom(bottom);
+	SetNear(near); SetFar(far); 
+	SetLeft(left); SetRight(right); 
+	SetTop(top); SetBottom(bottom);
 	SetParalela();
 }
 
