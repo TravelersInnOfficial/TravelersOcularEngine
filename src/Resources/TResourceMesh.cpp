@@ -5,7 +5,13 @@ TResourceMesh::TResourceMesh(std::string name){
 	LoadFile();
 }
 
-TResourceMesh::~TResourceMesh(){}
+TResourceMesh::TResourceMesh(){
+
+}
+
+TResourceMesh::~TResourceMesh(){
+
+}
 
 bool TResourceMesh::LoadFile(){
 
@@ -42,11 +48,11 @@ bool TResourceMesh::LoadFile(){
 		int iMeshFaces = mesh->mNumFaces;	//Number of faces of the current mesh
 
 		//Iterate faces
-		for (int j; j < iMeshFaces; j++) {
+		for (int j = 0; j < iMeshFaces; j++) {
 			const aiFace& face = mesh->mFaces[j];
 
 			//Iterate vertex faces (3 for every face)
-			for(int k; k < 3; k++) {
+			for(int k = 0; k < 3; k++) {
 				aiVector3D vertex = mesh->mVertices[face.mIndices[k]];			//Store the vertex
 				aiVector3D uv	  = mesh->mTextureCoords[0][face.mIndices[k]];	//Store the uv coords
 				aiVector3D normal;								
@@ -62,5 +68,10 @@ bool TResourceMesh::LoadFile(){
 			}
 		}
 	}
+	return false;
+}
+
+bool TResourceMesh::LoadFile(std::string name){
+	SetName(name);
 	return false;
 }

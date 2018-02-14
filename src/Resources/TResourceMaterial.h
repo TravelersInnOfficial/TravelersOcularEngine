@@ -6,14 +6,16 @@
 class TResourceMaterial: public TResource {
 
 public:
+    TResourceMaterial();
     TResourceMaterial(std::string name);
     ~TResourceMaterial();
-
+    
     /*********************************************
 	 * @brief Loads the mesh passed
 	 * @param std::string path of the resource
 	 *********************************************/
     bool LoadFile();
+    bool LoadFile(std::string name);
 
 private:
 
