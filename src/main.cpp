@@ -3,7 +3,6 @@
 #include "Entities/TEntity.h"
 #include "Entities/TTransform.h"
 #include "Entities/TMesh.h"
-#include "TResourceManager.h"
 #include "Resources/Program.h"
 #include <map>
 
@@ -16,6 +15,9 @@
 #include <iostream>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+
+#include "TResourceManager.h"
+#include "Resources/TResourceMesh.h"
 
 TNode* InitializeTree(){
 	// MAIN MENU
@@ -230,6 +232,7 @@ int main(){
     glDeleteVertexArrays(1, &vao);
 
     App.close();
+	TResourceMesh* newModel = new TResourceMesh("../assets/models/cube.obj");
 
     return EXIT_SUCCESS;
 }

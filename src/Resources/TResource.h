@@ -4,6 +4,11 @@
 #include <iostream>
 #include <GL/glew.h>
 
+//Headers to load models
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 class TResource{
 public:
 	TResource();
