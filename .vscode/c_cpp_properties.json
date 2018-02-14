@@ -30,7 +30,9 @@
                 "/usr/local/include",
                 "${workspaceRoot}",
                 "/usr/include/c++/7.2.1",
-                "/usr/include/c++/7.2.1/x86_64-pc-linux-gnu"
+                "/usr/include/c++/7.2.1/x86_64-pc-linux-gnu",
+                "${workspaceRoot}/src/Common",
+                "/usr/include/linux"
             ],
             "defines": [],
             "intelliSenseMode": "clang-x64",
@@ -64,7 +66,7 @@
                     "${workspaceRoot}",
                     "C:/msys64/mingw64/include",
                     "C:/msys64/mingw64/include/c++/7.2.0",
-                    "C:/msys64/mingw64/include/c++/7.2.0/x86_64-w64-mingw32"                    
+                    "C:/msys64/mingw64/include/c++/7.2.0/x86_64-w64-mingw32"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""

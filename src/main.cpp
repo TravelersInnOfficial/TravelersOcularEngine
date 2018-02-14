@@ -3,95 +3,19 @@
 #include "Entities/TEntity.h"
 #include "Entities/TTransform.h"
 #include "Entities/TMesh.h"
+#include "TResourceManager.h"
+#include "Resources/Program.h"
+#include <map>
 
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <SFML/Graphics.hpp>
-#include <SFML/OpenGL.hpp>
+// Uncomment if visual studio code doesnt detect function
+//#include <SFML/OpenGL.hpp>
 
 #include <iostream>
-#include <fstream>
-#include <stdexcept>
-
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "TResourceManager.h"
-
-GLuint LoadShader(const char *shaderFile, GLenum type){
-    std::ifstream in(shaderFile);
-    std::string src = "";
-    std::string line = "";
-    while(std::getline(in,line)) src += line + "\n";
-    std::cout << src;
-    
-    const char* source = src.c_str();
-	//GLint compiled;
-    GLuint shaderID = glCreateShader(type);
-    glShaderSource(shaderID,1,&source,NULL);
-    glCompileShader(shaderID);
-    
-	if(!shaderID){
-        std::cerr << "Could not compile the shader";
-        return 0;
-    }
-
-    GLint status;
-	glGetShaderiv(shaderID, GL_COMPILE_STATUS, &status);
-	if (status == GL_FALSE){
-		std::string msg("Compile failure in shader:\n");
-
-        GLint infoLogLength;
-        glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
-        char* strInfoLog = new char[infoLogLength + 1];
-        glGetShaderInfoLog(shaderID, infoLogLength, NULL, strInfoLog);
-        msg += strInfoLog;
-        delete[] strInfoLog;
-
-        glDeleteShader(shaderID); shaderID = 0;
-        throw std::runtime_error(msg);
-	}
-
-    return shaderID;
-}
-
-GLuint CreateProgram(GLuint vertexShader, GLuint fragmentShader){
-	// Creamos el programa y le añadimos los shaders
-	GLuint shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-
-	// No es necesario porque no se escribe en mas de un buffer
-	//glBindFragDataLocation(shaderProgram, 0, "outColor");
-	// insert location binding code here
-	//glBindAttribLocation(shaderProgram, 0, "position");
-	//glBindAttribLocation(shaderProgram, 1, "vertexColor");
-
-	// Se linkea el programa a los shaders
-	glLinkProgram(shaderProgram);
-
-	// Liberamos los shaders una vez unidos
-	glDetachShader(shaderProgram, vertexShader);
-	glDetachShader(shaderProgram, fragmentShader);
-
-	// SE COMPRUEBA SI LINKEA BIEN
-    GLint status;
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &status);
-    if (status == GL_FALSE) {
-        std::string msg("Program linking failure: ");
-
-        GLint infoLogLength;
-        glGetProgramiv(shaderProgram, GL_INFO_LOG_LENGTH, &infoLogLength);
-        char* strInfoLog = new char[infoLogLength + 1];
-        glGetProgramInfoLog(shaderProgram, infoLogLength, NULL, strInfoLog);
-        msg += strInfoLog;
-        delete[] strInfoLog;
-
-        glDeleteProgram(shaderProgram); shaderProgram = 0;
-        throw std::runtime_error(msg);
-    }
-
-	return shaderProgram;
-}
 
 TNode* InitializeTree(){
 	// MAIN MENU
@@ -127,8 +51,6 @@ TNode* InitializeTree(){
 
 	return parent;
 }
-
-GLuint program = 0;
 
 /// Definimos los vertices del objeto
 std::vector<float> vertices {
@@ -223,12 +145,12 @@ void addVertices(){
 	printData(false);
 }
 
-void updateProgram(){
+void updateProgram(GLuint prog){
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-	sendAtributes2Shader(program);
+	sendAtributes2Shader(prog);
 	glDrawElements(GL_TRIANGLES, elements.size(), GL_UNSIGNED_INT, 0);	
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
-	sendAtributes2Shader(program);
+	sendAtributes2Shader(prog);
 	glDrawElements(GL_TRIANGLES, elements.size(), GL_UNSIGNED_INT, 0);	
 }
 
@@ -265,19 +187,20 @@ int main(){
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[1]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(GLuint), &elements[0], GL_STATIC_DRAW);
 
-	/// Cargamos los shaders
-	GLuint vs = LoadShader("../src/Shaders/VShader.glsl", GL_VERTEX_SHADER);
-	GLuint fs = LoadShader("../src/Shaders/FShader.glsl", GL_FRAGMENT_SHADER);
+	/// Cargamos los shaders para el progama
+	std::map<std::string, GLenum> shaders = std::map<std::string, GLenum>();	
+	shaders.insert(std::pair<std::string, GLenum>("../src/Shaders/VShader.glsl", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>("../src/Shaders/FShader.glsl", GL_FRAGMENT_SHADER));
 	
 	// Creamos el programa y lo usamos
-	program = CreateProgram(vs, fs);
+	Program* program = new Program(shaders);
 
 	// Empezamos a usar los shaders en el programa
-	glUseProgram(program);
+	glUseProgram(program->GetProgramID());
 
 	/// Obtenemos los atributos del shader
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-	sendAtributes2Shader(program);
+	sendAtributes2Shader(program->GetProgramID());
 	
 	/// Bucle principal
 	while (App.isOpen()){
@@ -297,13 +220,11 @@ int main(){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//glDrawArrays(GL_TRIANGLES, 0, 3);
-		updateProgram();
+		updateProgram(program->GetProgramID());
         App.display();       
     }
 
-	glDeleteProgram(program);
-    glDeleteShader(fs);
-    glDeleteShader(vs);
+	delete program;
 
     glDeleteBuffers(3, buffers);
     glDeleteVertexArrays(1, &vao);
