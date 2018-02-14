@@ -15,7 +15,7 @@ public:
 	virtual ~TResource();
 
 	virtual bool LoadFile() = 0;
-	virtual bool LoadFile(std::string name) = 0;
+	bool LoadFile(std::string name);
 	
 	std::string GetName();
 	void SetName(std::string name);
@@ -25,7 +25,7 @@ public:
 protected:
 	std::string m_name;
 	bool m_loaded;
-	bool SetLoaded(bool loaded);
+	void SetLoaded(bool loaded);
 
 };
 

@@ -14,15 +14,7 @@ TResourceMaterial::~TResourceMaterial(){
 }
 
 bool TResourceMaterial::LoadFile(){
-	toRet = false;
-	
-	SetLoaded(toRet);
-	return toRet;
-}
-
-bool TResourceMaterial::LoadFile(std::string name){
-	toRet = false;
-	SetName(name);
+	bool toRet = false;
 	
 	SetLoaded(toRet);
 	return toRet;

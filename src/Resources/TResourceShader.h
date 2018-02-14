@@ -15,7 +15,6 @@ public:
 	 * @param std::string path of the resource
 	 *********************************************/
     bool LoadFile();
-    bool LoadFile(std::string name);
 
 private:
 

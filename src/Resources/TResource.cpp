@@ -24,3 +24,10 @@ bool TResource::GetLoaded(){
 void TResource::SetLoaded(bool loaded){
 	m_loaded = loaded;
 }
+
+bool TResource::LoadFile(std::string name){
+	bool toRet = false;
+	SetName(name);
+	toRet = LoadFile();
+	return toRet;
+}

@@ -14,15 +14,7 @@ TResourceTexture::~TResourceTexture(){
 }
 
 bool TResourceTexture::LoadFile(){
-	toRet = false;
-	
-	SetLoaded(toRet);
-	return toRet;
-}
-
-bool TResourceTexture::LoadFile(std::string name){
-	toRet = false;
-	SetName(name);
+	bool toRet = false;
 	
 	SetLoaded(toRet);
 	return toRet;
