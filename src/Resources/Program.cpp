@@ -70,7 +70,7 @@ GLuint Program::LoadShader(std::string shaderPath, GLenum shaderType){
     std::string src = "";
     std::string line = "";
     while(std::getline(in,line)) src += line + "\n";
-    std::cout << src;
+    //std::cout << src;
     
     const char* source = src.c_str();
 

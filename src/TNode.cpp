@@ -34,8 +34,10 @@ TNode::~TNode(){
 		}
 	}
 	m_children.clear();
-
+	//std::cout<<"Todos los hijos borrados de: " << this << "\n";
+	
 	if(m_entity != NULL){
+		//std::cout<<"Borrando entidad de: " << this << "\n";	
 		delete m_entity;
 		m_entity = NULL;
 	}
