@@ -12,6 +12,11 @@ public:
     Program(std::map<std::string, GLenum>);
     ~Program();
 
+    /**
+     * @brief Returns id of the shader
+     * 
+     * @return GLuint: OpenGL ShaderID 
+     */
     GLuint GetProgramID();
     
 private:

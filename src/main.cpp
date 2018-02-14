@@ -1,4 +1,4 @@
-#include <iostream>
+// PROVISONAL INCLUDES
 #include "TNode.h"
 #include "Entities/TEntity.h"
 #include "Entities/TTransform.h"
@@ -9,8 +9,6 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <SFML/Graphics.hpp>
-// Uncomment if visual studio code doesnt detect function
-//#include <SFML/OpenGL.hpp>
 
 #include <iostream>
 #include <glm/gtc/type_ptr.hpp>
@@ -56,10 +54,10 @@ TNode* InitializeTree(){
 
 /// Definimos los vertices del objeto
 std::vector<float> vertices {
-	 0.0f,  0.5f,  1.0f, 0.0f, 0.0f,  // Vertice 0 (X, Y)
-	-0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  // Vertice 1 (X, Y)
-	 0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  // Vertice 2 (X, Y)
-	-1.0f,  0.5f,  1.0f, 1.0f, 0.0f   // Vertice 3 (X, Y)
+	 0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,  // Vertice 0 (X, Y)
+	-0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,  // Vertice 1 (X, Y)
+	 0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,  // Vertice 2 (X, Y)
+	-1.0f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f   // Vertice 3 (X, Y)
 };
 
 // Definimos los elementos (los vertices en este caso), que vamos a usar
@@ -96,12 +94,12 @@ void printData(bool bol){
 void sendAtributes2Shader(GLuint prog){
 	// posicion
 	GLint posAttrib = glGetAttribLocation(prog, "position");
-	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), 0);
+	glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), 0);
 	glEnableVertexAttribArray(posAttrib);
 
 	// color
 	GLint colorAttrib = glGetAttribLocation(prog, "vertexColor");
-	glVertexAttribPointer(colorAttrib, 3, GL_FLOAT, GL_FALSE, 5*sizeof(float), (void*)(2*sizeof(float)));
+	glVertexAttribPointer(colorAttrib, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)(3*sizeof(float)));
 	glEnableVertexAttribArray(colorAttrib);
 
 	// enviamos al uniform del shader la transformacion
@@ -119,10 +117,10 @@ void addVertices(){
 	std::copy(begin(auxvertices), end(auxvertices), std::back_inserter(vertices));*/
 
 	std::vector<float> vertices2{
-		 1.0f,  0.5f,  0.0f, 1.0f, 0.0f,  // Vertice 0 (X, Y)
-		 0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  // Vertice 1 (X, Y)
-		 1.5f, -0.5f,  0.0f, 1.0f, 0.0f,  // Vertice 2 (X, Y)
-		 0.0f,  0.5f,  0.0f, 1.0f, 0.0f   // Vertice 3 (X, Y)
+		 1.0f,  0.5f, 0.0f, 0.0f, 1.0f, 0.0f,  // Vertice 0 (X, Y)
+		 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,  // Vertice 1 (X, Y)
+		 1.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,  // Vertice 2 (X, Y)
+		 0.0f,  0.5f, 0.0f, 0.0f, 1.0f, 0.0f   // Vertice 3 (X, Y)
 	};
 
 	// Definimos el buffer de vertices del objeto
@@ -178,14 +176,7 @@ int main(){
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), NULL, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-
 	// Generamos el buffer de elementos del objeto
-	//GLuint ebo;
-	//glGenBuffers(1, &ebo);
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[1]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(GLuint), &elements[0], GL_STATIC_DRAW);
 
@@ -196,13 +187,7 @@ int main(){
 	
 	// Creamos el programa y lo usamos
 	Program* program = new Program(shaders);
-
-	// Empezamos a usar los shaders en el programa
 	glUseProgram(program->GetProgramID());
-
-	/// Obtenemos los atributos del shader
-	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-	sendAtributes2Shader(program->GetProgramID());
 	
 	/// Bucle principal
 	while (App.isOpen()){
@@ -214,7 +199,6 @@ int main(){
 			}
 			if ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::Space)){
                 addVertices();
-				//rotateModel(viewUniform);
 			}
         }
 
@@ -226,14 +210,15 @@ int main(){
         App.display();       
     }
 
+
 	delete program;
 
     glDeleteBuffers(3, buffers);
     glDeleteVertexArrays(1, &vao);
-
-    App.close();
 	
 	TResourceMesh* newModel = new TResourceMesh("../assets/models/cube.obj");
+	delete newModel;
 
+    App.close();
     return EXIT_SUCCESS;
 }
