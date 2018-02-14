@@ -14,10 +14,16 @@ TResourceShader::~TResourceShader(){
 }
 
 bool TResourceShader::LoadFile(){
-	return false;
+	toRet = false;
+	
+	SetLoaded(toRet);
+	return toRet;
 }
 
 bool TResourceShader::LoadFile(std::string name){
+	toRet = false;
 	SetName(name);
-	return false;
+	
+	SetLoaded(toRet);
+	return toRet;
 }

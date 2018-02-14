@@ -14,7 +14,9 @@ TResourceMesh::~TResourceMesh(){
 }
 
 bool TResourceMesh::LoadFile(){
+	toRet = false;
 
+	/*
 	//if (vboModelData.GetBufferID() == 0) {
 	//	vboModelData.CreateVBO();
 	//	tTextures.reserve(50);
@@ -68,10 +70,16 @@ bool TResourceMesh::LoadFile(){
 			}
 		}
 	}
-	return false;
+	*/
+	
+	SetLoaded(toRet);
+	return toRet;
 }
 
 bool TResourceMesh::LoadFile(std::string name){
+	toRet = false;
 	SetName(name);
-	return false;
+	
+	SetLoaded(toRet);
+	return toRet;
 }

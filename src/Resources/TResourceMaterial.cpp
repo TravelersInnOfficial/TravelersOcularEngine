@@ -14,10 +14,16 @@ TResourceMaterial::~TResourceMaterial(){
 }
 
 bool TResourceMaterial::LoadFile(){
-	return false;
+	toRet = false;
+	
+	SetLoaded(toRet);
+	return toRet;
 }
 
 bool TResourceMaterial::LoadFile(std::string name){
+	toRet = false;
 	SetName(name);
-	return false;
+	
+	SetLoaded(toRet);
+	return toRet;
 }

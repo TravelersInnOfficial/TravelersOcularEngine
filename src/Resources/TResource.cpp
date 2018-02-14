@@ -16,3 +16,11 @@ void TResource::SetName(std::string name){
 	// Treat name!
 	m_name = name;
 }
+
+bool TResource::GetLoaded(){
+	return m_loaded;
+}
+
+void TResource::SetLoaded(bool loaded){
+	m_loaded = loaded;
+}

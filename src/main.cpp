@@ -232,6 +232,7 @@ int main(){
     glDeleteVertexArrays(1, &vao);
 
     App.close();
+	
 	TResourceMesh* newModel = new TResourceMesh("../assets/models/cube.obj");
 
     return EXIT_SUCCESS;

@@ -20,8 +20,12 @@ public:
 	std::string GetName();
 	void SetName(std::string name);
 
+	bool GetLoaded();
+
 protected:
 	std::string m_name;
+	bool m_loaded;
+	bool SetLoaded(bool loaded);
 
 };
 

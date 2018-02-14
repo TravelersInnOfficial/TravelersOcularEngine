@@ -14,10 +14,16 @@ TResourceTexture::~TResourceTexture(){
 }
 
 bool TResourceTexture::LoadFile(){
-	return false;
+	toRet = false;
+	
+	SetLoaded(toRet);
+	return toRet;
 }
 
 bool TResourceTexture::LoadFile(std::string name){
+	toRet = false;
 	SetName(name);
-	return false;
+	
+	SetLoaded(toRet);
+	return toRet;
 }
