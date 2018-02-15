@@ -17,6 +17,8 @@
 #include "TResourceManager.h"
 #include "Resources/TResourceMesh.h"
 
+TNode* node3;
+
 TNode* InitializeTree(Program* prog){
 	// MAIN MENU
 	TTransform* aux = new TTransform();
@@ -24,18 +26,18 @@ TNode* InitializeTree(Program* prog){
 	//std::cout<<"PARENT: "<< parent << " CREADO\n";
 
 	aux = new TTransform();
-	//aux->Rotate(0.0f, 0.0f, 1.0f, 180.0f);
+	aux->Rotate(1.0f, 0.0f, 0.0f, 90.0f);
 	TNode* node1 = new TNode(parent, aux);
 	//std::cout<<"NODE1 : "<< node1 << " CREADO | Hijo de PARENT: " << node1->GetParent() << "\n";
 
 	aux = new TTransform();
-	aux->Rotate(0.0f, 0.0f, 1.0f, 90.0f);
+	aux->Rotate(1.0f, 0.0f, 0.0f, 90.0f);
 	TNode* node2 = new TNode(parent, aux);
 	//std::cout<<"NODE2 : "<< node2 << " CREADO | Hijo de PARENT: " << node2->GetParent() << "\n";
 
 	aux = new TTransform();
-	aux->Translate(1.5f, 0.0f, 0.0f);
-	TNode* node3 = new TNode(node1, aux);
+	aux->Translate(0.0f, 0.0f, 0.0f);
+	node3 = new TNode(node1, aux);
 	//std::cout<<"NODE3 : "<< node3 << " CREADO | Hijo de  NODE1: " << node3->GetParent() << "\n";
 
 	aux = new TTransform();
@@ -48,9 +50,9 @@ TNode* InitializeTree(Program* prog){
 	mesh->SetProgram(prog);
 	//std::cout<<"nmesh1 : "<< nmesh1 << " CREADO | Hijo de  NODE3: " << nmesh1->GetParent() << "\n";
 
-	TMesh* mesh2 = new TMesh();
+	/*TMesh* mesh2 = new TMesh();
 	TNode* nmesh2 = new TNode(node4, mesh2);
-	mesh2->SetProgram(prog);
+	mesh2->SetProgram(prog);*/
 	//std::cout<<"nmesh2 : "<< nmesh2 << " CREADO | Hijo de  NODE4: " << nmesh2->GetParent() << "\n";
 
 	//std::cout<<"############################################################\n";
@@ -58,10 +60,17 @@ TNode* InitializeTree(Program* prog){
 	return parent;
 }
 
-void addVertices(){
+void addVertices(float x, float y, GLuint uniView){/*
+	glm::mat4 view = glm::lookAt( glm::vec3(0.0f, 0.0f, 0.5f), glm::vec3(5 * sin(glm::radians(x)), y, 50*cos(glm::radians(x))), glm::vec3(0.0f, 0.0f, 1.0f));
+	glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));
+
 	// Definimos los vertices del objeto
-	std::cout << "###########################################################\n";
-	std::cout << "Dibujamos los nuevos vertices\n";
+	//std::cout << "###########################################################\n";
+	//std::cout << "Dibujamos los nuevos vertices\n";*/
+
+
+	TTransform* trans = (TTransform*) node3->GetEntity();
+	trans->Translate(y, 0.0f, 0.0f);
 }
 
 void printMatrix(glm::mat4 mat){
@@ -75,7 +84,7 @@ void printMatrix(glm::mat4 mat){
 }
 
 int main(){
-    sf::Window App(sf::VideoMode(600, 600, 32), "SFML OpenGL Test", sf::Style::Close);
+    sf::Window App(sf::VideoMode(800, 600, 32), "SFML OpenGL Test", sf::Style::Close);
 
 	/// Iniciamos glew
 	glewExperimental = GL_TRUE;
@@ -98,7 +107,25 @@ int main(){
 	Program* program = new Program(shaders);
 	glUseProgram(program->GetProgramID());
 
+	glm::mat4 view = glm::mat4(1.0f);
+	//glm::mat4 view = glm::lookAt( glm::vec3(0.0f, 1.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0, 1, 0));
+	GLint uniView = glGetUniformLocation(program->GetProgramID(), "ViewMatrix");
+	glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));
+
+	glm::mat4 proj = glm::mat4(1.0f);
+	//glm::mat4 proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 10.0f);
+	//glm::mat4 proj = glm::frustum(-400.0f, 400.0f, -300.0f, 300.0f, 0.1f, 10.0f);
+	//glm::mat4 proj = glm::frustum(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 10.0f);
+	//glm::mat4 proj = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 10.0f);
+	
+	GLint uniProj = glGetUniformLocation(program->GetProgramID(), "ProjectionMatrix");
+	glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(proj));
+
 	TNode* parent = InitializeTree(program);
+	
+	float x, y;
+	x = 0;
+	y = 1.0f;
 	
 	/// Bucle principal
 	while (App.isOpen()){
@@ -108,8 +135,28 @@ int main(){
             if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape)){
                 App.close();
 			}
+			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Left)){
+				x -= 1.0f;
+				std::cout << "x: " << x << " y: " << y << "\n"; 
+				addVertices(x, y, uniView);
+			}
+			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Right)){
+				x += 1.0f;
+				std::cout << "x: " << x << " y: " << y << "\n"; 
+				addVertices(x, y, uniView);
+			}
+			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Down)){
+				y -= 0.05f;				
+				std::cout << "x: " << x << " y: " << y << "\n"; 
+				addVertices(x, y, uniView);
+			}
+			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Up)){
+				y += 0.05f;
+				std::cout << "x: " << x << " y: " << y << "\n"; 
+				addVertices(x, y, uniView);				
+			}
 			if ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::Space)){
-                addVertices();
+				addVertices(x, y, uniView);
 			}
         }
 
