@@ -8,10 +8,10 @@
 TMesh::TMesh(){
 	// TEMPORAL VERTICES AND ELEMENTS
 	std::vector<float> vertices {
-		0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,  // Vertice 0 (X, Y)
-		-0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,  // Vertice 1 (X, Y)
-		0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,  // Vertice 2 (X, Y)
-		-1.0f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f   // Vertice 3 (X, Y)
+		 0.0f, 0.0f,  0.5f, 1.0f, 0.0f, 0.0f,  // Vertice 0 (X, Y)
+		-0.5f, 0.0f, -0.5f, 0.0f, 1.0f, 0.0f,  // Vertice 1 (X, Y)
+		 0.5f, 0.0f, -0.5f, 0.0f, 0.0f, 1.0f,  // Vertice 2 (X, Y)
+		-1.0f, 0.0f,  0.5f, 1.0f, 1.0f, 0.0f   // Vertice 3 (X, Y)
 	};
 
 	// Definimos los elementos (los vertices en este caso), que vamos a usar
@@ -81,7 +81,7 @@ void TMesh::SendShaderData(){
 	}
 
 	// vertex position
-	GLint posAttrib = glGetAttribLocation(m_program->GetProgramID(), "position");
+	GLint posAttrib = glGetAttribLocation(m_program->GetProgramID(), "VertexPosition");
 	glVertexAttribPointer(posAttrib,3, GL_FLOAT, GL_FALSE, 6*sizeof(float), 0);
 	glEnableVertexAttribArray(posAttrib);
 
@@ -92,11 +92,11 @@ void TMesh::SendShaderData(){
 	glEnableVertexAttribArray(normalAttrib);*/
 
 	// uv texture
-	GLint colorAttrib = glGetAttribLocation(m_program->GetProgramID(), "vertexColor");
+	GLint colorAttrib = glGetAttribLocation(m_program->GetProgramID(), "VertexColor");
 	glVertexAttribPointer(colorAttrib, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)(3*sizeof(float)));
 	glEnableVertexAttribArray(colorAttrib);
 
-	GLint viewUniform = glGetUniformLocation(m_program->GetProgramID(), "transform");
+	GLint viewUniform = glGetUniformLocation(m_program->GetProgramID(), "ModelViewMatrix");
 	glUniformMatrix4fv(viewUniform, 1, GL_FALSE, glm::value_ptr(m_stack.top()));
 }
 
@@ -113,22 +113,29 @@ void TMesh::SendShaderData(){
 		 1.000000f,  1.000000f, -1.000000f
 	};
 
-	/*
-		f 2//1 3//1 1//1
-		f 4//2 7//2 3//2
-		f 8//3 5//3 7//3
-		f 6//4 1//4 5//4
-		f 7//5 1//5 3//5
-		f 4//6 6//6 8//6
-		f 2//1 4//1 3//1
-		f 4//2 8//2 7//2
-		f 8//3 6//3 5//3
-		f 6//4 2//4 1//4
-		f 7//5 5//5 1//5
-		f 4//6 2//6 6//6
-	*
 
-	std::vector<GLuint> elements {
+	f 2//1 3//1 1//1
+	f 4//2 7//2 3//2
+	f 8//3 5//3 7//3
+	f 6//4 1//4 5//4
+	f 7//5 1//5 3//5
+	f 4//6 6//6 8//6
+	f 2//1 4//1 3//1
+	f 4//2 8//2 7//2
+	f 8//3 6//3 5//3
+	f 6//4 2//4 1//4
+	f 7//5 5//5 1//5
+	f 4//6 2//6 6//6
+	
+
+	vn -1.0000 0.0000 0.0000
+	vn 0.0000 0.0000 -1.0000
+	vn 1.0000 0.0000 0.0000
+	vn 0.0000 0.0000 1.0000
+	vn 0.0000 -1.0000 0.0000
+	vn 0.0000 1.0000 0.0000
+
+	elements {
 		2, 3, 1,
 		4, 7, 3,
 		8, 5, 7,
