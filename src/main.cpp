@@ -70,6 +70,7 @@ void addVertices(float x, float y, GLuint uniView){/*
 
 	node1Rot->Identity();
 	node1Rot->Rotate(0.0f, 1.0f, 0.0f, x);
+	node1Rot->Rotate(1.0f, 0.0f, 0.0f, y);
 }
 
 void printMatrix(glm::mat4 mat){
@@ -147,22 +148,22 @@ int main(){
                 App.close();
 			}
 			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Left)){
-				x -= 1.0f;
+				x -= 2.0f;
 				std::cout << "x: " << x << " y: " << y << "\n"; 
 				addVertices(x, y, uniView);
 			}
 			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Right)){
-				x += 1.0f;
+				x += 2.0f;
 				std::cout << "x: " << x << " y: " << y << "\n"; 
 				addVertices(x, y, uniView);
 			}
 			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Down)){
-				y -= 0.05f;				
+				y -= 2.0f;				
 				std::cout << "x: " << x << " y: " << y << "\n"; 
 				addVertices(x, y, uniView);
 			}
 			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Up)){
-				y += 0.05f;
+				y += 2.0f;
 				std::cout << "x: " << x << " y: " << y << "\n"; 
 				addVertices(x, y, uniView);				
 			}
@@ -171,7 +172,7 @@ int main(){
 			}
         }
 		//glDepthMask(true);
-		glClearColor(0.1, 0.1, 0.1, 0.1);
+		glClearColor(1, 1, 1, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
@@ -183,9 +184,6 @@ int main(){
 	delete program;
 
     glDeleteVertexArrays(1, &vao);
-	
-	TResourceMesh* newModel = new TResourceMesh("../assets/models/cube.obj");
-	delete newModel;
 
 	//std::cout << "Deleting TREE\n";
 	delete parent;

@@ -55,7 +55,7 @@ TMesh::TMesh(){
 
 	// MOST IMPORTANT LINE (1 hour to find this error)
 	m_program = NULL;
-	m_mesh = TResourceManager::GetInstance()->GetResourceMesh("./../assets/models/potion.obj");
+	m_mesh = TResourceManager::GetInstance()->GetResourceMesh("./../assets/models/wizard.obj");
 	// Create vertex buffer for [vec3 vertexPosition, vec3 normalDirection, vec2 UVCoordinate]
 	//m_vbo = 0;
 	//glGenBuffers(1, &m_vbo);
@@ -92,16 +92,16 @@ void TMesh::BeginDraw(){
     // Send all attributes and uniforms to shader
     GLuint* vertexBuffer = m_mesh->GetVertexBuffer();
 	glBindBuffer(GL_ARRAY_BUFFER, *vertexBuffer);
-
 	//GLuint* elementsBuffer = m_mesh->GetElementBuffer();
 
 	SendShaderData();
 
+	GLuint* elementsBuffer = m_mesh->GetElementBuffer();
 	// Bind and draw elements depending of how many vbos
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
-	//glDrawElements(GL_TRIANGLES, elements.size(), GL_UNSIGNED_INT, 0);   
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *elementsBuffer);
+	glDrawElements(GL_TRIANGLES, 10000, GL_UNSIGNED_INT, 0);   
 
-	glDrawArrays(GL_TRIANGLES, 0, 2000);
+	//glDrawArrays(GL_TRIANGLES, 0, m_mesh->GetVertexSize());
 }
 
 void TMesh::EndDraw(){

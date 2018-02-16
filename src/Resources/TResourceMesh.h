@@ -24,6 +24,8 @@ public:
     GLuint* GetVertexBuffer();
     GLuint* GetElementBuffer();
 
+    int GetVertexSize();
+
 private:
     std::vector<glm::vec3> m_vertex;
     std::vector<glm::vec2> m_textures;
