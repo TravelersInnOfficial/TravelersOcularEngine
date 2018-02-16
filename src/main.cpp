@@ -17,7 +17,7 @@
 #include "TResourceManager.h"
 #include "Resources/TResourceMesh.h"
 
-TNode* node3;
+TTransform* node1Rot;
 
 TNode* InitializeTree(Program* prog){
 	// MAIN MENU
@@ -25,19 +25,19 @@ TNode* InitializeTree(Program* prog){
 	TNode* parent = new TNode(aux);
 	//std::cout<<"PARENT: "<< parent << " CREADO\n";
 
-	aux = new TTransform();
-	aux->Rotate(1.0f, 0.0f, 0.0f, 90.0f);
-	TNode* node1 = new TNode(parent, aux);
+	node1Rot = new TTransform();
+	//aux->Rotate(1.0f, 0.0f, 0.0f, 90.0f);
+	TNode* node1 = new TNode(parent, node1Rot);
 	//std::cout<<"NODE1 : "<< node1 << " CREADO | Hijo de PARENT: " << node1->GetParent() << "\n";
 
 	aux = new TTransform();
-	aux->Rotate(1.0f, 0.0f, 0.0f, 90.0f);
+	//aux->Rotate(1.0f, 0.0f, 0.0f, 90.0f);
 	TNode* node2 = new TNode(parent, aux);
 	//std::cout<<"NODE2 : "<< node2 << " CREADO | Hijo de PARENT: " << node2->GetParent() << "\n";
 
 	aux = new TTransform();
 	aux->Translate(0.0f, 0.0f, 0.0f);
-	node3 = new TNode(node1, aux);
+	TNode* node3 = new TNode(node1, aux);
 	//std::cout<<"NODE3 : "<< node3 << " CREADO | Hijo de  NODE1: " << node3->GetParent() << "\n";
 
 	aux = new TTransform();
@@ -68,9 +68,8 @@ void addVertices(float x, float y, GLuint uniView){/*
 	//std::cout << "###########################################################\n";
 	//std::cout << "Dibujamos los nuevos vertices\n";*/
 
-
-	TTransform* trans = (TTransform*) node3->GetEntity();
-	trans->Translate(y, 0.0f, 0.0f);
+	node1Rot->Identity();
+	node1Rot->Rotate(0.0f, 1.0f, 0.0f, x);
 }
 
 void printMatrix(glm::mat4 mat){
@@ -89,9 +88,6 @@ int main(){
 	/// Iniciamos glew
 	glewExperimental = GL_TRUE;
 	glewInit();
-	
-	glEnable( GL_DEPTH_TEST ); 		// enable depth-testing
-	glDepthFunc( GL_LESS );		 	// depth-testing interprets a smaller value as "closer"
 
 	/// Creamos el Array de vertices del objeto
     GLuint vao;
@@ -108,15 +104,22 @@ int main(){
 	glUseProgram(program->GetProgramID());
 
 	glm::mat4 view = glm::mat4(1.0f);
-	//glm::mat4 view = glm::lookAt( glm::vec3(0.0f, 1.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0, 1, 0));
+	view = glm::lookAt( glm::vec3(0.0f, 1.2f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0, 1, 0));
+	//view = glm::lookAt( glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0, 1, 0));
 	GLint uniView = glGetUniformLocation(program->GetProgramID(), "ViewMatrix");
 	glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));
 
 	glm::mat4 proj = glm::mat4(1.0f);
-	//glm::mat4 proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 10.0f);
-	//glm::mat4 proj = glm::frustum(-400.0f, 400.0f, -300.0f, 300.0f, 0.1f, 10.0f);
-	//glm::mat4 proj = glm::frustum(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 10.0f);
-	//glm::mat4 proj = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 10.0f);
+	GLfloat FoV = 45.0f;
+	proj = glm::perspective(
+		glm::radians(FoV), // El campo de visión vertical, en radián: la cantidad de "zoom". Piensa en el lente de la cámara. Usualmente está entre 90° (extra ancho) y 30° (zoom aumentado)
+		4.0f / 3.0f,       // Proporción. Depende del tamaño de tu ventana 4/3 == 800/600 == 1280/960, Parece familiar?
+		1.0f,              // Plano de corte cercano. Tan grande como sea posible o tendrás problemas de precisión.
+		100.0f             // Plano de corte lejano. Tan pequeño como se pueda.
+	);
+	//proj = glm::ortho(-40.0f, 40.0f, -30.0f, 30.0f, 0.1f, 10.0f);
+	//proj = glm::frustum(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 10.0f);
+	//proj = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 10.0f);
 	
 	GLint uniProj = glGetUniformLocation(program->GetProgramID(), "ProjectionMatrix");
 	glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(proj));
@@ -127,8 +130,14 @@ int main(){
 	x = 0;
 	y = 1.0f;
 	
+	// Habilidad el test de profundidad
+	glEnable(GL_DEPTH_TEST);
+	// Aceptar el fragmento si está más cerca de la cámara que el fragmento anterior
+	glDepthFunc(GL_LESS);
+
 	/// Bucle principal
 	while (App.isOpen()){
+
         sf::Event event;
 		while (App.pollEvent(event)){
             if (event.type == sf::Event::Closed) App.close();
@@ -159,9 +168,9 @@ int main(){
 				addVertices(x, y, uniView);
 			}
         }
-
-        glClearColor(0.1, 0.1, 0.1, 0.1);
+		glDepthMask(true);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClearColor(0.1, 0.1, 0.1, 0.1);
 
         parent->Draw();
 		App.display();

@@ -16,5 +16,5 @@ out vec3 color;
 
 void main(){
     color = VertexColor;
-    gl_Position = ModelViewMatrix * ViewMatrix * ProjectionMatrix * vec4(VertexPosition, 1.0);
+    gl_Position = ProjectionMatrix *  ViewMatrix * ModelViewMatrix * vec4(VertexPosition, 1.0);
 }

@@ -4,15 +4,63 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <stdexcept>
 #include <iostream>
+#include <chrono>
 
 TMesh::TMesh(){
 	// TEMPORAL VERTICES AND ELEMENTS
-	std::vector<float> vertices {
+	/*std::vector<float> vertices {
 		 0.0f, 0.0f,  0.5f, 1.0f, 0.0f, 0.0f,  // Vertice 0 (X, Y)
 		-0.5f, 0.0f, -0.5f, 0.0f, 1.0f, 0.0f,  // Vertice 1 (X, Y)
 		 0.5f, 0.0f, -0.5f, 0.0f, 0.0f, 1.0f,  // Vertice 2 (X, Y)
+
+		 0.0f, 0.0f,  0.5f, 1.0f, 0.0f, 0.0f,  // Vertice 0 (X, Y)
+		-0.5f, 0.0f, -0.5f, 0.0f, 1.0f, 0.0f,  // Vertice 1 (X, Y)
 		-1.0f, 0.0f,  0.5f, 1.0f, 1.0f, 0.0f   // Vertice 3 (X, Y)
-	};
+	};*/
+
+	std::vector<float> vertices = {
+        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+         0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+
+        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f,
+         0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f,
+
+        -0.5f,  0.5f,  0.5f, 1.0f, 0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f, 1.0f, 0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f, 1.0f, 0.0f, 0.0f,
+
+         0.5f,  0.5f,  0.5f, 1.0f, 0.0f, 0.0f,
+         0.5f,  0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f, 1.0f, 0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f, 1.0f, 0.0f, 0.0f,
+
+        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f,
+         0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 0.0f,
+
+        -0.5f,  0.5f, -0.5f, 0.0f, 0.0f, 1.0f,
+         0.5f,  0.5f, -0.5f, 0.0f, 0.0f, 1.0f,
+         0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
+         0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f, 0.0f, 0.0f, 1.0f
+    };
 
 	// Definimos los elementos (los vertices en este caso), que vamos a usar
 	elements = {
@@ -43,8 +91,8 @@ TMesh::TMesh(){
 	// its custom buffer data, and glVertexAttribPointer (with previous binding)
 	
 	// Send ebo all index of the faces (3 vertices)
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(float), &elements[0], GL_STATIC_DRAW);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
+	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(float), &elements[0], GL_STATIC_DRAW);
 }
 
 TMesh::~TMesh(){
@@ -61,8 +109,10 @@ void TMesh::BeginDraw(){
 	SendShaderData();
 
 	// Bind and draw elements depending of how many vbos
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
-	glDrawElements(GL_TRIANGLES, elements.size(), GL_UNSIGNED_INT, 0);   
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
+	//glDrawElements(GL_TRIANGLES, elements.size(), GL_UNSIGNED_INT, 0);   
+
+	glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
 void TMesh::EndDraw(){
@@ -98,6 +148,7 @@ void TMesh::SendShaderData(){
 
 	GLint viewUniform = glGetUniformLocation(m_program->GetProgramID(), "ModelViewMatrix");
 	glUniformMatrix4fv(viewUniform, 1, GL_FALSE, glm::value_ptr(m_stack.top()));
+	//glUniformMatrix4fv(viewUniform, 1, GL_FALSE, glm::value_ptr(m_stack.top()));
 }
 
 /*  CUBE VERTICES EXAMPLE
