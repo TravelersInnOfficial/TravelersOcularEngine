@@ -103,6 +103,19 @@ bool TObjLoader::LoadObjFromFileAssimp(std::string path, std::vector<glm::vec3>*
 		}
 	}
 
+	if (scene->HasMaterials()){
+        for (unsigned int i = 0; i < scene->mNumMaterials; i++){
+			const aiMaterial* material = scene->mMaterials[i];
+			aiString texturePath;
+			unsigned int numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
+			if (material->GetTextureCount(aiTextureType_DIFFUSE)) {
+				if(material->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath) == AI_SUCCESS){
+					
+				}
+			}
+		}
+	}
+
 	return true;
 }
 

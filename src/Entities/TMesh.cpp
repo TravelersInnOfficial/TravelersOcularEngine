@@ -55,7 +55,7 @@ TMesh::TMesh(){
 
 	// MOST IMPORTANT LINE (1 hour to find this error)
 	m_program = NULL;
-	m_mesh = TResourceManager::GetInstance()->GetResourceMesh("./../assets/models/wizard.obj");
+	m_mesh = TResourceManager::GetInstance()->GetResourceMesh("./../assets/models/Wizard.obj");
 	// Create vertex buffer for [vec3 vertexPosition, vec3 normalDirection, vec2 UVCoordinate]
 	//m_vbo = 0;
 	//glGenBuffers(1, &m_vbo);
