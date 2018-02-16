@@ -5,6 +5,8 @@
 #include <GL/glew.h>
 #include <vector>
 #include "../Resources/Program.h"
+#include "./../Resources/TResourceMesh.h"
+#include "./../TResourceManager.h"
 
 class TMesh: public TEntity{
 public:
@@ -18,12 +20,12 @@ public:
 
 private:
 
-	GLuint   m_vbo;
-	GLuint   m_ebo;
+	//GLuint   m_vbo;
+	//GLuint   m_ebo;
 	Program* m_program;
 
-	std::vector<GLuint> elements;
-	//TResourceMesh* m_mesh
+	//std::vector<GLuint> elements;
+	TResourceMesh* m_mesh;
 	
 	/**
 	 * @brief Sends shader all needed information

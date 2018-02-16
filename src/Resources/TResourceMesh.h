@@ -6,6 +6,8 @@
 #include <assimp/postprocess.h>
 #include "TResource.h"
 
+#include "./../Loaders/TObjLoader.h"
+
 class TResourceMesh: public TResource {
 
 public:
@@ -19,10 +21,18 @@ public:
 	 *********************************************/
     bool LoadFile();
 
+    GLuint* GetVertexBuffer();
+    GLuint* GetElementBuffer();
+
 private:
-    //GLfloat* m_vertex;
-    //GLfloat* m_normals;
-    //GLfloat* m_textures;
+    std::vector<glm::vec3> m_vertex;
+    std::vector<glm::vec2> m_textures;
+    std::vector<glm::vec3> m_normals;
+    std::vector<unsigned int> m_vertexIndex;
+
+    GLuint m_vbo;
+    GLuint m_ebo;
+
     //GLfloat* m_verTriangles;
     //GLfloat* m_normTriangles;
     //GLfloat* m_texTriangles;

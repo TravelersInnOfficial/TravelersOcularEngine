@@ -83,7 +83,7 @@ void printMatrix(glm::mat4 mat){
 }
 
 int main(){
-	sf::ContextSettings context(24, 8, 3, 3);
+	sf::ContextSettings context(24, 8, 4, 3);
     sf::Window App(sf::VideoMode(800, 600, 32), "SFML OpenGL Test", sf::Style::Close, context);
 
 	/// Iniciamos glew
@@ -110,7 +110,7 @@ int main(){
 	glUseProgram(program->GetProgramID());
 
 	glm::mat4 view = glm::mat4(1.0f);
-	view = glm::lookAt( glm::vec3(0.0f, 1.2f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0, 1, 0));
+	view = glm::lookAt( glm::vec3(0.0f, 1.2f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0, 1, 0));
 	//view = glm::lookAt( glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0, 1, 0));
 	GLint uniView = glGetUniformLocation(program->GetProgramID(), "ViewMatrix");
 	glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));
