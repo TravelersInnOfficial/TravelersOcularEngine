@@ -4,7 +4,6 @@
 #include "TResource.h"
 
 #include "./../Loaders/TObjLoader.h"
-#include "./../Loaders/TAssimpLoader.h"
 
 class TResourceMesh: public TResource {
 

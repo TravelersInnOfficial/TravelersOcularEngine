@@ -1,15 +1,126 @@
 #include "TObjLoader.h"
 
-struct PackedVertex{
-	glm::vec3 position;
-	glm::vec2 uv;
-	glm::vec3 normal;
-	bool operator<(const PackedVertex that) const{
-		return memcmp((void*)this, (void*)&that, sizeof(PackedVertex))>0;
-	};
-};
+bool LoadObjFromFile();
 
-bool LoadObjFromFile(std::string path, std::vector<glm::vec3>* out_vertices, std::vector<glm::vec2>* out_uvs, std::vector<glm::vec3>* out_normals){
+// VBO = VERTEX BUFFER OBJECT
+
+void TObjLoader::IndexVBO(std::vector<glm::vec3>* out_vertices, std::vector<glm::vec2>* out_uvs, std::vector<glm::vec3>* out_normals, std::vector<unsigned int>* out_indices){
+	std::map<PackedVertex, unsigned int> VertexToOutIndex;
+	std::vector<glm::vec3> temp_vertices, temp_normals;
+	std::vector<glm::vec2> temp_uvs;
+	
+	// Copio los vectores que han pasado en otros temporales
+	temp_vertices.insert	(temp_vertices.begin(), 	out_vertices->begin(), 	out_vertices->end());
+	temp_uvs.insert			(temp_uvs.begin(), 			out_uvs->begin(), 		out_uvs->end());
+	temp_normals.insert		(temp_normals.begin(), 		out_normals->begin(), 	out_normals->end());
+
+	// Una vez copiados los valores, procedo a vaciar los pasados por parametros
+	out_vertices->clear();
+	out_uvs->clear();
+	out_normals->clear();
+
+	// For each input vertex
+	int size = temp_vertices.size();
+	for ( unsigned int i=0; i<size; i++ ){
+
+		PackedVertex packed = {temp_vertices[i], temp_uvs[i], temp_normals[i]};
+		
+		// Try to find a similar vertex in out_XXXX
+		unsigned int index;
+		bool found = GetSimilarVertexIndex_fast(&packed, &VertexToOutIndex, &index);
+
+		if (found){ // A similar vertex is already in the VBO, use it instead !
+			out_indices->push_back(index);
+		}else{ // If not, it needs to be added in the output data.
+			out_vertices	->push_back(temp_vertices[i]);
+			out_uvs			->push_back(temp_uvs[i]);
+			out_normals		->push_back(temp_normals[i]);
+			unsigned int newindex = (unsigned int)out_vertices->size() - 1;
+			out_indices		->push_back( newindex );
+			VertexToOutIndex[packed] = newindex;
+		}
+	}
+}
+
+bool TObjLoader::GetSimilarVertexIndex_fast(PackedVertex* packed, std::map<PackedVertex,unsigned int>* VertexToOutIndex, unsigned int* result){
+	std::map<PackedVertex,unsigned int>::iterator it = VertexToOutIndex->find(*packed);
+	bool output = false;
+	if ( it == VertexToOutIndex->end() ){
+		output = false;
+	}else{
+		*result = it->second;
+		output = true;
+	}
+	return output;
+}
+
+// ============================================================================================================================================
+//
+// ASSIMP
+//
+// ============================================================================================================================================
+
+bool TObjLoader::LoadObjAssimp( std::string path, std::vector<glm::vec3>* out_vertices, std::vector<glm::vec2>* out_uvs, std::vector<glm::vec3>* out_normals, std::vector<unsigned int>* out_indices){
+	if(!LoadObjFromFileAssimp(path, out_vertices, out_uvs, out_normals)){
+		return false;
+	}
+	IndexVBO(out_vertices, out_uvs, out_normals, out_indices);
+	return true;
+}
+
+bool TObjLoader::LoadObjFromFileAssimp(std::string path, std::vector<glm::vec3>* out_vertices, std::vector<glm::vec2>* out_uvs, std::vector<glm::vec3>* out_normals){
+    std::ifstream file(path);						// |
+    if(!file.fail()) file.close();					// |
+    else{											// |
+        std::cout<<"Could not open file " + path;	// |
+        return false;								// | Comprobacion de que exista
+    }
+
+	const struct aiScene* scene = NULL;
+	Assimp::Importer importer;
+	scene = importer.ReadFile(path.c_str(), aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType);
+    
+	if(!scene){										// |
+        std::cout<<"Could not open file " + path;	// |
+        return false;								// | Comprobacion de que se lea bien
+    }
+
+	// Recorremos todos los MESHES de la ESCENA
+	for(int i = 0; i < scene->mNumMeshes; i++){
+		aiMesh* mesh = scene->mMeshes[i]; 					// Cogemos el MESH a tratar
+		int iMeshFaces = mesh->mNumFaces; 					// Guardamos el NUMERO DE CARAS
+		for(int j = 0; j < iMeshFaces ;j++){				// Iteramos por las CARAS
+			const aiFace& face = mesh->mFaces[j];			// Nos guardamos la cara que estamos tratando
+			for(int k = 0; k < 3 ;k++){
+				aiVector3D pos = mesh->mVertices[face.mIndices[k]];			// POSICION DEL VERTICE
+				aiVector3D normal = mesh->mNormals[face.mIndices[k]];		// NORMAL DEL VERTICE
+				aiVector3D uv = mesh->mTextureCoords[0][face.mIndices[k]];	// COORDENADA DE TEXTURA
+				
+				out_vertices->push_back(glm::vec3(pos.x, pos.y, pos.z));			// |
+				out_normals->push_back(glm::vec3(normal.x, normal.y, normal.z));	// |
+				out_uvs->push_back(glm::vec2(uv.x, uv.y));							// | Lo guardamos para DEVOLVER
+			}
+		}
+	}
+
+	return true;
+}
+
+// ============================================================================================================================================
+//
+// CUSTOM
+//
+// ============================================================================================================================================
+
+bool TObjLoader::LoadObjCustom( std::string path, std::vector<glm::vec3>* out_vertices, std::vector<glm::vec2>* out_uvs, std::vector<glm::vec3>* out_normals, std::vector<unsigned int>* out_indices){
+	if(!LoadObjFromFileCustom(path, out_vertices, out_uvs, out_normals)){
+		return false;
+	}
+	IndexVBO(out_vertices, out_uvs, out_normals, out_indices);
+	return true;
+}
+
+bool TObjLoader::LoadObjFromFileCustom(std::string path, std::vector<glm::vec3>* out_vertices, std::vector<glm::vec2>* out_uvs, std::vector<glm::vec3>* out_normals){
 	// Creamos algunas variables temporales para cargar el obj
 	std::vector< unsigned int > vertexIndices, uvIndices, normalIndices;
 	std::vector< glm::vec3 > temp_vertices;
@@ -100,65 +211,5 @@ bool LoadObjFromFile(std::string path, std::vector<glm::vec3>* out_vertices, std
 		glm::vec3 normal = temp_normals[normalIndex-1];
 		out_normals->push_back(normal);
 	}
-	return true;
-}
-
-bool getSimilarVertexIndex_fast( PackedVertex* packed, std::map<PackedVertex, unsigned int>* VertexToOutIndex, unsigned int* result){
-	std::map<PackedVertex,unsigned int>::iterator it = VertexToOutIndex->find(*packed);
-	bool output = false;
-	if ( it == VertexToOutIndex->end()){
-		output = false;
-	}else{
-		*result = it->second;
-		output = true;
-	}
-	return output;
-}
-
-void IndexVBO(std::vector<glm::vec3>* out_vertices, std::vector<glm::vec2>* out_uvs, std::vector<glm::vec3>* out_normals, std::vector<unsigned int>* out_indices){
-	std::map<PackedVertex, unsigned int> VertexToOutIndex;
-	std::vector<glm::vec3> temp_vertices, temp_normals;
-	std::vector<glm::vec2> temp_uvs;
-	
-	// Copio los vectores que han pasado en otros temporales
-	temp_vertices.insert	(temp_vertices.begin(), 	out_vertices->begin(), 	out_vertices->end());
-	temp_uvs.insert			(temp_uvs.begin(), 			out_uvs->begin(), 		out_uvs->end());
-	temp_normals.insert		(temp_normals.begin(), 		out_normals->begin(), 	out_normals->end());
-
-	// Una vez copiados los valores, procedo a vaciar los pasados por parametros
-	out_vertices->clear();
-	out_uvs->clear();
-	out_normals->clear();
-
-	// For each input vertex
-	int size = temp_vertices.size();
-	for ( unsigned int i=0; i<size; i++ ){
-
-		PackedVertex packed = {temp_vertices[i], temp_uvs[i], temp_normals[i]};
-		
-		// Try to find a similar vertex in out_XXXX
-		unsigned int index;
-		bool found = getSimilarVertexIndex_fast(&packed, &VertexToOutIndex, &index);
-
-		if (found){ // A similar vertex is already in the VBO, use it instead !
-			out_indices->push_back(index);
-		}else{ // If not, it needs to be added in the output data.
-			out_vertices	->push_back(temp_vertices[i]);
-			out_uvs			->push_back(temp_uvs[i]);
-			out_normals		->push_back(temp_normals[i]);
-			unsigned int newindex = (unsigned int)out_vertices->size() - 1;
-			out_indices		->push_back( newindex );
-			VertexToOutIndex[packed] = newindex;
-		}
-	}
-}
-
-bool TObjLoader::LoadObj( std::string path, std::vector<glm::vec3>* out_vertices, std::vector<glm::vec2>* out_uvs, std::vector<glm::vec3>* out_normals, std::vector<unsigned int>* out_indices){
-	if(!LoadObjFromFile(path, out_vertices, out_uvs, out_normals)){
-		return false;
-	}
-	std::cout<<out_vertices->size()<<std::endl;
-	IndexVBO(out_vertices, out_uvs, out_normals, out_indices);
-	std::cout<<out_vertices->size()<<std::endl;
 	return true;
 }
