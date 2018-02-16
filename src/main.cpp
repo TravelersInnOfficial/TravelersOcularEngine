@@ -83,11 +83,17 @@ void printMatrix(glm::mat4 mat){
 }
 
 int main(){
-    sf::Window App(sf::VideoMode(800, 600, 32), "SFML OpenGL Test", sf::Style::Close);
+	sf::ContextSettings context(24, 8, 3, 3);
+    sf::Window App(sf::VideoMode(800, 600, 32), "SFML OpenGL Test", sf::Style::Close, context);
 
 	/// Iniciamos glew
 	glewExperimental = GL_TRUE;
 	glewInit();
+
+	// Habilidad el test de profundidad
+	glEnable(GL_DEPTH_TEST);
+	// Aceptar el fragmento si está más cerca de la cámara que el fragmento anterior
+	glDepthFunc(GL_LESS);
 
 	/// Creamos el Array de vertices del objeto
     GLuint vao;
@@ -129,11 +135,7 @@ int main(){
 	float x, y;
 	x = 0;
 	y = 1.0f;
-	
-	// Habilidad el test de profundidad
-	glEnable(GL_DEPTH_TEST);
-	// Aceptar el fragmento si está más cerca de la cámara que el fragmento anterior
-	glDepthFunc(GL_LESS);
+
 
 	/// Bucle principal
 	while (App.isOpen()){
@@ -168,9 +170,10 @@ int main(){
 				addVertices(x, y, uniView);
 			}
         }
-		glDepthMask(true);
+		//glDepthMask(true);
+		glClearColor(0.1, 0.1, 0.1, 0.1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glClearColor(0.1, 0.1, 0.1, 0.1);
+
 
         parent->Draw();
 		App.display();
