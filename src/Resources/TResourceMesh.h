@@ -1,12 +1,10 @@
 #ifndef TRESOURCEMESH_H
 #define TRESOURCEMESH_H
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
 #include "TResource.h"
 
 #include "./../Loaders/TObjLoader.h"
+#include "./../Loaders/TAssimpLoader.h"
 
 class TResourceMesh: public TResource {
 
@@ -32,20 +30,6 @@ private:
 
     GLuint m_vbo;
     GLuint m_ebo;
-
-    //GLfloat* m_verTriangles;
-    //GLfloat* m_normTriangles;
-    //GLfloat* m_texTriangles;
-
-    //static CVertexBufferObject vboModelData;
-    //static UINT uiVAO;
-    //static vector <CTexture> tTextures;
-
-    //vector<int> iMeshStartIndices;
-    //vector<int> iMeshSizes;
-    //vector<int> iMaterialIndices;
-
-    //int iNumMaterials;
     
 };
 
