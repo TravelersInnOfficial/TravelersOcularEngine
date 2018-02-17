@@ -1,4 +1,5 @@
 #include "TObjectLoader.h"
+#include "TTextureLoader.h"
 
 bool LoadObjFromFile();
 
@@ -69,20 +70,20 @@ bool TObjectLoader::LoadObjAssimp( std::string path, std::vector<glm::vec3>* out
 }
 
 bool TObjectLoader::LoadObjFromFileAssimp(std::string path, std::vector<glm::vec3>* out_vertices, std::vector<glm::vec2>* out_uvs, std::vector<glm::vec3>* out_normals){
-	std::ifstream file(path);						// |
-	if(!file.fail()) file.close();					// |
-	else{											// |
-		std::cout<<"Could not open file " + path;	// |
-		return false;								// | Comprobacion de que exista
+	std::ifstream file(path);									// |
+	if(!file.fail()) file.close();								// |
+	else{														// |
+		std::cout<<"File not found " + path<<std::endl;			// |
+		return false;											// | Comprobacion de que exista
 	}
 
 	const struct aiScene* scene = NULL;
 	Assimp::Importer importer;
 	scene = importer.ReadFile(path.c_str(), aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType);
 	
-	if(!scene){										// |
-		std::cout<<"Could not open file " + path;	// |
-		return false;								// | Comprobacion de que se lea bien
+	if(!scene){													// |
+		std::cout<<"Could not open file " + path<<std::endl;	// |
+		return false;											// | Comprobacion de que se lea bien
 	}
 
 	// Recorremos todos los MESHES de la ESCENA
@@ -103,18 +104,26 @@ bool TObjectLoader::LoadObjFromFileAssimp(std::string path, std::vector<glm::vec
 		}
 	}
 
-	/*if (scene->HasMaterials()){
+	if (scene->HasMaterials()){
 		for (unsigned int i = 0; i < scene->mNumMaterials; i++){
 			const aiMaterial* material = scene->mMaterials[i];
 			aiString texturePath;
 			unsigned int numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
-			if (material->GetTextureCount(aiTextureType_DIFFUSE)) {
-				if(material->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath) == AI_SUCCESS){
-					
+			for(int i = 0; i < numTextures; i++){
+				if (material->GetTextureCount(aiTextureType_DIFFUSE)) {
+					if(material->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath) == AI_SUCCESS){
+						std::string file = std::string(texturePath.C_Str());
+						std::string auxPath = path.substr(0,path.find_last_of('/'));
+						auxPath = auxPath.substr(0, auxPath.find_last_of('/'));
+						std::string finalPath = auxPath + "/textures/" + file;
+						TTextureLoader loader;
+						GLuint loadedTexture = loader.LoadTexture(finalPath);
+						if(loadedTexture > 0) std::cout<<"CARGADA"<<std::endl;
+					}
 				}
 			}
 		}
-	}*/
+	}
 
 	return true;
 }
