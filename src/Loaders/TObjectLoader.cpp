@@ -1,5 +1,5 @@
 #include "TObjectLoader.h"
-#include "TTextureLoader.h"
+#include "./../TResourceManager.h"
 
 bool LoadObjFromFile();
 
@@ -112,20 +112,14 @@ bool TObjectLoader::LoadObjFromFileAssimp(std::string path, std::vector<glm::vec
 			for(int i = 0; i < numTextures; i++){
 				if (material->GetTextureCount(aiTextureType_DIFFUSE)) {
 					if(material->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath) == AI_SUCCESS){
-						
 						// Treat texture path
 						std::string file = std::string(texturePath.C_Str());
 						std::string auxPath = path.substr(0,path.find_last_of('/'));
 						auxPath = auxPath.substr(0, auxPath.find_last_of('/'));
 						std::string finalPath = auxPath + "/textures/" + file;
 						
-						// Image data
-						unsigned char imageData = 0;
-						int width = 0;
-						int height = 0;
-						
-						// Loading the texture
-						TTextureLoader::LoadTexture(finalPath, &imageData, &width, &height);
+						// Load texture
+						TResourceManager::GetInstance()->GetResourceTexture(finalPath);
 					}
 				}
 			}

@@ -17,6 +17,9 @@ public:
     bool LoadFile();
 
 private:
+    unsigned char m_imageData;
+    int m_width;
+    int m_height;
 
 };
 

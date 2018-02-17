@@ -28,6 +28,7 @@ TResourceMesh::~TResourceMesh(){
 
 bool TResourceMesh::LoadFile(){
 	bool toRet = TObjectLoader::LoadObjAssimp(m_name, &m_vertex, &m_textures, &m_normals, &m_vertexIndex);
+	
 	if(toRet){
 		glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 		glBufferData(GL_ARRAY_BUFFER, m_vertex.size() * sizeof(glm::vec3), &m_vertex[0], GL_STATIC_DRAW);
@@ -35,6 +36,8 @@ bool TResourceMesh::LoadFile(){
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_vertexIndex.size() * sizeof(unsigned int), &m_vertexIndex[0], GL_STATIC_DRAW);
 	}
+
+	SetLoaded(toRet);
 	return toRet;
 }
 

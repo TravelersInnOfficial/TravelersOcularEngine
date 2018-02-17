@@ -17,7 +17,7 @@ bool TTextureLoader::LoadTexture(std::string path, unsigned char* imageData, int
 	// Mostramos los datos por consola
 	/*if(imageData != NULL){
 		std::cout<<"MIS PIXELES SON: "<<std::endl;
-		for(int i = 0; i < width*height*channels; i++){
+		for(int i = 0; i < *width * *height * 4; i++){
 			std::cout<<(int)imageData[i]<<std::endl;
 		}
 	}*/
