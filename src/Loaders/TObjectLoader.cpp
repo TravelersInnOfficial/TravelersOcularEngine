@@ -105,6 +105,7 @@ bool TObjectLoader::LoadObjFromFileAssimp(std::string path, std::vector<glm::vec
 	}
 
 	if (scene->HasMaterials()){
+		std::cout<<"Vamos a cargar texturas para: "<<path<<std::endl;
 		for (unsigned int i = 0; i < scene->mNumMaterials; i++){
 			const aiMaterial* material = scene->mMaterials[i];
 			aiString texturePath;
