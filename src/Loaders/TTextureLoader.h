@@ -9,7 +9,7 @@
 
 class TTextureLoader{
 public:
-	static GLuint LoadTexture(std::string path);
+	static bool LoadTexture(std::string path, unsigned char* imageData, int* width, int* height);
 
 private:
 	

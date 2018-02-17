@@ -105,7 +105,6 @@ bool TObjectLoader::LoadObjFromFileAssimp(std::string path, std::vector<glm::vec
 	}
 
 	if (scene->HasMaterials()){
-		std::cout<<"Vamos a cargar texturas para: "<<path<<std::endl;
 		for (unsigned int i = 0; i < scene->mNumMaterials; i++){
 			const aiMaterial* material = scene->mMaterials[i];
 			aiString texturePath;
@@ -113,13 +112,20 @@ bool TObjectLoader::LoadObjFromFileAssimp(std::string path, std::vector<glm::vec
 			for(int i = 0; i < numTextures; i++){
 				if (material->GetTextureCount(aiTextureType_DIFFUSE)) {
 					if(material->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath) == AI_SUCCESS){
+						
+						// Treat texture path
 						std::string file = std::string(texturePath.C_Str());
 						std::string auxPath = path.substr(0,path.find_last_of('/'));
 						auxPath = auxPath.substr(0, auxPath.find_last_of('/'));
 						std::string finalPath = auxPath + "/textures/" + file;
-						TTextureLoader loader;
-						GLuint loadedTexture = loader.LoadTexture(finalPath);
-						if(loadedTexture > 0) std::cout<<"CARGADA"<<std::endl;
+						
+						// Image data
+						unsigned char imageData = 0;
+						int width = 0;
+						int height = 0;
+						
+						// Loading the texture
+						TTextureLoader::LoadTexture(finalPath, &imageData, &width, &height);
 					}
 				}
 			}
