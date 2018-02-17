@@ -118,7 +118,7 @@ bool TObjectLoader::LoadObjFromFileAssimp(std::string path, std::vector<glm::vec
 						auxPath = auxPath.substr(0, auxPath.find_last_of('/'));
 						std::string finalPath = auxPath + "/textures/" + file;
 						
-						// Load texture
+						// Load texture (But do nothing with it)
 						TResourceManager::GetInstance()->GetResourceTexture(finalPath);
 					}
 				}
