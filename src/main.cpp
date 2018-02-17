@@ -32,7 +32,7 @@ TNode* InitializeTree(Program* prog){
 
 	aux = new TTransform();
 	//aux->Rotate(1.0f, 0.0f, 0.0f, 90.0f);
-	TNode* node2 = new TNode(parent, aux);
+	//TNode* node2 = new TNode(parent, aux);
 	//std::cout<<"NODE2 : "<< node2 << " CREADO | Hijo de PARENT: " << node2->GetParent() << "\n";
 
 	aux = new TTransform();
@@ -42,11 +42,11 @@ TNode* InitializeTree(Program* prog){
 
 	aux = new TTransform();
 	aux->Translate(0.0f, 0.0f, 0.0f);
-	TNode* node4 = new TNode(node2, aux);
+	//TNode* node4 = new TNode(node2, aux);
 	//std::cout<<"NODE4 : "<< node4 << " CREADO | Hijo de  NODE2: " << node4->GetParent() << "\n";
 
 	TMesh* mesh = new TMesh();
-	TNode* nmesh1 = new TNode(node3, mesh);
+	/*TNode* nmesh1 = */ new TNode(node3, mesh);
 	mesh->SetProgram(prog);
 	//std::cout<<"nmesh1 : "<< nmesh1 << " CREADO | Hijo de  NODE3: " << nmesh1->GetParent() << "\n";
 
@@ -172,7 +172,7 @@ int main(){
 			}
         }
 		//glDepthMask(true);
-		glClearColor(1, 1, 1, 1);
+		glClearColor(0.7, 0.7, 1, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 

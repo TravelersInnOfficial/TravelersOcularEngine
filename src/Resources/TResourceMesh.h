@@ -3,7 +3,7 @@
 
 #include "TResource.h"
 
-#include "./../Loaders/TObjLoader.h"
+#include "./../Loaders/TObjectLoader.h"
 
 class TResourceMesh: public TResource {
 

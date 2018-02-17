@@ -3,13 +3,13 @@
     CXXFLAGS			:= -O3 -ffast-math -Wall -std=c++11 -m64
     CPPFLAGS        	:= -I/mingw64/include -I/mingw64/include/bullet -I./src/Common
     LDFLAGS				:= -L/mingw64/lib
-    LIBS 				:= -lopengl32 -lm -lsfml-window -lsfml-graphics -lsfml-system -lglew32 
+    LIBS 				:= -lopengl32 -lm -lsfml-window -lsfml-graphics -lsfml-system -lglew32 -lassimp -lSOIL
 else
     Target				:= EngineTest
     CXXFLAGS			:= -O3 -g -Wall -std=c++11
     CPPFLAGS        	:= -I/usr/include -I/usr/include/bullet -I./src/Common -I/usr/local/include/assimp
     LDFLAGS				:= -L./libs/Linux -L./usr/local/lib/
-    LIBS 				:= -lGL -lsfml-window -lsfml-graphics -lsfml-system -lGLEW -lassimp
+    LIBS 				:= -lGL -lsfml-window -lsfml-graphics -lsfml-system -lGLEW -lassimp -lSOIL
 endif
 
 BinPath 			:= ./bin

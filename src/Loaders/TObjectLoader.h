@@ -1,5 +1,5 @@
-#ifndef TASSIMPLOADER_H
-#define TASSIMPLOADER_H
+#ifndef TOBJECTLOADER_H
+#define TOBJECTLOADER_H
 
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
@@ -24,7 +24,7 @@ struct PackedVertex{
 	};
 };
 
-class TObjLoader{
+class TObjectLoader{
 public:
 	static bool LoadObjAssimp(
 		std::string path, 
