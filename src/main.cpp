@@ -149,22 +149,22 @@ int main(){
 			}
 			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Left)){
 				x -= 2.0f;
-				std::cout << "x: " << x << " y: " << y << "\n"; 
+				//std::cout << "x: " << x << " y: " << y << "\n"; 
 				addVertices(x, y, uniView);
 			}
 			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Right)){
 				x += 2.0f;
-				std::cout << "x: " << x << " y: " << y << "\n"; 
+				//std::cout << "x: " << x << " y: " << y << "\n"; 
 				addVertices(x, y, uniView);
 			}
 			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Down)){
 				y -= 2.0f;				
-				std::cout << "x: " << x << " y: " << y << "\n"; 
+				//std::cout << "x: " << x << " y: " << y << "\n"; 
 				addVertices(x, y, uniView);
 			}
 			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Up)){
 				y += 2.0f;
-				std::cout << "x: " << x << " y: " << y << "\n"; 
+				//std::cout << "x: " << x << " y: " << y << "\n"; 
 				addVertices(x, y, uniView);				
 			}
 			if ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::Space)){

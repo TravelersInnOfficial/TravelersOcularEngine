@@ -11,6 +11,12 @@ TResourceMesh::TResourceMesh(std::string name){
 	m_ebo = 0;
 	glGenBuffers(1, &m_ebo);
 
+	m_uvbo = 0;
+	glGenBuffers(1, &m_uvbo);
+
+	m_nbo = 0;
+	glGenBuffers(1, &m_nbo);
+
 	LoadFile();
 }
 
@@ -79,6 +85,12 @@ bool TResourceMesh::LoadFile(){
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_vertexIndex.size() * sizeof(unsigned int), &m_vertexIndex[0], GL_STATIC_DRAW);
+	
+		glBindBuffer(GL_ARRAY_BUFFER, m_uvbo);
+		glBufferData(GL_ARRAY_BUFFER, m_textures.size()*sizeof(glm::vec2), &m_textures[0], GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_nbo);
+		glBufferData(GL_ARRAY_BUFFER, m_normals.size()*sizeof(glm::vec3), &m_normals[0], GL_STATIC_DRAW);
 	}
 
 	SetLoaded(toRet);
@@ -96,6 +108,14 @@ GLuint* TResourceMesh::GetElementBuffer(){
 
 GLuint* TResourceMesh::GetVertexBuffer(){
 	return &m_vbo;
+}
+
+GLuint* TResourceMesh::GetUvBuffer(){
+	return &m_uvbo;
+}
+
+GLuint* TResourceMesh::GetNormalBuffer(){
+	return &m_nbo;
 }
 
 int TResourceMesh::GetVertexSize(){

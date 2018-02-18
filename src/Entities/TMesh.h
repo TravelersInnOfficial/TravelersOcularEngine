@@ -5,27 +5,25 @@
 #include <GL/glew.h>
 #include <vector>
 #include "../Resources/Program.h"
-#include "./../Resources/TResourceMesh.h"
 #include "./../TResourceManager.h"
+#include "./../Resources/TResourceMesh.h"
+#include "./../Resources/TResourceTexture.h"
 
 class TMesh: public TEntity{
 public:
 	TMesh();
 	~TMesh();
 
-	//void LoadMesh(TFichero);
 	void SetProgram(Program* prog);
 	void BeginDraw();
 	void EndDraw();
 
 private:
 
-	//GLuint   m_vbo;
-	//GLuint   m_ebo;
-	Program* m_program;
+	Program* 	m_program;
 
-	//std::vector<GLuint> elements;
-	TResourceMesh* m_mesh;
+	TResourceMesh* 		m_mesh;
+	TResourceTexture* 	m_texture;
 	
 	/**
 	 * @brief Sends shader all needed information

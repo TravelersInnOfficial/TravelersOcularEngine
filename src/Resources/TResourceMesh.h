@@ -32,10 +32,6 @@ public:
     void ClearNormal();
     void ClearVertexIndex();
 
-
-
-
-
     /**************************************************************************
      * @brief Devuelve un puntero al buffer de vertices
      **************************************************************************/  
@@ -45,7 +41,8 @@ public:
      * @brief Devuelve un puntero al buffer de elementos
      **************************************************************************/  
     GLuint* GetElementBuffer();
-
+    GLuint* GetUvBuffer();
+    GLuint* GetNormalBuffer();
     /**************************************************************************
      * @brief Devuelve el numero de Vertices que tiene el modelo
      **************************************************************************/  
@@ -58,7 +55,9 @@ private:
     std::vector<unsigned int> m_vertexIndex;
 
     GLuint m_vbo;
+    GLuint m_uvbo;
     GLuint m_ebo;
+    GLuint m_nbo;
     
 };
 
