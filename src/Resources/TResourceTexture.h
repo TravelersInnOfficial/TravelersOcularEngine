@@ -16,7 +16,7 @@ public:
 	 *********************************************/
     bool LoadFile();
 
-    GLuint GetTextureId();
+    GLuint* GetTextureId();
 
 private:
     unsigned char m_imageData;

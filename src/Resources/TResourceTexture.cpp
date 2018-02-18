@@ -41,6 +41,6 @@ bool TResourceTexture::LoadFile(){
 	return toRet;
 }
 
-GLuint TResourceTexture::GetTextureId(){
-	return m_textureID;
+GLuint* TResourceTexture::GetTextureId(){
+	return &m_textureID;
 }

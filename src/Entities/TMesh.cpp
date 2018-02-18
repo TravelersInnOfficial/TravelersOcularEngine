@@ -70,7 +70,7 @@ void TMesh::SendShaderData(){
 	// glEnableVertexAttribArray(normalAttrib);
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, m_texture->GetTextureId());
+	glBindTexture(GL_TEXTURE_2D, *m_texture->GetTextureId());
 		// Set our "myTextureSampler" sampler to use Texture Unit 0
 	GLuint TextureID = glGetUniformLocation(m_program->GetProgramID(), "myTextureSampler");
 	glUniform1i(TextureID, 0);
