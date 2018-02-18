@@ -3,18 +3,18 @@
 
 #include "TEntity.h"
 #include <glm/mat4x4.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include "../Resources/Program.h"
 
 class TCamera: public TEntity{
 public:
-	TCamera(bool perspective, float near, float far, float left, float right, float top, float bottom);
+	TCamera(bool perspective, float left, float right, float bottom, float top, float near, float far, Program* p);
 	~TCamera();
 
-	void SetPerspectiva(float near, float far, float left, float right, float top, float bottom);
-	void SetParalela(float near, float far, float left, float right, float top, float bottom);
+	void SetPerspective(float left, float right, float bottom, float top, float near, float far);
+	void SetParallel(float left, float right, float bottom, float top, float near, float far);
 
-	void SetPerspectiva();
-	void SetParalela();
+	void SetPerspective();
+	void SetParallel();
 
 	void SetNear(float newVal);
 	float GetNear();
@@ -37,6 +37,11 @@ public:
 	glm::mat4 GetProjectionMatrix();
 
 	glm::mat4 RecalculateProjectionMatrix();
+
+	glm::mat4 GetTransform();
+	
+	void SendMatrixToShader();
+	Program* m_program;
 
 	void BeginDraw();
 	void EndDraw();

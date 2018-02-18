@@ -25,6 +25,7 @@ public:
 	void 	EndDraw();								// Acabar de pintar la transformacion
 	void 	PrintMatrix();
 	void 	PrintMatrix(glm::mat4);
+	glm::mat4 GetTransform();
 
 private:
 	glm::mat4 m_matrix;								// Matriz de transformacion de 4x4
