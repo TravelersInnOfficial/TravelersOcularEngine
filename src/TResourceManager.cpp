@@ -38,7 +38,10 @@ TResourceTexture* TResourceManager::GetResourceTexture(std::string name){
 	TResourceTexture* toRet = NULL;
 	std::string path = TreatName(name);
 	toRet = (TResourceTexture*)FindResource(path);
-	if(toRet == NULL) toRet = new TResourceTexture(path);
+	if(toRet == NULL){ 
+		toRet = new TResourceTexture(path);
+		m_resources[path] = toRet;
+	}
 	return toRet;
 }
 
@@ -46,7 +49,10 @@ TResourceMesh* TResourceManager::GetResourceMesh(std::string name){
 	TResourceMesh* toRet = NULL;
 	std::string path = TreatName(name);
 	toRet = (TResourceMesh*)FindResource(path);
-	if(toRet == NULL) toRet = new TResourceMesh(path);
+	if(toRet == NULL) {
+		toRet = new TResourceMesh(path);
+		m_resources[path] = toRet;
+	}
 	return toRet;
 }
 
@@ -54,7 +60,10 @@ TResourceMaterial* TResourceManager::GetResourceMaterial(std::string name){
 	TResourceMaterial* toRet = NULL;
 	std::string path = TreatName(name);
 	toRet = (TResourceMaterial*)FindResource(path);
-	if(toRet == NULL) toRet = new TResourceMaterial(path);
+	if(toRet == NULL) {
+		toRet = new TResourceMaterial(path);
+		m_resources[path] = toRet;
+	}
 	return toRet;
 }
 
@@ -62,7 +71,10 @@ TResourceShader* TResourceManager::GetResourceShader(std::string name){
 	TResourceShader* toRet = NULL;
 	std::string path = TreatName(name);
 	toRet = (TResourceShader*)FindResource(path);
-	if(toRet == NULL) toRet = new TResourceShader(path);
+	if(toRet == NULL) {
+		toRet = new TResourceShader(path);
+		m_resources[path] = toRet;
+	}
 	return toRet;
 }
 
