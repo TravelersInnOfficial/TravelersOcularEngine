@@ -26,22 +26,12 @@ struct PackedVertex{
 
 class TObjectLoader{
 public:
-	static bool LoadObjAssimp(
-		std::string path, 
-		std::vector<glm::vec3>* out_vertices, 
-		std::vector<glm::vec2>* out_uvs, 
-		std::vector<glm::vec3>* out_normals,
-		std::vector<unsigned int>* out_indices);
-	static bool LoadObjCustom(
-		std::string path, 
-		std::vector<glm::vec3>* out_vertices, 
-		std::vector<glm::vec2>* out_uvs,
-		std::vector<glm::vec3>* out_normals,
-		std::vector<unsigned int>* out_indices);
+	static bool LoadObjAssimp(TResourceMesh* mesh);
+	static bool LoadObjCustom(TResourceMesh* mesh);
 private:
-	static bool LoadObjFromFileCustom(std::string path, std::vector<glm::vec3>* out_vertices, std::vector<glm::vec2>* out_uvs, std::vector<glm::vec3>* out_normals);
-	static bool LoadObjFromFileAssimp(std::string path, std::vector<glm::vec3>* out_vertices, std::vector<glm::vec2>* out_uvs, std::vector<glm::vec3>* out_normals);
-	static void IndexVBO(std::vector<glm::vec3>* out_vertices, std::vector<glm::vec2>* out_uvs, std::vector<glm::vec3>* out_normals, std::vector<unsigned int>* out_indices);
+	static bool LoadObjFromFileCustom(TResourceMesh* mesh);
+	static bool LoadObjFromFileAssimp(TResourceMesh* mesh);
+	static void IndexVBO(TResourceMesh* mesh);
 	static bool GetSimilarVertexIndex_fast(PackedVertex* packed, std::map<PackedVertex,unsigned int>* VertexToOutIndex, unsigned int* result);
 };
 

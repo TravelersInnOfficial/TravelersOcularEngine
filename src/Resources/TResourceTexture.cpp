@@ -13,6 +13,7 @@ TResourceTexture::TResourceTexture(){
 
 TResourceTexture::~TResourceTexture(){
 	SOIL_free_image_data(&m_imageData); // Liberar el array de datos
+	// Liberar el buffer
 }
 
 bool TResourceTexture::LoadFile(){
