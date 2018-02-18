@@ -104,7 +104,7 @@ bool TObjectLoader::LoadObjFromFileAssimp(TResourceMesh* mesh){
 				aiVector3D uv = meshCustom->mTextureCoords[0][face.mIndices[k]];	// COORDENADA DE TEXTURA
 				
 				mesh->AddVertex(glm::vec3(pos.x, pos.y, pos.z));					// |
-				mesh->AddUv(glm::vec2(uv.x, uv.y));									// |
+				mesh->AddUv(glm::vec2(uv.x, 1.0f-uv.y));									// |
 				mesh->AddNormal(glm::vec3(normal.x, normal.y, normal.z));			// | Lo guardamos para DEVOLVER
 			}
 		}

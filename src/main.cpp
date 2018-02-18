@@ -112,7 +112,7 @@ int main(){
 	glUseProgram(program->GetProgramID());
 
 	glm::mat4 view = glm::mat4(1.0f);
-	view = glm::lookAt( glm::vec3(0.0f, 1.2f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0, 1, 0));
+	view = glm::lookAt( glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0, 1, 0));
 	//view = glm::lookAt( glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0, 1, 0));
 	GLint uniView = glGetUniformLocation(program->GetProgramID(), "ViewMatrix");
 	glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));
