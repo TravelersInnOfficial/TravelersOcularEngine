@@ -3,7 +3,8 @@
 
 #include "TResource.h"
 
-#include "./../Loaders/TObjectLoader.h"
+#include <glm/gtc/type_ptr.hpp>
+#include <vector>
 
 class TResourceMesh: public TResource {
 
@@ -12,15 +13,42 @@ public:
     TResourceMesh(std::string name);
     ~TResourceMesh();
 
-    /*********************************************
+    /**************************************************************************
 	 * @brief Loads the mesh passed
-	 * @param std::string path of the resource
-	 *********************************************/
+     **************************************************************************/  
     bool LoadFile();
 
+    std::vector<glm::vec3>* GetVertexVector();
+    std::vector<glm::vec2>* GetUvVector();
+    std::vector<glm::vec3>* GetNormalVector();
+
+    void AddVertex(glm::vec3 vertex);
+    void AddUv(glm::vec2 uv);
+    void AddNormal(glm::vec3 normal);
+    void AddVertexIndex(unsigned int index);
+
+    void ClearVertex();
+    void ClearUv();
+    void ClearNormal();
+    void ClearVertexIndex();
+
+
+
+
+
+    /**************************************************************************
+     * @brief Devuelve un puntero al buffer de vertices
+     **************************************************************************/  
     GLuint* GetVertexBuffer();
+
+    /**************************************************************************
+     * @brief Devuelve un puntero al buffer de elementos
+     **************************************************************************/  
     GLuint* GetElementBuffer();
 
+    /**************************************************************************
+     * @brief Devuelve el numero de Vertices que tiene el modelo
+     **************************************************************************/  
     int GetVertexSize();
 
 private:
