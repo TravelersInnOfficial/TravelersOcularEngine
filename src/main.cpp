@@ -4,6 +4,7 @@
 #include "Entities/TTransform.h"
 #include "Entities/TMesh.h"
 #include "Resources/Program.h"
+#include "Entities/TCamera.h"
 #include <map>
 
 #define GLEW_STATIC
@@ -18,6 +19,38 @@
 #include "Resources/TResourceMesh.h"
 
 TTransform* node1Rot;
+
+void printMatrix(glm::mat4 mat){
+	for (int i= 0; i<4; i++){
+		for (int j = 0; j<4; j++)
+			std::cout << mat[i][j] <<" ";
+
+		std::cout << "\n";	
+	}
+	std::cout << "\n";
+}
+
+glm::mat4 GetTransformInTree(TNode* node){
+	TNode* auxParent;
+	glm::mat4 toReturn;
+
+	auxParent = node->GetParent();
+	toReturn = ((TTransform*)auxParent->GetEntity())->GetTransform();
+	auxParent = auxParent->GetParent();
+
+	while(auxParent != NULL){
+		printMatrix(toReturn);
+		toReturn = ((TTransform*)auxParent->GetEntity())->GetTransform() * toReturn;
+		auxParent = auxParent->GetParent();
+	}
+	
+	return toReturn;
+}
+
+void sendViewMatrix(Program* prog, glm::mat4 view){
+	GLint uniView = glGetUniformLocation(prog->GetProgramID(), "ViewMatrix");
+	glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));
+}
 
 TNode* InitializeTree(Program* prog){
 	// MAIN MENU
@@ -55,36 +88,40 @@ TNode* InitializeTree(Program* prog){
 	mesh2->SetProgram(prog);*/
 	//std::cout<<"nmesh2 : "<< nmesh2 << " CREADO | Hijo de  NODE4: " << nmesh2->GetParent() << "\n";
 
+	aux = new TTransform();
+	aux->Rotate(1.0f, 0.0f, 0.0f, 0.0f);
+	TNode* node5 = new TNode(parent, aux);
+
+	aux = new TTransform();
+	aux->Translate(0.0f, 0.0f, -5.0f);
+	TNode* node6 = new TNode(node5, aux);
+	
+	TCamera* camera = new TCamera(true, -1.0f, 1.0f, -0.75f, 0.75f, 2.0f, 10.0f, prog);
+	TNode* cameraNode = new TNode(node6, camera);
+
+/**/
+	glm::mat4 view = glm::mat4(1.0f);
+	view = GetTransformInTree(cameraNode);
+	sendViewMatrix(prog, view);
+
+	//view = glm::lookAt( glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0, 1, 0));
+	//proj = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 1.0f, 100.0f);
+	//proj = glm::frustum(-1.0f, 1.0f, -0.75f, 0.75f, 2.0f, 10.0f);
+	//proj = glm::ortho(-1.0f, 1.0f, -0.75f, 0.75f, 1.0f, 10.0f);
+/**/
+
 	//std::cout<<"############################################################\n";
 
 	return parent;
 }
 
-void addVertices(float x, float y, GLuint uniView){/*
-	glm::mat4 view = glm::lookAt( glm::vec3(0.0f, 0.0f, 0.5f), glm::vec3(5 * sin(glm::radians(x)), y, 50*cos(glm::radians(x))), glm::vec3(0.0f, 0.0f, 1.0f));
-	glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));
-
-	// Definimos los vertices del objeto
-	//std::cout << "###########################################################\n";
-	//std::cout << "Dibujamos los nuevos vertices\n";*/
-
-	node1Rot->Identity();
+void addVertices(float x, float y){
 	node1Rot->Rotate(0.0f, 1.0f, 0.0f, x);
 	node1Rot->Rotate(1.0f, 0.0f, 0.0f, y);
 }
 
-void printMatrix(glm::mat4 mat){
-	for (int i= 0; i<4; i++){
-		for (int j = 0; j<4; j++)
-			std::cout << mat[i][j] <<" ";
-
-		std::cout << "\n";	
-	}
-	std::cout << "\n";
-}
-
 int main(){
-	sf::ContextSettings context(24, 8, 4, 3);
+	sf::ContextSettings context = sf::ContextSettings(24, 8, 4, 3);
     sf::Window App(sf::VideoMode(800, 600, 32), "SFML OpenGL Test", sf::Style::Close, context);
 
 	/// Iniciamos glew
@@ -111,33 +148,8 @@ int main(){
 	Program* program = new Program(shaders);
 	glUseProgram(program->GetProgramID());
 
-	glm::mat4 view = glm::mat4(1.0f);
-	view = glm::lookAt( glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0, 1, 0));
-	//view = glm::lookAt( glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0, 1, 0));
-	GLint uniView = glGetUniformLocation(program->GetProgramID(), "ViewMatrix");
-	glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));
-
-	glm::mat4 proj = glm::mat4(1.0f);
-	GLfloat FoV = 45.0f;
-	proj = glm::perspective(
-		glm::radians(FoV), // El campo de visión vertical, en radián: la cantidad de "zoom". Piensa en el lente de la cámara. Usualmente está entre 90° (extra ancho) y 30° (zoom aumentado)
-		4.0f / 3.0f,       // Proporción. Depende del tamaño de tu ventana 4/3 == 800/600 == 1280/960, Parece familiar?
-		1.0f,              // Plano de corte cercano. Tan grande como sea posible o tendrás problemas de precisión.
-		100.0f             // Plano de corte lejano. Tan pequeño como se pueda.
-	);
-	//proj = glm::ortho(-40.0f, 40.0f, -30.0f, 30.0f, 0.1f, 10.0f);
-	//proj = glm::frustum(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 10.0f);
-	//proj = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 10.0f);
-	
-	GLint uniProj = glGetUniformLocation(program->GetProgramID(), "ProjectionMatrix");
-	glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(proj));
-
 	TNode* parent = InitializeTree(program);
 	
-	float x, y;
-	x = 0;
-	y = 1.0f;
-
 	TResourceManager* resourceManager = TResourceManager::GetInstance();
 
 	/// Bucle principal
@@ -150,27 +162,18 @@ int main(){
                 App.close();
 			}
 			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Left)){
-				x -= 2.0f;
-				//std::cout << "x: " << x << " y: " << y << "\n"; 
-				addVertices(x, y, uniView);
+				addVertices(-2, 0);
 			}
 			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Right)){
-				x += 2.0f;
-				//std::cout << "x: " << x << " y: " << y << "\n"; 
-				addVertices(x, y, uniView);
+				addVertices(2, 0);
 			}
 			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Down)){
-				y -= 2.0f;				
-				//std::cout << "x: " << x << " y: " << y << "\n"; 
-				addVertices(x, y, uniView);
+				addVertices(0, -2);
 			}
 			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Up)){
-				y += 2.0f;
-				//std::cout << "x: " << x << " y: " << y << "\n"; 
-				addVertices(x, y, uniView);				
+				addVertices(0, 2);				
 			}
 			if ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::Space)){
-				addVertices(x, y, uniView);
 			}
         }
 		//glDepthMask(true);

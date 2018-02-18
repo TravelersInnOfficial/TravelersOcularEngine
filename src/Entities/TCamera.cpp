@@ -1,12 +1,17 @@
 #include "TCamera.h"
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <GL/glew.h>
+#include <iostream>
 
 /*############################################################################################
 # NEW/DELETE #################################################################################
 ############################################################################################*/
 
-TCamera::TCamera(bool perspective, float near, float far, float left, float right, float top, float bottom){
-	if(perspective) SetPerspectiva(near, far, left, right, top, bottom);
-	else SetParalela(near, far, left, right, top, bottom);
+TCamera::TCamera(bool perspective, float left, float right, float bottom, float top, float near, float far, Program* p){
+	m_program = p;
+	if(perspective) SetPerspective(left, right, bottom, top, near, far);
+	else SetParallel(left, right, bottom, top, near, far);
 }
 
 TCamera::~TCamera(){}
@@ -15,26 +20,26 @@ TCamera::~TCamera(){}
 # GETTERS/SETTERS ############################################################################
 ############################################################################################*/
 
-void TCamera::SetPerspectiva(float near, float far, float left, float right, float top, float bottom){
+void TCamera::SetPerspective(float left, float right, float bottom, float top, float near, float far){
+	SetNear(near); SetFar(far);
+	SetLeft(left); SetRight(right);
+	SetTop(top); SetBottom(bottom);
+	SetPerspective();
+}
+
+void TCamera::SetParallel(float left, float right, float bottom, float top, float near, float far){
 	SetNear(near); SetFar(far); 
 	SetLeft(left); SetRight(right); 
 	SetTop(top); SetBottom(bottom);
-	SetPerspectiva();
+	SetParallel();
 }
 
-void TCamera::SetParalela(float near, float far, float left, float right, float top, float bottom){
-	SetNear(near); SetFar(far); 
-	SetLeft(left); SetRight(right); 
-	SetTop(top); SetBottom(bottom);
-	SetParalela();
-}
-
-void TCamera::SetPerspectiva(){
+void TCamera::SetPerspective(){
 	m_perspective = true;
 	RecalculateProjectionMatrix();
 }
 
-void TCamera::SetParalela(){
+void TCamera::SetParallel(){
 	m_perspective = false;
 	RecalculateProjectionMatrix();
 }
@@ -96,13 +101,11 @@ glm::mat4 TCamera::GetProjectionMatrix(){
 ############################################################################################*/
 
 glm::mat4 TCamera::RecalculateProjectionMatrix(){
-	glm::mat4 projectionMatrix = glm::mat4(1.0f);
+	if(m_perspective) m_projectionMatrix = CalculatePerspectiveMatrix();
+	else m_projectionMatrix = CalculateOrthogonalMatrix();
 
-	if(m_perspective) projectionMatrix = CalculatePerspectiveMatrix();
-	else projectionMatrix = CalculateOrthogonalMatrix();
-
-	m_projectionMatrix = projectionMatrix;
-	return(projectionMatrix);
+	SendMatrixToShader();
+	return(m_projectionMatrix);
 }
 
 glm::mat4 TCamera::CalculatePerspectiveMatrix(){
@@ -111,6 +114,14 @@ glm::mat4 TCamera::CalculatePerspectiveMatrix(){
 
 glm::mat4 TCamera::CalculateOrthogonalMatrix(){
 	return(glm::ortho(m_left, m_right, m_bottom, m_top, m_near, m_far));
+}
+
+void TCamera::SendMatrixToShader(){
+	if (m_program == NULL)
+		std::cout << "EL PROGRAMA\n";
+
+	GLint uniProj = glGetUniformLocation(m_program->GetProgramID(), "ProjectionMatrix");
+	glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(m_projectionMatrix));
 }
 
 /*############################################################################################

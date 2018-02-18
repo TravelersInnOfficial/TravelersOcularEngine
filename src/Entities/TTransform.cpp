@@ -68,3 +68,7 @@ void TTransform::PrintMatrix(){
 	}
 	std::cout<<"\n";
 }
+
+glm::mat4 TTransform::GetTransform(){
+	return m_matrix;
+}
