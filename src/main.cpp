@@ -91,6 +91,7 @@ int main(){
 	glewExperimental = GL_TRUE;
 	glewInit();
 
+	glEnable(GL_TEXTURE_2D);
 	// Habilidad el test de profundidad
 	glEnable(GL_DEPTH_TEST);
 	// Aceptar el fragmento si está más cerca de la cámara que el fragmento anterior

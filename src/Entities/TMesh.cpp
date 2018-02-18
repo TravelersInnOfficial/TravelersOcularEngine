@@ -42,7 +42,7 @@ void TMesh::SendShaderData(){
 
 	// SEND THE VERTEX
 	GLint posAttrib = glGetAttribLocation(m_program->GetProgramID(), "VertexPosition");
-	glVertexAttribPointer(posAttrib,3, GL_FLOAT, GL_FALSE, 3*sizeof(float), 0);
+	glVertexAttribPointer(posAttrib,3, GL_FLOAT, GL_FALSE, 0*sizeof(float), 0);
 	glEnableVertexAttribArray(posAttrib);
 
 	// --------------------------------------------------------ENVIAMOS LAS UV
@@ -52,7 +52,7 @@ void TMesh::SendShaderData(){
 
 	// SEND THE UV
 	GLint uvAttrib = glGetAttribLocation(m_program->GetProgramID(), "inUV");
-	glVertexAttribPointer(uvAttrib, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
+	glVertexAttribPointer(uvAttrib, 2, GL_FLOAT, GL_FALSE, 0*sizeof(float), 0);
 	glEnableVertexAttribArray(uvAttrib);
 
 	// --------------------------------------------------------ENVIAMOS LA MATRIZ DE MODELO
@@ -71,7 +71,6 @@ void TMesh::SendShaderData(){
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, *m_texture->GetTextureId());
-		// Set our "myTextureSampler" sampler to use Texture Unit 0
 	GLuint TextureID = glGetUniformLocation(m_program->GetProgramID(), "myTextureSampler");
 	glUniform1i(TextureID, 0);
 }

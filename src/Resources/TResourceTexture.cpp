@@ -12,30 +12,37 @@ TResourceTexture::TResourceTexture(){
 }
 
 TResourceTexture::~TResourceTexture(){
-	SOIL_free_image_data(&m_imageData); // Liberar el array de datos
+	SOIL_free_image_data(m_imageData); // Liberar el array de datos
 	glBindBuffer(GL_TEXTURE_2D, 0);		// |
 	glDeleteBuffers(1, &m_textureID);	// | Eliminar el buffer de datos de OpenGL
 }
 
 bool TResourceTexture::LoadFile(){
-	bool toRet = TTextureLoader::LoadTexture(m_name, &m_imageData, &m_width, &m_height);
+	//bool toRet = TTextureLoader::LoadTexture(m_name, m_imageData, &m_width, &m_height);
+	bool toRet = true;
 	SetLoaded(toRet);
 
 	if(toRet){
+		int channels;
+		m_imageData = SOIL_load_image(m_name.c_str(), &m_width, &m_height, &channels, SOIL_LOAD_RGBA);
+
 		// Preparamos la Textura
 		glGenTextures(1, &m_textureID);	// Numero de texturas a generar, array de texturas
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &m_imageData);	// Cargamos nuestros datos en la textura de OpenGL
+
+		// Bindeamos los parametros a nuestra textura de OpenGL
+		glBindTexture(GL_TEXTURE_2D, m_textureID);
+		
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_imageData);	// Cargamos nuestros datos en la textura de OpenGL
 
 		// Algunos Parametros de Textura --> https://www.khronos.org/registry/OpenGL-Refpages/es2.0/xhtml/glTexParameter.xml
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 		// Algunos Filtros de Textura --> https://www.khronos.org/registry/OpenGL-Refpages/es2.0/xhtml/glTexParameter.xml
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glGenerateMipmap(GL_TEXTURE_2D);
 		
-		// Bindeamos los parametros a nuestra textura de OpenGL
-		glBindTexture(GL_TEXTURE_2D, m_textureID);
 	}
 
 	return toRet;

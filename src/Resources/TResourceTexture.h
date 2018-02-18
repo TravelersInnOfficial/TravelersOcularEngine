@@ -19,7 +19,7 @@ public:
     GLuint* GetTextureId();
 
 private:
-    unsigned char m_imageData;
+    unsigned char* m_imageData;
     int m_width;
     int m_height;
     GLuint m_textureID;

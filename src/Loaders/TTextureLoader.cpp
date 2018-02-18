@@ -13,7 +13,7 @@ bool TTextureLoader::LoadTexture(std::string path, unsigned char* imageData, int
 	// Cargamos la imagen forzando el numero de canales a 4 (SOIL_LOAD_RGBA)
 	int channels;
 	imageData = SOIL_load_image(path.c_str(), width, height, &channels, SOIL_LOAD_RGBA);
-	
+	std::cout<<channels<<std::endl;
 	// Mostramos los datos por consola
 	/*if(imageData != NULL){
 		std::cout<<"MIS PIXELES SON: "<<std::endl;

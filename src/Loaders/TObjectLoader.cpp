@@ -30,8 +30,8 @@ void TObjectLoader::IndexVBO(TResourceMesh* mesh){
 	for ( unsigned int i=0; i<size; i++ ){
 
 		PackedVertex packed = {temp_vertices[i], temp_uvs[i], temp_normals[i]};
-		
-		// Try to find a similar vertex in out_XXXX
+	
+			// Try to find a similar vertex in out_XXXX
 		unsigned int index;
 		bool found = GetSimilarVertexIndex_fast(&packed, &VertexToOutIndex, &index);
 
