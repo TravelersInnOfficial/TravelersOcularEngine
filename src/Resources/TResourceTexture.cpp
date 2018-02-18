@@ -4,6 +4,10 @@
 
 TResourceTexture::TResourceTexture(std::string name){
 	m_name = name;
+
+	glBindBuffer(GL_TEXTURE_2D, 0);	
+	glGenBuffers(1, &m_textureID);
+
 	LoadFile();
 }
 
@@ -13,6 +17,7 @@ TResourceTexture::TResourceTexture(){
 
 TResourceTexture::~TResourceTexture(){
 	SOIL_free_image_data(m_imageData); // Liberar el array de datos
+
 	glBindBuffer(GL_TEXTURE_2D, 0);		// |
 	glDeleteBuffers(1, &m_textureID);	// | Eliminar el buffer de datos de OpenGL
 }
@@ -23,8 +28,6 @@ bool TResourceTexture::LoadFile(){
 	SetLoaded(toRet);
 
 	if(toRet){
-		// Preparamos la Textura
-		glGenTextures(1, &m_textureID);	// Numero de texturas a generar, array de texturas
 
 		// Bindeamos los parametros a nuestra textura de OpenGL
 		glBindTexture(GL_TEXTURE_2D, m_textureID);
@@ -41,10 +44,9 @@ bool TResourceTexture::LoadFile(){
 		glGenerateMipmap(GL_TEXTURE_2D);
 		
 	}
-
 	return toRet;
 }
 
-GLuint* TResourceTexture::GetTextureId(){
-	return &m_textureID;
+GLuint TResourceTexture::GetTextureId(){
+	return m_textureID;
 }

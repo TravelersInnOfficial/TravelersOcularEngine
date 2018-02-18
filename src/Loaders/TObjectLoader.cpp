@@ -1,30 +1,23 @@
 #include "TObjectLoader.h"
 #include "./../TResourceManager.h"
 
-bool LoadObjFromFile();
-
 // VBO = VERTEX BUFFER OBJECT
 
-void TObjectLoader::IndexVBO(TResourceMesh* mesh){
+void TObjectLoader::IndexVBO(TResourceMesh* mesh, std::vector<glm::vec3>* vertexVec, std::vector<glm::vec2>* uvVec, std::vector<glm::vec3>* normalVec, std::vector<unsigned int>* indexVec){
 	std::map<PackedVertex, unsigned int> VertexToOutIndex;
 	std::vector<glm::vec3> temp_vertices, temp_normals;
 	std::vector<glm::vec2> temp_uvs;
-	
-	// Conseguimos un puntero a los vectores del mesh
-	std::vector<glm::vec3>* out_vertices = mesh->GetVertexVector();
-	std::vector<glm::vec2>* out_uvs = mesh->GetUvVector();
-	std::vector<glm::vec3>* out_normals = mesh->GetNormalVector();
 
 	// Copio los vectores que han pasado en otros temporales
-	temp_vertices.insert	(temp_vertices.begin(), 	out_vertices->begin(), 	out_vertices->end());
-	temp_uvs.insert			(temp_uvs.begin(), 			out_uvs->begin(), 		out_uvs->end());
-	temp_normals.insert		(temp_normals.begin(), 		out_normals->begin(), 	out_normals->end());
+	temp_vertices.insert	(temp_vertices.begin(), 	vertexVec->begin(), 	vertexVec->end());
+	temp_uvs.insert			(temp_uvs.begin(), 			uvVec->begin(), 		uvVec->end());
+	temp_normals.insert		(temp_normals.begin(), 		normalVec->begin(), 	normalVec->end());
 
 	// Una vez copiados los valores, procedo a vaciar los pasados por parametros
-	mesh->ClearVertex();
-	mesh->ClearUv();
-	mesh->ClearNormal();
-
+	vertexVec->clear();
+	uvVec->clear();
+	normalVec->clear();
+	indexVec->clear();
 	// For each input vertex
 	int size = temp_vertices.size();
 	for ( unsigned int i=0; i<size; i++ ){
@@ -36,13 +29,13 @@ void TObjectLoader::IndexVBO(TResourceMesh* mesh){
 		bool found = GetSimilarVertexIndex_fast(&packed, &VertexToOutIndex, &index);
 
 		if (found){ // A similar vertex is already in the VBO, use it instead !
-			mesh->AddVertexIndex(index);
+			indexVec->push_back(index);
 		}else{ // If not, it needs to be added in the output data.
-			mesh->AddVertex(temp_vertices[i]);
-			mesh->AddUv(temp_uvs[i]);			
-			mesh->AddNormal(temp_normals[i]);
-			unsigned int newindex = (unsigned int)out_vertices->size() - 1;
-			mesh->AddVertexIndex(newindex);
+			vertexVec->push_back(temp_vertices[i]);
+			uvVec->push_back(temp_uvs[i]);			
+			normalVec->push_back(temp_normals[i]);
+			unsigned int newindex = (unsigned int)vertexVec->size() - 1;
+			indexVec->push_back(newindex);
 			VertexToOutIndex[packed] = newindex;
 		}
 	}
@@ -60,6 +53,58 @@ bool TObjectLoader::GetSimilarVertexIndex_fast(PackedVertex* packed, std::map<Pa
 	return output;
 }
 
+bool TObjectLoader::LoadObj(TResourceMesh* mesh, int option){
+	std::vector<glm::vec3> vertex;
+	std::vector<glm::vec2> uv;
+	std::vector<glm::vec3> normal;
+	std::vector<unsigned int> index;
+
+	bool loaded = false;
+	switch(option){
+		case 0:
+			loaded = LoadObjFromFileAssimp(mesh, &vertex, &uv, &normal);
+			break;
+		case 1:
+			loaded = LoadObjFromFileCustom(mesh, &vertex, &uv, &normal);
+			break;
+		default:
+			std::cout<<"La opcion a la que intenta acceder no existe. Opcion: "<<option<<std::endl;
+	}
+
+	if(!loaded){
+		return false;
+	}
+
+
+	IndexVBO(mesh, &vertex, &uv, &normal, &index);
+
+	// Cargamos el buffer de vertices
+	GLuint currentBuffer = mesh->GetVertexBuffer();
+	glBindBuffer(GL_ARRAY_BUFFER, currentBuffer);
+	glBufferData(GL_ARRAY_BUFFER, vertex.size()*sizeof(glm::vec3), &vertex[0], GL_STATIC_DRAW);
+	glBufferStorage(GL_ARRAY_BUFFER, vertex.size()*sizeof(glm::vec3), &vertex[0], GL_STATIC_DRAW);
+
+	// Cargamos el buffer de uvs
+	currentBuffer = mesh->GetUvBuffer();
+	glBindBuffer(GL_ARRAY_BUFFER, currentBuffer);
+	glBufferData(GL_ARRAY_BUFFER, uv.size()*sizeof(glm::vec2), &uv[0], GL_STATIC_DRAW);
+	
+	// Cargamos el buffer de normales
+	currentBuffer = mesh->GetNormalBuffer();
+	glBindBuffer(GL_ARRAY_BUFFER, currentBuffer);
+	glBufferData(GL_ARRAY_BUFFER, normal.size()*sizeof(glm::vec3), &normal[0], GL_STATIC_DRAW);
+
+	// Cargamos el buffer de elementos
+	currentBuffer = mesh->GetElementBuffer();
+	mesh->SetElementSize(index.size());
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, currentBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index.size()*sizeof(unsigned int), &index[0], GL_STATIC_DRAW);
+	glBufferStorage(GL_ELEMENT_ARRAY_BUFFER, index.size()*sizeof(unsigned int), &index[0], GL_STATIC_DRAW);
+	
+
+	return true;
+}
+
 // ============================================================================================================================================
 //
 // ASSIMP
@@ -67,14 +112,10 @@ bool TObjectLoader::GetSimilarVertexIndex_fast(PackedVertex* packed, std::map<Pa
 // ============================================================================================================================================
 
 bool TObjectLoader::LoadObjAssimp(TResourceMesh* mesh){
-	if(!LoadObjFromFileAssimp(mesh)){
-		return false;
-	}
-	IndexVBO(mesh);
-	return true;
+	return LoadObj(mesh, 0);
 }
 
-bool TObjectLoader::LoadObjFromFileAssimp(TResourceMesh* mesh){
+bool TObjectLoader::LoadObjFromFileAssimp(TResourceMesh* mesh, std::vector<glm::vec3>* vertexVec, std::vector<glm::vec2>* uvVec, std::vector<glm::vec3>* normalVec){
 	std::string path = mesh->GetName();
 	std::ifstream file(path);									// |
 	if(!file.fail()) file.close();								// |
@@ -100,12 +141,12 @@ bool TObjectLoader::LoadObjFromFileAssimp(TResourceMesh* mesh){
 			const aiFace& face = meshCustom->mFaces[j];			// Nos guardamos la cara que estamos tratando
 			for(int k = 0; k < 3 ;k++){
 				aiVector3D pos = meshCustom->mVertices[face.mIndices[k]];			// POSICION DEL VERTICE
-				aiVector3D normal = meshCustom->mNormals[face.mIndices[k]];		// NORMAL DEL VERTICE
+				aiVector3D normal = meshCustom->mNormals[face.mIndices[k]];			// NORMAL DEL VERTICE
 				aiVector3D uv = meshCustom->mTextureCoords[0][face.mIndices[k]];	// COORDENADA DE TEXTURA
 				
-				mesh->AddVertex(glm::vec3(pos.x, pos.y, pos.z));					// |
-				mesh->AddUv(glm::vec2(uv.x, 1.0f-uv.y));									// |
-				mesh->AddNormal(glm::vec3(normal.x, normal.y, normal.z));			// | Lo guardamos para DEVOLVER
+				vertexVec->push_back(glm::vec3(pos.x, pos.y, pos.z));				// |		
+				uvVec->push_back(glm::vec2(uv.x, 1.0f-uv.y));						// |
+				normalVec->push_back(glm::vec3(normal.x, normal.y, normal.z));		// | Lo guardamos para DEVOLVER
 			}
 		}
 	}
@@ -125,7 +166,10 @@ bool TObjectLoader::LoadObjFromFileAssimp(TResourceMesh* mesh){
 						std::string finalPath = auxPath + "/textures/" + file;
 						
 						// Load texture (But do nothing with it)
-						TResourceManager::GetInstance()->GetResourceTexture(finalPath);
+						TResourceTexture* texture = TResourceManager::GetInstance()->GetResourceTexture(finalPath);
+						if(texture != NULL){
+							mesh->AddTexture(texture);
+						}
 					}
 				}
 			}
@@ -142,14 +186,10 @@ bool TObjectLoader::LoadObjFromFileAssimp(TResourceMesh* mesh){
 // ============================================================================================================================================
 
 bool TObjectLoader::LoadObjCustom(TResourceMesh* mesh){
-	if(!LoadObjFromFileCustom(mesh)){
-		return false;
-	}
-	IndexVBO(mesh);
-	return true;
+	return LoadObj(mesh, 1);
 }
 
-bool TObjectLoader::LoadObjFromFileCustom(TResourceMesh* mesh){
+bool TObjectLoader::LoadObjFromFileCustom(TResourceMesh* mesh, std::vector<glm::vec3>* vertexVec, std::vector<glm::vec2>* uvVec, std::vector<glm::vec3>* normalVec){
 	// Creamos algunas variables temporales para cargar el obj
 	std::vector< unsigned int > vertexIndices, uvIndices, normalIndices;
 	std::vector< glm::vec3 > temp_vertices;
@@ -183,6 +223,7 @@ bool TObjectLoader::LoadObjFromFileCustom(TResourceMesh* mesh){
 			else if ( strcmp( lineHeader, "vt" ) == 0 ){
 				glm::vec2 uv;
 				fscanf(file, "%f %f\n", &uv.x, &uv.y );
+				uv.y = 1.0f - uv.y;
 				temp_uvs.push_back(uv);
 			}
 			// Miramos si se trata de una normal
@@ -223,7 +264,7 @@ bool TObjectLoader::LoadObjFromFileCustom(TResourceMesh* mesh){
 		int vertexIndex = vertexIndices[i];
 		// Tenemos que poner el -1 porque los obj empiezan por 1
 		glm::vec3 vertex = temp_vertices[vertexIndex-1];
-		mesh->AddVertex(vertex);
+		vertexVec->push_back(vertex);
 	}
 	// Analizamos los UV
 	size = uvIndices.size();
@@ -231,7 +272,7 @@ bool TObjectLoader::LoadObjFromFileCustom(TResourceMesh* mesh){
 		// Nos guardamos el indice del uv
 		int uvIndex = uvIndices[i];
 		glm::vec2 uv = temp_uvs[uvIndex-1];
-		mesh->AddUv(uv);
+		uvVec->push_back(uv);
 	}
 	// Analizamos las normales
 	size = normalIndices.size();
@@ -239,7 +280,7 @@ bool TObjectLoader::LoadObjFromFileCustom(TResourceMesh* mesh){
 		// Nos guardamos el indice de la normal
 		int normalIndex = normalIndices[i];
 		glm::vec3 normal = temp_normals[normalIndex-1];
-		mesh->AddNormal(normal);
+		normalVec->push_back(normal);
 	}
 	return true;
 }

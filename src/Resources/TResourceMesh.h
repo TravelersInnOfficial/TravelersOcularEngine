@@ -2,6 +2,7 @@
 #define TRESOURCEMESH_H
 
 #include "TResource.h"
+#include "TResourceTexture.h"
 
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
@@ -18,47 +19,49 @@ public:
      **************************************************************************/  
     bool LoadFile();
 
-    std::vector<glm::vec3>* GetVertexVector();
-    std::vector<glm::vec2>* GetUvVector();
-    std::vector<glm::vec3>* GetNormalVector();
+    void AddTexture(TResourceTexture* texture);
+    void SetElementSize(int value);
+    TResourceTexture* GetTexture();
 
-    void AddVertex(glm::vec3 vertex);
-    void AddUv(glm::vec2 uv);
-    void AddNormal(glm::vec3 normal);
-    void AddVertexIndex(unsigned int index);
-
-    void ClearVertex();
-    void ClearUv();
-    void ClearNormal();
-    void ClearVertexIndex();
-
+// =====================================================================================================
+//
+//  BUFFERS
+//
+// ===================================================================================================== 
+    
     /**************************************************************************
      * @brief Devuelve un puntero al buffer de vertices
      **************************************************************************/  
-    GLuint* GetVertexBuffer();
+    GLuint GetVertexBuffer();
 
     /**************************************************************************
      * @brief Devuelve un puntero al buffer de elementos
      **************************************************************************/  
-    GLuint* GetElementBuffer();
-    GLuint* GetUvBuffer();
-    GLuint* GetNormalBuffer();
+    GLuint GetElementBuffer();
+
+    /**************************************************************************
+     * @brief Devuelve un puntero al buffer de uv
+     **************************************************************************/  
+    GLuint GetUvBuffer();
+
+    /**************************************************************************
+     * @brief Devuelve un puntero al buffer de normales
+     **************************************************************************/  
+    GLuint GetNormalBuffer();
+
     /**************************************************************************
      * @brief Devuelve el numero de Vertices que tiene el modelo
      **************************************************************************/  
-    int GetVertexSize();
+    int GetElementSize();
 
 private:
-    std::vector<glm::vec3> m_vertex;
-    std::vector<glm::vec2> m_textures;
-    std::vector<glm::vec3> m_normals;
-    std::vector<unsigned int> m_vertexIndex;
+    int m_elementSize;
+    TResourceTexture* m_basicTexture;
 
     GLuint m_vbo;
     GLuint m_uvbo;
     GLuint m_ebo;
-    GLuint m_nbo;
-    
+    GLuint m_nbo;  
 };
 
 #endif

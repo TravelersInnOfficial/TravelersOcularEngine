@@ -18,9 +18,9 @@ void TMesh::BeginDraw(){
 	// Bind and send the data to the VERTEX SHADER
 	SendShaderData();
 	// Bind and draw elements depending of how many vbos
-	GLuint* elementsBuffer = m_mesh->GetElementBuffer();
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *elementsBuffer);
-	glDrawElements(GL_TRIANGLES, 10000, GL_UNSIGNED_INT, 0);
+	GLuint elementsBuffer = m_mesh->GetElementBuffer();
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBuffer);
+	glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
 }
 
 void TMesh::EndDraw(){
@@ -37,8 +37,8 @@ void TMesh::SendShaderData(){
 
     // --------------------------------------------------------ENVIAMOS LOS VERTICES
     // BIND VERTEX
-    GLuint* vertexBuffer = m_mesh->GetVertexBuffer();
-	glBindBuffer(GL_ARRAY_BUFFER, *vertexBuffer);
+    GLuint vertexBuffer = m_mesh->GetVertexBuffer();
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 
 	// SEND THE VERTEX
 	GLint posAttrib = glGetAttribLocation(m_program->GetProgramID(), "VertexPosition");
@@ -47,11 +47,11 @@ void TMesh::SendShaderData(){
 
 	// --------------------------------------------------------ENVIAMOS LAS UV
 	// BIND THE UV
-    GLuint* uvBuffer = m_mesh->GetUvBuffer();
-	glBindBuffer(GL_ARRAY_BUFFER, *uvBuffer);
+    GLuint uvBuffer = m_mesh->GetUvBuffer();
+	glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
 
 	// SEND THE UV
-	GLint uvAttrib = glGetAttribLocation(m_program->GetProgramID(), "inUV");
+	GLuint uvAttrib = glGetAttribLocation(m_program->GetProgramID(), "inUV");
 	glVertexAttribPointer(uvAttrib, 2, GL_FLOAT, GL_FALSE, 0*sizeof(float), 0);
 	glEnableVertexAttribArray(uvAttrib);
 
@@ -68,10 +68,18 @@ void TMesh::SendShaderData(){
 	// GLint normalAttrib = glGetAttribLocation(m_program->GetProgramID(), "vertexNormal");
 	// glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, GL_FALSE, 9*sizeof(float), (void*)(3*sizeof(float)));
 	// glEnableVertexAttribArray(normalAttrib);
+	TResourceTexture* currentTexture = NULL;
+	if(m_texture != NULL){
+		currentTexture = m_texture;
+	}else if(m_mesh!=NULL){
+		currentTexture = m_mesh->GetTexture();
+	}
 
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, *m_texture->GetTextureId());
-	GLuint TextureID = glGetUniformLocation(m_program->GetProgramID(), "myTextureSampler");
-	glUniform1i(TextureID, 0);
+	if(currentTexture!=NULL){
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, currentTexture->GetTextureId());
+		GLuint TextureID = glGetUniformLocation(m_program->GetProgramID(), "myTextureSampler");
+		glUniform1i(TextureID, 0);
+	}
 }
 	

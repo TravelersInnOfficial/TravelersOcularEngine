@@ -138,6 +138,7 @@ int main(){
 	x = 0;
 	y = 1.0f;
 
+	TResourceManager* resourceManager = TResourceManager::GetInstance();
 
 	/// Bucle principal
 	while (App.isOpen()){
@@ -182,12 +183,15 @@ int main(){
     }
 
 
+
 	delete program;
 
     glDeleteVertexArrays(1, &vao);
 
 	//std::cout << "Deleting TREE\n";
 	delete parent;
+
+	delete resourceManager;
 	//	std::cout << "TREE DELETED\n";
     App.close();
     return EXIT_SUCCESS;
