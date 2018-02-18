@@ -18,14 +18,11 @@ TResourceTexture::~TResourceTexture(){
 }
 
 bool TResourceTexture::LoadFile(){
-	//bool toRet = TTextureLoader::LoadTexture(m_name, m_imageData, &m_width, &m_height);
-	bool toRet = true;
+	bool toRet = TTextureLoader::LoadTexture(m_name, &m_imageData, &m_width, &m_height);
+	//bool toRet = true;
 	SetLoaded(toRet);
 
 	if(toRet){
-		int channels;
-		m_imageData = SOIL_load_image(m_name.c_str(), &m_width, &m_height, &channels, SOIL_LOAD_RGBA);
-
 		// Preparamos la Textura
 		glGenTextures(1, &m_textureID);	// Numero de texturas a generar, array de texturas
 

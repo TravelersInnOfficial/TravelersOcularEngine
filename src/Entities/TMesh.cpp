@@ -7,8 +7,8 @@
 
 TMesh::TMesh(){
 	m_program 	= NULL;
-	m_mesh 		= TResourceManager::GetInstance()->GetResourceMesh("./../assets/models/Wizard.obj");
-	m_texture 	= TResourceManager::GetInstance()->GetResourceTexture("./../assets/textures/Wizard.png");
+	m_mesh 		= TResourceManager::GetInstance()->GetResourceMesh("./../assets/models/potion.obj");
+	m_texture 	= TResourceManager::GetInstance()->GetResourceTexture("./../assets/textures/POT_HP.png");
 }
 
 TMesh::~TMesh(){
