@@ -13,6 +13,8 @@ TResourceTexture::TResourceTexture(){
 
 TResourceTexture::~TResourceTexture(){
 	SOIL_free_image_data(&m_imageData); // Liberar el array de datos
+	glBindBuffer(GL_TEXTURE_2D, 0);		// |
+	glDeleteBuffers(1, &m_textureID);	// | Eliminar el buffer de datos de OpenGL
 }
 
 bool TResourceTexture::LoadFile(){
@@ -29,8 +31,8 @@ bool TResourceTexture::LoadFile(){
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 		// Algunos Filtros de Textura --> https://www.khronos.org/registry/OpenGL-Refpages/es2.0/xhtml/glTexParameter.xml
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		
 		// Bindeamos los parametros a nuestra textura de OpenGL
 		glBindTexture(GL_TEXTURE_2D, m_textureID);
