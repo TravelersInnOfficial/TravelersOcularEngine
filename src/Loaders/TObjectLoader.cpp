@@ -1,4 +1,5 @@
 #include "TObjectLoader.h"
+#include "TMaterialLoader.h"
 #include "./../TResourceManager.h"
 
 // VBO = VERTEX BUFFER OBJECT
@@ -116,7 +117,7 @@ bool TObjectLoader::LoadObjAssimp(TResourceMesh* mesh){
 }
 
 bool TObjectLoader::LoadObjFromFileAssimp(TResourceMesh* mesh, std::vector<glm::vec3>* vertexVec, std::vector<glm::vec2>* uvVec, std::vector<glm::vec3>* normalVec){
-	std::string path = mesh->GetName();
+	std::string path = mesh->GetName(); 
 	std::ifstream file(path);									// |
 	if(!file.fail()) file.close();								// |
 	else{														// |
@@ -156,8 +157,13 @@ bool TObjectLoader::LoadObjFromFileAssimp(TResourceMesh* mesh, std::vector<glm::
 			const aiMaterial* material = scene->mMaterials[i];
 			aiString texturePath;
 			unsigned int numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
+
+			aiString name;
+			material->Get(AI_MATKEY_NAME, name);
+			TMaterialLoader::LoadMaterial(name.C_Str(), mesh, material);
+
+			// Cargamos las texturas que tenga el modelo
 			for(int i = 0; i < numTextures; i++){
-				if (material->GetTextureCount(aiTextureType_DIFFUSE)) {
 					if(material->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath) == AI_SUCCESS){
 						// Treat texture path
 						std::string file = std::string(texturePath.C_Str());
@@ -171,7 +177,6 @@ bool TObjectLoader::LoadObjFromFileAssimp(TResourceMesh* mesh, std::vector<glm::
 							mesh->AddTexture(texture);
 						}
 					}
-				}
 			}
 		}
 	}

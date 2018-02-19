@@ -3,6 +3,7 @@
 
 #include "TResource.h"
 #include "TResourceTexture.h"
+#include "TResourceMaterial.h"
 
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
@@ -20,6 +21,7 @@ public:
     bool LoadFile();
 
     void AddTexture(TResourceTexture* texture);
+    void AddMaterial(TResourceMaterial* material);
     void SetElementSize(int value);
     TResourceTexture* GetTexture();
 
@@ -56,7 +58,9 @@ public:
 
 private:
     int m_elementSize;
-    TResourceTexture* m_basicTexture;
+    TResourceTexture*   m_basicTexture;
+    TResourceMaterial*  m_basicMaterial;
+
 
     GLuint m_vbo;
     GLuint m_uvbo;

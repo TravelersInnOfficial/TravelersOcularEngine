@@ -44,6 +44,10 @@ void TResourceMesh::AddTexture(TResourceTexture* texture){
 	m_basicTexture = texture;
 }
 
+void TResourceMesh::AddMaterial(TResourceMaterial* material){
+	m_basicMaterial = material;
+}
+
 bool TResourceMesh::LoadFile(){
 	bool toRet = TObjectLoader::LoadObjAssimp(this);
 	SetLoaded(toRet);

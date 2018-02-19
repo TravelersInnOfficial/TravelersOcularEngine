@@ -56,11 +56,15 @@ TResourceMesh* TResourceManager::GetResourceMesh(std::string name){
 	return toRet;
 }
 
-TResourceMaterial* TResourceManager::GetResourceMaterial(std::string name){ 
+TResourceMaterial* TResourceManager::GetResourceMaterial(std::string name){
+	// En el caso de los materiales en nombre no sera el path para el recurso
+	// Sera directamente el nombre del material
 	TResourceMaterial* toRet = NULL;
 	std::string path = TreatName(name);
 	toRet = (TResourceMaterial*)FindResource(path);
 	if(toRet == NULL) {
+		// Una vez llegados aqui significa que no se ha encontrado un material con este nombre
+		// Asi que crearemos uno nuevo con este nombre para que se rellene a partir del puntero
 		toRet = new TResourceMaterial(path);
 		m_resources[path] = toRet;
 	}
