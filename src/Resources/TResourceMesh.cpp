@@ -4,6 +4,7 @@
 TResourceMesh::TResourceMesh(std::string name){
 	m_name = name;
 	m_basicTexture = NULL;
+	m_basicMaterial = NULL;
 
 	// Inicializamos los buffer
 	m_vbo = 0;
