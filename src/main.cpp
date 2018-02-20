@@ -128,11 +128,12 @@ int main(){
 	glewExperimental = GL_TRUE;
 	glewInit();
 
-	glEnable(GL_TEXTURE_2D);
-	// Habilidad el test de profundidad
-	glEnable(GL_DEPTH_TEST);
-	// Aceptar el fragmento si está más cerca de la cámara que el fragmento anterior
+	glShadeModel(GL_SMOOTH);	// Habilitar el smooth de caras
+	glEnable(GL_TEXTURE_2D);	// Habilitar el test de profundidad
+	glEnable(GL_DEPTH_TEST);	// Aceptar el fragmento si está más cerca de la cámara que el fragmento anterior
 	glDepthFunc(GL_LESS);
+	glEnable(GL_CULL_FACE);		//|
+	glCullFace(GL_BACK);		//| Habilitar el backface culing
 
 	/// Creamos el Array de vertices del objeto
     GLuint vao;
