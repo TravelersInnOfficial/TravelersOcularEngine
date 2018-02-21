@@ -1,23 +1,19 @@
 #ifndef TFCAMERA_H
 #define TFCAMERA_H
 
-#include "./../../TNode.h"
+#include "TFNode.h"
 
-class TFCamera{
+class TFCamera: public TFNode{
 public:
-	TFCamera();
+	TFCamera(bool perspective);
 	~TFCamera();
-
-	void SetPosition();	// Sets the rotation of the Node
-	void SetRotation();	// Sets the position of the Node
 	
-	void Move();		// Adds the position to the current position
-	void Rotate();		// Adds the rotation to the current rotation
+	void SetPerspective();	// Sets the camera to Perspective
+	void SetNearFar();		// Sets the Near and Far components of the camera
+	void SetLeftRight();	// Sets the Left and Right components
+	void SetUpDown();		// Sets the Up and Down components
 
 private:
-	TNode* meshNode;
-	TNode* rotationNode;
-	TNode* positionNode;
 
 };
 

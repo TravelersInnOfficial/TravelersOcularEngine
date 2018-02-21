@@ -1,23 +1,19 @@
 #ifndef TFLIGHT_H
 #define TFLIGHT_H
 
-#include "./../../TNode.h"
+#include <vector4d.h>
+#include "TFNode.h"
 
-class TFLight{
+class TFLight: public TFNode{
 public:
-	TFLight();
+	TFLight(vector4df color, float intensity);
 	~TFLight();
 
-	void SetPosition();	// Sets the rotation of the Node
-	void SetRotation();	// Sets the position of the Node
-	
-	void Move();		// Adds the position to the current position
-	void Rotate();		// Adds the rotation to the current rotation
+	void SetColor(vector4df color);				// Changes the light color
+	void SetIntensity(float intensity);			// Changes the light intensity
+
 
 private:
-	TNode* meshNode;
-	TNode* rotationNode;
-	TNode* positionNode;
 
 };
 

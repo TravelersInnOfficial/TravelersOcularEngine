@@ -1,26 +1,24 @@
 #ifndef TFMESH_H
 #define TFMESH_H
 
-#include "./../../TNode.h"
+#include "TFNode.h"
 
-class TFMesh{
+class TFMesh: public TFNode{
 public:
-	TFMesh();
+	TFMesh(vector3df scale = vector3df(0, 0, 0), std::string meshPath = "");
+
 	~TFMesh();
 
-	void SetPosition();	// Sets the rotation of the Node
-	void SetRotation();	// Sets the position of the Node
-	void SetScale();	// Sets the scale of the Node
-	
-	void Move();		// Adds the position to the current position
-	void Rotate();		// Adds the rotation to the current rotation
-	void Scale();		// Adds the scale to the current scale
+	void SetScale(vector3df scale);			// Sets the scale of the Node
+	void Scale(vector3df scale);			// Adds the scale to the current scale
+
+	void SetTexture(std::string texturePath = "");		// Replaces the Texture with a new one
+	void SetMesh(std::string meshPath = "");			// Replaces the Mesh with a new one
+
+	void CreateCube();						// Replaces the Mesh with a Cube
 
 private:
-	TNode* meshNode;
-	TNode* rotationNode;
-	TNode* positionNode;
-	TNode* scaleNode;
+	TNode* m_scaleNode;
 
 };
 
