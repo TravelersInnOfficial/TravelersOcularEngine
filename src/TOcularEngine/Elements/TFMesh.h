@@ -5,7 +5,12 @@
 
 class TFMesh: public TFNode{
 public:
-	TFMesh(vector3df scale = vector3df(0, 0, 0), std::string meshPath = "");
+	TFMesh(
+		vector3df position = vector3df(0, 0, 0),
+		vector3df rotation = vector3df(0, 0, 0),
+		vector3df scale = vector3df(0, 0, 0),
+		std::string meshPath = ""
+	);
 
 	~TFMesh();
 

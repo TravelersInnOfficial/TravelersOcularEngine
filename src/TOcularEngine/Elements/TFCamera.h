@@ -5,7 +5,11 @@
 
 class TFCamera: public TFNode{
 public:
-	TFCamera(bool perspective);
+	TFCamera(
+		vector3df position = vector3df(0, 0, 0),
+		vector3df rotation = vector3df(0, 0, 0),
+		bool perspective
+	);
 	~TFCamera();
 	
 	void SetPerspective();	// Sets the camera to Perspective
