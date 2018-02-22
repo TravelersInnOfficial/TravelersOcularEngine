@@ -15,11 +15,11 @@ public:
 
 	virtual void CreateEstructure() = 0;	// Rotacion Escala Translacion
 
-	void SetTranslate();	// Sets the rotation of the Node
-	void SetRotation();		// Sets the position of the Node
+	void SetTranslate(vector3df translation);	// Sets the rotation of the Node
+	void SetRotation(vector3df rotation);		// Sets the position of the Node
 
-	void Translate();		// Adds the position to the current position
-	void Rotate();			// Adds the rotation to the current rotation
+	void Translate(vector3df translation);		// Adds the position to the current position
+	void Rotate(vector3df rotation);			// Adds the rotation to the current rotation
 
 protected:
 	TNode* m_meshNode;

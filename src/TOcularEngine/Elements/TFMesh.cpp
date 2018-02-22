@@ -32,11 +32,14 @@ void TFMesh::CreateEstructure(){
 }
 
 void TFMesh::SetScale(vector3df scale){
-	
+	TTransform* myTransform = (TTransform*) m_scaleNode->GetEntity();
+	myTransform->Identity();
+	myTransform->Scale(scale.X, scale.Y, scale.Z);
 }
 
 void TFMesh::Scale(vector3df scale){
-	
+	TTransform* myTransform = (TTransform*) m_scaleNode->GetEntity();
+	myTransform->Scale(scale.X, scale.Y, scale.Z);
 }
 
 void TFMesh::SetTexture(std::string texturePath){
