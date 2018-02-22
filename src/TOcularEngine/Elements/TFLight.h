@@ -5,7 +5,13 @@
 #include "TFNode.h"
 
 class TFLight: public TFNode{
+	friend class SceneManager;
+
 public:
+	void SetColor(vector4df color);				// Changes the light color
+	void SetIntensity(float intensity);			// Changes the light intensity
+
+private:
 	TFLight(
 		vector3df position = vector3df(0, 0, 0),
 		vector3df rotation = vector3df(0, 0, 0),
@@ -13,13 +19,7 @@ public:
 		float intensity = 1.0f
 	);
 	~TFLight();
-
 	void CreateEstructure();
-
-	void SetColor(vector4df color);				// Changes the light color
-	void SetIntensity(float intensity);			// Changes the light intensity
-
-private:
 
 };
 

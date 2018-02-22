@@ -8,13 +8,12 @@
 #include "./../../Entities/TLight.h"
 #include "./../../Entities/TCamera.h"
 
+class SceneManager;
+
 class TFNode{
+	friend class SceneManager;
+
 public:
-	TFNode();
-	~TFNode();
-
-	virtual void CreateEstructure() = 0;	// Rotacion Escala Translacion
-
 	void SetTranslate(vector3df translation);	// Sets the rotation of the Node
 	void SetRotation(vector3df rotation);		// Sets the position of the Node
 
@@ -25,6 +24,10 @@ protected:
 	TNode* m_meshNode;
 	TNode* m_rotationNode;
 	TNode* m_positionNode;
+
+	TFNode();
+	~TFNode();
+	virtual void CreateEstructure() = 0;		// Rotacion Escala Translacion
 
 };
 

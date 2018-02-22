@@ -38,7 +38,7 @@ glm::mat4 GetTransformInTree(TNode* node){
 	toReturn = ((TTransform*)auxParent->GetEntity())->GetTransform();
 	auxParent = auxParent->GetParent();
 
-	while(auxParent != NULL){
+	while(auxParent != nullptr){
 		printMatrix(toReturn);
 		toReturn = ((TTransform*)auxParent->GetEntity())->GetTransform() * toReturn;
 		auxParent = auxParent->GetParent();

@@ -6,7 +6,7 @@
 #include <chrono>
 
 TMesh::TMesh(std::string meshPath, std::string texturePath){
-	m_program = NULL;
+	m_program = nullptr;
 	LoadMesh(meshPath);
 	ChangeTexture(texturePath);
 }
@@ -21,7 +21,7 @@ void TMesh::LoadMesh(std::string meshPath){
 
 void TMesh::ChangeTexture(std::string texturePath){
 	if(texturePath != "") m_texture = TResourceManager::GetInstance()->GetResourceTexture(texturePath);
-	else m_texture = NULL;
+	else m_texture = nullptr;
 }
 
 void TMesh::BeginDraw(){
@@ -43,7 +43,7 @@ void TMesh::SetProgram(Program* prog){
 
 void TMesh::SendShaderData(){
 	// If there is no Program, exit
-	if(m_program == NULL) throw std::runtime_error("SHADER NOT ASSIGNED TO MESH");
+	if(m_program == nullptr) throw std::runtime_error("SHADER NOT ASSIGNED TO MESH");
 
     // --------------------------------------------------------ENVIAMOS LOS VERTICES
     // BIND VERTEX
@@ -78,14 +78,14 @@ void TMesh::SendShaderData(){
 	// GLint normalAttrib = glGetAttribLocation(m_program->GetProgramID(), "vertexNormal");
 	// glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, GL_FALSE, 9*sizeof(float), (void*)(3*sizeof(float)));
 	// glEnableVertexAttribArray(normalAttrib);
-	TResourceTexture* currentTexture = NULL;
-	if(m_texture != NULL){
+	TResourceTexture* currentTexture = nullptr;
+	if(m_texture != nullptr){
 		currentTexture = m_texture;
-	}else if(m_mesh!=NULL){
+	}else if(m_mesh!=nullptr){
 		currentTexture = m_mesh->GetTexture();
 	}
 
-	if(currentTexture!=NULL){
+	if(currentTexture!=nullptr){
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, currentTexture->GetTextureId());
 		GLuint TextureID = glGetUniformLocation(m_program->GetProgramID(), "myTextureSampler");

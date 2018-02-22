@@ -2,12 +2,12 @@
 #include <iostream>
 
 TNode::TNode(){
-	m_parent = NULL;
-	m_entity = NULL;
+	m_parent = nullptr;
+	m_entity = nullptr;
 }
 
 TNode::TNode(TEntity* entity){
-	m_parent = NULL;
+	m_parent = nullptr;
 	m_entity = entity;
 }
 
@@ -27,22 +27,22 @@ TNode::~TNode(){
 	for(int i=0; i<size; i++){
 		TNode* node = m_children[i];
 		//std::cout<<"Borrando Hijo "<< i << ": " << node << "\n";
-		if(node != NULL){
+		if(node != nullptr){
 			delete node;
 			//std::cout<<"Hijo "<< i << ": " << node << " Borrado\n";
-			node = NULL;
+			node = nullptr;
 		}
 	}
 	m_children.clear();
 	//std::cout<<"Todos los hijos borrados de: " << this << "\n";
 	
-	if(m_entity != NULL){
+	if(m_entity != nullptr){
 		//std::cout<<"Borrando entidad de: " << this << "\n";	
 		delete m_entity;
-		m_entity = NULL;
+		m_entity = nullptr;
 	}
 
-	if(m_parent!=NULL)
+	if(m_parent!=nullptr)
 		m_parent->RemoveChild(this);
 	//std::cout<<"Borrado: " << this << "\n\n";
 }
@@ -69,7 +69,7 @@ int TNode::RemoveChild(TNode* child){
 bool TNode::SetEntity(TEntity* entity){
 	bool toReturn = false;
 	
-	if(m_entity == NULL){
+	if(m_entity == nullptr){
 		m_entity = entity;
 		toReturn = true;
 	}
@@ -83,9 +83,9 @@ TEntity* TNode::GetEntity(){
 
 bool TNode::SetParent(TNode* parent){
 	bool toReturn = false;
-	if(parent != NULL){
+	if(parent != nullptr){
 	
-		if(m_parent != NULL){
+		if(m_parent != nullptr){
 			m_parent->RemoveChild(this);
 		}
 		m_parent = parent;
@@ -102,7 +102,7 @@ TNode* TNode::GetParent(){
 
 void TNode::Draw(){
 	//std::cout<<"Apilamos NODO: "<<this<<"\n";
-	if(m_entity != NULL) m_entity->BeginDraw();
+	if(m_entity != nullptr) m_entity->BeginDraw();
 	
 	int size = m_children.size();
 	for(int i=0; i<size; i++){
@@ -110,6 +110,6 @@ void TNode::Draw(){
 		child->Draw();
 	}
 	
-	if(m_entity != NULL) m_entity->EndDraw();
+	if(m_entity != nullptr) m_entity->EndDraw();
 	//std::cout<<"Desapilamos NODO: "<<this<<"\n";
 }

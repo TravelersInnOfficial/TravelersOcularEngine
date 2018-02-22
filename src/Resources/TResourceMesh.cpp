@@ -3,8 +3,8 @@
 
 TResourceMesh::TResourceMesh(std::string name){
 	m_name = name;
-	m_basicTexture = NULL;
-	m_basicMaterial = NULL;
+	m_basicTexture = nullptr;
+	m_basicMaterial = nullptr;
 
 	// Inicializamos los buffer
 	m_vbo = 0;
@@ -24,8 +24,8 @@ TResourceMesh::TResourceMesh(std::string name){
 
 TResourceMesh::TResourceMesh(){
 	m_name = "";
-	m_basicTexture = NULL;
-	m_basicMaterial = NULL;
+	m_basicTexture = nullptr;
+	m_basicMaterial = nullptr;
 
 	// Inicializamos los buffer
 	m_vbo = 0;

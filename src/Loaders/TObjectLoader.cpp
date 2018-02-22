@@ -125,7 +125,7 @@ bool TObjectLoader::LoadObjFromFileAssimp(TResourceMesh* mesh, std::vector<glm::
 		return false;											// | Comprobacion de que exista
 	}
 
-	const struct aiScene* scene = NULL;
+	const struct aiScene* scene = nullptr;
 	Assimp::Importer importer;
 	scene = importer.ReadFile(path.c_str(), aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType);
 	
@@ -173,7 +173,7 @@ bool TObjectLoader::LoadObjFromFileAssimp(TResourceMesh* mesh, std::vector<glm::
 						
 						// Load texture (But do nothing with it)
 						TResourceTexture* texture = TResourceManager::GetInstance()->GetResourceTexture(finalPath);
-						if(texture != NULL){
+						if(texture != nullptr){
 							mesh->AddTexture(texture);
 						}
 					}
@@ -204,7 +204,7 @@ bool TObjectLoader::LoadObjFromFileCustom(TResourceMesh* mesh, std::vector<glm::
 	// Intentamos leer el archivo, en el caso de que no existiera volvemos
 	std::string path = mesh->GetName();
 	FILE * file = std::fopen(path.c_str(),"r");
-	if( file == NULL ){
+	if( file == nullptr ){
    		std::cout<<"Impossible to open the file !\n";
 		return false;
 	}

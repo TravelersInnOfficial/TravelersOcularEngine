@@ -46,7 +46,7 @@ Program::Program(std::map<std::string, GLenum> shaderData){
         GLint infoLogLength;
         glGetProgramiv(m_programID, GL_INFO_LOG_LENGTH, &infoLogLength);
         char* strInfoLog = new char[infoLogLength + 1];
-        glGetProgramInfoLog(m_programID, infoLogLength, NULL, strInfoLog);
+        glGetProgramInfoLog(m_programID, infoLogLength, nullptr, strInfoLog);
         msg += strInfoLog;
         delete[] strInfoLog;
 
@@ -76,7 +76,7 @@ GLuint Program::LoadShader(std::string shaderPath, GLenum shaderType){
 
 	//GLint compiled;
     GLuint shaderID = glCreateShader(shaderType);
-    glShaderSource(shaderID,1,&source,NULL);
+    glShaderSource(shaderID,1,&source,nullptr);
     glCompileShader(shaderID);
     
 	if(!shaderID){
@@ -93,7 +93,7 @@ GLuint Program::LoadShader(std::string shaderPath, GLenum shaderType){
         GLint infoLogLength;
         glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
         char* strInfoLog = new char[infoLogLength + 1];
-        glGetShaderInfoLog(shaderID, infoLogLength, NULL, strInfoLog);
+        glGetShaderInfoLog(shaderID, infoLogLength, nullptr, strInfoLog);
         msg += strInfoLog;
         delete[] strInfoLog;
 

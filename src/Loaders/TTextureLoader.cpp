@@ -16,7 +16,7 @@ bool TTextureLoader::LoadTexture(std::string path, unsigned char** imageData, in
 
 	// Comprobamos si hemos cargado la imagen
 	bool toRet = true;
-	if(imageData == NULL){
+	if(imageData == nullptr){
 		std::cout<<"Could not open file " + path<<std::endl;
 		toRet = false;
 	}

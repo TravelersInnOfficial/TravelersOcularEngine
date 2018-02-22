@@ -1,9 +1,9 @@
 #include "TResourceManager.h"
 
-static TResourceManager* instance = NULL;
+static TResourceManager* instance = nullptr;
 
 TResourceManager* TResourceManager::GetInstance() {
-	if (instance == NULL) instance = new TResourceManager();
+	if (instance == nullptr) instance = new TResourceManager();
 	return instance;
 }
 
@@ -17,7 +17,7 @@ TResourceManager::~TResourceManager(){
 
 	for(; it != m_resources.end(); it++){
 		TResource* tResource = it->second;
-		if (tResource != NULL) delete tResource;	//Delete the resource in the map
+		if (tResource != nullptr) delete tResource;	//Delete the resource in the map
 	}
 
 	m_resources.clear();		//Clear the map
@@ -28,17 +28,17 @@ TResourceManager::~TResourceManager(){
  * @param std::string path of the resource
  *********************************************/
 TResource* TResourceManager::FindResource(std::string name){
-	TResource* output = NULL;
+	TResource* output = nullptr;
 	std::map<std::string, TResource*>::iterator it = m_resources.find(name); //Search the resource
 	if (it != m_resources.end()) output = it->second;
 	return output;
 }
 
 TResourceTexture* TResourceManager::GetResourceTexture(std::string name){ 
-	TResourceTexture* toRet = NULL;
+	TResourceTexture* toRet = nullptr;
 	std::string path = TreatName(name);
 	toRet = (TResourceTexture*)FindResource(path);
-	if(toRet == NULL){ 
+	if(toRet == nullptr){ 
 		toRet = new TResourceTexture(path);
 		m_resources[path] = toRet;
 	}
@@ -46,10 +46,10 @@ TResourceTexture* TResourceManager::GetResourceTexture(std::string name){
 }
 
 TResourceMesh* TResourceManager::GetResourceMesh(std::string name){ 
-	TResourceMesh* toRet = NULL;
+	TResourceMesh* toRet = nullptr;
 	std::string path = TreatName(name);
 	toRet = (TResourceMesh*)FindResource(path);
-	if(toRet == NULL) {
+	if(toRet == nullptr) {
 		toRet = new TResourceMesh(path);
 		m_resources[path] = toRet;
 	}
@@ -59,10 +59,10 @@ TResourceMesh* TResourceManager::GetResourceMesh(std::string name){
 TResourceMaterial* TResourceManager::GetResourceMaterial(std::string name){
 	// En el caso de los materiales en nombre no sera el path para el recurso
 	// Sera directamente el nombre del material
-	TResourceMaterial* toRet = NULL;
+	TResourceMaterial* toRet = nullptr;
 	std::string path = TreatName(name);
 	toRet = (TResourceMaterial*)FindResource(path);
-	if(toRet == NULL) {
+	if(toRet == nullptr) {
 		// Una vez llegados aqui significa que no se ha encontrado un material con este nombre
 		// Asi que crearemos uno nuevo con este nombre para que se rellene a partir del puntero
 		toRet = new TResourceMaterial(path);
@@ -72,10 +72,10 @@ TResourceMaterial* TResourceManager::GetResourceMaterial(std::string name){
 }
 
 TResourceShader* TResourceManager::GetResourceShader(std::string name){ 
-	TResourceShader* toRet = NULL;
+	TResourceShader* toRet = nullptr;
 	std::string path = TreatName(name);
 	toRet = (TResourceShader*)FindResource(path);
-	if(toRet == NULL) {
+	if(toRet == nullptr) {
 		toRet = new TResourceShader(path);
 		m_resources[path] = toRet;
 	}

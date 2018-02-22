@@ -120,7 +120,7 @@ glm::mat4 TCamera::CalculateOrthogonalMatrix(){
 }
 
 void TCamera::SendMatrixToShader(){
-	if (m_program == NULL)
+	if (m_program == nullptr)
 		std::cout << "EL PROGRAMA\n";
 
 	GLint uniProj = glGetUniformLocation(m_program->GetProgramID(), "ProjectionMatrix");
