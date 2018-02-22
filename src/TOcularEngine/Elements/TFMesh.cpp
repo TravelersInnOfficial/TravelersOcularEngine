@@ -43,13 +43,16 @@ void TFMesh::Scale(vector3df scale){
 }
 
 void TFMesh::SetTexture(std::string texturePath){
-	
+	TMesh* myMesh = (TMesh*) m_scaleNode->GetEntity();
+	myMesh->ChangeTexture(texturePath);
 }
 
 void TFMesh::SetMesh(std::string meshPath){
-	
+	TMesh* myMesh = (TMesh*) m_scaleNode->GetEntity();
+	myMesh->LoadMesh(meshPath);
 }
 
 void TFMesh::CreateCube(){
-	
+	TMesh* myMesh = (TMesh*) m_scaleNode->GetEntity();
+	myMesh->LoadMesh("");
 }
