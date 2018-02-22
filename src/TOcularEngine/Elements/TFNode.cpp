@@ -1,10 +1,10 @@
 #include "TFNode.h"
 
-TFNode(vector3df position = vector3df(0, 0, 0), vector3df rotation = vector3df(0, 0, 0)){
-
+TFNode::TFNode(){
+	CreateEstructure();
 }
 
-~TFNode(){
+TFNode::~TFNode(){
 
 }
 

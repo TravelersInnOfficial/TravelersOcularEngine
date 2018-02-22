@@ -3,11 +3,17 @@
 
 #include <vector3d.h>
 #include "./../../TNode.h"
+#include "./../../Entities/TTransform.h"
+#include "./../../Entities/TMesh.h"
+#include "./../../Entities/TLight.h"
+#include "./../../Entities/TCamera.h"
 
 class TFNode{
 public:
-	TFNode(vector3df position = vector3df(0, 0, 0), vector3df rotation = vector3df(0, 0, 0));
+	TFNode();
 	~TFNode();
+
+	virtual void CreateEstructure() = 0;	// Rotacion Escala Translacion
 
 	void SetTranslate();	// Sets the rotation of the Node
 	void SetRotation();		// Sets the position of the Node
@@ -15,7 +21,7 @@ public:
 	void Translate();		// Adds the position to the current position
 	void Rotate();			// Adds the rotation to the current rotation
 
-private:
+protected:
 	TNode* m_meshNode;
 	TNode* m_rotationNode;
 	TNode* m_positionNode;

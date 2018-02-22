@@ -8,6 +8,9 @@
 # NEW/DELETE #################################################################################
 ############################################################################################*/
 
+TCamera::TCamera(){
+}
+
 TCamera::TCamera(bool perspective, float left, float right, float bottom, float top, float near, float far, Program* p){
 	m_program = p;
 	if(perspective) SetPerspective(left, right, bottom, top, near, far);

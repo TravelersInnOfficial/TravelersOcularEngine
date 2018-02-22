@@ -7,6 +7,7 @@
 
 class TCamera: public TEntity{
 public:
+	TCamera();
 	TCamera(bool perspective, float left, float right, float bottom, float top, float near, float far, Program* p);
 	~TCamera();
 

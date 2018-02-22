@@ -11,8 +11,9 @@ public:
 		vector3df scale = vector3df(0, 0, 0),
 		std::string meshPath = ""
 	);
-
 	~TFMesh();
+
+	void CreateEstructure();
 
 	void SetScale(vector3df scale);			// Sets the scale of the Node
 	void Scale(vector3df scale);			// Adds the scale to the current scale

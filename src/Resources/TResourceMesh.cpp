@@ -23,7 +23,22 @@ TResourceMesh::TResourceMesh(std::string name){
 }
 
 TResourceMesh::TResourceMesh(){
+	m_name = "";
+	m_basicTexture = NULL;
+	m_basicMaterial = NULL;
 
+	// Inicializamos los buffer
+	m_vbo = 0;
+	glGenBuffers(1, &m_vbo);
+
+	m_ebo = 0;
+	glGenBuffers(1, &m_ebo);
+
+	m_uvbo = 0;
+	glGenBuffers(1, &m_uvbo);
+
+	m_nbo = 0;
+	glGenBuffers(1, &m_nbo);
 }
 
 TResourceMesh::~TResourceMesh(){

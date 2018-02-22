@@ -1,25 +1,37 @@
 #include "TFCamera.h"
 
-TFCamera(vector3df position = vector3df(0, 0, 0), vector3df rotation = vector3df(0, 0, 0), bool perspective) : TFNode(position, rotation){
+TFCamera::TFCamera(vector3df position, vector3df rotation, bool perspective) : TFNode(){
 
 }
 
-~TFCamera(){
+TFCamera::~TFCamera(){
 
 }
 
-void SetPerspective(){
+void TFCamera::CreateEstructure(){
+	m_meshNode = new TNode();
+
+	TTransform* pos = new TTransform();
+	TTransform* rot = new TTransform();
+	TCamera* camera = new TCamera();
+
+	m_rotationNode = new TNode(rot);
+	m_positionNode = new TNode(m_rotationNode, pos);
+	m_meshNode = new TNode(m_positionNode, camera);
+}
+
+void TFCamera::SetPerspective(){
 
 }
 
-void SetNearFar(){
+void TFCamera::SetNearFar(){
 
 }
 
-void SetLeftRight(){
+void TFCamera::SetLeftRight(){
 
 }
 
-void SetUpDown(){
+void TFCamera::SetUpDown(){
 
 }
