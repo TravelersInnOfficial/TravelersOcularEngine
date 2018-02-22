@@ -5,13 +5,23 @@
 #include <iostream>
 #include <chrono>
 
-TMesh::TMesh(){
-	m_program 	= NULL;
-	m_mesh 		= TResourceManager::GetInstance()->GetResourceMesh("./../assets/models/Wizard.obj");
-	m_texture 	= TResourceManager::GetInstance()->GetResourceTexture("./../assets/textures/Wizard.png");
+TMesh::TMesh(std::string meshPath, std::string texturePath){
+	m_program = NULL;
+	LoadMesh(meshPath);
+	ChangeTexture(texturePath);
 }
 
 TMesh::~TMesh(){
+}
+
+void TMesh::LoadMesh(std::string meshPath){
+	if(meshPath == "") meshPath = "./../assets/models/cube.obj";
+	m_mesh = TResourceManager::GetInstance()->GetResourceMesh(meshPath);
+}
+
+void TMesh::ChangeTexture(std::string texturePath){
+	if(texturePath != "") m_texture = TResourceManager::GetInstance()->GetResourceTexture(texturePath);
+	else m_texture = NULL;
 }
 
 void TMesh::BeginDraw(){

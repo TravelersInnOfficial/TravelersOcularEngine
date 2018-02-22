@@ -34,6 +34,12 @@ void TTransform::Rotate(float X, float Y, float Z, float W){
 	m_matrix = glm::rotate(m_matrix, glm::radians(W), glm::vec3(X,Y,Z));
 }
 
+void TTransform::Rotate(float X, float Y, float Z){
+	Rotate(1, 0, 0, X);
+	Rotate(0, 1, 0, Y);
+	Rotate(0, 0, 1, Z);
+}
+
 void TTransform::Scale(float X, float Y, float Z){
 	m_matrix = glm::scale(m_matrix, glm::vec3(X,Y,Z));
 }

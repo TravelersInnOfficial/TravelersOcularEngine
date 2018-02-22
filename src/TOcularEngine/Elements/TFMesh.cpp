@@ -1,37 +1,34 @@
 #include "TFMesh.h"
 
 TFMesh::TFMesh(vector3df position, vector3df rotation, vector3df scale, std::string meshPath) : TFNode(){
-	//crere
 	TTransform* t = (TTransform*) m_positionNode->GetEntity();
 	t->Translate(position.X, position.Y, position.Z);
 	
 	t = (TTransform*) m_rotationNode->GetEntity();
-	t->Rotate(1,0,0,scale.X);
-	t->Rotate(0,1,0,scale.Y);
-	t->Rotate(0,0,1,scale.Z);
+	t->Rotate(rotation.X, rotation.Y, rotation.Z);
 
 	t = (TTransform*) m_scaleNode->GetEntity();
-	t->Scale(rotation.X, rotation.Y, rotation.Z);
+	t->Scale(scale.X, scale.Y, scale.Z);
 
-	//m_meshNode.GetEntity()->
+	m_meshNode->SetEntity(new TMesh(meshPath));
 }
 
 TFMesh::~TFMesh(){
-
+	delete m_rotationNode;
+	delete m_positionNode;
+	delete m_meshNode;
 }
 
 void TFMesh::CreateEstructure(){
-	m_meshNode = new TNode();
-
 	TTransform* pos = new TTransform();
 	TTransform* rot = new TTransform();
 	TTransform* esc = new TTransform();
-	TMesh* mesh = new TMesh();
 
 	m_rotationNode = new TNode(rot);
 	m_scaleNode = new TNode(m_rotationNode, esc);
 	m_positionNode = new TNode(m_scaleNode, pos);
-	m_meshNode = new TNode(m_positionNode, mesh);
+	m_meshNode = new TNode();
+	m_meshNode->SetParent(m_positionNode);
 }
 
 void TFMesh::SetScale(vector3df scale){

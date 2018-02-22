@@ -17,9 +17,10 @@ public:
 	void 	Transpose();							// Transponer la matriz
 	void 	Inverse();								// Invertir la matriz
 	
-	void 	Translate(float X, float Y, float Z);	// Mover la matriz
-	void 	Rotate(float, float, float, float);		// Rotar la matriz
-	void 	Scale(float, float, float);				// Escalar la matriz
+	void 	Translate(float X, float Y, float Z);		// Mover la matriz
+	void	Rotate(float X, float Y, float Z);			// Rotar la matriz (TODOS LOS EJES)
+	void 	Rotate(float, float, float, float);			// Rotar la matriz (SOLO UN EJE)
+	void 	Scale(float, float, float);					// Escalar la matriz
 
 	void 	BeginDraw();							// Empezar a pintar la transformacion
 	void 	EndDraw();								// Acabar de pintar la transformacion

@@ -11,12 +11,15 @@
 
 class TMesh: public TEntity{
 public:
-	TMesh();
+	TMesh(std::string meshPath = "", std::string texturePath = "");
 	~TMesh();
 
 	void SetProgram(Program* prog);
 	void BeginDraw();
 	void EndDraw();
+
+	void LoadMesh(std::string meshPath = "");
+	void ChangeTexture(std::string texturePath = "");
 
 private:
 
