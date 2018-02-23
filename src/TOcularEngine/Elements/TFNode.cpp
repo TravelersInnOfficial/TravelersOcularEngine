@@ -11,6 +11,10 @@ TFNode::~TFNode(){
 
 }
 
+void TFNode::Attach(TNode* root){
+	m_rotationNode->SetParent(root);
+}
+
 void TFNode::SetTranslate(vector3df translation){
 	TTransform* myTransform = (TTransform*) m_positionNode->GetEntity();
 	myTransform->Identity();

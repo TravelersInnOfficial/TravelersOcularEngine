@@ -32,6 +32,7 @@ protected:
 	TFNode();
 	~TFNode();
 	virtual void CreateEstructure() = 0;		// Rotacion Escala Translacion
+	void Attach(TNode* root);					// Node to be attached to
 
 };
 
