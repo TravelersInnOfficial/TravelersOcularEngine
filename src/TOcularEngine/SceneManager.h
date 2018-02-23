@@ -77,8 +77,7 @@ public:
      */
     bool        DeleteMesh(TFMesh*);
 
-    void BeginScene();
-    void EndScene();
+    void Update();
 
 private:
     TNode* m_SceneTreeRoot;

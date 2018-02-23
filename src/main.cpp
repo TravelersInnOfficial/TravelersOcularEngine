@@ -17,6 +17,7 @@
 
 #include "TResourceManager.h"
 #include "Resources/TResourceMesh.h"
+#include "TOcularEngine/TOcularEngine.h"
 
 TTransform* node1Rot;
 
@@ -121,19 +122,19 @@ void addVertices(float x, float y){
 }
 
 int main(){
-	sf::ContextSettings context = sf::ContextSettings(24, 8, 4, 3);
-    sf::Window App(sf::VideoMode(800, 600, 32), "SFML OpenGL Test", sf::Style::Close, context);
+	VideoDriver* VDriv = toe::GetVideoDriver();
+	VDriv->CreateWindow("Wizards&Warlocks",toe::core::vector2df(800,600));
 
 	/// Iniciamos glew
-	glewExperimental = GL_TRUE;
-	glewInit();
+	//glewExperimental = GL_TRUE;
+	//glewInit();
 
-	glShadeModel(GL_SMOOTH);	// Habilitar el smooth de caras
-	glEnable(GL_TEXTURE_2D);	// Habilitar el test de profundidad
-	glEnable(GL_DEPTH_TEST);	// Aceptar el fragmento si está más cerca de la cámara que el fragmento anterior
-	glDepthFunc(GL_LESS);
-	glEnable(GL_CULL_FACE);		//|
-	glCullFace(GL_BACK);		//| Habilitar el backface culing
+	//glShadeModel(GL_SMOOTH);	// Habilitar el smooth de caras
+	//glEnable(GL_TEXTURE_2D);	// Habilitar el test de profundidad
+	//glEnable(GL_DEPTH_TEST);	// Aceptar el fragmento si está más cerca de la cámara que el fragmento anterior
+	//glDepthFunc(GL_LESS);
+	//glEnable(GL_CULL_FACE);		//|
+	//glCullFace(GL_BACK);		//| Habilitar el backface culing
 
 	/// Creamos el Array de vertices del objeto
     GLuint vao;
@@ -154,39 +155,11 @@ int main(){
 	TResourceManager* resourceManager = TResourceManager::GetInstance();
 
 	/// Bucle principal
-	while (App.isOpen()){
-
-        sf::Event event;
-		while (App.pollEvent(event)){
-            if (event.type == sf::Event::Closed) App.close();
-            if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape)){
-                App.close();
-			}
-			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Left)){
-				addVertices(-2, 0);
-			}
-			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Right)){
-				addVertices(2, 0);
-			}
-			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Down)){
-				addVertices(0, -2);
-			}
-			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Up)){
-				addVertices(0, 2);				
-			}
-			if ((event.type == sf::Event::KeyReleased) && (event.key.code == sf::Keyboard::Space)){
-			}
-        }
-		//glDepthMask(true);
-		glClearColor(0.7, 0.7, 1, 1);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
-        parent->Draw();
-		App.display();
-    }
-
-
+		VDriv->SetClearScreenColor(toe::core::vector4df(0.7, 0.7, 1, 1));
+		while(VDriv->Update()){
+        	parent->Draw();
+			VDriv->Draw();
+		}
 
 	delete program;
 
@@ -197,6 +170,6 @@ int main(){
 
 	delete resourceManager;
 	//	std::cout << "TREE DELETED\n";
-    App.close();
+    //App.close();
     return EXIT_SUCCESS;
 }

@@ -15,6 +15,12 @@ public:
      */
     ~VideoDriver();
 
+    void CreateWindow(std::string window_name, toe::core::vector2df dimensions);
+    bool Update();
+    void Draw();
+    void ClearScreen();
+    
+//GETTERS
     /**
      * @brief Returns an instance of the Video Driver
      * 
@@ -43,7 +49,27 @@ public:
      */
     float GetTime();
 
-    static void CreateWindow(std::string window_name, toe::core::vector2df dimensions);
+    /**
+     * @brief Returns the actual window title
+     * 
+     * @return std::string m_name
+     */
+    std::string GetWindowName();
+
+//SETTERS
+    /**
+     * @brief Sets the update clear screen color
+     * 
+     * @param color (toe::core::vector4df)
+     */
+    void SetClearScreenColor(toe::core::vector4df color);
+
+    /**
+     * @brief Sets the window title
+     * 
+     * @param name (std::string)
+     */
+    void SetWindowName(std::string name);
 
 private:
     /**
@@ -52,11 +78,16 @@ private:
      */
     VideoDriver();
 
-    sf::Window m_window;
-    sf::Clock m_clock;
+    std::string m_name;
+
+    sf::RenderWindow* m_window;
+    sf::Clock* m_clock;
 
     SceneManager* privateSceneManager = nullptr;
     IODriver* privateIODriver = nullptr;
+
+    bool close_window;
+    toe::core::vector4df m_clearSceenColor;
 };
 
 #endif

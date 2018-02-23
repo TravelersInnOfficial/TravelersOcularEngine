@@ -62,3 +62,7 @@ bool SceneManager::DeleteMesh(TFMesh* mesh){
     delete mesh;
     return true;
 }
+
+void SceneManager::Update(){
+    
+}

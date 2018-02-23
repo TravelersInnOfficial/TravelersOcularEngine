@@ -1,5 +1,5 @@
 #include "TOcularEngine.h"
 
-VideoDriver* toe::getVideoDriver(){
+VideoDriver* toe::GetVideoDriver(){
     return privateVideoDriver;
 }

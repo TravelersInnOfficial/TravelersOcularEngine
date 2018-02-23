@@ -5,7 +5,7 @@
 
 namespace toe{
     //PUBLIC
-    VideoDriver* getVideoDriver();
+    VideoDriver* GetVideoDriver();
 
     namespace core{ 
         class rect{
