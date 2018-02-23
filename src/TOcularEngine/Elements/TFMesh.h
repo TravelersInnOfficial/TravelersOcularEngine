@@ -7,9 +7,9 @@ class TFMesh: public TFNode{
 	friend class SceneManager;
 
 public:
-	void SetScale(vector3df scale);			// Sets the scale of the Node
-	void Scale(vector3df scale);			// Adds the scale to the current scale
-	vector3df GetScale();					// Returns the scale of the Node
+	void SetScale(toe::core::vector3df scale);			// Sets the scale of the Node
+	void Scale(toe::core::vector3df scale);			// Adds the scale to the current scale
+	toe::core::vector3df GetScale();					// Returns the scale of the Node
 
 	void SetTexture(std::string texturePath = "");		// Replaces the Texture with a new one
 	void SetMesh(std::string meshPath = "");			// Replaces the Mesh with a new one
@@ -20,9 +20,9 @@ private:
 	TNode* m_scaleNode;
 
 	TFMesh(
-		vector3df position = vector3df(0, 0, 0),
-		vector3df rotation = vector3df(0, 0, 0),
-		vector3df scale = vector3df(0, 0, 0),
+		toe::core::vector3df position = toe::core::vector3df(0, 0, 0),
+		toe::core::vector3df rotation = toe::core::vector3df(0, 0, 0),
+		toe::core::vector3df scale = toe::core::vector3df(0, 0, 0),
 		std::string meshPath = ""
 	);
 	~TFMesh();

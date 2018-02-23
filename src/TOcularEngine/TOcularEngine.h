@@ -1,33 +1,11 @@
 #ifndef TOCULARENGINE_h
 #define TOCULARENGINE_h
 
-#include <vector>
-
-#include "./Elements/TFCamera.h"
-#include "./Elements/TFLight.h"
-#include "./Elements/TFMesh.h"
-
-#define GLEW_STATIC
-#include <GL/glew.h>
-#include <SFML/Graphics.hpp>
-
-#include <iostream>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
-#include "./../TResourceManager.h"
-#include "./../Resources/TResourceMesh.h"
+#include "VideoDriver.h"
 
 namespace toe{
     //PUBLIC
-    namespace scene{
-        TFCamera*   AddCamera(vector3df position, vector3df rotation, bool perspective);
-        TFLight*    AddLight(vector3df position, vector3df rotation, vector4df color, float intensity);
-        TFMesh*     AddMesh(vector3df position, vector3df rotation, vector3df scale, std::string meshPath);
-        void        DeleteCamera(TFCamera*);
-        void        DeleteLight(TFLight*);
-        void        DeleteMesh(TFMesh*);
-    };
+    VideoDriver* getVideoDriver();
 
     namespace core{ 
         class rect{
@@ -44,23 +22,11 @@ namespace toe{
         };
 
         void Draw2DRect(float color ,toe::core::rect );
-        float       GetTime();
     }
 
-
-    void BeginScene();
-    void Run();
-    void EndScene();
-    void Drop();
-
-    //DRAW FUNCTIONS
-    
-    //PRIVATE
     namespace{
-        float m_time = 0;
-        std::vector<TFCamera*> m_cameras;
-        std::vector<TFLight*> m_lights;
-    };
+        VideoDriver* privateVideoDriver = VideoDriver::GetInstance();
+    }
 
     // TODO:: GUARDARSE TODOS LOS PUNTEROS A NODOS QUE CONTIENEN LUCES Y CAMARAS
     //- Metodos para el registro y manejo de viewports

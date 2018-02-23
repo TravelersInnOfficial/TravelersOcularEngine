@@ -15,14 +15,14 @@ class TFNode{
 	friend class SceneManager;
 
 public:
-	void SetTranslate(vector3df translation);	// Sets the rotation of the Node
-	void SetRotation(vector3df rotation);		// Sets the position of the Node
+	void SetTranslate(toe::core::vector3df translation);	// Sets the rotation of the Node
+	void SetRotation(toe::core::vector3df rotation);		// Sets the position of the Node
 
-	void Translate(vector3df translation);		// Adds the position to the current position
-	void Rotate(vector3df rotation);			// Adds the rotation to the current rotation
+	void Translate(toe::core::vector3df translation);		// Adds the position to the current position
+	void Rotate(toe::core::vector3df rotation);			// Adds the rotation to the current rotation
 
-	vector3df GetTranslate();					// Returns the rotation of the Node
-	vector3df GetRotation();					// Returns the position of the Node
+	toe::core::vector3df GetTranslate();					// Returns the rotation of the Node
+	toe::core::vector3df GetRotation();					// Returns the position of the Node
 
 protected:
 	TNode* m_entityNode;

@@ -22,8 +22,8 @@ public:
 
 private:
 	TFCamera(
-		vector3df position = vector3df(0, 0, 0),
-		vector3df rotation = vector3df(0, 0, 0),
+		toe::core::vector3df position = toe::core::vector3df(0, 0, 0),
+		toe::core::vector3df rotation = toe::core::vector3df(0, 0, 0),
 		bool perspective = true
 	);
 	~TFCamera();
