@@ -50,3 +50,13 @@ float TFLight::GetIntensity(){
 	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
 	return myEntity->GetIntensity();
 }
+
+void TFLight::SetActive(bool active){
+	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
+	myEntity->SetActive(active);
+}
+
+bool TFLight::GetActive(){
+	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
+	return myEntity->GetActive();
+}

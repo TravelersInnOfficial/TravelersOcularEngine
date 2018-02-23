@@ -10,9 +10,11 @@ class TFLight: public TFNode{
 public:
 	void SetColor(vector4df color);				// Changes the light color
 	void SetIntensity(float intensity);			// Changes the light intensity
+	void SetActive(bool active);				// Changes the light active state
 
 	vector4df GetColor();	// Returns the light color
 	float GetIntensity();	// Returns the light intensity
+	bool GetActive();		// Returns the light active state
 
 private:
 	TFLight(

@@ -24,6 +24,14 @@ float TLight::GetIntensity(){
 	return m_intensity;
 }
 
+void TLight::SetActive(bool active){
+	m_active = active;
+}
+
+bool TLight::GetActive(){
+	return m_active;
+}
+
 void TLight::BeginDraw(){}
 
 void TLight::EndDraw(){}

@@ -15,12 +15,16 @@ public:
 	void 	SetIntensity(float intensity);	// Guarda el color que se le pasa por parametros
 	float 	GetIntensity();					// Devuelve la intentsidad de la luz
 
+	void	SetActive(bool active);
+	bool	GetActive();
+
 	void 	BeginDraw();					// Empezar a pintar la luz
 	void 	EndDraw();						// Acabar de pintar la luz
 
 private:
 	TColor m_color;
 	float m_intensity;
+	bool m_active;
 	
 };
 
