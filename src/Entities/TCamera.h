@@ -7,8 +7,16 @@
 
 class TCamera: public TEntity{
 public:
-	TCamera();
-	TCamera(bool perspective, float left, float right, float bottom, float top, float near, float far, Program* p);
+	TCamera	(
+				bool perspective = true,
+				float left = -1.0f,
+				float right = 1.0f,
+				float bottom = -0.75f,
+				float top = 0.75f,
+				float near = 2.0f,
+				float far = 10.0f,
+				Program* p = nullptr
+			);
 	~TCamera();
 
 	void SetPerspective(float left, float right, float bottom, float top, float near, float far);
@@ -16,6 +24,7 @@ public:
 
 	void SetPerspective();
 	void SetParallel();
+	bool GetPerspective();
 
 	void SetNear(float newVal);
 	float GetNear();

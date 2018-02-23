@@ -6,17 +6,21 @@
 
 class TLight: public TEntity{
 public:
-	TLight(TColor intensity = TColor());
+	TLight(TColor color = TColor(), float intensity = 1.0f);
 	~TLight();
 
-	void 	SetIntensity(TColor intensity);	// Guarda el color que se le pasa por parametros
-	TColor 	GetIntensity();					// Devuelve la intentsidad de la luz
+	void 	SetColor(TColor color);		// Guarda el color que se le pasa por parametros
+	TColor 	GetColor();						// Devuelve la intentsidad de la luz
+
+	void 	SetIntensity(float intensity);	// Guarda el color que se le pasa por parametros
+	float 	GetIntensity();					// Devuelve la intentsidad de la luz
 
 	void 	BeginDraw();					// Empezar a pintar la luz
 	void 	EndDraw();						// Acabar de pintar la luz
 
 private:
-	TColor m_intensity;
+	TColor m_color;
+	float m_intensity;
 	
 };
 

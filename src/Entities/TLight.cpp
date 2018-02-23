@@ -1,16 +1,26 @@
 #include "TLight.h"
 
-TLight::TLight(TColor intensity){
+TLight::TLight(TColor color, float intensity){
+	m_color = color;
 	m_intensity = intensity;
 }
 
 TLight::~TLight(){}
 
-void TLight::SetIntensity(TColor intensity){
+void TLight::SetColor(TColor color){
+	m_color = color;
+
+}
+
+TColor TLight::GetColor(){
+	return m_color;
+}
+
+void TLight::SetIntensity(float intensity){
 	m_intensity = intensity;
 }
 
-TColor TLight::GetIntensity(){
+float TLight::GetIntensity(){
 	return m_intensity;
 }
 

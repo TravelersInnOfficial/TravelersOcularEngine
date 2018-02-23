@@ -1,7 +1,7 @@
 #include "TFNode.h"
 
 TFNode::TFNode(){
-	m_meshNode = nullptr;
+	m_entityNode = nullptr;
 	m_rotationNode = nullptr;
 	m_positionNode = nullptr;
 	CreateEstructure();
@@ -32,4 +32,14 @@ void TFNode::Translate(vector3df translation){
 void TFNode::Rotate(vector3df rotation){
 	TTransform* myTransform = (TTransform*) m_rotationNode->GetEntity();
 	myTransform->Rotate(rotation.X, rotation.Y, rotation.Z);
+}
+
+vector3df TFNode::GetTranslate(){
+	vector3df toRet = vector3df(0,0,0);
+	return toRet;
+}
+
+vector3df TFNode::GetRotation(){
+	vector3df toRet = vector3df(0,0,0);
+	return toRet;
 }

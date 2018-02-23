@@ -9,6 +9,7 @@ class TFMesh: public TFNode{
 public:
 	void SetScale(vector3df scale);			// Sets the scale of the Node
 	void Scale(vector3df scale);			// Adds the scale to the current scale
+	vector3df GetScale();					// Returns the scale of the Node
 
 	void SetTexture(std::string texturePath = "");		// Replaces the Texture with a new one
 	void SetMesh(std::string meshPath = "");			// Replaces the Mesh with a new one

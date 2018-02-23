@@ -8,9 +8,6 @@
 # NEW/DELETE #################################################################################
 ############################################################################################*/
 
-TCamera::TCamera(){
-}
-
 TCamera::TCamera(bool perspective, float left, float right, float bottom, float top, float near, float far, Program* p){
 	m_program = p;
 	if(perspective) SetPerspective(left, right, bottom, top, near, far);
@@ -35,6 +32,10 @@ void TCamera::SetParallel(float left, float right, float bottom, float top, floa
 	SetLeft(left); SetRight(right); 
 	SetTop(top); SetBottom(bottom);
 	SetParallel();
+}
+
+bool TCamera::GetPerspective(){
+	return m_perspective;
 }
 
 void TCamera::SetPerspective(){

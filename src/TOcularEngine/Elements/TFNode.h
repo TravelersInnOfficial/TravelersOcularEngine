@@ -2,6 +2,7 @@
 #define TFNODE_H
 
 #include <vector3d.h>
+#include <TColor.h>
 #include "./../../TNode.h"
 #include "./../../Entities/TTransform.h"
 #include "./../../Entities/TMesh.h"
@@ -20,8 +21,11 @@ public:
 	void Translate(vector3df translation);		// Adds the position to the current position
 	void Rotate(vector3df rotation);			// Adds the rotation to the current rotation
 
+	vector3df GetTranslate();					// Returns the rotation of the Node
+	vector3df GetRotation();					// Returns the position of the Node
+
 protected:
-	TNode* m_meshNode;
+	TNode* m_entityNode;
 	TNode* m_rotationNode;
 	TNode* m_positionNode;
 
