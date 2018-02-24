@@ -1,5 +1,5 @@
 #include "TTextureLoader.h"
-#include <SOIL2.h>
+#include <SOIL2/SOIL2.h>
 #include <fstream>
 
 bool TTextureLoader::LoadTexture(std::string path, unsigned char** imageData, int* width, int* height){

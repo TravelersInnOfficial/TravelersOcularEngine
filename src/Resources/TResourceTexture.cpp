@@ -1,6 +1,6 @@
 #include "TResourceTexture.h"
 #include "../Loaders/TTextureLoader.h"
-#include <SOIL2.h>
+#include <SOIL2/SOIL2.h>
 
 TResourceTexture::TResourceTexture(std::string name){
 	m_name = name;
