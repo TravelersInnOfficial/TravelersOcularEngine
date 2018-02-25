@@ -18,34 +18,24 @@ TNode::TNode(TNode* parent, TEntity* entity){
 	parent->AddChild(this);
 }
 
-// -----------------------------------IMPORTANTE-------------------------------
-// Pensar donde destruir la entidad, el padre y los hijos
-// Ninguno se crea directamente detro de la clase
 TNode::~TNode(){
 	int size = m_children.size();
-	//std::cout<<"Empezamos a borrar "<< this << " | Numero de hijos: " << size << "\n";
 	
 	for(int i=0; i<size; i++){
 		TNode* node = m_children[i];
-		//std::cout<<"Borrando Hijo "<< i << ": " << node << "\n";
 		if(node != nullptr){
 			delete node;
-			//std::cout<<"Hijo "<< i << ": " << node << " Borrado\n";
 			node = nullptr;
 		}
 	}
 	m_children.clear();
-	//std::cout<<"Todos los hijos borrados de: " << this << "\n";
 	
 	if(m_entity != nullptr){
-		//std::cout<<"Borrando entidad de: " << this << "\n";	
 		delete m_entity;
 		m_entity = nullptr;
 	}
 
-	if(m_parent!=nullptr)
-		m_parent->RemoveChild(this);
-	//std::cout<<"Borrado: " << this << "\n\n";
+	if(m_parent!=nullptr) m_parent->RemoveChild(this);
 }
 
 int TNode::AddChild(TNode* child){
@@ -102,7 +92,6 @@ TNode* TNode::GetParent(){
 }
 
 void TNode::Draw(){
-	//std::cout<<"Apilamos NODO: "<<this<<"\n";
 	if(m_entity != nullptr) m_entity->BeginDraw();
 	
 	int size = m_children.size();
@@ -112,7 +101,6 @@ void TNode::Draw(){
 	}
 	
 	if(m_entity != nullptr) m_entity->EndDraw();
-	//std::cout<<"Desapilamos NODO: "<<this<<"\n";
 }
 
 glm::mat4 TNode::GetTransformMatrix(){

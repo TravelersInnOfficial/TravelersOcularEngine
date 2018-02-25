@@ -113,7 +113,7 @@ void SceneManager::InitScene(){
 
 	TMesh* mesh = new TMesh();
     TNode* miNodo = new TNode(node3, mesh);
-	mesh->SetProgram(program);
+	//mesh->SetProgram(program);
 
 	aux = new TTransform();
 	aux->Rotate(1.0f, 0.0f, 0.0f, 0.0f);
@@ -125,7 +125,7 @@ void SceneManager::InitScene(){
 	
 
     // CREAMOS LA CAMARA
-	TCamera* camera = new TCamera(true, -1.0f, 1.0f, -0.75f, 0.75f, 2.0f, 10.0f, program);
+	TCamera* camera = new TCamera(true, -1.0f, 1.0f, -0.75f, 0.75f, 2.0f, 10.0f);
 	TNode* cameraNode = new TNode(node6, camera);
 	glm::mat4 view = cameraNode->GetTransformMatrix();
     GLint uniView = glGetUniformLocation(program->GetProgramID(), "ViewMatrix");

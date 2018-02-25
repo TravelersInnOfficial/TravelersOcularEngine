@@ -4,11 +4,12 @@
 #include <stdexcept>
 #include <iostream>
 #include <chrono>
+#include "../TOcularEngine/VideoDriver.h"
 
 TMesh::TMesh(std::string meshPath, std::string texturePath){
-	m_program = nullptr;
 	LoadMesh(meshPath);
 	ChangeTexture(texturePath);
+	m_program = BASIC;
 }
 
 TMesh::~TMesh(){
@@ -36,14 +37,8 @@ void TMesh::BeginDraw(){
 void TMesh::EndDraw(){
 }
 
-// PROVISIONAL FUNCTION
-void TMesh::SetProgram(Program* prog){
-	m_program = prog;
-}
-
 void TMesh::SendShaderData(){
-	// If there is no Program, exit
-	if(m_program == nullptr) throw std::runtime_error("SHADER NOT ASSIGNED TO MESH");
+	/*myProgram = VideoDriver::GetInstance()->GetProgram(m_program);
 
     // --------------------------------------------------------ENVIAMOS LOS VERTICES
     // BIND VERTEX
@@ -51,7 +46,7 @@ void TMesh::SendShaderData(){
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 
 	// SEND THE VERTEX
-	GLint posAttrib = glGetAttribLocation(m_program->GetProgramID(), "VertexPosition");
+	GLint posAttrib = glGetAttribLocation(myProgram->GetProgramID(), "VertexPosition");
 	glVertexAttribPointer(posAttrib,3, GL_FLOAT, GL_FALSE, 0*sizeof(float), 0);
 	glEnableVertexAttribArray(posAttrib);
 
@@ -61,13 +56,13 @@ void TMesh::SendShaderData(){
 	glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
 
 	// SEND THE UV
-	GLuint uvAttrib = glGetAttribLocation(m_program->GetProgramID(), "inUV");
+	GLuint uvAttrib = glGetAttribLocation(myProgram->GetProgramID(), "inUV");
 	glVertexAttribPointer(uvAttrib, 2, GL_FLOAT, GL_FALSE, 0*sizeof(float), 0);
 	glEnableVertexAttribArray(uvAttrib);
 
 	// --------------------------------------------------------ENVIAMOS LA MATRIZ DE MODELO
 	// SEND THE MODEL/VIEW/MATRIX
-	GLint viewUniform = glGetUniformLocation(m_program->GetProgramID(), "ModelViewMatrix");
+	GLint viewUniform = glGetUniformLocation(myProgram->GetProgramID(), "ModelViewMatrix");
 	glUniformMatrix4fv(viewUniform, 1, GL_FALSE, glm::value_ptr(m_stack.top()));
 
 	// BIND THE NORMAL
@@ -75,7 +70,7 @@ void TMesh::SendShaderData(){
 	// glBindBuffer(GL_ARRAY_BUFFER, *normalBuffer);
 
 	// SEND THE NORMAL
-	// GLint normalAttrib = glGetAttribLocation(m_program->GetProgramID(), "vertexNormal");
+	// GLint normalAttrib = glGetAttribLocation(myProgram->GetProgramID(), "vertexNormal");
 	// glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, GL_FALSE, 9*sizeof(float), (void*)(3*sizeof(float)));
 	// glEnableVertexAttribArray(normalAttrib);
 	TResourceTexture* currentTexture = nullptr;
@@ -88,8 +83,8 @@ void TMesh::SendShaderData(){
 	if(currentTexture!=nullptr){
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, currentTexture->GetTextureId());
-		GLuint TextureID = glGetUniformLocation(m_program->GetProgramID(), "myTextureSampler");
+		GLuint TextureID = glGetUniformLocation(myProgram->GetProgramID(), "myTextureSampler");
 		glUniform1i(TextureID, 0);
-	}
+	}*/
 }
 	
