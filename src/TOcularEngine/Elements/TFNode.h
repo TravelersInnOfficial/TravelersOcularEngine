@@ -3,6 +3,7 @@
 
 #include <vector3d.h>
 #include <TColor.h>
+#include <glm/gtx/matrix_decompose.hpp>
 #include "./../../TNode.h"
 #include "./../../Entities/TTransform.h"
 #include "./../../Entities/TMesh.h"
