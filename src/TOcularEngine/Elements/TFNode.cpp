@@ -4,7 +4,6 @@ TFNode::TFNode(){
 	m_entityNode = nullptr;
 	m_rotationNode = nullptr;
 	m_positionNode = nullptr;
-	CreateEstructure();
 }
 
 TFNode::~TFNode(){

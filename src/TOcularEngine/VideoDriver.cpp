@@ -8,7 +8,6 @@ VideoDriver::VideoDriver(){
     privateIODriver = new IODriver();
     close_window = false;
     m_clearSceenColor = toe::core::vector4df(0,0,0,0);
-    m_programs.reserve(10);
 }
 
 VideoDriver* VideoDriver::GetInstance(){
@@ -29,7 +28,9 @@ float VideoDriver::GetTime(){
 
 void VideoDriver::CreateWindow(std::string window_name, toe::core::vector2df dimensions){
     m_name = window_name;
-    m_window = new sf::RenderWindow(sf::VideoMode(dimensions.X, dimensions.Y), m_name.c_str(), sf::Style::Titlebar | sf::Style::Close);
+
+    sf::ContextSettings context = sf::ContextSettings(24, 8, 4, 3);
+    m_window = new sf::RenderWindow(sf::VideoMode(dimensions.X, dimensions.Y), m_name.c_str(), sf::Style::Titlebar | sf::Style::Close, context);
     
     /// Iniciamos glew
 	glewExperimental = GL_TRUE;
@@ -100,13 +101,12 @@ void VideoDriver::initShaders(){
     
     Program* p = new Program(shaders);
     glUseProgram(p->GetProgramID());
-    m_programs[STANDARD_SHADER] = p;
+    m_programs.insert(std::pair<SHADERTYPE, Program*>(STANDARD_SHADER,p));
 }
 
 Program* VideoDriver::GetProgram(SHADERTYPE p){
     return m_programs[p];
 }
-
-std::vector<Program*> VideoDriver::GetProgramVector(){
+std::map<SHADERTYPE,Program*> VideoDriver::GetProgramVector(){
     return m_programs;
 }

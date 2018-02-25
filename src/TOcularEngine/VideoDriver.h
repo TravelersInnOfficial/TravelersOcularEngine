@@ -78,7 +78,7 @@ public:
 
     Program* GetProgram(SHADERTYPE);
 
-    std::vector<Program*> GetProgramVector();
+    std::map<SHADERTYPE,Program*> GetProgramVector();
 
 
 private:
@@ -92,7 +92,7 @@ private:
     bool close_window;
     toe::core::vector4df m_clearSceenColor;
 
-    std::vector<Program*> m_programs;
+    std::map<SHADERTYPE, Program*> m_programs;
     /**
      * @brief Video Driver constructor
      * 

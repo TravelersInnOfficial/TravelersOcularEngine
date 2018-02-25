@@ -1,6 +1,8 @@
 #include "TFLight.h"
 
 TFLight::TFLight(toe::core::vector3df position, toe::core::vector3df rotation, toe::core::vector4df color, float intensity) : TFNode(){
+	CreateEstructure();
+	
 	TTransform* t = (TTransform*) m_positionNode->GetEntity();
 	t->Translate(position.X, position.Y, position.Z);
 

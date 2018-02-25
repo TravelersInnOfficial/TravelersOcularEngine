@@ -108,8 +108,10 @@ glm::mat4 TNode::GetTransformMatrix(){
 	glm::mat4 toReturn;
 
 	auxParent = GetParent();
-	toReturn = ((TTransform*)auxParent->GetEntity())->GetTransform();
-	auxParent = auxParent->GetParent();
+	if(auxParent != nullptr){
+		toReturn = ((TTransform*)auxParent->GetEntity())->GetTransform();
+		auxParent = auxParent->GetParent();
+	}
 
 	while(auxParent != nullptr){
 		toReturn = ((TTransform*)auxParent->GetEntity())->GetTransform() * toReturn;
