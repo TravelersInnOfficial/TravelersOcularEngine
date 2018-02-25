@@ -96,8 +96,8 @@ public:
     IODriver();
     ~IODriver();
     bool Update(sf::Event* event);
-private:
-	bool OnEvent(const TEvent& event);
+protected:
+	virtual bool OnEvent(const TEvent& event);
     bool m_close;
 };
 

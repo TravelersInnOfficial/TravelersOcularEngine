@@ -1,5 +1,4 @@
 #include "IODriver.h"
-#include <iostream>
 
 TEvent::TEvent(){}
 
@@ -207,7 +206,6 @@ bool IODriver::OnEvent(const TEvent& event){
 
     if (event.m_type == Type_KeyReleased){ 
         if(event.m_key.code == Key_Space){
-            std::cout<<"funciona"<<std::endl;
         } 
     }
     return m_close;
