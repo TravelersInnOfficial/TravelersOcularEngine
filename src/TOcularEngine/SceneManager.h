@@ -83,6 +83,8 @@ public:
 
     void Draw();
 
+    TNode* GetRootNode();
+
 private:
     TNode* m_SceneTreeRoot;
 
@@ -92,7 +94,7 @@ private:
     std::vector<TFCamera*> m_cameras; //Pointers to the cameras created
     std::vector<TFLight*> m_lights; //Pointers to the lights created
 
-    TNode* main_camera;
+    TFCamera* main_camera;
 
     glm::mat4 GetTransformInTree(TNode* node);
 };

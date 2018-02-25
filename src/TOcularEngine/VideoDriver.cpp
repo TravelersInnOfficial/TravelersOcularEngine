@@ -34,7 +34,9 @@ float VideoDriver::GetTime(){
 
 void VideoDriver::CreateWindow(std::string window_name, toe::core::vector2df dimensions){
     m_name = window_name;
-    m_window = new sf::RenderWindow(sf::VideoMode(dimensions.X, dimensions.Y), m_name.c_str(), sf::Style::Titlebar | sf::Style::Close);
+
+    sf::ContextSettings context = sf::ContextSettings(24, 8, 4, 3);
+    m_window = new sf::RenderWindow(sf::VideoMode(dimensions.X, dimensions.Y), m_name.c_str(), sf::Style::Titlebar | sf::Style::Close, context);
     
     /// Iniciamos glew
 	glewExperimental = GL_TRUE;
