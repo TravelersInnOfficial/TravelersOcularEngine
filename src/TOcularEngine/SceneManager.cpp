@@ -1,4 +1,5 @@
 #include "SceneManager.h"
+#include "VideoDriver.h"
 
 SceneManager::SceneManager(){
     TTransform init_transform;
@@ -72,6 +73,13 @@ void SceneManager::Update(){
 }
 
 void SceneManager::Draw(){
+	glm::mat4 view = main_camera->GetTransformMatrix();
+    std::vector<Program*> p = VideoDriver::GetInstance()->GetProgramVector();
+    for(int i = 0; i<p.size(); i++){
+        GLint uniView = glGetUniformLocation(p[i]->GetProgramID(), "ViewMatrix");
+	    glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));
+    }
+
     m_SceneTreeRoot->Draw();
 }
 
@@ -84,16 +92,6 @@ void SceneManager::InitScene(){
     // CREAMOS EL ARRAY DE VERTICES PARA LOS OBJETOS
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
-
-    // CARGAMOS LOS SHADERS
-	std::map<std::string, GLenum> shaders = std::map<std::string, GLenum>();	
-	shaders.insert(std::pair<std::string, GLenum>("../src/Shaders/VShader.glsl", GL_VERTEX_SHADER));
-	shaders.insert(std::pair<std::string, GLenum>("../src/Shaders/FShader.glsl", GL_FRAGMENT_SHADER));
-    
-    // CREAMOS EL PROGRAMA
-	program = new Program(shaders);
-	glUseProgram(program->GetProgramID());
-
 
     // CREAMOS EL ARBOL
 	TTransform* aux = new TTransform();
@@ -126,11 +124,8 @@ void SceneManager::InitScene(){
 
     // CREAMOS LA CAMARA
 	TCamera* camera = new TCamera(true, -1.0f, 1.0f, -0.75f, 0.75f, 2.0f, 10.0f);
-	TNode* cameraNode = new TNode(node6, camera);
-	glm::mat4 view = cameraNode->GetTransformMatrix();
-    GLint uniView = glGetUniformLocation(program->GetProgramID(), "ViewMatrix");
-	glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));
-
+	main_camera = new TNode(node6, camera);
+    
     // ASIGNAMOS EL NODO ROOT
     m_SceneTreeRoot = parent;
 }

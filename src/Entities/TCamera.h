@@ -2,8 +2,8 @@
 #define TCAMERA_H
 
 #include "TEntity.h"
-#include <vector>
 #include <glm/mat4x4.hpp>
+#include "../Resources/Program.h"
 
 class TCamera: public TEntity{
 public:
@@ -50,6 +50,7 @@ public:
 	glm::mat4 GetTransform();
 	
 	void SendMatrixToShader();
+	SHADERTYPE m_program;
 
 	void BeginDraw();
 	void EndDraw();

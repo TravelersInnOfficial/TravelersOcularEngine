@@ -4,7 +4,7 @@
 TLight::TLight(TColor color, float intensity){
 	m_color = color;
 	m_intensity = intensity;
-	m_program = BASIC;
+	m_program = STANDARD_SHADER;
 }
 
 TLight::~TLight(){}

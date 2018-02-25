@@ -12,7 +12,7 @@
 TCamera::TCamera(bool perspective, float left, float right, float bottom, float top, float near, float far){
 	if(perspective) SetPerspective(left, right, bottom, top, near, far);
 	else SetParallel(left, right, bottom, top, near, far);
-	m_program = BASIC;
+	m_program = STANDARD_SHADER;
 }
 
 TCamera::~TCamera(){}
@@ -122,11 +122,11 @@ glm::mat4 TCamera::CalculateOrthogonalMatrix(){
 }
 
 void TCamera::SendMatrixToShader(){
-	/*std::vector<Program*> programs = VideoDriver::GetInstance()->GetProgramVector();
+	std::vector<Program*> programs = VideoDriver::GetInstance()->GetProgramVector();
 	for(int i = 0; i < programs.size(); i++){
 		GLint uniProj = glGetUniformLocation(programs[i]->GetProgramID(), "ProjectionMatrix");
 		glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(m_projectionMatrix));
-	}*/
+	}
 }
 
 /*############################################################################################

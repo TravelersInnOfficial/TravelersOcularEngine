@@ -22,7 +22,7 @@ public:
 
 private:
 
-	PROGRAM m_program;
+	SHADERTYPE m_program;
 
 	TResourceMesh* 		m_mesh;
 	TResourceTexture* 	m_texture;

@@ -9,7 +9,7 @@
 TMesh::TMesh(std::string meshPath, std::string texturePath){
 	LoadMesh(meshPath);
 	ChangeTexture(texturePath);
-	m_program = BASIC;
+	m_program = STANDARD_SHADER;
 }
 
 TMesh::~TMesh(){
@@ -38,7 +38,7 @@ void TMesh::EndDraw(){
 }
 
 void TMesh::SendShaderData(){
-	/*myProgram = VideoDriver::GetInstance()->GetProgram(m_program);
+	Program* myProgram = VideoDriver::GetInstance()->GetProgram(m_program);
 
     // --------------------------------------------------------ENVIAMOS LOS VERTICES
     // BIND VERTEX
@@ -85,6 +85,6 @@ void TMesh::SendShaderData(){
 		glBindTexture(GL_TEXTURE_2D, currentTexture->GetTextureId());
 		GLuint TextureID = glGetUniformLocation(myProgram->GetProgramID(), "myTextureSampler");
 		glUniform1i(TextureID, 0);
-	}*/
+	}
 }
 	

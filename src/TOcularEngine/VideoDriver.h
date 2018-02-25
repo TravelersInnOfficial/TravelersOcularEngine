@@ -74,9 +74,9 @@ public:
      */
     void SetWindowName(std::string name);
 
-    void SetShaderProgram(PROGRAM);
+    void SetShaderProgram(SHADERTYPE);
 
-    Program* GetProgram(PROGRAM);
+    Program* GetProgram(SHADERTYPE);
 
     std::vector<Program*> GetProgramVector();
 
