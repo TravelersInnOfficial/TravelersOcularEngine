@@ -3,15 +3,16 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <GL/glew.h>
 #include <iostream>
+#include "../TOcularEngine/VideoDriver.h"
 
 /*############################################################################################
 # NEW/DELETE #################################################################################
 ############################################################################################*/
 
-TCamera::TCamera(bool perspective, float left, float right, float bottom, float top, float near, float far, Program* p){
-	m_program = p;
+TCamera::TCamera(bool perspective, float left, float right, float bottom, float top, float near, float far){
 	if(perspective) SetPerspective(left, right, bottom, top, near, far);
 	else SetParallel(left, right, bottom, top, near, far);
+	m_program = STANDARD_SHADER;
 }
 
 TCamera::~TCamera(){}
@@ -121,11 +122,11 @@ glm::mat4 TCamera::CalculateOrthogonalMatrix(){
 }
 
 void TCamera::SendMatrixToShader(){
-	if (m_program == nullptr)
-		std::cout << "EL PROGRAMA\n";
-
-	GLint uniProj = glGetUniformLocation(m_program->GetProgramID(), "ProjectionMatrix");
-	glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(m_projectionMatrix));
+	std::vector<Program*> programs = VideoDriver::GetInstance()->GetProgramVector();
+	for(int i = 0; i < programs.size(); i++){
+		GLint uniProj = glGetUniformLocation(programs[i]->GetProgramID(), "ProjectionMatrix");
+		glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(m_projectionMatrix));
+	}
 }
 
 /*############################################################################################

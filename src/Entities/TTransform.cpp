@@ -2,6 +2,7 @@
 
 TTransform::TTransform(){
 	m_matrix = glm::mat4(1.0f);
+	m_program = STANDARD_SHADER;
 }
 
 TTransform::~TTransform(){}

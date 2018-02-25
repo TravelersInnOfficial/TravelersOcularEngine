@@ -7,3 +7,7 @@ std::stack<glm::mat4> TEntity::InitializeStack(){
 }
 
 std::stack<glm::mat4> TEntity::m_stack = TEntity::InitializeStack();
+
+void TEntity::SetProgram(SHADERTYPE program){
+    m_program = program;
+}

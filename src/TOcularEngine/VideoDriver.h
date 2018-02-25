@@ -1,6 +1,9 @@
 #ifndef VIDEODRIVER_H
 #define VIDEODRIVER_H
 
+#define GLEW_STATIC
+#include <GL/glew.h>
+
 #include "SceneManager.h"
 #include "IODriver.h"
 #include <SFML/System.hpp>
@@ -71,16 +74,16 @@ public:
      */
     void SetWindowName(std::string name);
 
+    void SetShaderProgram(SHADERTYPE);
+
+    Program* GetProgram(SHADERTYPE);
+
+    std::vector<Program*> GetProgramVector();
+
+
 private:
-    /**
-     * @brief Video Driver constructor
-     * 
-     */
-    VideoDriver();
-
-    std::string m_name;
-
     sf::RenderWindow* m_window;
+    std::string m_name;
     sf::Clock* m_clock;
 
     SceneManager* privateSceneManager = nullptr;
@@ -88,6 +91,20 @@ private:
 
     bool close_window;
     toe::core::vector4df m_clearSceenColor;
+
+    std::vector<Program*> m_programs;
+    /**
+     * @brief Video Driver constructor
+     * 
+     */
+    VideoDriver();
+
+    /**
+     * @brief Loads the shaders in the Resource Manager
+     * 
+     */
+    void initShaders();
+
 };
 
 #endif

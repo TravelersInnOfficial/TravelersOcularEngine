@@ -1,8 +1,10 @@
 #include "TLight.h"
+#include "../TOcularEngine/VideoDriver.h"
 
 TLight::TLight(TColor color, float intensity){
 	m_color = color;
 	m_intensity = intensity;
+	m_program = STANDARD_SHADER;
 }
 
 TLight::~TLight(){}

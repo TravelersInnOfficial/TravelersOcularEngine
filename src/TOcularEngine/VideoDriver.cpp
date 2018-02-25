@@ -8,6 +8,7 @@ VideoDriver::VideoDriver(){
     privateIODriver = new IODriver();
     close_window = false;
     m_clearSceenColor = toe::core::vector4df(0,0,0,0);
+    m_programs.reserve(10);
 }
 
 VideoDriver* VideoDriver::GetInstance(){
@@ -40,6 +41,9 @@ void VideoDriver::CreateWindow(std::string window_name, toe::core::vector2df dim
 	glDepthFunc(GL_LESS);
 	glEnable(GL_CULL_FACE);		//|
 	glCullFace(GL_BACK);		//| Habilitar el backface culing
+
+    initShaders();
+    privateSceneManager->InitScene();
 }
 
 bool VideoDriver::Update(){
@@ -57,6 +61,7 @@ bool VideoDriver::Update(){
 }
 
 void VideoDriver::Draw(){
+    privateSceneManager->Draw();
     m_window->display();
 }
 
@@ -76,4 +81,32 @@ void VideoDriver::SetWindowName(std::string name){
 
 std::string VideoDriver::GetWindowName(){
     return m_name;
+}
+
+void VideoDriver::SetShaderProgram(SHADERTYPE p){
+    //privateSceneManager->SetProgram(m_programs[p]);
+	//glUseProgram(m_programs[p]->GetProgramID());
+}
+
+void VideoDriver::initShaders(){
+    //LOAD IN RESOURCE MANAGER
+    TResourceManager::GetInstance()->GetResourceShader("../src/Shaders/VShader.glsl");
+    TResourceManager::GetInstance()->GetResourceShader("../src/Shaders/FShader.glsl");
+
+    //CARGAMOS LOS SHADERS
+	std::map<std::string, GLenum> shaders = std::map<std::string, GLenum>();	
+	shaders.insert(std::pair<std::string, GLenum>("../src/Shaders/VShader.glsl", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>("../src/Shaders/FShader.glsl", GL_FRAGMENT_SHADER));
+    
+    Program* p = new Program(shaders);
+    glUseProgram(p->GetProgramID());
+    m_programs[STANDARD_SHADER] = p;
+}
+
+Program* VideoDriver::GetProgram(SHADERTYPE p){
+    return m_programs[p];
+}
+
+std::vector<Program*> VideoDriver::GetProgramVector(){
+    return m_programs;
 }

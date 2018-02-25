@@ -79,10 +79,21 @@ public:
 
     void Update();
 
+    void InitScene();
+
+    void Draw();
+
 private:
     TNode* m_SceneTreeRoot;
 
+    GLuint vao;
+    Program* program;
+
     std::vector<TFCamera*> m_cameras; //Pointers to the cameras created
     std::vector<TFLight*> m_lights; //Pointers to the lights created
+
+    TNode* main_camera;
+
+    glm::mat4 GetTransformInTree(TNode* node);
 };
 #endif
