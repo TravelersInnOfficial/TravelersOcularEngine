@@ -8,6 +8,7 @@
 
 class TEntity{
 public:
+	virtual ~TEntity();
 	virtual void EndDraw() = 0;
 	virtual void BeginDraw() = 0;
 	void SetProgram(SHADERTYPE program);
