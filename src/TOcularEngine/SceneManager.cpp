@@ -6,15 +6,23 @@ SceneManager::SceneManager(){
 }
 
 SceneManager::~SceneManager(){
-	for(int i = m_cameras.size() - 1; i >= 0; i--){
+	int size = m_cameras.size();
+	for(int i = size - 1; i >= 0; i--){
 		delete m_cameras[i];
 	}
 	m_cameras.clear();
 	
-	for(int i = m_lights.size() - 1; i >= 0; i--){
+	size = m_lights.size();
+	for(int i = size - 1; i >= 0; i--){
 		delete m_lights[i];
 	}
 	m_lights.clear();
+
+	size = m_meshes.size();
+	for(int i = size - 1; i>=0; i--){
+		delete m_meshes[i];
+	}
+	m_meshes.clear();
 
 	glDeleteVertexArrays(1, &vao);
 	delete m_SceneTreeRoot;
@@ -41,6 +49,7 @@ TFLight* SceneManager::AddLight(toe::core::vector3df position, toe::core::vector
 TFMesh* SceneManager::AddMesh(toe::core::vector3df position, toe::core::vector3df rotation, toe::core::vector3df scale, std::string meshPath){
 	TFMesh* toRet = nullptr;
 	toRet = new TFMesh(position, rotation, scale, meshPath);
+	m_meshes.push_back(toRet);
 	toRet->Attach(m_SceneTreeRoot);
 	return toRet;
 }

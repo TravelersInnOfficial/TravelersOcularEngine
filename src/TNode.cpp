@@ -21,20 +21,22 @@ TNode::TNode(TNode* parent, TEntity* entity){
 TNode::~TNode(){
 	int size = m_children.size();
 	
-	for(int i=0; i<size; i++){
+	for(int i = size - 1; i>=0; i--){
 		TNode* node = m_children[i];
 		if(node != nullptr){
+			m_children.erase(m_children.begin() + i);
 			delete node;
 			node = nullptr;
 		}
 	}
+
 	m_children.clear();
 	
 	if(m_entity != nullptr){
 		delete m_entity;
 		m_entity = nullptr;
 	}
-
+	 
 	if(m_parent!=nullptr) m_parent->RemoveChild(this);
 }
 

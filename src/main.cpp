@@ -9,13 +9,16 @@ void CreateTree(){
 	toe::core::vector3df cameraRot = toe::core::vector3df(0, 0, 0);
 	sm->AddCamera(cameraPos, cameraRot, true);
 
-	toe::core::vector3df meshPos = toe::core::vector3df(0, 0, 0);
-	toe::core::vector3df meshRot = toe::core::vector3df(0, 0, 0);
-	toe::core::vector3df meshScale = toe::core::vector3df(1, 1, 1);
-	std::string path = "./../assets/models/Wizard.obj";
-	sm->AddMesh(meshPos, meshRot, meshScale, path);
+	//toe::core::vector3df meshPos = toe::core::vector3df(0, 0, 0);
+	//toe::core::vector3df meshRot = toe::core::vector3df(0, 0, 0);
+	//toe::core::vector3df meshScale = toe::core::vector3df(1, 1, 1);
+	//std::string path = "./../assets/models/Wizard.obj";
+	//sm->AddMesh(meshPos, meshRot, meshScale, path);
 
 	toe::AddCube();
+	toe::AddCube();
+//	toe::AddCube();
+
 }
 
 int main(){

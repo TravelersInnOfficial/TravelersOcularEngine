@@ -91,8 +91,9 @@ private:
     GLuint vao;
     Program* program;
 
-    std::vector<TFCamera*> m_cameras; //Pointers to the cameras created
-    std::vector<TFLight*> m_lights; //Pointers to the lights created
+    std::vector<TFCamera*>  m_cameras;  // Pointers to the cameras created
+    std::vector<TFLight*>   m_lights;   // Pointers to the lights created
+    std::vector<TFMesh*>    m_meshes;    // Pointers to the nodes created
 
     TFCamera* main_camera;
 

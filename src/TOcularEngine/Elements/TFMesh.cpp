@@ -16,9 +16,7 @@ TFMesh::TFMesh(toe::core::vector3df position, toe::core::vector3df rotation, toe
 }
 
 TFMesh::~TFMesh(){
-	delete m_rotationNode;
-	delete m_positionNode;
-	delete m_entityNode;
+	// Los nodos se eliminan con el arbol
 }
 
 void TFMesh::CreateEstructure(){
