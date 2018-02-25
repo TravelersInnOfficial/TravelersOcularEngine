@@ -71,6 +71,13 @@ public:
      */
     void SetWindowName(std::string name);
 
+    void SetShaderProgram(PROGRAM);
+
+    Program* GetProgram(PROGRAM);
+
+    std::vector<Program*> GetProgramVector();
+
+
 private:
     sf::RenderWindow* m_window;
     std::string m_name;
@@ -82,11 +89,18 @@ private:
     bool close_window;
     toe::core::vector4df m_clearSceenColor;
 
+    std::vector<Program*> m_programs;
     /**
      * @brief Video Driver constructor
      * 
      */
     VideoDriver();
+
+    /**
+     * @brief Loads the shaders in the Resource Manager
+     * 
+     */
+    void initShaders();
 
 };
 

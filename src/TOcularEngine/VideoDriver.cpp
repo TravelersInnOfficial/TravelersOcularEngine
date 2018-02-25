@@ -8,6 +8,7 @@ VideoDriver::VideoDriver(){
     privateIODriver = new IODriver();
     close_window = false;
     m_clearSceenColor = toe::core::vector4df(0,0,0,0);
+    initShaders();
 }
 
 VideoDriver* VideoDriver::GetInstance(){
@@ -79,4 +80,32 @@ void VideoDriver::SetWindowName(std::string name){
 
 std::string VideoDriver::GetWindowName(){
     return m_name;
+}
+
+void VideoDriver::SetShaderProgram(PROGRAM p){
+    privateSceneManager->SetProgram(m_programs[p]);
+	glUseProgram(program->GetProgramID());
+}
+
+void VideoDriver::initShaders(){
+    //LOAD IN RESOURCE MANAGER
+    GetResourceShader("../src/Shaders/VShader.glsl");
+    GetResourceShader("../src/Shaders/FShader.glsl");
+
+    //CARGAMOS LOS SHADERS
+	std::map<std::string, GLenum> shaders = shaders = std::map<std::string, GLenum>();	
+	shaders.insert(std::pair<std::string, GLenum>("../src/Shaders/VShader.glsl", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>("../src/Shaders/FShader.glsl", GL_FRAGMENT_SHADER));
+
+    Program *p = new Program(shaders);
+    m_programs.push_back(p);
+
+}
+
+Program* VideoDriver::GetProgram(PROGRAM p){
+    return m_programs[p];
+}
+
+std::vector<Program*> VideoDriver::GetProgramVector(){
+    return m_programs;
 }
