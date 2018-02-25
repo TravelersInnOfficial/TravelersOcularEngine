@@ -94,7 +94,7 @@ public:
 class IODriver{
 public:
     IODriver();
-    ~IODriver();
+    virtual ~IODriver();
     bool Update(sf::Event* event);
 protected:
 	virtual bool OnEvent(const TEvent& event);
