@@ -16,6 +16,12 @@ VideoDriver* VideoDriver::GetInstance(){
 }
 
 VideoDriver::~VideoDriver(){
+    std::map<SHADERTYPE, Program*>::iterator it = m_programs.begin();
+    for(;it!=m_programs.end();++it){
+        m_programs.erase(it);
+    }
+    m_programs.clear();
+
     delete privateIODriver;
     delete privateSceneManager;
     delete m_clock;
@@ -85,8 +91,7 @@ std::string VideoDriver::GetWindowName(){
 }
 
 void VideoDriver::SetShaderProgram(SHADERTYPE p){
-    //privateSceneManager->SetProgram(m_programs[p]);
-	//glUseProgram(m_programs[p]->GetProgramID());
+	glUseProgram(m_programs.find(p)->second->GetProgramID());
 }
 
 void VideoDriver::initShaders(){
