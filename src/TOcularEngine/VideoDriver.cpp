@@ -8,7 +8,6 @@ VideoDriver::VideoDriver(){
     privateIODriver = new IODriver();
     close_window = false;
     m_clearSceenColor = toe::core::vector4df(0,0,0,0);
-    m_programs.reserve(10);
 }
 
 VideoDriver* VideoDriver::GetInstance(){
@@ -100,13 +99,12 @@ void VideoDriver::initShaders(){
     
     Program* p = new Program(shaders);
     glUseProgram(p->GetProgramID());
-    m_programs[STANDARD_SHADER] = p;
+    m_programs.insert(std::pair<SHADERTYPE, Program*>(STANDARD_SHADER,p));
 }
 
 Program* VideoDriver::GetProgram(SHADERTYPE p){
     return m_programs[p];
 }
-
-std::vector<Program*> VideoDriver::GetProgramVector(){
+std::map<SHADERTYPE,Program*> VideoDriver::GetProgramVector(){
     return m_programs;
 }

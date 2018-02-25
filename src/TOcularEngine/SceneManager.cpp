@@ -2,8 +2,7 @@
 #include "VideoDriver.h"
 
 SceneManager::SceneManager(){
-	TTransform init_transform;
-	m_SceneTreeRoot = new TNode(&init_transform);
+	m_SceneTreeRoot = new TNode(new TTransform());
 }
 
 SceneManager::~SceneManager(){
@@ -75,13 +74,14 @@ void SceneManager::Update(){
 
 void SceneManager::Draw(){
 	glm::mat4 view = main_camera->m_entityNode->GetTransformMatrix();
-	std::vector<Program*> p = VideoDriver::GetInstance()->GetProgramVector();
-	for(int i = 0; i<p.size(); i++){
-		GLint uniView = glGetUniformLocation(p[i]->GetProgramID(), "ViewMatrix");
-		glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));
-	}
+    std::map<SHADERTYPE,Program*> p = VideoDriver::GetInstance()->GetProgramVector();
+    std::map<SHADERTYPE,Program*>::iterator it = p.begin();
+    for(;it!=p.end();++it){
+        GLint uniView = glGetUniformLocation(it->second->GetProgramID(), "ViewMatrix");
+	    glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));
+    }
 
-	m_SceneTreeRoot->Draw();
+    m_SceneTreeRoot->Draw();
 }
 
 void SceneManager::InitScene(){

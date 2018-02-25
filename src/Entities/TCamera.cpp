@@ -122,9 +122,10 @@ glm::mat4 TCamera::CalculateOrthogonalMatrix(){
 }
 
 void TCamera::SendMatrixToShader(){
-	std::vector<Program*> programs = VideoDriver::GetInstance()->GetProgramVector();
-	for(int i = 0; i < programs.size(); i++){
-		GLint uniProj = glGetUniformLocation(programs[i]->GetProgramID(), "ProjectionMatrix");
+	std::map<SHADERTYPE,Program*> programs = VideoDriver::GetInstance()->GetProgramVector();
+	std::map<SHADERTYPE,Program*>::iterator it = programs.begin();
+	for(; it!=programs.end();++it){
+		GLint uniProj = glGetUniformLocation(it->second->GetProgramID(), "ProjectionMatrix");
 		glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(m_projectionMatrix));
 	}
 }
