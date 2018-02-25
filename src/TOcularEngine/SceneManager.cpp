@@ -2,7 +2,7 @@
 
 SceneManager::SceneManager(){
     TTransform init_transform;
-    m_SceneTreeRoot = new TNode(&init_transform);
+    m_SceneTreeRoot = nullptr;
 }
 
 SceneManager::~SceneManager(){
@@ -15,6 +15,10 @@ SceneManager::~SceneManager(){
         delete m_lights[i];
     }
     m_lights.clear();
+
+    delete m_SceneTreeRoot;
+    glDeleteVertexArrays(1, &vao);
+    delete program;
 }
 
 TFCamera* SceneManager::AddCamera(toe::core::vector3df position, toe::core::vector3df rotation, bool perspective){
@@ -65,4 +69,84 @@ bool SceneManager::DeleteMesh(TFMesh* mesh){
 
 void SceneManager::Update(){
     
+}
+
+void SceneManager::Draw(){
+    m_SceneTreeRoot->Draw();
+}
+
+// #####################################################################################################
+// #####################################################################################################
+// #####################################################################################################
+
+void SceneManager::InitScene(){
+
+    // CREAMOS EL ARRAY DE VERTICES PARA LOS OBJETOS
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
+    // CARGAMOS LOS SHADERS
+	std::map<std::string, GLenum> shaders = std::map<std::string, GLenum>();	
+	shaders.insert(std::pair<std::string, GLenum>("../src/Shaders/VShader.glsl", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>("../src/Shaders/FShader.glsl", GL_FRAGMENT_SHADER));
+    
+    // CREAMOS EL PROGRAMA
+	program = new Program(shaders);
+	glUseProgram(program->GetProgramID());
+
+
+    // CREAMOS EL ARBOL
+	TTransform* aux = new TTransform();
+	TNode* parent = new TNode(aux);
+
+	TTransform* node1Rot = new TTransform();
+	TNode* node1 = new TNode(parent, node1Rot);
+
+	aux = new TTransform();
+
+	aux = new TTransform();
+	aux->Translate(0.0f, 0.0f, 0.0f);
+	TNode* node3 = new TNode(node1, aux);
+
+	aux = new TTransform();
+	aux->Translate(0.0f, 0.0f, 0.0f);
+
+	TMesh* mesh = new TMesh();
+    TNode* miNodo = new TNode(node3, mesh);
+	mesh->SetProgram(program);
+
+	aux = new TTransform();
+	aux->Rotate(1.0f, 0.0f, 0.0f, 0.0f);
+	TNode* node5 = new TNode(parent, aux);
+
+	aux = new TTransform();
+	aux->Translate(0.0f, 0.0f, -5.0f);
+	TNode* node6 = new TNode(node5, aux);
+	
+
+    // CREAMOS LA CAMARA
+	TCamera* camera = new TCamera(true, -1.0f, 1.0f, -0.75f, 0.75f, 2.0f, 10.0f, program);
+	TNode* cameraNode = new TNode(node6, camera);
+	glm::mat4 view = GetTransformInTree(cameraNode);
+    GLint uniView = glGetUniformLocation(program->GetProgramID(), "ViewMatrix");
+	glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));
+
+    // ASIGNAMOS EL NODO ROOT
+    m_SceneTreeRoot = parent;
+}
+
+glm::mat4 SceneManager::GetTransformInTree(TNode* node){
+	TNode* auxParent;
+	glm::mat4 toReturn;
+
+	auxParent = node->GetParent();
+	toReturn = ((TTransform*)auxParent->GetEntity())->GetTransform();
+	auxParent = auxParent->GetParent();
+
+	while(auxParent != nullptr){
+		toReturn = ((TTransform*)auxParent->GetEntity())->GetTransform() * toReturn;
+		auxParent = auxParent->GetParent();
+	}
+	
+	return toReturn;
 }

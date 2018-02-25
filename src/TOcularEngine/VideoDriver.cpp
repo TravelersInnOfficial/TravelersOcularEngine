@@ -40,6 +40,8 @@ void VideoDriver::CreateWindow(std::string window_name, toe::core::vector2df dim
 	glDepthFunc(GL_LESS);
 	glEnable(GL_CULL_FACE);		//|
 	glCullFace(GL_BACK);		//| Habilitar el backface culing
+
+    privateSceneManager->InitScene();
 }
 
 bool VideoDriver::Update(){
@@ -57,6 +59,7 @@ bool VideoDriver::Update(){
 }
 
 void VideoDriver::Draw(){
+    privateSceneManager->Draw();
     m_window->display();
 }
 

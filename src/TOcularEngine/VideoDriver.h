@@ -72,15 +72,8 @@ public:
     void SetWindowName(std::string name);
 
 private:
-    /**
-     * @brief Video Driver constructor
-     * 
-     */
-    VideoDriver();
-
-    std::string m_name;
-
     sf::RenderWindow* m_window;
+    std::string m_name;
     sf::Clock* m_clock;
 
     SceneManager* privateSceneManager = nullptr;
@@ -88,6 +81,13 @@ private:
 
     bool close_window;
     toe::core::vector4df m_clearSceenColor;
+
+    /**
+     * @brief Video Driver constructor
+     * 
+     */
+    VideoDriver();
+
 };
 
 #endif
