@@ -14,6 +14,8 @@ void CreateTree(){
 	toe::core::vector3df meshScale = toe::core::vector3df(1, 1, 1);
 	std::string path = "./../assets/models/Wizard.obj";
 	sm->AddMesh(meshPos, meshRot, meshScale, path);
+
+	toe::AddCube();
 }
 
 int main(){

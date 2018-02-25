@@ -6,6 +6,9 @@
 namespace toe{
     //PUBLIC
     VideoDriver* GetVideoDriver();
+    TFMesh* AddCube(toe::core::vector3df position = toe::core::vector3df(0,0,0),
+                 toe::core::vector3df rotation = toe::core::vector3df(0,0,0),
+                 toe::core::vector3df scale = toe::core::vector3df(1,1,1));
 
     namespace core{ 
         class rect{
@@ -26,6 +29,8 @@ namespace toe{
 
     namespace{
         VideoDriver* privateVideoDriver = VideoDriver::GetInstance();
+        SceneManager* privateSceneManager = VideoDriver::GetInstance()->GetSceneManager();
+        IODriver* privateIOManager = VideoDriver::GetInstance()->GetIOManager();
     }
 
     // TODO:: GUARDARSE TODOS LOS PUNTEROS A NODOS QUE CONTIENEN LUCES Y CAMARAS

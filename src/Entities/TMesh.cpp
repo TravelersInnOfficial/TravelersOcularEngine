@@ -10,6 +10,7 @@ TMesh::TMesh(std::string meshPath, std::string texturePath){
 	LoadMesh(meshPath);
 	ChangeTexture(texturePath);
 	m_program = STANDARD_SHADER;
+
 }
 
 TMesh::~TMesh(){
