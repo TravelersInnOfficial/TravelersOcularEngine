@@ -102,8 +102,6 @@ void SceneManager::InitScene(){
 	TNode* node1 = new TNode(parent, node1Rot);
 
 	aux = new TTransform();
-
-	aux = new TTransform();
 	aux->Translate(0.0f, 0.0f, 0.0f);
 	TNode* node3 = new TNode(node1, aux);
 
