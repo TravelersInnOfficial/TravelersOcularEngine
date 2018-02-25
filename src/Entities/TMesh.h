@@ -14,7 +14,6 @@ public:
 	TMesh(std::string meshPath = "", std::string texturePath = "");
 	~TMesh();
 
-	void SetProgram(Program* prog);
 	void BeginDraw();
 	void EndDraw();
 
@@ -23,7 +22,7 @@ public:
 
 private:
 
-	Program* 	m_program;
+	PROGRAM m_program;
 
 	TResourceMesh* 		m_mesh;
 	TResourceTexture* 	m_texture;
