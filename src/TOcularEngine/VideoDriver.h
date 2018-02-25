@@ -1,6 +1,9 @@
 #ifndef VIDEODRIVER_H
 #define VIDEODRIVER_H
 
+#define GLEW_STATIC
+#include <GL/glew.h>
+
 #include "SceneManager.h"
 #include "IODriver.h"
 #include <SFML/System.hpp>

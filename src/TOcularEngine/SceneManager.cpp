@@ -6,12 +6,12 @@ SceneManager::SceneManager(){
 }
 
 SceneManager::~SceneManager(){
-    for(int i = m_cameras.size(); i>=0; i--){
+    for(int i = m_cameras.size() - 1; i >= 0; i--){
         delete m_cameras[i];
     }
     m_cameras.clear();
     
-    for(int i = m_lights.size(); i>=0; i--){
+    for(int i = m_lights.size() - 1; i >= 0; i--){
         delete m_lights[i];
     }
     m_lights.clear();
@@ -127,26 +127,10 @@ void SceneManager::InitScene(){
     // CREAMOS LA CAMARA
 	TCamera* camera = new TCamera(true, -1.0f, 1.0f, -0.75f, 0.75f, 2.0f, 10.0f, program);
 	TNode* cameraNode = new TNode(node6, camera);
-	glm::mat4 view = GetTransformInTree(cameraNode);
+	glm::mat4 view = cameraNode->GetTransformMatrix();
     GLint uniView = glGetUniformLocation(program->GetProgramID(), "ViewMatrix");
 	glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));
 
     // ASIGNAMOS EL NODO ROOT
     m_SceneTreeRoot = parent;
-}
-
-glm::mat4 SceneManager::GetTransformInTree(TNode* node){
-	TNode* auxParent;
-	glm::mat4 toReturn;
-
-	auxParent = node->GetParent();
-	toReturn = ((TTransform*)auxParent->GetEntity())->GetTransform();
-	auxParent = auxParent->GetParent();
-
-	while(auxParent != nullptr){
-		toReturn = ((TTransform*)auxParent->GetEntity())->GetTransform() * toReturn;
-		auxParent = auxParent->GetParent();
-	}
-	
-	return toReturn;
 }

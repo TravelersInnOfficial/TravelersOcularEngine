@@ -20,6 +20,8 @@ public:
 	TNode*		GetParent();					// Devuelve el padre del nodo
 	void		Draw();							// Pinta el nodo
 
+	glm::mat4	GetTransformMatrix();			// Consigue la matriz del arbol
+
 private:
 	TEntity*			m_entity;				// Entidad que marca el tipo de nodo, con sus propias funciones
 	std::vector<TNode*>	m_children;				// Vector de nodos hijos

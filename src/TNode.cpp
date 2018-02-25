@@ -1,4 +1,5 @@
-#include "./TNode.h"
+#include "TNode.h"
+#include "./Entities/TTransform.h"
 #include <iostream>
 
 TNode::TNode(){
@@ -112,4 +113,20 @@ void TNode::Draw(){
 	
 	if(m_entity != nullptr) m_entity->EndDraw();
 	//std::cout<<"Desapilamos NODO: "<<this<<"\n";
+}
+
+glm::mat4 TNode::GetTransformMatrix(){
+	TNode* auxParent;
+	glm::mat4 toReturn;
+
+	auxParent = GetParent();
+	toReturn = ((TTransform*)auxParent->GetEntity())->GetTransform();
+	auxParent = auxParent->GetParent();
+
+	while(auxParent != nullptr){
+		toReturn = ((TTransform*)auxParent->GetEntity())->GetTransform() * toReturn;
+		auxParent = auxParent->GetParent();
+	}
+	
+	return toReturn;
 }
