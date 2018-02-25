@@ -60,6 +60,15 @@ void TFMesh::CreateCube(){
 }
 
 toe::core::vector3df TFMesh::GetScale(){
-	toe::core::vector3df toRet = toe::core::vector3df(0,0,0);
+	TTransform* myTransform = (TTransform*) m_scaleNode->GetEntity();
+	glm::mat4 transformation = myTransform->GetTransform();
+	glm::vec3 scale;
+	glm::quat rotation;
+	glm::vec3 translation;
+	glm::vec3 skew;
+	glm::vec4 perspective;
+	glm::decompose(transformation, scale, rotation, translation, skew, perspective);
+
+	toe::core::vector3df toRet = toe::core::vector3df(scale.x, scale.y, scale.z);
 	return toRet;
 }

@@ -38,11 +38,32 @@ void TFNode::Rotate(toe::core::vector3df rotation){
 }
 
 toe::core::vector3df TFNode::GetTranslate(){
-	toe::core::vector3df toRet = toe::core::vector3df(0,0,0);
+	TTransform* myTransform = (TTransform*) m_positionNode->GetEntity();
+	glm::mat4 transformation = myTransform->GetTransform();
+	glm::vec3 scale;
+	glm::quat rotation;
+	glm::vec3 translation;
+	glm::vec3 skew;
+	glm::vec4 perspective;
+	glm::decompose(transformation, scale, rotation, translation, skew, perspective);
+
+	toe::core::vector3df toRet = toe::core::vector3df(translation.x, translation.y, translation.z);
 	return toRet;
 }
 
 toe::core::vector3df TFNode::GetRotation(){
-	toe::core::vector3df toRet = toe::core::vector3df(0,0,0);
+	TTransform* myTransform = (TTransform*) m_rotationNode->GetEntity();
+	glm::mat4 transformation = myTransform->GetTransform();
+	glm::vec3 scale;
+	glm::quat rotation;
+	glm::vec3 translation;
+	glm::vec3 skew;
+	glm::vec4 perspective;
+	glm::decompose(transformation, scale, rotation, translation, skew, perspective);
+	
+	rotation = glm::conjugate(rotation);
+	glm::vec3 finalRotation = glm::eulerAngles(rotation);
+
+	toe::core::vector3df toRet = toe::core::vector3df(finalRotation.x, finalRotation.y, finalRotation.z);
 	return toRet;
 }
