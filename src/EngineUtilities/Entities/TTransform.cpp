@@ -47,7 +47,7 @@ void TTransform::Scale(float X, float Y, float Z){
 
 void TTransform::BeginDraw(){
 	// Apilar la multiplicacion de la matriz de la transformacion y la matriz actual
-	m_stack.push(m_stack.top() * m_matrix);
+	m_stack.push(m_matrix * m_stack.top());
 	//PrintMatrix(m_stack.top());
 }
 
