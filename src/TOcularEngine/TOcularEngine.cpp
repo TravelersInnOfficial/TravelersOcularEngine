@@ -4,7 +4,7 @@ VideoDriver* toe::GetVideoDriver(){
     return privateVideoDriver;
 }
 
-TFMesh* toe::AddCube(toe::core::vector3df position, toe::core::vector3df rotation, toe::core::vector3df scale){
+TFMesh* toe::AddCube(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale){
     TFMesh* m = privateSceneManager->AddMesh(position, rotation, scale, "");
     return m;
 }

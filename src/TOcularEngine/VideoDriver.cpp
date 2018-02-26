@@ -7,7 +7,7 @@ VideoDriver::VideoDriver(){
     privateSceneManager = new SceneManager();
     privateIODriver = new IODriver();
     close_window = false;
-    m_clearSceenColor = toe::core::vector4df(0,0,0,0);
+    m_clearSceenColor = toe::core::TOEvector4df(0,0,0,0);
 }
 
 VideoDriver* VideoDriver::GetInstance(){
@@ -32,7 +32,7 @@ float VideoDriver::GetTime(){
     return m_clock->getElapsedTime().asMilliseconds();
 }
 
-void VideoDriver::CreateWindow(std::string window_name, toe::core::vector2df dimensions){
+void VideoDriver::CreateWindow(std::string window_name, toe::core::TOEvector2df dimensions){
     m_name = window_name;
 
     sf::ContextSettings context = sf::ContextSettings(24, 8, 4, 3);
@@ -77,7 +77,7 @@ void VideoDriver::ClearScreen(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void VideoDriver::SetClearScreenColor(toe::core::vector4df color){
+void VideoDriver::SetClearScreenColor(toe::core::TOEvector4df color){
     m_clearSceenColor = color;
 }
 

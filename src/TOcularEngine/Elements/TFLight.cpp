@@ -1,6 +1,6 @@
 #include "TFLight.h"
 
-TFLight::TFLight(toe::core::vector3df position, toe::core::vector3df rotation, toe::core::vector4df color, float intensity) : TFNode(){
+TFLight::TFLight(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector4df color, float intensity) : TFNode(){
 	CreateEstructure();
 	
 	TTransform* t = (TTransform*) m_positionNode->GetEntity();
@@ -29,7 +29,7 @@ void TFLight::CreateEstructure(){
 	m_entityNode->SetParent(m_positionNode);
 }
 
-void TFLight::SetColor(toe::core::vector4df color){
+void TFLight::SetColor(toe::core::TOEvector4df color){
 	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
 	glm::vec4 glmColor = glm::vec4(color.X, color.Y, color.X2, color.Y2);
 	TColor myColor = TColor(glmColor);
@@ -41,10 +41,10 @@ void TFLight::SetIntensity(float intensity){
 	myEntity->SetIntensity(intensity);
 }
 
-toe::core::vector4df TFLight::GetColor(){
+toe::core::TOEvector4df TFLight::GetColor(){
 	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
 	glm::vec4 myColor = myEntity->GetColor().GetRGBA();
-	toe::core::vector4df toRetColor = toe::core::vector4df(myColor.x, myColor.y, myColor.z, myColor.w);
+	toe::core::TOEvector4df toRetColor = toe::core::TOEvector4df(myColor.x, myColor.y, myColor.z, myColor.w);
 	return toRetColor;
 }
 

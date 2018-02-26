@@ -1,6 +1,6 @@
 #include "TFCamera.h"
 
-TFCamera::TFCamera(toe::core::vector3df position, toe::core::vector3df rotation, bool perspective) : TFNode(){
+TFCamera::TFCamera(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, bool perspective) : TFNode(){
 	CreateEstructure();
 	
 	TTransform* t = (TTransform*) m_positionNode->GetEntity();

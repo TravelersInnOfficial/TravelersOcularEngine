@@ -6,9 +6,9 @@
 namespace toe{
     //PUBLIC
     VideoDriver* GetVideoDriver();
-    TFMesh* AddCube(toe::core::vector3df position = toe::core::vector3df(0,0,0),
-                 toe::core::vector3df rotation = toe::core::vector3df(0,0,0),
-                 toe::core::vector3df scale = toe::core::vector3df(1,1,1));
+    TFMesh* AddCube(toe::core::TOEvector3df position = toe::core::TOEvector3df(0,0,0),
+                 toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,0,0),
+                 toe::core::TOEvector3df scale = toe::core::TOEvector3df(1,1,1));
 
     namespace core{ 
         class rect{

@@ -8,7 +8,7 @@
 #include "IODriver.h"
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
-#include <vector2d.h>
+#include <TOEvector2d.h>
 
 class VideoDriver{
 public:
@@ -18,7 +18,7 @@ public:
      */
     ~VideoDriver();
 
-    void CreateWindow(std::string window_name, toe::core::vector2df dimensions);
+    void CreateWindow(std::string window_name, toe::core::TOEvector2df dimensions);
     bool Update();
     void Draw();
     void ClearScreen();
@@ -63,9 +63,9 @@ public:
     /**
      * @brief Sets the update clear screen color
      * 
-     * @param color (toe::core::vector4df)
+     * @param color (toe::core::TOEvector4df)
      */
-    void SetClearScreenColor(toe::core::vector4df color);
+    void SetClearScreenColor(toe::core::TOEvector4df color);
 
     /**
      * @brief Sets the window title
@@ -90,7 +90,7 @@ private:
     IODriver* privateIODriver = nullptr;
 
     bool close_window;
-    toe::core::vector4df m_clearSceenColor;
+    toe::core::TOEvector4df m_clearSceenColor;
 
     std::map<SHADERTYPE, Program*> m_programs;
     /**

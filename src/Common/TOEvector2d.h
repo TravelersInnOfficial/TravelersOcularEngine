@@ -1,16 +1,16 @@
-#ifndef VECTOR2D_H
-#define VECTOR2D_H
+#ifndef TOEvector2D_H
+#define TOEvector2D_H
 
 #include <iostream>
 #include <cmath>
 #include <Constants.h>
-#include <vector3d.h>
+#include <TOEvector3d.h>
 
 namespace toe{
     namespace core{
         
         template<typename T>
-        class vector2d{
+        class TOEvector2d{
 
         private:
         public:
@@ -20,23 +20,23 @@ namespace toe{
             /**
              * Creates and empty 3d vector of all 0;
             */
-            vector2d() : X(0), Y(0) {}
+            TOEvector2d() : X(0), Y(0) {}
             
             /**
              * Creates and initializes 3d vector
             */
-            vector2d(T nx, T ny) : X(nx), Y(ny) {}
+            TOEvector2d(T nx, T ny) : X(nx), Y(ny) {}
 
             /**
              * Copy constructor
             */
-            vector2d(const vector2d<T>& other) : X(other.X), Y(other.Y) {}
+            TOEvector2d(const TOEvector2d<T>& other) : X(other.X), Y(other.Y) {}
 
             /**
              * Convert 3d in 2d
              */
 
-            vector2d(const toe::core::vector3d<T>& other) : X(other.X), Y(other.Y) {}
+            TOEvector2d(const toe::core::TOEvector3d<T>& other) : X(other.X), Y(other.Y) {}
 
             /**
              * returns length of the vector
@@ -46,8 +46,8 @@ namespace toe{
             /**
              * convert to abs the values of the vector
              */
-            vector2d absolute(){
-            return vector2d(abs(X), abs(Y));
+            TOEvector2d absolute(){
+            return TOEvector2d(abs(X), abs(Y));
             }
 
             /**
@@ -97,23 +97,23 @@ namespace toe{
 
 
             //Operators
-            vector2d<T> operator*(const T v) const { return vector2d<T>(X * v, Y * v); }
-            vector2d<T> operator/(const T v) const { return vector2d<T>(X / v, Y / v); }
-            vector2d<T> operator-(vector2d<T> v) const { return vector2d<T>(X-v.X, Y-v.Y); }
-            vector2d<T> operator+(vector2d<T> v) const { return vector2d<T>(X+v.X, Y+v.Y); }
-            void operator=(const vector2d<T> v) { X = v.X; Y = v.Y;}
+            TOEvector2d<T> operator*(const T v) const { return TOEvector2d<T>(X * v, Y * v); }
+            TOEvector2d<T> operator/(const T v) const { return TOEvector2d<T>(X / v, Y / v); }
+            TOEvector2d<T> operator-(TOEvector2d<T> v) const { return TOEvector2d<T>(X-v.X, Y-v.Y); }
+            TOEvector2d<T> operator+(TOEvector2d<T> v) const { return TOEvector2d<T>(X+v.X, Y+v.Y); }
+            void operator=(const TOEvector2d<T> v) { X = v.X; Y = v.Y;}
             void operator*=(const T v) { X = X*v; Y = Y*v;}
 
-            bool operator==(const vector2d<T> v) { if(v.X == X && v.Y == Y) return true; return false; }
+            bool operator==(const TOEvector2d<T> v) { if(v.X == X && v.Y == Y) return true; return false; }
 
-            friend inline std::ostream& operator << (std::ostream &o,const vector2d<T> &v){
+            friend inline std::ostream& operator << (std::ostream &o,const TOEvector2d<T> &v){
                 o << "(" << v.X << ", " << v.Y << ")";
                 return o;
             }
         };
 
-        typedef vector2d<float> vector2df;
-        typedef vector2d<int> vector2di;
+        typedef TOEvector2d<float> TOEvector2df;
+        typedef TOEvector2d<int> TOEvector2di;
     }
 }
 #endif

@@ -1,6 +1,6 @@
 #include "TFMesh.h"
 
-TFMesh::TFMesh(toe::core::vector3df position, toe::core::vector3df rotation, toe::core::vector3df scale, std::string meshPath) : TFNode(){
+TFMesh::TFMesh(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale, std::string meshPath) : TFNode(){
 	CreateEstructure();
 	
 	TTransform* t = (TTransform*) m_positionNode->GetEntity();
@@ -31,13 +31,13 @@ void TFMesh::CreateEstructure(){
 	m_entityNode->SetParent(m_positionNode);
 }
 
-void TFMesh::SetScale(toe::core::vector3df scale){
+void TFMesh::SetScale(toe::core::TOEvector3df scale){
 	TTransform* myTransform = (TTransform*) m_scaleNode->GetEntity();
 	myTransform->Identity();
 	myTransform->Scale(scale.X, scale.Y, scale.Z);
 }
 
-void TFMesh::Scale(toe::core::vector3df scale){
+void TFMesh::Scale(toe::core::TOEvector3df scale){
 	TTransform* myTransform = (TTransform*) m_scaleNode->GetEntity();
 	myTransform->Scale(scale.X, scale.Y, scale.Z);
 }
@@ -57,7 +57,7 @@ void TFMesh::CreateCube(){
 	myMesh->LoadMesh("");
 }
 
-toe::core::vector3df TFMesh::GetScale(){
+toe::core::TOEvector3df TFMesh::GetScale(){
 	TTransform* myTransform = (TTransform*) m_scaleNode->GetEntity();
 	glm::mat4 transformation = myTransform->GetTransform();
 	glm::vec3 scale;
@@ -67,6 +67,6 @@ toe::core::vector3df TFMesh::GetScale(){
 	glm::vec4 perspective;
 	glm::decompose(transformation, scale, rotation, translation, skew, perspective);
 
-	toe::core::vector3df toRet = toe::core::vector3df(scale.x, scale.y, scale.z);
+	toe::core::TOEvector3df toRet = toe::core::TOEvector3df(scale.x, scale.y, scale.z);
 	return toRet;
 }

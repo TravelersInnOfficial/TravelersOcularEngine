@@ -29,7 +29,7 @@ SceneManager::~SceneManager(){
 	delete program;
 }
 
-TFCamera* SceneManager::AddCamera(toe::core::vector3df position, toe::core::vector3df rotation, bool perspective){
+TFCamera* SceneManager::AddCamera(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, bool perspective){
 	TFCamera* toRet = nullptr;
 	toRet = new TFCamera(position, rotation, perspective);
 	m_cameras.push_back(toRet);
@@ -38,7 +38,7 @@ TFCamera* SceneManager::AddCamera(toe::core::vector3df position, toe::core::vect
 	return toRet;
 }
 
-TFLight* SceneManager::AddLight(toe::core::vector3df position, toe::core::vector3df rotation, toe::core::vector4df color, float intensity){
+TFLight* SceneManager::AddLight(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector4df color, float intensity){
 	TFLight* toRet = nullptr;
 	toRet = new TFLight(position, rotation, color, intensity);
 	m_lights.push_back(toRet);
@@ -46,7 +46,7 @@ TFLight* SceneManager::AddLight(toe::core::vector3df position, toe::core::vector
 	return toRet;
 }
 
-TFMesh* SceneManager::AddMesh(toe::core::vector3df position, toe::core::vector3df rotation, toe::core::vector3df scale, std::string meshPath){
+TFMesh* SceneManager::AddMesh(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale, std::string meshPath){
 	TFMesh* toRet = nullptr;
 	toRet = new TFMesh(position, rotation, scale, meshPath);
 	m_meshes.push_back(toRet);
