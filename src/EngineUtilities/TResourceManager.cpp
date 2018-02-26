@@ -38,7 +38,7 @@ TResourceTexture* TResourceManager::GetResourceTexture(std::string name){
 	TResourceTexture* toRet = nullptr;
 	std::string path = TreatName(name);
 	toRet = (TResourceTexture*)FindResource(path);
-	if(toRet == nullptr){ 
+	if(toRet == nullptr){
 		toRet = new TResourceTexture(path);
 		m_resources[path] = toRet;
 	}

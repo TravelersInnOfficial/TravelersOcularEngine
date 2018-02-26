@@ -4,11 +4,11 @@
 #include <vector3d.h>
 #include <TColor.h>
 #include <glm/gtx/matrix_decompose.hpp>
-#include "./../../TNode.h"
-#include "./../../Entities/TTransform.h"
-#include "./../../Entities/TMesh.h"
-#include "./../../Entities/TLight.h"
-#include "./../../Entities/TCamera.h"
+#include "./../../EngineUtilities/TNode.h"
+#include "./../../EngineUtilities/Entities/TTransform.h"
+#include "./../../EngineUtilities/Entities/TMesh.h"
+#include "./../../EngineUtilities/Entities/TLight.h"
+#include "./../../EngineUtilities/Entities/TCamera.h"
 
 class SceneManager;
 
@@ -20,10 +20,10 @@ public:
 	void SetRotation(toe::core::vector3df rotation);		// Sets the position of the Node
 
 	void Translate(toe::core::vector3df translation);		// Adds the position to the current position
-	void Rotate(toe::core::vector3df rotation);			// Adds the rotation to the current rotation
+	void Rotate(toe::core::vector3df rotation);				// Adds the rotation to the current rotation
 
 	toe::core::vector3df GetTranslate();					// Returns the rotation of the Node
-	toe::core::vector3df GetRotation();					// Returns the position of the Node
+	toe::core::vector3df GetRotation();						// Returns the position of the Node
 
 protected:
 	TNode* m_entityNode;

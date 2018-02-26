@@ -96,13 +96,13 @@ void VideoDriver::SetShaderProgram(SHADERTYPE p){
 
 void VideoDriver::initShaders(){
     //LOAD IN RESOURCE MANAGER
-    TResourceManager::GetInstance()->GetResourceShader("../src/Shaders/VShader.glsl");
-    TResourceManager::GetInstance()->GetResourceShader("../src/Shaders/FShader.glsl");
+    TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/VShader.glsl");
+    TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/FShader.glsl");
 
     //CARGAMOS LOS SHADERS
 	std::map<std::string, GLenum> shaders = std::map<std::string, GLenum>();	
-	shaders.insert(std::pair<std::string, GLenum>("../src/Shaders/VShader.glsl", GL_VERTEX_SHADER));
-	shaders.insert(std::pair<std::string, GLenum>("../src/Shaders/FShader.glsl", GL_FRAGMENT_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>("../src/EngineUtilities/Shaders/VShader.glsl", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>("../src/EngineUtilities/Shaders/FShader.glsl", GL_FRAGMENT_SHADER));
     
     Program* p = new Program(shaders);
     glUseProgram(p->GetProgramID());
