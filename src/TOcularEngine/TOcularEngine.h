@@ -28,9 +28,9 @@ namespace toe{
     }
 
     namespace{
-        VideoDriver* privateVideoDriver = VideoDriver::GetInstance();
-        SceneManager* privateSceneManager = VideoDriver::GetInstance()->GetSceneManager();
-        IODriver* privateIOManager = VideoDriver::GetInstance()->GetIOManager();
+        VideoDriver* privateVideoDriver;
+        SceneManager* privateSceneManager;
+        IODriver* privateIOManager;
     }
 
     // TODO:: GUARDARSE TODOS LOS PUNTEROS A NODOS QUE CONTIENEN LUCES Y CAMARAS

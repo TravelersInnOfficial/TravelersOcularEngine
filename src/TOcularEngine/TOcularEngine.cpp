@@ -1,6 +1,9 @@
 #include "TOcularEngine.h"
 
 VideoDriver* toe::GetVideoDriver(){
+    privateVideoDriver = VideoDriver::GetInstance();
+    privateSceneManager = VideoDriver::GetInstance()->GetSceneManager();
+    privateIOManager = VideoDriver::GetInstance()->GetIOManager();
     return privateVideoDriver;
 }
 
