@@ -43,17 +43,17 @@ void TFMesh::Scale(toe::core::TOEvector3df scale){
 }
 
 void TFMesh::SetTexture(std::string texturePath){
-	TMesh* myMesh = (TMesh*) m_scaleNode->GetEntity();
+	TMesh* myMesh = (TMesh*) m_entityNode->GetEntity();
 	myMesh->ChangeTexture(texturePath);
 }
 
 void TFMesh::SetMesh(std::string meshPath){
-	TMesh* myMesh = (TMesh*) m_scaleNode->GetEntity();
+	TMesh* myMesh = (TMesh*) m_entityNode->GetEntity();
 	myMesh->LoadMesh(meshPath);
 }
 
 void TFMesh::CreateCube(){
-	TMesh* myMesh = (TMesh*) m_scaleNode->GetEntity();
+	TMesh* myMesh = (TMesh*) m_entityNode->GetEntity();
 	myMesh->LoadMesh("");
 }
 
