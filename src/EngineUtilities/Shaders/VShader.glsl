@@ -12,8 +12,7 @@ uniform mat4 ModelViewMatrix;
 uniform mat3 NormalMatrix;
 uniform mat4 MVP;
 
-void main()
-{
+void main() {
 	// TRANSFORMAR VERTICE Y NORMAL A COORDENADAS DE VISTA
 	Position = vec3 (ModelViewMatrix * vec4(VertexPosition, 1.0f));
 	Normal = normalize (NormalMatrix * VertexNormal);

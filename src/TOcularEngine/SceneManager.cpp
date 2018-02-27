@@ -4,7 +4,7 @@
 
 SceneManager::SceneManager(){
 	m_SceneTreeRoot = new TNode(new TTransform());
-	m_ambientLight = glm::vec3(0.25f, 0.25f, 0.25f);
+	m_ambientLight = glm::vec3(0.25);
 }
 
 SceneManager::~SceneManager(){
@@ -97,10 +97,6 @@ void SceneManager::DrawLight(TFLight* light, int num){
 	GLint lightPLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
 	glUniform3fv(lightPLocation, 1, glm::value_ptr(location));
 
-	aux = str +"Ambient";
-	GLint ambLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
-	glUniform3fv(ambLocation, 1, glm::value_ptr(m_ambientLight));
-
 	toe::core::TOEvector4df color = light->GetColor() * light->GetIntensity();
 	glm::vec3 diffuse = glm::vec3(color.X, color.Y, color.X2);
 	aux = str +"Diffuse";
@@ -117,9 +113,15 @@ void SceneManager::Draw(){
 	// Select active camera and set view and projection matrix
 	TEntity::SetViewMatrixPtr( main_camera->m_entityNode->GetTransformMatrix() );
 
+	// Gets the Program
+	Program* myProgram = VideoDriver::GetInstance()->GetProgramVector()[STANDARD_SHADER];
+
+	// Sends the Ambient Light
+	GLint ambLocation = glGetUniformLocation(myProgram->GetProgramID(), "SpecialLight.AmbientLight");
+	glUniform3fv(ambLocation, 1, glm::value_ptr(m_ambientLight));
+
 	// Send size of lights
 	GLint size = m_lights.size();
-	Program* myProgram = VideoDriver::GetInstance()->GetProgramVector()[STANDARD_SHADER];	
 	GLuint nlightspos = glGetUniformLocation(myProgram->GetProgramID(), "nlights");
 	glUniform1i(nlightspos, size);
 
