@@ -68,4 +68,6 @@
         "**/bin": true,
         "**/obj": true,
     }
+    ,
+    "editor.tabSize": 4
 }

@@ -27,6 +27,7 @@
             "name": "Linux",
             "includePath": [
                 "/usr/include",
+                "/usr/include/linux",
                 "/usr/local/include",
                 "${workspaceRoot}",
                 "/usr/include/c++/7.2.1",
@@ -40,10 +41,11 @@
             "browse": {
                 "path": [
                     "/usr/include",
+                    "/usr/include/linux",
                     "/usr/local/include",
                     "${workspaceRoot}",
                     "/usr/include/c++/7.2.1",
-                    "/usr/include/c++/7.2.1/x86_64-pc-linux-gnu",                "/usr/include/c++/7.3.0",
+                    "/usr/include/c++/7.2.1/x86_64-pc-linux-gnu",
                     "/usr/include/c++/7.3.0",
                     "/usr/include/c++/7.3.0/x86_64-pc-linux-gnu",
                     "${workspaceRoot}/src/Common"
