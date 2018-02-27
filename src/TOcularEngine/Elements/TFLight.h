@@ -25,6 +25,7 @@ private:
 	);
 	~TFLight();
 	void CreateEstructure();
+	void DrawLight(int num);
 
 };
 

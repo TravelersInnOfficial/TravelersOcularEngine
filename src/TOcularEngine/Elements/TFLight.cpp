@@ -1,4 +1,5 @@
 #include "TFLight.h"
+#include "./../VideoDriver.h"
 
 TFLight::TFLight(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector4df color, float intensity) : TFNode(){
 	CreateEstructure();
@@ -61,4 +62,30 @@ void TFLight::SetActive(bool active){
 bool TFLight::GetActive(){
 	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
 	return myEntity->GetActive();
+}
+
+void TFLight::DrawLight(int num){
+	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
+
+	if(myEntity->GetActive()){
+		Program* myProgram = VideoDriver::GetInstance()->GetProgramVector()[STANDARD_SHADER];
+		std::string str = "Light["+std::to_string(num)+"].";
+		std::string aux = "";
+
+		glm::vec3 location = m_entityNode->GetTraslation();
+		aux = str +"Position";
+		GLint lightPLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
+		glUniform3fv(lightPLocation, 1, glm::value_ptr(location));
+
+		toe::core::TOEvector4df color = GetColor() * GetIntensity();
+		glm::vec3 diffuse = glm::vec3(color.X, color.Y, color.X2);
+		aux = str +"Diffuse";
+		GLint diffLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
+		glUniform3fv(diffLocation, 1, glm::value_ptr(diffuse));
+
+		glm::vec3 specular = glm::vec3(color.X, color.Y, color.X2);
+		aux = str +"Specular";
+		GLint specLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
+		glUniform3fv(specLocation, 1, glm::value_ptr(specular));
+	}
 }

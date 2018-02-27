@@ -87,28 +87,6 @@ void SceneManager::SetAmbientLight(toe::core::TOEvector3df ambientLight){
 	m_ambientLight = glm::vec3(ambientLight.X, ambientLight.Y, ambientLight.Z);
 }
 
-void SceneManager::DrawLight(TFLight* light, int num){
-	Program* myProgram = VideoDriver::GetInstance()->GetProgramVector()[STANDARD_SHADER];
-	std::string str = "Light["+std::to_string(num)+"].";
-	std::string aux = "";
-
-	glm::vec3 location = light->m_entityNode->GetTraslation();
-	aux = str +"Position";
-	GLint lightPLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
-	glUniform3fv(lightPLocation, 1, glm::value_ptr(location));
-
-	toe::core::TOEvector4df color = light->GetColor() * light->GetIntensity();
-	glm::vec3 diffuse = glm::vec3(color.X, color.Y, color.X2);
-	aux = str +"Diffuse";
-	GLint diffLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
-	glUniform3fv(diffLocation, 1, glm::value_ptr(diffuse));
-
-	glm::vec3 specular = glm::vec3(color.X, color.Y, color.X2);
-	aux = str +"Specular";
-	GLint specLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
-	glUniform3fv(specLocation, 1, glm::value_ptr(specular));
-}
-
 void SceneManager::Draw(){
 	// Select active camera and set view and projection matrix
 	TEntity::SetViewMatrixPtr( main_camera->m_entityNode->GetTransformMatrix() );
@@ -126,9 +104,7 @@ void SceneManager::Draw(){
 	glUniform1i(nlightspos, size);
 
 	// Draw all lights
-    for(int i = 0; i < size; i++){
-		DrawLight(m_lights[i], i);
-    }
+    for(int i = 0; i < size; i++) m_lights[i]->DrawLight(i);
 
     m_SceneTreeRoot->Draw();
 }
