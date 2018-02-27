@@ -31,8 +31,9 @@
                 "${workspaceRoot}",
                 "/usr/include/c++/7.2.1",
                 "/usr/include/c++/7.2.1/x86_64-pc-linux-gnu",
-                "${workspaceRoot}/src/Common",
-                "/usr/include/linux"
+                "/usr/include/c++/7.3.0",
+                "/usr/include/c++/7.3.0/x86_64-pc-linux-gnu",
+                "${workspaceRoot}/src/Common"
             ],
             "defines": [],
             "intelliSenseMode": "clang-x64",
@@ -42,7 +43,10 @@
                     "/usr/local/include",
                     "${workspaceRoot}",
                     "/usr/include/c++/7.2.1",
-                    "/usr/include/c++/7.2.1/x86_64-pc-linux-gnu"
+                    "/usr/include/c++/7.2.1/x86_64-pc-linux-gnu",                "/usr/include/c++/7.3.0",
+                    "/usr/include/c++/7.3.0",
+                    "/usr/include/c++/7.3.0/x86_64-pc-linux-gnu",
+                    "${workspaceRoot}/src/Common"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
@@ -54,7 +58,9 @@
                 "${workspaceRoot}",
                 "C:/msys64/mingw64/include",
                 "C:/msys64/mingw64/include/c++/7.2.0",
-                "C:/msys64/mingw64/include/c++/7.2.0/x86_64-w64-mingw32"
+                "C:/msys64/mingw64/include/c++/7.2.0/x86_64-w64-mingw32",
+                "C:/msys64/mingw64/include/c++/7.3.0",
+                "C:/msys64/mingw64/include/c++/7.3.0/x86_64-w64-mingw32"
             ],
             "defines": [
                 "_DEBUG",
