@@ -77,6 +77,11 @@ public:
      */
     bool        DeleteMesh(TFMesh*);
 
+    /**
+     * @brief Sets the Ambient Light
+     */
+    void SetAmbientLight(toe::core::TOEvector3df ambientLight);
+
     void Update();
 
     void InitScene();
@@ -95,6 +100,8 @@ private:
     std::vector<TFCamera*>  m_cameras;  // Pointers to the cameras created
     std::vector<TFLight*>   m_lights;   // Pointers to the lights created
     std::vector<TFMesh*>    m_meshes;    // Pointers to the nodes created
+
+    glm::vec3 m_ambientLight;
 
     TFCamera* main_camera;
 
