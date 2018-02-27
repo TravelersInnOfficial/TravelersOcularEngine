@@ -7,7 +7,7 @@ VideoDriver::VideoDriver(){
     privateSceneManager = new SceneManager();
     privateIODriver = new IODriver();
     close_window = false;
-    m_clearSceenColor = toe::core::vector4df(0,0,0,0);
+    m_clearSceenColor = toe::core::TOEvector4df(0,0,0,0);
 }
 
 VideoDriver* VideoDriver::GetInstance(){
@@ -16,6 +16,12 @@ VideoDriver* VideoDriver::GetInstance(){
 }
 
 VideoDriver::~VideoDriver(){
+    std::map<SHADERTYPE, Program*>::iterator it = m_programs.begin();
+    for(;it!=m_programs.end();++it){
+        m_programs.erase(it);
+    }
+    m_programs.clear();
+
     delete privateIODriver;
     delete privateSceneManager;
     delete m_clock;
@@ -26,7 +32,7 @@ float VideoDriver::GetTime(){
     return m_clock->getElapsedTime().asMilliseconds();
 }
 
-void VideoDriver::CreateWindow(std::string window_name, toe::core::vector2df dimensions){
+void VideoDriver::CreateWindow(std::string window_name, toe::core::TOEvector2df dimensions){
     m_name = window_name;
 
     sf::ContextSettings context = sf::ContextSettings(24, 8, 4, 3);
@@ -71,7 +77,7 @@ void VideoDriver::ClearScreen(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void VideoDriver::SetClearScreenColor(toe::core::vector4df color){
+void VideoDriver::SetClearScreenColor(toe::core::TOEvector4df color){
     m_clearSceenColor = color;
 }
 
@@ -85,19 +91,18 @@ std::string VideoDriver::GetWindowName(){
 }
 
 void VideoDriver::SetShaderProgram(SHADERTYPE p){
-    //privateSceneManager->SetProgram(m_programs[p]);
-	//glUseProgram(m_programs[p]->GetProgramID());
+	glUseProgram(m_programs.find(p)->second->GetProgramID());
 }
 
 void VideoDriver::initShaders(){
     //LOAD IN RESOURCE MANAGER
-    TResourceManager::GetInstance()->GetResourceShader("../src/Shaders/VShader.glsl");
-    TResourceManager::GetInstance()->GetResourceShader("../src/Shaders/FShader.glsl");
+    TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/VShader.glsl");
+    TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/FShader.glsl");
 
     //CARGAMOS LOS SHADERS
 	std::map<std::string, GLenum> shaders = std::map<std::string, GLenum>();	
-	shaders.insert(std::pair<std::string, GLenum>("../src/Shaders/VShader.glsl", GL_VERTEX_SHADER));
-	shaders.insert(std::pair<std::string, GLenum>("../src/Shaders/FShader.glsl", GL_FRAGMENT_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>("../src/EngineUtilities/Shaders/VShader.glsl", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>("../src/EngineUtilities/Shaders/FShader.glsl", GL_FRAGMENT_SHADER));
     
     Program* p = new Program(shaders);
     glUseProgram(p->GetProgramID());

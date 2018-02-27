@@ -1,11 +1,11 @@
-#ifndef VECTOR4d_H
-#define VECTOR4d_H
+#ifndef TOEvector4d_H
+#define TOEvector4d_H
 
 #include <iostream>
 namespace toe{
     namespace core{
         template<typename T>
-        class vector4d{
+        class TOEvector4d{
 
         private:
         public:
@@ -15,17 +15,17 @@ namespace toe{
             /**
              * Creates and empty 4d vector of all 0;
             */
-            vector4d() : X(0), Y(0), X2(0), Y2(0){}
+            TOEvector4d() : X(0), Y(0), X2(0), Y2(0){}
             
             /**
              * Creates and initializes 4d vector
             */
-            vector4d(T nx, T ny, T nx2, T ny2) : X(nx), Y(ny), X2(nx2), Y2(ny2) {}
+            TOEvector4d(T nx, T ny, T nx2, T ny2) : X(nx), Y(ny), X2(nx2), Y2(ny2) {}
 
             /**
              * Copy constructor
             */
-            vector4d(const vector4d<T>& other) : X(other.X), Y(other.Y), X2(other.X2), Y2(other.Y2){}
+            TOEvector4d(const TOEvector4d<T>& other) : X(other.X), Y(other.Y), X2(other.X2), Y2(other.Y2){}
 
             /**
              * returns length of the vector
@@ -57,20 +57,20 @@ namespace toe{
             void setY2(T newY2){ Y2 = newY2;}
 
             //Operators
-            vector4d<T> operator*(const T v) const { return vector4d<T>(X * v, Y * v, X2 * v, Y2 * v); }
-            vector4d<T> operator/(const T v) const { return vector4d<T>(X / v, Y / v, X2 / v, Y2 / v); }
-            vector4d<T> operator-(vector4d<T> v) const { return vector4d<T>(X-v.X, Y-v.Y, X2-v.X2, Y2-v.Y2); }
-            vector4d<T> operator+(vector4d<T> v) const { return vector4d<T>(X+v.X, Y+v.Y, X2+v.X2, Y2+v.Y2); }
+            TOEvector4d<T> operator*(const T v) const { return TOEvector4d<T>(X * v, Y * v, X2 * v, Y2 * v); }
+            TOEvector4d<T> operator/(const T v) const { return TOEvector4d<T>(X / v, Y / v, X2 / v, Y2 / v); }
+            TOEvector4d<T> operator-(TOEvector4d<T> v) const { return TOEvector4d<T>(X-v.X, Y-v.Y, X2-v.X2, Y2-v.Y2); }
+            TOEvector4d<T> operator+(TOEvector4d<T> v) const { return TOEvector4d<T>(X+v.X, Y+v.Y, X2+v.X2, Y2+v.Y2); }
 
-            friend inline std::ostream& operator << (std::ostream &o,const vector4d<T> &v){
+            friend inline std::ostream& operator << (std::ostream &o,const TOEvector4d<T> &v){
                 o << "(" << v.X << ", " << v.Y << ", " << v.X2 << ", " << v.Y2 << ")";
                 return o;
             }
         };
 
 
-        typedef vector4d<float> vector4df;
-        typedef vector4d<int> vector4di;
+        typedef TOEvector4d<float> TOEvector4df;
+        typedef TOEvector4d<int> TOEvector4di;
     }
 }
 

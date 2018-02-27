@@ -24,34 +24,34 @@ public:
     /**
      * @brief Adds a new camera to the scene tree
      * 
-     * @param position (toe::core::vector3df)
-     * @param rotation (toe::core::vector3df)
+     * @param position (toe::core::TOEvector3df)
+     * @param rotation (toe::core::TOEvector3df)
      * @param perspective (bool)
      * @return TFCamera* NewCamera
      */
-    TFCamera*   AddCamera(toe::core::vector3df position, toe::core::vector3df rotation, bool perspective);
+    TFCamera*   AddCamera(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, bool perspective);
 
     /**
      * @brief Adds a new Light to the scene tree
      * 
-     * @param position (toe::core::vector3df)
-     * @param rotation (toe::core::vector3df)
-     * @param color (toe::core::vector4df)
+     * @param position (toe::core::TOEvector3df)
+     * @param rotation (toe::core::TOEvector3df)
+     * @param color (toe::core::TOEvector4df)
      * @param intensity (float)
      * @return TFLight* NewLight
      */
-    TFLight*    AddLight(toe::core::vector3df position, toe::core::vector3df rotation, toe::core::vector4df color, float intensity);
+    TFLight*    AddLight(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector4df color, float intensity);
 
     /**
      * @brief Adds a new Mesh to the scene tree
      * 
-     * @param position (toe::core::vector3df)
-     * @param rotation (toe::core::vector3df)
-     * @param scale (toe::core::vector3df)
+     * @param position (toe::core::TOEvector3df)
+     * @param rotation (toe::core::TOEvector3df)
+     * @param scale (toe::core::TOEvector3df)
      * @param meshPath (std::string)
      * @return TFMesh* NewMesh
      */
-    TFMesh*     AddMesh(toe::core::vector3df position, toe::core::vector3df rotation, toe::core::vector3df scale, std::string meshPath);
+    TFMesh*     AddMesh(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale, std::string meshPath);
 
     /**
      * @brief Deletes the Camera given
@@ -92,8 +92,9 @@ private:
     GLuint vao;
     Program* program;
 
-    std::vector<TFCamera*> m_cameras; //Pointers to the cameras created
-    std::vector<TFLight*> m_lights; //Pointers to the lights created
+    std::vector<TFCamera*>  m_cameras;  // Pointers to the cameras created
+    std::vector<TFLight*>   m_lights;   // Pointers to the lights created
+    std::vector<TFMesh*>    m_meshes;    // Pointers to the nodes created
 
     TFCamera* main_camera;
 

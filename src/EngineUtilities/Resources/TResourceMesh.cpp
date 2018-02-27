@@ -1,5 +1,6 @@
 #include "TResourceMesh.h"
 #include "./../Loaders/TObjectLoader.h"
+#include "./../TResourceManager.h"
 
 TResourceMesh::TResourceMesh(std::string name){
 	m_name = name;
@@ -20,6 +21,9 @@ TResourceMesh::TResourceMesh(std::string name){
 	glGenBuffers(1, &m_nbo);
 
 	LoadFile();
+	if(m_basicTexture == nullptr){
+		m_basicTexture = TResourceManager::GetInstance()->GetResourceTexture("../assets/textures/default_texture.png");	
+	}
 }
 
 TResourceMesh::TResourceMesh(){

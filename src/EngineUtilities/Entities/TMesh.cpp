@@ -10,13 +10,14 @@ TMesh::TMesh(std::string meshPath, std::string texturePath){
 	LoadMesh(meshPath);
 	ChangeTexture(texturePath);
 	m_program = STANDARD_SHADER;
+
 }
 
 TMesh::~TMesh(){
 }
 
 void TMesh::LoadMesh(std::string meshPath){
-	if(meshPath == "") meshPath = "./../assets/models/cube.obj";
+	if(meshPath.compare("")==0) meshPath = "./../assets/models/cube.obj";
 	m_mesh = TResourceManager::GetInstance()->GetResourceMesh(meshPath);
 }
 
@@ -95,9 +96,10 @@ void TMesh::SendShaderData(){
 	}
 
 	if(currentTexture!=nullptr){
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, currentTexture->GetTextureId());
 		GLuint TextureID = glGetUniformLocation(myProgram->GetProgramID(), "myTextureSampler");
 		glUniform1i(TextureID, 0);
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, currentTexture->GetTextureId());
 	}
 }

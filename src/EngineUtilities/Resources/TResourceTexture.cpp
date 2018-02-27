@@ -16,19 +16,19 @@ TResourceTexture::TResourceTexture(){
 }
 
 TResourceTexture::~TResourceTexture(){
-	SOIL_free_image_data(m_imageData); // Liberar el array de datos
-
+	SOIL_free_image_data(m_imageData);	// Liberar el array de datos
 	glBindBuffer(GL_TEXTURE_2D, 0);		// |
 	glDeleteBuffers(1, &m_textureID);	// | Eliminar el buffer de datos de OpenGL
 }
 
 bool TResourceTexture::LoadFile(){
 	bool toRet = TTextureLoader::LoadTexture(m_name, &m_imageData, &m_width, &m_height);
-	//bool toRet = true;
 	SetLoaded(toRet);
 
 	if(toRet){
-
+		// Generamos la nueva texgura
+		glGenTextures(1, &m_textureID);
+		
 		// Bindeamos los parametros a nuestra textura de OpenGL
 		glBindTexture(GL_TEXTURE_2D, m_textureID);
 		
@@ -42,7 +42,6 @@ bool TResourceTexture::LoadFile(){
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glGenerateMipmap(GL_TEXTURE_2D);
-		
 	}
 	return toRet;
 }

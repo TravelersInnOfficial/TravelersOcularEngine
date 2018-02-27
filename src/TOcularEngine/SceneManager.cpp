@@ -1,28 +1,36 @@
 #include "SceneManager.h"
 #include "VideoDriver.h"
-#include "../Entities/TEntity.h"
+#include "../EngineUtilities/Entities/TEntity.h"
 
 SceneManager::SceneManager(){
 	m_SceneTreeRoot = new TNode(new TTransform());
 }
 
 SceneManager::~SceneManager(){
-	for(int i = m_cameras.size() - 1; i >= 0; i--){
+	int size = m_cameras.size();
+	for(int i = size - 1; i >= 0; i--){
 		delete m_cameras[i];
 	}
 	m_cameras.clear();
 	
-	for(int i = m_lights.size() - 1; i >= 0; i--){
+	size = m_lights.size();
+	for(int i = size - 1; i >= 0; i--){
 		delete m_lights[i];
 	}
 	m_lights.clear();
+
+	size = m_meshes.size();
+	for(int i = size - 1; i>=0; i--){
+		delete m_meshes[i];
+	}
+	m_meshes.clear();
 
 	glDeleteVertexArrays(1, &vao);
 	delete m_SceneTreeRoot;
 	delete program;
 }
 
-TFCamera* SceneManager::AddCamera(toe::core::vector3df position, toe::core::vector3df rotation, bool perspective){
+TFCamera* SceneManager::AddCamera(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, bool perspective){
 	TFCamera* toRet = nullptr;
 	toRet = new TFCamera(position, rotation, perspective);
 	m_cameras.push_back(toRet);
@@ -31,7 +39,7 @@ TFCamera* SceneManager::AddCamera(toe::core::vector3df position, toe::core::vect
 	return toRet;
 }
 
-TFLight* SceneManager::AddLight(toe::core::vector3df position, toe::core::vector3df rotation, toe::core::vector4df color, float intensity){
+TFLight* SceneManager::AddLight(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector4df color, float intensity){
 	TFLight* toRet = nullptr;
 	toRet = new TFLight(position, rotation, color, intensity);
 	m_lights.push_back(toRet);
@@ -39,9 +47,10 @@ TFLight* SceneManager::AddLight(toe::core::vector3df position, toe::core::vector
 	return toRet;
 }
 
-TFMesh* SceneManager::AddMesh(toe::core::vector3df position, toe::core::vector3df rotation, toe::core::vector3df scale, std::string meshPath){
+TFMesh* SceneManager::AddMesh(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale, std::string meshPath){
 	TFMesh* toRet = nullptr;
 	toRet = new TFMesh(position, rotation, scale, meshPath);
+	m_meshes.push_back(toRet);
 	toRet->Attach(m_SceneTreeRoot);
 	return toRet;
 }
@@ -78,7 +87,7 @@ void SceneManager::DrawLight(TFLight* light){
 
 	//glm::vec3 location = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::vec3 location = glm::vec3(light->m_positionNode->GetTraslation());
-	location.x = VideoDriver::xdist;
+	location.z = VideoDriver::xdist;
 	GLint lightPLocation = glGetUniformLocation(myProgram->GetProgramID(), "Light.Position");
 	glUniform3fv(lightPLocation, 1, glm::value_ptr(location));
 
@@ -93,7 +102,7 @@ void SceneManager::DrawLight(TFLight* light){
 	glUniform3fv(diffLocation, 1, glm::value_ptr(diffuse));
 
 	//glm::vec3 specular = glm::vec3(1.0f, 0.0f, 0.0f);
-	toe::core::vector4df color = light->GetColor() * light->GetIntensity();
+	toe::core::TOEvector4df color = light->GetColor() * light->GetIntensity();
 	
 	glm::vec3 specular = glm::vec3(color.X, color.Y, color.X2);
 	GLint specLocation = glGetUniformLocation(myProgram->GetProgramID(), "Light.Specular");

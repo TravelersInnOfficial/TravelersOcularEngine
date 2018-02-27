@@ -1,5 +1,5 @@
-#ifndef VECTOR3D_H
-#define VECTOR3D_H
+#ifndef TOEvector3D_H
+#define TOEvector3D_H
 
 #include <iostream>
 #include <math.h>
@@ -9,7 +9,7 @@ namespace toe{
     namespace core{
                 
         template<typename T>
-        class vector3d{
+        class TOEvector3d{
 
         private:
         public:
@@ -19,22 +19,22 @@ namespace toe{
             /**
              * Creates and empty 3d vector of all 0;
             */
-            vector3d() : X(0), Y(0), Z(0) {}
+            TOEvector3d() : X(0), Y(0), Z(0) {}
             
             /**
              * Creates and initializes 3d vector of same number
             */
-            vector3d(T n) : X(n), Y(n), Z(n) {}
+            TOEvector3d(T n) : X(n), Y(n), Z(n) {}
 
             /**
              * Creates and initializes 3d vector
             */
-            vector3d(T nx, T ny, T nz) : X(nx), Y(ny), Z(nz) {}
+            TOEvector3d(T nx, T ny, T nz) : X(nx), Y(ny), Z(nz) {}
 
             /**
              * Copy constructor
             */
-            vector3d(const vector3d<T>& other) : X(other.X), Y(other.Y), Z(other.Z) {}
+            TOEvector3d(const TOEvector3d<T>& other) : X(other.X), Y(other.Y), Z(other.Z) {}
 
             /**
              * returns length of the vector
@@ -98,29 +98,29 @@ namespace toe{
             void setZ(T newZ){ Z = newZ;}
 
             //Operators
-            vector3d<T> operator+(const T v) const { return vector3d<T>(X + v, Y + v, Z + v); }
-            vector3d<T> operator-(const T v) const { return vector3d<T>(X - v, Y - v, Z - v); }
-            vector3d<T> operator*(const T v) const { return vector3d<T>(X * v, Y * v, Z * v); }
-            vector3d<T> operator/(const T v) const { return vector3d<T>(X / v, Y / v, Z / v); }
-            vector3d<T> operator-(vector3d<T> v) const { return vector3d<T>(X-v.X, Y-v.Y, Z-v.Z); }
-            vector3d<T> operator+(vector3d<T> v) const { return vector3d<T>(X+v.X, Y+v.Y, Z+v.Z); }
-            vector3d<T> operator*(vector3d<T> v) const { return vector3d<T>(X*v.X, Y*v.Y, Z*v.Z); }
-            vector3d<T> operator/(vector3d<T> v) const { return vector3d<T>(X/v.X, Y/v.Y, Z/v.Z); }
+            TOEvector3d<T> operator+(const T v) const { return TOEvector3d<T>(X + v, Y + v, Z + v); }
+            TOEvector3d<T> operator-(const T v) const { return TOEvector3d<T>(X - v, Y - v, Z - v); }
+            TOEvector3d<T> operator*(const T v) const { return TOEvector3d<T>(X * v, Y * v, Z * v); }
+            TOEvector3d<T> operator/(const T v) const { return TOEvector3d<T>(X / v, Y / v, Z / v); }
+            TOEvector3d<T> operator-(TOEvector3d<T> v) const { return TOEvector3d<T>(X-v.X, Y-v.Y, Z-v.Z); }
+            TOEvector3d<T> operator+(TOEvector3d<T> v) const { return TOEvector3d<T>(X+v.X, Y+v.Y, Z+v.Z); }
+            TOEvector3d<T> operator*(TOEvector3d<T> v) const { return TOEvector3d<T>(X*v.X, Y*v.Y, Z*v.Z); }
+            TOEvector3d<T> operator/(TOEvector3d<T> v) const { return TOEvector3d<T>(X/v.X, Y/v.Y, Z/v.Z); }
 
-            void operator=(const vector3d<T> v) { X = v.X; Y = v.Y; Z = v.Z; }
+            void operator=(const TOEvector3d<T> v) { X = v.X; Y = v.Y; Z = v.Z; }
             void operator*=(const T v) { X = X*v; Y = Y*v; Z = Z*v; }
 
-            bool operator==(const vector3d<T> v) { if(v.X == X && v.Y == Y && v.Z == Z) return true; return false; }
+            bool operator==(const TOEvector3d<T> v) { if(v.X == X && v.Y == Y && v.Z == Z) return true; return false; }
 
 
-            friend inline std::ostream& operator << (std::ostream &o,const vector3d<T> &v){
+            friend inline std::ostream& operator << (std::ostream &o,const TOEvector3d<T> &v){
                 o << "(" << v.X << ", " << v.Y << ", " << v.Z << ")";
                 return o;
             }
         };
 
-        typedef vector3d<float> vector3df;
-        typedef vector3d<int> vector3di;
+        typedef TOEvector3d<float> TOEvector3df;
+        typedef TOEvector3d<int> TOEvector3di;
     }
 }
 #endif
