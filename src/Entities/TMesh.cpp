@@ -50,29 +50,43 @@ void TMesh::SendShaderData(){
 	glVertexAttribPointer(posAttrib,3, GL_FLOAT, GL_FALSE, 0*sizeof(float), 0);
 	glEnableVertexAttribArray(posAttrib);
 
+	// --------------------------------------------------------ENVIAMOS LAS NORMALS
+	// BIND THE NORMALS
+    GLuint normalBuffer = m_mesh->GetNormalBuffer();
+	glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
+
+	// SEND THE NORMALS
+	GLuint normAttrib = glGetAttribLocation(myProgram->GetProgramID(), "VertexNormal");
+	glVertexAttribPointer(normAttrib, 3, GL_FLOAT, GL_FALSE, 0*sizeof(float), 0);
+	glEnableVertexAttribArray(normAttrib);
+
 	// --------------------------------------------------------ENVIAMOS LAS UV
 	// BIND THE UV
     GLuint uvBuffer = m_mesh->GetUvBuffer();
 	glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
 
 	// SEND THE UV
-	GLuint uvAttrib = glGetAttribLocation(myProgram->GetProgramID(), "inUV");
+	GLuint uvAttrib = glGetAttribLocation(myProgram->GetProgramID(), "TextureCoords");
 	glVertexAttribPointer(uvAttrib, 2, GL_FLOAT, GL_FALSE, 0*sizeof(float), 0);
 	glEnableVertexAttribArray(uvAttrib);
 
-	// --------------------------------------------------------ENVIAMOS LA MATRIZ DE MODELO
-	// SEND THE MODEL/VIEW/MATRIX
-	GLint viewUniform = glGetUniformLocation(myProgram->GetProgramID(), "ModelViewMatrix");
-	glUniformMatrix4fv(viewUniform, 1, GL_FALSE, glm::value_ptr(m_stack.top()));
+	// --------------------------------------------------------ENVIAMOS LAS MATRICES
+	// SEND THE MODELVIEW MATRIX
+	glm::mat4 modelView = ViewMatrix * m_stack.top();
+	GLint mvLocation = glGetUniformLocation(myProgram->GetProgramID(), "ModelViewMatrix");
+	glUniformMatrix4fv(mvLocation, 1, GL_FALSE, glm::value_ptr(modelView));
 
-	// BIND THE NORMAL
-	// GLuint* normalBuffer = m_mesh->GetNormalBuffer();
-	// glBindBuffer(GL_ARRAY_BUFFER, *normalBuffer);
+	// SEND THE MODELVIEWPROJECTION MATRIX
+	glm::mat4 mvpMatrix = ProjMatrix * modelView;
+	GLint mvpLocation = glGetUniformLocation(myProgram->GetProgramID(), "MVP");
+	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(mvpMatrix));
 
-	// SEND THE NORMAL
-	// GLint normalAttrib = glGetAttribLocation(myProgram->GetProgramID(), "vertexNormal");
-	// glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, GL_FALSE, 9*sizeof(float), (void*)(3*sizeof(float)));
-	// glEnableVertexAttribArray(normalAttrib);
+	// SEND THE NORMAL MATRIX
+	glm::mat3 normalMatrix = glm::transpose(glm::inverse(modelView));
+	GLint normalMLocation = glGetUniformLocation(myProgram->GetProgramID(), "NormalMatrix");
+	glUniformMatrix3fv(normalMLocation, 1, GL_FALSE, glm::value_ptr(normalMatrix));
+
+	// --------------------------------------------------------ENVIAMOS LA TEXTURA
 	TResourceTexture* currentTexture = nullptr;
 	if(m_texture != nullptr){
 		currentTexture = m_texture;
@@ -87,4 +101,3 @@ void TMesh::SendShaderData(){
 		glUniform1i(TextureID, 0);
 	}
 }
-	

@@ -21,6 +21,7 @@ public:
 	void		Draw();							// Pinta el nodo
 
 	glm::mat4	GetTransformMatrix();			// Consigue la matriz del arbol
+	glm::vec3  	GetTraslation();				// Returns vec3 Traslation
 
 private:
 	TEntity*			m_entity;				// Entidad que marca el tipo de nodo, con sus propias funciones

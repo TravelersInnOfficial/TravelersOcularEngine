@@ -100,8 +100,7 @@ bool TObjectLoader::LoadObj(TResourceMesh* mesh, int option){
 	mesh->SetElementSize(index.size());
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, currentBuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index.size()*sizeof(unsigned int), &index[0], GL_STATIC_DRAW);
-	glBufferStorage(GL_ELEMENT_ARRAY_BUFFER, index.size()*sizeof(unsigned int), &index[0], GL_STATIC_DRAW);
-	
+
 
 	return true;
 }

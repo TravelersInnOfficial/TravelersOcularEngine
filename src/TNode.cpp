@@ -120,3 +120,13 @@ glm::mat4 TNode::GetTransformMatrix(){
 	
 	return toReturn;
 }
+
+glm::vec3 TNode::GetTraslation(){
+	glm::vec3 toReturn;
+
+	glm::mat4 transform = (((TTransform*)GetEntity())->GetTransform());
+	glm::vec4 position = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f) * transform;
+
+	toReturn = glm::vec3(position);
+	return toReturn;
+}

@@ -37,8 +37,10 @@ void TFNode::Rotate(toe::core::vector3df rotation){
 	myTransform->Rotate(rotation.X, rotation.Y, rotation.Z);
 }
 
-toe::core::vector3df TFNode::GetTranslate(){
-	toe::core::vector3df toRet = toe::core::vector3df(0,0,0);
+toe::core::vector3df TFNode::GetTranslation(){
+	glm::vec3 traslation = m_positionNode->GetTraslation();
+
+	toe::core::vector3df toRet = toe::core::vector3df(traslation.x,traslation.y,traslation.z);
 	return toRet;
 }
 

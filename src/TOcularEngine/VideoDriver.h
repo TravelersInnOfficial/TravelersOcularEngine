@@ -22,7 +22,10 @@ public:
     bool Update();
     void Draw();
     void ClearScreen();
-    
+
+    inline static float zdist = 0.0f;
+    inline static float xdist = 0.0f;
+
 //GETTERS
     /**
      * @brief Returns an instance of the Video Driver

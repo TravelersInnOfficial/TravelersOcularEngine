@@ -11,3 +11,15 @@ std::stack<glm::mat4> TEntity::m_stack = TEntity::InitializeStack();
 void TEntity::SetProgram(SHADERTYPE program){
     m_program = program;
 }
+
+glm::mat4 TEntity::ViewMatrix;
+glm::mat4 TEntity::ProjMatrix;
+
+
+void TEntity::SetViewMatrixPtr(glm::mat4 view){
+    ViewMatrix = view;
+}
+
+void TEntity::SetProjMatrixPtr(glm::mat4 proj){
+    ProjMatrix = proj;
+}
