@@ -126,6 +126,7 @@ glm::mat4 TNode::GetTransformMatrix(){
 
 glm::vec3 TNode::GetTraslation(){
 	glm::mat4 myTransform = GetTransformMatrix();
+	
 	glm::vec3 scale;
 	glm::quat rotation;
 	glm::vec3 translation;
@@ -134,5 +135,34 @@ glm::vec3 TNode::GetTraslation(){
 	glm::decompose(myTransform, scale, rotation, translation, skew, perspective);
 
 	glm::vec3 toRet = glm::vec3(translation.x, translation.y, translation.z);
+	return toRet;
+}
+
+glm::vec3 TNode::GetRotation(){
+	glm::mat4 myTransform = GetTransformMatrix();
+	
+	glm::vec3 scale;
+	glm::quat rotation;
+	glm::vec3 translation;
+	glm::vec3 skew;
+	glm::vec4 perspective;
+	glm::decompose(myTransform, scale, rotation, translation, skew, perspective);
+
+	rotation = glm::conjugate(rotation);
+	glm::vec3 toRet = glm::eulerAngles(rotation);
+	return toRet;
+}
+
+glm::vec3 TNode::GetScale(){
+	glm::mat4 myTransform = GetTransformMatrix();
+	
+	glm::vec3 scale;
+	glm::quat rotation;
+	glm::vec3 translation;
+	glm::vec3 skew;
+	glm::vec4 perspective;
+	glm::decompose(myTransform, scale, rotation, translation, skew, perspective);
+
+	glm::vec3 toRet = glm::vec3(scale.x, scale.y, scale.z);
 	return toRet;
 }

@@ -22,6 +22,8 @@ public:
 
 	glm::mat4	GetTransformMatrix();			// Consigue la matriz del arbol
 	glm::vec3  	GetTraslation();				// Returns vec3 Traslation
+	glm::vec3  	GetRotation();					// Returns vec3 Rotation
+	glm::vec3  	GetScale();						// Returns vec3 Scale
 
 private:
 	TEntity*			m_entity;				// Entidad que marca el tipo de nodo, con sus propias funciones
