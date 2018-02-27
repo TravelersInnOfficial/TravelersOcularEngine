@@ -26,6 +26,7 @@ private:
 
 	TResourceMesh* 		m_mesh;
 	TResourceTexture* 	m_texture;
+	TResourceMaterial* 	m_material;
 	
 	/**
 	 * @brief Sends shader all needed information

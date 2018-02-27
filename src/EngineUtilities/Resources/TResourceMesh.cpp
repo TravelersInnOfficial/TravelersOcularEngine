@@ -78,6 +78,10 @@ TResourceTexture* TResourceMesh::GetTexture(){
 	return m_basicTexture;
 }
 
+TResourceMaterial* TResourceMesh::GetMaterial(){
+	return m_basicMaterial;
+}
+
 GLuint TResourceMesh::GetElementBuffer(){
 	return m_ebo;
 }

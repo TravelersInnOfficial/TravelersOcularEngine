@@ -92,7 +92,7 @@ void SceneManager::DrawLight(TFLight* light, int num){
 	GLint lightPLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
 	glUniform3fv(lightPLocation, 1, glm::value_ptr(location));
 
-	glm::vec3 ambient = glm::vec3(0.0f, 0.0f, 0.0f);
+	glm::vec3 ambient = glm::vec3(0.25f, 0.25f, 0.25f);
 	aux = str +"Ambient";
 	GLint ambLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
 	glUniform3fv(ambLocation, 1, glm::value_ptr(ambient));

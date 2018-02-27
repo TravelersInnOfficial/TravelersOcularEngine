@@ -24,15 +24,15 @@ void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh*
 	*meshThree = sm->AddMesh(pos, rot, scale, path);
 	(*meshThree)->SetTexture("./../assets/textures/potion.png");
 
-	toe::core::TOEvector3df lightPos = toe::core::TOEvector3df(5.0f, 0.0f, 0.0f);
+	toe::core::TOEvector3df lightPos = toe::core::TOEvector3df(0.0f, 0.0f, 0.0f);
 	toe::core::TOEvector3df lightRot = toe::core::TOEvector3df(0.0f, 0.0f, 0.0f);
-	toe::core::TOEvector4df    color = toe::core::TOEvector4df(1.0f, 1.0f, 1.0f, 0.0f);;
-	float intensity = 0.5f;
+	toe::core::TOEvector4df    color = toe::core::TOEvector4df(1.0f, 1.0f, 1.0f, 1.0f);
+	float intensity = 1.0f;
 	*light1 = sm->AddLight(lightPos, lightRot, color, intensity);
 
-	color = toe::core::TOEvector4df(1.0f, 0.3f, 0.3f, 0.0f);;
-	intensity = 0.6f;
-	//*light2 = sm->AddLight(lightPos, lightRot, color, intensity);
+	// color = toe::core::TOEvector4df(1.0f, 0.3f, 0.3f, 0.0f);;
+	// intensity = 0.6f;
+	// *light2 = sm->AddLight(lightPos, lightRot, color, intensity);
 }
 
 int main(){
@@ -55,8 +55,7 @@ int main(){
 		meshOne->SetRotation(rotation);
 		meshTwo->SetRotation(rotation);
 		meshThree->SetRotation(rotation);
-		//meshThree->SetTranslate(toe::core::TOEvector3df(1.5f, 0.0f, VideoDriver::zdist));
-		light1->SetTranslate(toe::core::TOEvector3df(0.0f, 0.0f, VideoDriver::zdist));
+		light1->SetTranslate(toe::core::TOEvector3df(VideoDriver::xdist, 0.0f, -VideoDriver::zdist));
 		//light2->SetTranslate(toe::core::TOEvector3df(0.0f, 0.0f, VideoDriver::xdist));
 	}
 
