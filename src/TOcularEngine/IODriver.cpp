@@ -203,13 +203,13 @@ bool IODriver::OnEvent(const TEvent& event){
         }
         if (event.m_key.code == Key_Down){
             //addVertices(0, -2);
-            VideoDriver::zdist -= 5.0f;
-            std::cout<<"VideoDriver::zdist: " << VideoDriver::zdist << "VideoDriver::zdist: " << VideoDriver::zdist << "\n";
+            VideoDriver::zdist -= 0.5f;
+            std::cout<<"VideoDriver::zdist: " << VideoDriver::zdist << "\n";
         }
         if (event.m_key.code == Key_Up){
             //addVertices(0, 2);                
-            VideoDriver::zdist += 5.0f;
-            std::cout<<"VideoDriver::zdist: " << VideoDriver::zdist << "VideoDriver::xdist: " << VideoDriver::xdist << "\n";
+            VideoDriver::zdist += 0.5f;
+            std::cout<<"VideoDriver::zdist: " << VideoDriver::zdist << "\n";
         }
     }
 

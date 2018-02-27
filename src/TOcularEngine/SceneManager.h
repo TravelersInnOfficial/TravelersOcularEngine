@@ -81,7 +81,7 @@ public:
 
     void InitScene();
 
-    void DrawLight(TFLight* light);
+    void DrawLight(TFLight* light, int num);
     void Draw();
 
     TNode* GetRootNode();

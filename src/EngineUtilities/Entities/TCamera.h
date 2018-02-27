@@ -49,7 +49,6 @@ public:
 
 	glm::mat4 GetTransform();
 	
-	void SendMatrixToShader();
 	SHADERTYPE m_program;
 
 	void BeginDraw();

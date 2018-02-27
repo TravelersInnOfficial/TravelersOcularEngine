@@ -82,55 +82,48 @@ void SceneManager::Update(){
 	
 }
 
-void SceneManager::DrawLight(TFLight* light){
+void SceneManager::DrawLight(TFLight* light, int num){
 	Program* myProgram = VideoDriver::GetInstance()->GetProgramVector()[STANDARD_SHADER];
+	std::string str = "Light["+std::to_string(num)+"].";
+	std::string aux = "";
 
-	//glm::vec3 location = glm::vec3(0.0f, 0.0f, 0.0f);
-	glm::vec3 location = glm::vec3(light->m_positionNode->GetTraslation());
-	location.z = VideoDriver::xdist;
-	GLint lightPLocation = glGetUniformLocation(myProgram->GetProgramID(), "Light.Position");
+	glm::vec3 location = light->m_entityNode->GetTraslation();
+	aux = str +"Position";
+	GLint lightPLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
 	glUniform3fv(lightPLocation, 1, glm::value_ptr(location));
 
-	//glm::vec3 ambient = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::vec3 ambient = glm::vec3(0.0f, 0.0f, 0.0f);
-	GLint ambLocation = glGetUniformLocation(myProgram->GetProgramID(), "Light.Ambient");
+	aux = str +"Ambient";
+	GLint ambLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
 	glUniform3fv(ambLocation, 1, glm::value_ptr(ambient));
 
-	//glm::vec3 diffuse = glm::vec3(0.8f, 0.8f, 0.8f);
-	glm::vec3 diffuse = glm::vec3(light->GetIntensity());
-	GLint diffLocation = glGetUniformLocation(myProgram->GetProgramID(), "Light.Diffuse");
+	toe::core::TOEvector4df color = light->GetColor() * light->GetIntensity();
+	glm::vec3 diffuse = glm::vec3(color.X, color.Y, color.X2);
+	aux = str +"Diffuse";
+	GLint diffLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
 	glUniform3fv(diffLocation, 1, glm::value_ptr(diffuse));
 
-	//glm::vec3 specular = glm::vec3(1.0f, 0.0f, 0.0f);
-	toe::core::TOEvector4df color = light->GetColor() * light->GetIntensity();
-	
 	glm::vec3 specular = glm::vec3(color.X, color.Y, color.X2);
-	GLint specLocation = glGetUniformLocation(myProgram->GetProgramID(), "Light.Specular");
+	aux = str +"Specular";
+	GLint specLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
 	glUniform3fv(specLocation, 1, glm::value_ptr(specular));
 }
 
 void SceneManager::Draw(){
-	//VideoDriver::ViewMatrix = main_camera->m_entityNode->GetTransformMatrix();
-	//VideoDriver::ProjMatrix = ((TCamera*)main_camera->m_entityNode->GetEntity())->GetProjectionMatrix();
-	
 	// Select active camera and set view and projection matrix
 	TEntity::SetViewMatrixPtr( main_camera->m_entityNode->GetTransformMatrix() );
-	TEntity::SetProjMatrixPtr( ( (TCamera*)(main_camera->m_entityNode->GetEntity()) )->GetProjectionMatrix() );
-	
-	std::vector<TFLight*>::iterator it = m_lights.begin();
-    for(;it!=m_lights.end();++it){
-		DrawLight(*it);
+
+	// Send size of lights
+	GLint size = m_lights.size();
+	Program* myProgram = VideoDriver::GetInstance()->GetProgramVector()[STANDARD_SHADER];	
+	GLuint nlightspos = glGetUniformLocation(myProgram->GetProgramID(), "nlights");
+	glUniform1i(nlightspos, size);
+
+	// Draw all lights
+    for(int i = 0; i < size; i++){
+		DrawLight(m_lights[i], i);
     }
 
-	/*
-	glm::mat4 view = main_camera->m_entityNode->GetTransformMatrix();
-    std::map<SHADERTYPE,Program*> p = VideoDriver::GetInstance()->GetProgramVector();
-    std::map<SHADERTYPE,Program*>::iterator it = p.begin();
-    for(;it!=p.end();++it){
-        GLint uniView = glGetUniformLocation(it->second->GetProgramID(), "ViewMatrix");
-	    glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));
-    }
-*/
     m_SceneTreeRoot->Draw();
 }
 
