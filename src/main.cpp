@@ -44,7 +44,7 @@ int main(){
 	TFLight* light2 = nullptr;
 
 	CreateTree(&myCamera, &meshOne, &meshTwo, &meshThree, &light1, &light2);
-	//meshThree->SetParent(meshTwo);
+	meshThree->SetParent(meshTwo);
 
 	while(VDriv->Update()){
 		VDriv->Draw();
