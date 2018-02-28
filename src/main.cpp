@@ -29,19 +29,12 @@ void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh*
 	toe::core::TOEvector4df    color = toe::core::TOEvector4df(1.0f, 1.0f, 1.0f, 1.0f);
 	float intensity = 1.0f;
 	*light1 = sm->AddLight(lightPos, lightRot, color, intensity);
-	
-	// ELIMINAMOS --  EL DELETE ESTA MAL, CON CONTEMPLA HIJOS
-	// sm->DeleteLight(*light1);
-	// *light1 = nullptr;
-
-	// color = toe::core::TOEvector4df(1.0f, 0.3f, 0.3f, 0.0f);;
-	// intensity = 0.6f;
-	// *light2 = sm->AddLight(lightPos, lightRot, color, intensity);
 }
 
 int main(){
 	VideoDriver* VDriv = toe::GetVideoDriver();
 	VDriv->CreateWindow("Wizards&Warlocks",toe::core::TOEvector2df(800,600));
+	VDriv->SetClearScreenColor(toe::core::TOEvector4df(0.7, 0.7, 1, 1));
 
 	TFCamera* myCamera = nullptr;
 	TFMesh* meshOne = nullptr;
@@ -51,16 +44,15 @@ int main(){
 	TFLight* light2 = nullptr;
 
 	CreateTree(&myCamera, &meshOne, &meshTwo, &meshThree, &light1, &light2);
+	//meshThree->SetParent(meshTwo);
 
-	VDriv->SetClearScreenColor(toe::core::TOEvector4df(0.7, 0.7, 1, 1));
 	while(VDriv->Update()){
 		VDriv->Draw();
 		toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,VDriv->GetTime()/10,0);
 		meshOne->SetRotation(rotation);
 		meshTwo->SetRotation(rotation);
 		meshThree->SetRotation(rotation);
-		if(light1 != nullptr) light1->SetTranslate(toe::core::TOEvector3df(VideoDriver::xdist, 0.0f, -VideoDriver::zdist));
-		//light2->SetTranslate(toe::core::TOEvector3df(0.0f, 0.0f, VideoDriver::xdist));
+		if(meshTwo != nullptr) meshTwo->SetTranslate(toe::core::TOEvector3df(VideoDriver::xdist, 0.0f, -VideoDriver::zdist));
 	}
 
     return EXIT_SUCCESS;

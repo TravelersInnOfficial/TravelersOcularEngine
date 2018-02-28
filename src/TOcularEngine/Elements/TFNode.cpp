@@ -1,4 +1,6 @@
 #include "TFNode.h"
+#include "./../SceneManager.h"
+#include "./../VideoDriver.h"
 
 TFNode::TFNode(){
 	TTransform* rot = new TTransform();
@@ -72,7 +74,6 @@ toe::core::TOEvector3df TFNode::GetScale(){
 	return toRet;
 }
 
-
 /*
 * ADD CHILD:
 * 		1.- Compruebo si no lo tenia ya en mi vector
@@ -80,21 +81,35 @@ toe::core::TOEvector3df TFNode::GetScale(){
 * 		2.- Me meto en el vector de hijos
 * 		4.- Hago un SetParent del TFNode hijo con mi TFNode
 */
-void AddChild(TFNode* children){
+void TFNode::AddChild(TFNode* children){
+	bool exists = false;
 	
-}
+	for(int i = 0; i < m_children.size() && !exists ; i++){
+		if (m_children.at(i) == children) exists = true;
+	}
 
+	if(!exists){
+		m_children.push_back(children);
+		children->SetParent(this);
+	}
+}
 
 /*
 * REMOVE CHILD:
 * 		1.- Compruebo si lo tengo en mi vector
-* 			1.1.- Si lo tengo, le hago un SetParent vacío
+* 			1.1.- Si lo tengo, le hago un SetParent a mi padre (null si no existe)
 * 			1.2.- Si no lo tengo no hago nada
 */
-void RemoveChild(TFNode* children){
+void TFNode::RemoveChild(TFNode* children){
+	bool exists = false;
 	
+	for(int i = 0; i < m_children.size() && !exists ; i++){
+		if (m_children.at(i) == children){
+			m_children.erase(m_children.begin()+i);
+			children->SetParent(m_parent);
+		}
+	}
 }
-
 
 /*
 * SET PARENT:
@@ -103,17 +118,39 @@ void RemoveChild(TFNode* children){
 * 				1.1.1.- Si es el mismo, no hago nada
 * 				1.1.2.- Si es otro lo pongo a NULL y le hago un RemoveChild de mi mismo
 * 		2.- Ahora añado al nuevo nodo como mi padre
-* 		3.- Vinculo mi TNode Posicion a su TNode Rotacion como hijo (Mi posicion tiene de hijo su rotacion con Attatch)
+* 		3.- Vinculo mi TNode Posicion a su TNode Rotacion como hijo (Mi posicion tiene de hijo su rotacion con Attach)
 * 		4.- Accedo a mi nuevo padre y le hago un AddChild, metiendome a mi mismo
-*
-* SET PARENT VACIO:
+*/
+void TFNode::SetParent(TFNode* parent){
+	if(parent == nullptr) RemoveParent();
+	else if(parent != m_parent){
+		m_parent = parent;
+		Attach(m_parent->m_positionNode);
+		m_parent->AddChild(this);
+	}
+}
+
+/*
+* Remove Parent:
 * 	 	1.- Compruebo si mi padre es NULL
 *			1.1.- Si mi padre es NULL no hago nada
-* 		1.- Desvinculo el TNode Rotacion del TNode Posicion del padre y se lo vinculo al ROOT (Con Attatch)
+* 		1.- Desvinculo el TNode Rotacion del TNode Posicion del padre y se lo vinculo al ROOT (Con Attach)
 *		2.- Pongo a mi Parent a NULL
-* 		3.- Cojo a mi antiguo padre y le hago un Remove Children de mi
-* 
+* 		3.- Cojo a mi antiguo padre y le hago un Remove Child de mi
 */
-void SetParent(TFNode* parent){
-	
+void TFNode::RemoveParent(){
+	if(m_parent != nullptr){
+		TFNode* parentToRemove = m_parent;	// Nos guardamos el padre al que queremos quitarle el hijo
+		m_parent = nullptr;					// Ponemos el PADRE a NULL
+		parentToRemove->RemoveChild(this);	// Le quitamos el hijo al padre (Lo que hara que se le ponga al abuelo como hijo) ---> SOLO SE SUBE UN NIVEL, EL ATTACH SE HACE EN EL SET PARENT
+	}
+	else Attach(VideoDriver::GetInstance()->GetSceneManager()->GetRootNode());	// Si no tiene padre, se lo metemos al nodo ROOT
+}
+
+TFNode* TFNode::GetParent(){
+	return m_parent;
+}
+
+std::vector<TFNode*> TFNode::GetChildren(){
+	return m_children;
 }
