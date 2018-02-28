@@ -59,7 +59,7 @@ public:
      * @return true The camera has been deleted
      * @return false The camera couldn't be deleted
      */
-    bool        DeleteCamera(TFCamera*);
+    bool        DeleteCamera(TFCamera*, bool eraseChildren = true);
 
     /**
      * @brief Deletes the Light given
@@ -67,7 +67,7 @@ public:
      * @return true The light has been deleted
      * @return false The light couldn't be deleted
      */
-    bool        DeleteLight(TFLight*);
+    bool        DeleteLight(TFLight*, bool eraseChildren = true);
 
     /**
      * @brief Deletes the Mesh given
@@ -75,7 +75,7 @@ public:
      * @return true The mesh has been deleted
      * @return false The mesh couldn't be deleted
      */
-    bool        DeleteMesh(TFMesh*);
+    bool        DeleteMesh(TFMesh*, bool eraseChildren = true);
 
     /**
      * @brief Sets the Ambient Light
@@ -102,7 +102,6 @@ private:
     std::vector<TFMesh*>    m_meshes;    // Pointers to the nodes created
 
     glm::vec3 m_ambientLight;
-
     TFCamera* main_camera;
 
     glm::mat4 GetTransformInTree(TNode* node);

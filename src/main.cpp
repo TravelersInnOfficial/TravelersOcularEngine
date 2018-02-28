@@ -29,6 +29,10 @@ void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh*
 	toe::core::TOEvector4df    color = toe::core::TOEvector4df(1.0f, 1.0f, 1.0f, 1.0f);
 	float intensity = 1.0f;
 	*light1 = sm->AddLight(lightPos, lightRot, color, intensity);
+	
+	// ELIMINAMOS --  EL DELETE ESTA MAL, CON CONTEMPLA HIJOS
+	// sm->DeleteLight(*light1);
+	// *light1 = nullptr;
 
 	// color = toe::core::TOEvector4df(1.0f, 0.3f, 0.3f, 0.0f);;
 	// intensity = 0.6f;
@@ -55,7 +59,7 @@ int main(){
 		meshOne->SetRotation(rotation);
 		meshTwo->SetRotation(rotation);
 		meshThree->SetRotation(rotation);
-		light1->SetTranslate(toe::core::TOEvector3df(VideoDriver::xdist, 0.0f, -VideoDriver::zdist));
+		if(light1 != nullptr) light1->SetTranslate(toe::core::TOEvector3df(VideoDriver::xdist, 0.0f, -VideoDriver::zdist));
 		//light2->SetTranslate(toe::core::TOEvector3df(0.0f, 0.0f, VideoDriver::xdist));
 	}
 

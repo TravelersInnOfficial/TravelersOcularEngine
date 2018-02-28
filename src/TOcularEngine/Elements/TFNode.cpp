@@ -1,13 +1,20 @@
 #include "TFNode.h"
 
 TFNode::TFNode(){
-	m_entityNode = nullptr;
-	m_rotationNode = nullptr;
-	m_positionNode = nullptr;
+	TTransform* rot = new TTransform();
+	m_rotationNode = new TNode(rot);
+
+	TTransform* esc = new TTransform();
+	m_scaleNode = new TNode(m_rotationNode, esc);
+	
+	TTransform* pos = new TTransform();
+	m_positionNode = new TNode(m_scaleNode, pos);
+
+	m_entityNode = new TNode();
+	m_entityNode->SetParent(m_positionNode);
 }
 
 TFNode::~TFNode(){
-
 }
 
 void TFNode::Attach(TNode* root){
@@ -26,6 +33,11 @@ void TFNode::SetRotation(toe::core::TOEvector3df rotation){
 	myTransform->Rotate(rotation.X, rotation.Y, rotation.Z);
 }
 
+void TFNode::SetScale(toe::core::TOEvector3df scale){
+	TTransform* myTransform = (TTransform*) m_scaleNode->GetEntity();
+	myTransform->Identity();
+	myTransform->Scale(scale.X, scale.Y, scale.Z);
+}
 
 void TFNode::Translate(toe::core::TOEvector3df translation){
 	TTransform* myTransform = (TTransform*) m_positionNode->GetEntity();
@@ -35,6 +47,11 @@ void TFNode::Translate(toe::core::TOEvector3df translation){
 void TFNode::Rotate(toe::core::TOEvector3df rotation){
 	TTransform* myTransform = (TTransform*) m_rotationNode->GetEntity();
 	myTransform->Rotate(rotation.X, rotation.Y, rotation.Z);
+}
+
+void TFNode::Scale(toe::core::TOEvector3df scale){
+	TTransform* myTransform = (TTransform*) m_scaleNode->GetEntity();
+	myTransform->Scale(scale.X, scale.Y, scale.Z);
 }
 
 toe::core::TOEvector3df TFNode::GetTranslation(){
@@ -47,4 +64,56 @@ toe::core::TOEvector3df TFNode::GetRotation(){
 	glm::vec3 rotation = m_positionNode->GetRotation();
 	toe::core::TOEvector3df toRet = toe::core::TOEvector3df(rotation.x,rotation.y,rotation.z);
 	return toRet;
+}
+
+toe::core::TOEvector3df TFNode::GetScale(){
+	glm::vec3 scale = m_positionNode->GetScale();
+	toe::core::TOEvector3df toRet = toe::core::TOEvector3df(scale.x,scale.y,scale.z);
+	return toRet;
+}
+
+
+/*
+* ADD CHILD:
+* 		1.- Compruebo si no lo tenia ya en mi vector
+* 			1.1.- Si me tenia no hago nada
+* 		2.- Me meto en el vector de hijos
+* 		4.- Hago un SetParent del TFNode hijo con mi TFNode
+*/
+void AddChild(TFNode* children){
+	
+}
+
+
+/*
+* REMOVE CHILD:
+* 		1.- Compruebo si lo tengo en mi vector
+* 			1.1.- Si lo tengo, le hago un SetParent vacío
+* 			1.2.- Si no lo tengo no hago nada
+*/
+void RemoveChild(TFNode* children){
+	
+}
+
+
+/*
+* SET PARENT:
+* 		1.- Compruebo si mi padre es NULL
+* 			1.1.- Si mi padre no es NULL...
+* 				1.1.1.- Si es el mismo, no hago nada
+* 				1.1.2.- Si es otro lo pongo a NULL y le hago un RemoveChild de mi mismo
+* 		2.- Ahora añado al nuevo nodo como mi padre
+* 		3.- Vinculo mi TNode Posicion a su TNode Rotacion como hijo (Mi posicion tiene de hijo su rotacion con Attatch)
+* 		4.- Accedo a mi nuevo padre y le hago un AddChild, metiendome a mi mismo
+*
+* SET PARENT VACIO:
+* 	 	1.- Compruebo si mi padre es NULL
+*			1.1.- Si mi padre es NULL no hago nada
+* 		1.- Desvinculo el TNode Rotacion del TNode Posicion del padre y se lo vinculo al ROOT (Con Attatch)
+*		2.- Pongo a mi Parent a NULL
+* 		3.- Cojo a mi antiguo padre y le hago un Remove Children de mi
+* 
+*/
+void SetParent(TFNode* parent){
+	
 }

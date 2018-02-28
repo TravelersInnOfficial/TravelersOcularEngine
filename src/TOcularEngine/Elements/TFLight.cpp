@@ -2,32 +2,21 @@
 #include "./../VideoDriver.h"
 
 TFLight::TFLight(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector4df color, float intensity) : TFNode(){
-	CreateEstructure();
-	
-	TTransform* t = (TTransform*) m_positionNode->GetEntity();
-	t->Translate(position.X, position.Y, position.Z);
-
-	t = (TTransform*) m_rotationNode->GetEntity();
+	TTransform* t = (TTransform*) m_rotationNode->GetEntity();
 	t->Rotate(rotation.X, rotation.Y, rotation.Z);
+
+	t = (TTransform*) m_scaleNode->GetEntity();
+	t->Scale(1, 1, 1);
+
+	t = (TTransform*) m_positionNode->GetEntity();
+	t->Translate(position.X, position.Y, position.Z);
 
 	glm::vec4 glmColor = glm::vec4(color.X, color.Y, color.X2, color.Y2);
 	TColor myColor = TColor(glmColor);
-	TLight* light = new TLight(myColor, intensity);
-	m_entityNode->SetEntity(light);
+	m_entityNode->SetEntity(new TLight(myColor, intensity));
 }
 
 TFLight::~TFLight(){
-
-}
-
-void TFLight::CreateEstructure(){
-	TTransform* pos = new TTransform();
-	TTransform* rot = new TTransform();
-
-	m_rotationNode = new TNode(rot);
-	m_positionNode = new TNode(m_rotationNode, pos);
-	m_entityNode = new TNode();
-	m_entityNode->SetParent(m_positionNode);
 }
 
 void TFLight::SetColor(toe::core::TOEvector4df color){

@@ -1,31 +1,19 @@
 #include "TFCamera.h"
 
 TFCamera::TFCamera(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, bool perspective) : TFNode(){
-	CreateEstructure();
-	
-	TTransform* t = (TTransform*) m_positionNode->GetEntity();
-	t->Translate(position.X, position.Y, position.Z);
-	
-	t = (TTransform*) m_rotationNode->GetEntity();
+	TTransform* t = (TTransform*) m_rotationNode->GetEntity();
 	t->Rotate(rotation.X, rotation.Y, rotation.Z);
 
-	TCamera* camera = new TCamera(perspective);
-	m_entityNode->SetEntity(camera);
+	t = (TTransform*) m_scaleNode->GetEntity();
+	t->Scale(1, 1, 1);
+
+	t = (TTransform*) m_positionNode->GetEntity();
+	t->Translate(position.X, position.Y, position.Z);
+
+	m_entityNode->SetEntity(new TCamera(perspective));
 }
 
 TFCamera::~TFCamera(){
-
-}
-
-void TFCamera::CreateEstructure(){
-	TTransform* pos = new TTransform();
-	TTransform* rot = new TTransform();
-
-	m_rotationNode = new TNode(rot);
-	m_positionNode = new TNode(m_rotationNode, pos);
-	
-	m_entityNode = new TNode();
-	m_entityNode->SetParent(m_positionNode);
 }
 
 void TFCamera::SetPerspective(bool perspectiveCamera){

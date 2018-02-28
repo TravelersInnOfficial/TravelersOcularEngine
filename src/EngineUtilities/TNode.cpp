@@ -166,3 +166,7 @@ glm::vec3 TNode::GetScale(){
 	glm::vec3 toRet = glm::vec3(scale.x, scale.y, scale.z);
 	return toRet;
 }
+
+std::vector<TNode*>	TNode::GetChildren(){
+	return m_children;
+}
