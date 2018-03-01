@@ -5,7 +5,7 @@ TFCamera::TFCamera(toe::core::TOEvector3df position, toe::core::TOEvector3df rot
 	t->Rotate(rotation.X, rotation.Y, rotation.Z);
 
 	t = (TTransform*) m_scaleNode->GetEntity();
-	t->Scale(1, 1, 1);
+	t->Scale(1.0f, 1.0f, 1.0f);
 
 	t = (TTransform*) m_positionNode->GetEntity();
 	t->Translate(position.X, position.Y, position.Z);

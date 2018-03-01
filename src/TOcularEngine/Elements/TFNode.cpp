@@ -14,6 +14,8 @@ TFNode::TFNode(){
 
 	m_entityNode = new TNode();
 	m_entityNode->SetParent(m_positionNode);
+
+	m_parent = nullptr;
 }
 
 TFNode::~TFNode(){
@@ -125,7 +127,8 @@ void TFNode::SetParent(TFNode* parent){
 	if(parent == nullptr) RemoveParent();
 	else if(parent != m_parent){
 		m_parent = parent;
-		Attach(m_parent->m_positionNode);
+		TNode* node = m_parent->m_positionNode;
+		Attach(node);
 		m_parent->AddChild(this);
 	}
 }

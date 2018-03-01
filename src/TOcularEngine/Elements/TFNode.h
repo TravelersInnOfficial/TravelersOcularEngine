@@ -37,10 +37,10 @@ public:
 	std::vector<TFNode*> GetChildren();
 
 protected:
-	TNode* m_entityNode;
-	TNode* m_positionNode;
 	TNode* m_rotationNode;
 	TNode* m_scaleNode;
+	TNode* m_positionNode;
+	TNode* m_entityNode;
 	
 	std::vector<TFNode*> m_children;
 	TFNode* m_parent;				// If Parent is null, this TFNode is attatched to the ROOT NODE
