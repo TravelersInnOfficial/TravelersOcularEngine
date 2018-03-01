@@ -104,11 +104,12 @@ void TFNode::AddChild(TFNode* children){
 */
 void TFNode::RemoveChild(TFNode* children){
 	bool exists = false;
-	
-	for(int i = 0; i < m_children.size() && !exists ; i++){
+
+	for(int i = 0; i < m_children.size() && !exists; i++){
 		if (m_children.at(i) == children){
-			m_children.erase(m_children.begin()+i);
+			m_children.erase(m_children.begin() + i);
 			children->SetParent(m_parent);
+			exists = true;
 		}
 	}
 }
@@ -124,7 +125,9 @@ void TFNode::RemoveChild(TFNode* children){
 * 		4.- Accedo a mi nuevo padre y le hago un AddChild, metiendome a mi mismo
 */
 void TFNode::SetParent(TFNode* parent){
-	if(parent == nullptr) RemoveParent();
+	if(parent == nullptr){
+		RemoveParent();
+	}
 	else if(parent != m_parent){
 		m_parent = parent;
 		TNode* node = m_parent->m_positionNode;
@@ -147,7 +150,7 @@ void TFNode::RemoveParent(){
 		m_parent = nullptr;					// Ponemos el PADRE a NULL
 		parentToRemove->RemoveChild(this);	// Le quitamos el hijo al padre (Lo que hara que se le ponga al abuelo como hijo) ---> SOLO SE SUBE UN NIVEL, EL ATTACH SE HACE EN EL SET PARENT
 	}
-	else Attach(VideoDriver::GetInstance()->GetSceneManager()->GetRootNode());	// Si no tiene padre, se lo metemos al nodo ROOT
+	if(m_parent == nullptr) Attach(VideoDriver::GetInstance()->GetSceneManager()->GetRootNode());	// Si no tiene padre, se lo metemos al nodo ROOT
 }
 
 TFNode* TFNode::GetParent(){
