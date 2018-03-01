@@ -46,11 +46,9 @@ int main(){
 	CreateTree(&myCamera, &meshOne, &meshTwo, &meshThree, &light1, &light2);
 
 	// TF Parenting Test
-	// meshTwo->SetParent(meshThree);
-	// meshOne->SetParent(meshTwo);
-	// meshTwo->RemoveChild(meshOne);
-	// meshTwo->RemoveParent();
-	// meshOne->RemoveParent();
+	meshOne->SetParent(meshThree);
+	meshTwo->SetParent(meshThree);
+	meshThree->RemoveAllChildren();
 
 	while(VDriv->Update()){
 		VDriv->Draw();
@@ -58,7 +56,7 @@ int main(){
 		meshOne->SetRotation(rotation);
 		meshTwo->SetRotation(rotation);
 		meshThree->SetRotation(rotation);
-		if(meshThree != nullptr) meshThree->SetTranslate(toe::core::TOEvector3df(VideoDriver::xdist, 0.0f, -VideoDriver::zdist));
+		if(meshTwo != nullptr) meshTwo->SetTranslate(toe::core::TOEvector3df(VideoDriver::xdist, 0.0f, -VideoDriver::zdist));
 	}
 
     return EXIT_SUCCESS;
