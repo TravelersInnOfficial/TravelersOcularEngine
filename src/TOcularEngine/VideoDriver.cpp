@@ -156,3 +156,7 @@ void VideoDriver::initShaders(){
         p = new Program(shaders);
         m_programs.insert(std::pair<SHADERTYPE, Program*>(TEXT_SHADER, p));
 }
+
+void VideoDriver::SetMouseVisibility(bool visible){
+    m_window->setMouseCursorVisible(visible);
+}

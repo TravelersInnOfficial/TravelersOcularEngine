@@ -56,6 +56,8 @@ int main(){
 
 	int firstB = meshTwo->AddBillboard(pos, "up", 0.2f);
 
+	VDriv->SetMouseVisibility(false);
+
 	while(VDriv->Update()){
 		VDriv->Draw();
 		toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,VDriv->GetTime()/50,0);
