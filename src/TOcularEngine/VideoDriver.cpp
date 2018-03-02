@@ -32,7 +32,7 @@ float VideoDriver::GetTime(){
     return m_clock->getElapsedTime().asMilliseconds();
 }
 
-void VideoDriver::CreateWindow(std::string window_name, toe::core::TOEvector2df dimensions){
+void VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2df dimensions){
     m_name = window_name;
 
     sf::ContextSettings context = sf::ContextSettings(24, 8, 4, 3);
