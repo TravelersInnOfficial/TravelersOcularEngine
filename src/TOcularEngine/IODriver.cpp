@@ -76,7 +76,7 @@ bool IODriver::Update(sf::Event* event){
         case sf::Event::MouseButtonPressed:{
             sfEvent.m_type = Type_MouseButtonPressed;
             // Mouse Button
-            sfEvent.m_mouseButton.button   = (ButtonMouse)event->mouseButton.button;
+            sfEvent.m_mouseButton.button   = (KeyboardKey)(Key_MOUSE_START + event->mouseButton.button);
             sfEvent.m_mouseButton.x        = event->mouseButton.x;
             sfEvent.m_mouseButton.y        = event->mouseButton.y;
             break;
@@ -84,7 +84,7 @@ bool IODriver::Update(sf::Event* event){
         case sf::Event::MouseButtonReleased:{
             sfEvent.m_type = Type_MouseButtonReleased;
             // Mouse Button
-            sfEvent.m_mouseButton.button   = (ButtonMouse)event->mouseButton.button;
+            sfEvent.m_mouseButton.button   = (KeyboardKey)(Key_MOUSE_START + event->mouseButton.button);
             sfEvent.m_mouseButton.x        = event->mouseButton.x;
             sfEvent.m_mouseButton.y        = event->mouseButton.y;
             break;
