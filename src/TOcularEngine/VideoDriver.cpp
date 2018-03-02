@@ -63,6 +63,8 @@ bool VideoDriver::Update(){
 
 void VideoDriver::Draw(){
     privateSceneManager->Draw();
+    // Volvemos a poner el shader por default para el display de los datos
+    glUseProgram(GetProgram(STANDARD_SHADER)->GetProgramID());
     m_window->display();
 }
 
@@ -117,16 +119,29 @@ void VideoDriver::SetIODriver(IODriver* driver){
 }
 
 void VideoDriver::initShaders(){
-    //LOAD IN RESOURCE MANAGER
-    TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/VShader.glsl");
-    TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/FShader.glsl");
+    // CARGAMOS EL PROGRAMA STANDAR
+        // LOAD IN RESOURCE MANAGER
+        TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/VShader.glsl");
+        TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/FShader.glsl");
 
-    //CARGAMOS LOS SHADERS
-	std::map<std::string, GLenum> shaders = std::map<std::string, GLenum>();	
-	shaders.insert(std::pair<std::string, GLenum>("../src/EngineUtilities/Shaders/VShader.glsl", GL_VERTEX_SHADER));
-	shaders.insert(std::pair<std::string, GLenum>("../src/EngineUtilities/Shaders/FShader.glsl", GL_FRAGMENT_SHADER));
-    
-    Program* p = new Program(shaders);
-    glUseProgram(p->GetProgramID());
-    m_programs.insert(std::pair<SHADERTYPE, Program*>(STANDARD_SHADER,p));
+        // CARGAMOS LOS SHADERS
+    	std::map<std::string, GLenum> shaders = std::map<std::string, GLenum>();	
+    	shaders.insert(std::pair<std::string, GLenum>("../src/EngineUtilities/Shaders/VShader.glsl", GL_VERTEX_SHADER));
+    	shaders.insert(std::pair<std::string, GLenum>("../src/EngineUtilities/Shaders/FShader.glsl", GL_FRAGMENT_SHADER));
+        
+        Program* p = new Program(shaders);
+        m_programs.insert(std::pair<SHADERTYPE, Program*>(STANDARD_SHADER,p));
+
+    // CARGAMOS EL PROGRAMA DE TEXTO
+        // LOAD IN RESOURCE MANAGER
+        TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/VShaderText.glsl");
+        TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/FShaderText.glsl");
+
+        // CARGAMOS LOS SHADERS
+        shaders = std::map<std::string, GLenum>();
+        shaders.insert(std::pair<std::string, GLenum>("../src/EngineUtilities/Shaders/VShaderText.glsl", GL_VERTEX_SHADER));
+        shaders.insert(std::pair<std::string, GLenum>("../src/EngineUtilities/Shaders/FShaderText.glsl", GL_FRAGMENT_SHADER));
+
+        p = new Program(shaders);
+        m_programs.insert(std::pair<SHADERTYPE, Program*>(TEXT_SHADER, p));
 }
