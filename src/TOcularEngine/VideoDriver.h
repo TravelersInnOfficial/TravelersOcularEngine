@@ -87,6 +87,10 @@ public:
 
     void SetIODriver(IODriver* driver);
 
+    void SetCursorPosition(int x, int y);
+
+    toe::core::TOEvector2di GetCursorPosition();
+
 private:
     /**
      * @brief Video Driver constructor

@@ -160,3 +160,13 @@ void VideoDriver::initShaders(){
 void VideoDriver::SetMouseVisibility(bool visible){
     m_window->setMouseCursorVisible(visible);
 }
+
+
+void VideoDriver::SetCursorPosition(int x, int y){
+    sf::Mouse::setPosition(sf::Vector2i(x, y), *m_window);
+}
+
+toe::core::TOEvector2di VideoDriver::GetCursorPosition(){
+    sf::Vector2i auxVec = sf::Mouse::getPosition(*m_window);
+    return toe::core::TOEvector2di(auxVec.x, auxVec.y);
+}
