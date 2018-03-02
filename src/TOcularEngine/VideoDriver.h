@@ -66,6 +66,8 @@ public:
 
     std::map<SHADERTYPE,Program*> GetProgramVector();
 
+    void SetMouseVisibility(bool visible);
+
 //SETTERS
     /**
      * @brief Sets the update clear screen color
