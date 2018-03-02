@@ -16,6 +16,10 @@ VideoDriver* VideoDriver::GetInstance(){
 }
 
 VideoDriver::~VideoDriver(){
+    Drop();
+}
+
+void VideoDriver::Drop(){
     std::map<SHADERTYPE, Program*>::iterator it = m_programs.begin();
     for(;it!=m_programs.end();++it){
         m_programs.erase(it);
@@ -88,6 +92,13 @@ void VideoDriver::SetWindowName(std::string name){
 
 std::string VideoDriver::GetWindowName(){
     return m_name;
+}
+
+toe::core::TOEvector2df VideoDriver::GetWindowDimensions(){
+   toe::core::TOEvector2df toRet(0.0f,0.0f);
+   toRet.X = m_window->getSize().x;
+   toRet.Y = m_window->getSize().y;
+   return toRet;
 }
 
 void VideoDriver::SetShaderProgram(SHADERTYPE p){

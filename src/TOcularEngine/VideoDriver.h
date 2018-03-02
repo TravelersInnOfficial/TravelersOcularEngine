@@ -23,6 +23,8 @@ public:
     void Draw();
     void ClearScreen();
 
+    void Drop();
+
     inline static float zdist = 0.0f;
     inline static float xdist = 0.0f;
 
@@ -61,6 +63,8 @@ public:
      * @return std::string m_name
      */
     std::string GetWindowName();
+
+    toe::core::TOEvector2df GetWindowDimensions();
 
 //SETTERS
     /**
