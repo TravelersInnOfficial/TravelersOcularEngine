@@ -22,6 +22,7 @@ public:
     bool Update();
     void Draw();
     void ClearScreen();
+    void Drop();
 
 //GETTERS
     /**
@@ -58,6 +59,8 @@ public:
      * @return std::string m_name
      */
     std::string GetWindowName();
+
+    toe::core::TOEvector2df GetWindowDimensions();
 
     Program* GetProgram(SHADERTYPE);
 
