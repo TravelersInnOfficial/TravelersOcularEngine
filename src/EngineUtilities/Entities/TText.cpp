@@ -46,7 +46,7 @@ void TText::SendShaderData(){
 
 	// Enviamos la matriz MVP
 		// Calculamos la matriz MVP
-		glm::mat4 modelView = ViewMatrix * m_stack.top();
+		glm::mat4 modelView = ViewMatrix;// * m_stack.top();
 		glm::mat4 mvpMatrix = ProjMatrix * modelView;
 
 		// SEND THE MATRIX
@@ -110,7 +110,6 @@ void TText::LoadText(std::string text){
     	// Una vez ya tenemos los vertices calculamos los UV de la letra
     	// En nuestra imagen tenemos 16 columnas y filas, de ahi dividirlo entre 16
     	char character = text[i];
-    	std::cout<<character/16<<std::endl;
     	float uv_x = (character%16)/16.0f;
     	float uv_y = (character/16)/16.0f;
 

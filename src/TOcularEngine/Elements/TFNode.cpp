@@ -134,16 +134,13 @@ void TFNode::RemoveParent(){
 
 TFNode* TFNode::GetParent(){
 	return m_parent;
-<<<<<<< HEAD
-}
-
-std::vector<TFNode*> TFNode::GetChildren(){
-	return m_children;
 }
 
 TFText* TFNode::AddBillboard(toe::core::TOEvector3df position, std::string text, std::string texture){
-	toe::core::TOEvector3df rotation 	= toe::core::TOEvector3df(0, 0, 0);
-	toe::core::TOEvector3df scale 	= toe::core::TOEvector3df(1, 1, 1);
+	glm::vec3 rot 	= m_rotationNode->GetRotation(); //toe::core::TOEvector3df(0, 0, 0);
+	toe::core::TOEvector3df rotation 	= toe::core::TOEvector3df(-rot.x, -rot.y, -rot.z);
+	//toe::core::TOEvector3df rotation 	= toe::core::TOEvector3df(90, 0, 0);
+	toe::core::TOEvector3df scale 		= toe::core::TOEvector3df(1, 1, 1);
 
 	TFText* myText = new TFText(position, rotation, scale, text, texture);
 	
@@ -151,6 +148,4 @@ TFText* TFNode::AddBillboard(toe::core::TOEvector3df position, std::string text,
 	myText->Attach(m_positionNode);
 
 	return myText;
-=======
->>>>>>> 4db43c77467bcf08a70fe6a7a4a1ee0aeb0cd800
 }

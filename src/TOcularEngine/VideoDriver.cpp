@@ -69,6 +69,8 @@ bool VideoDriver::Update(){
 
 void VideoDriver::Draw(){
     privateSceneManager->Draw();
+    // Volvemos a poner el shader por default para el display de los datos
+    glUseProgram(GetProgram(STANDARD_SHADER)->GetProgramID());
     m_window->display();
 }
 
