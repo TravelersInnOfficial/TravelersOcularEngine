@@ -59,7 +59,7 @@ public:
      * @return true The camera has been deleted
      * @return false The camera couldn't be deleted
      */
-    bool        DeleteCamera(TFCamera*, bool eraseChildren = true);
+    bool        DeleteCamera(TFCamera*);
 
     /**
      * @brief Deletes the Light given
@@ -67,7 +67,7 @@ public:
      * @return true The light has been deleted
      * @return false The light couldn't be deleted
      */
-    bool        DeleteLight(TFLight*, bool eraseChildren = true);
+    bool        DeleteLight(TFLight*);
 
     /**
      * @brief Deletes the Mesh given
@@ -75,7 +75,7 @@ public:
      * @return true The mesh has been deleted
      * @return false The mesh couldn't be deleted
      */
-    bool        DeleteMesh(TFMesh*, bool eraseChildren = true);
+    bool        DeleteMesh(TFMesh*);
 
     /**
      * @brief Sets the Ambient Light
@@ -90,6 +90,8 @@ public:
     void Draw();
 
     TNode* GetRootNode();
+
+    TFCamera* GetMainCamera();
 
 private:
     TNode* m_SceneTreeRoot;
