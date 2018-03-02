@@ -1,7 +1,7 @@
 #include "TText.h"
 #include "../TOcularEngine/VideoDriver.h"
 
-TText::TText(std::string text, std::string texture){
+TText::TText(std::string text, float charSize, std::string texture){
 	// Inicializamos los buffer
 	m_vbo = 0;
 	glGenBuffers(1, &m_vbo);
@@ -10,6 +10,9 @@ TText::TText(std::string text, std::string texture){
 	glGenBuffers(1, &m_uvbo);
 
 	m_size = 0;
+
+	// Guardamos el tamanyo de las letras
+	m_charSize = charSize;
 
 	// Ponemos el texto del billboard
 	m_text = "";
@@ -31,6 +34,13 @@ void TText::BeginDraw(){
 }
 
 void TText::EndDraw(){}
+
+void TText::ChangeSize(float charSize){
+	if(m_charSize != charSize){
+		m_charSize = charSize;
+		LoadText(m_text);
+	}
+}
 
 void TText::ChangeText(std::string text){
 	if(text.compare(m_text) != 0){
@@ -104,7 +114,7 @@ void TText::LoadText(std::string text){
 	std::vector<glm::vec2> textUv;
 
 	int size = m_text.length();
-	float SIZE = 0.3f;
+	float SIZE = m_charSize;
 	float x = -SIZE*size/2;	// Centramos el texto en X
 	float y = -SIZE*size/2;	// Centramos el texto en Y
 	for(int i=0; i<size; i++){
