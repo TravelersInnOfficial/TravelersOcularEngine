@@ -55,6 +55,8 @@ int main(){
 	meshTwo->AddBillboard(pos, "mage");
 	meshThree->AddBillboard(pos, "potion");
 
+	VDriv->SetMouseVisibility(false);
+
 	while(VDriv->Update()){
 		VDriv->Draw();
 		toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,VDriv->GetTime()/50,0);

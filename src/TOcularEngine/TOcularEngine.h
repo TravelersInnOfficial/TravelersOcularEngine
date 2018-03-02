@@ -10,6 +10,10 @@ namespace toe{
                  toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,0,0),
                  toe::core::TOEvector3df scale = toe::core::TOEvector3df(1,1,1));
 
+    TFMesh* AddSphere(toe::core::TOEvector3df position = toe::core::TOEvector3df(0,0,0),
+                 toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,0,0),
+                 toe::core::TOEvector3df scale = toe::core::TOEvector3df(1,1,1));
+
     namespace core{ 
         class rect{
             public:
