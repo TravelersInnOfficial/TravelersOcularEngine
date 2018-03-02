@@ -1,6 +1,7 @@
 #include "TNode.h"
 #include "./Entities/TTransform.h"
 #include <iostream>
+#include <glm/gtx/matrix_decompose.hpp>
 
 TNode::TNode(){
 	m_parent = nullptr;
@@ -124,11 +125,48 @@ glm::mat4 TNode::GetTransformMatrix(){
 }
 
 glm::vec3 TNode::GetTraslation(){
-	glm::vec3 toReturn;
+	glm::mat4 myTransform = GetTransformMatrix();
+	
+	glm::vec3 scale;
+	glm::quat rotation;
+	glm::vec3 translation;
+	glm::vec3 skew;
+	glm::vec4 perspective;
+	glm::decompose(myTransform, scale, rotation, translation, skew, perspective);
 
-	glm::mat4 transform = (((TTransform*)GetEntity())->GetTransform());
-	glm::vec4 position = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f) * transform;
+	glm::vec3 toRet = glm::vec3(translation.x, translation.y, translation.z);
+	return toRet;
+}
 
-	toReturn = glm::vec3(position);
-	return toReturn;
+glm::vec3 TNode::GetRotation(){
+	glm::mat4 myTransform = GetTransformMatrix();
+	
+	glm::vec3 scale;
+	glm::quat rotation;
+	glm::vec3 translation;
+	glm::vec3 skew;
+	glm::vec4 perspective;
+	glm::decompose(myTransform, scale, rotation, translation, skew, perspective);
+
+	rotation = glm::conjugate(rotation);
+	glm::vec3 toRet = glm::eulerAngles(rotation);
+	return toRet;
+}
+
+glm::vec3 TNode::GetScale(){
+	glm::mat4 myTransform = GetTransformMatrix();
+	
+	glm::vec3 scale;
+	glm::quat rotation;
+	glm::vec3 translation;
+	glm::vec3 skew;
+	glm::vec4 perspective;
+	glm::decompose(myTransform, scale, rotation, translation, skew, perspective);
+
+	glm::vec3 toRet = glm::vec3(scale.x, scale.y, scale.z);
+	return toRet;
+}
+
+std::vector<TNode*>	TNode::GetChildren(){
+	return m_children;
 }

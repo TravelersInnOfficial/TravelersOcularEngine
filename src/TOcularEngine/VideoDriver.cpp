@@ -32,7 +32,7 @@ float VideoDriver::GetTime(){
     return m_clock->getElapsedTime().asMilliseconds();
 }
 
-void VideoDriver::CreateWindow(std::string window_name, toe::core::TOEvector2df dimensions){
+void VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2df dimensions){
     m_name = window_name;
 
     sf::ContextSettings context = sf::ContextSettings(24, 8, 4, 3);
@@ -70,12 +70,16 @@ bool VideoDriver::Update(){
 void VideoDriver::Draw(){
     privateSceneManager->Draw();
 
+    //2DTEST////////////////////
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
     static const GLfloat g_vertex_buffer_data[] = {
-    -1.0f, -1.0f, 0.0f,
-    1.0f, -1.0f, 0.0f,
-    0.0f,  1.0f, 0.0f,
+        -1.0f, -1.0f, 0.0f,
+        1.0f, -1.0f, 0.0f,
+        0.0f,  1.0f, 0.0f,
     };
-        
+         
     GLuint vertexbuffer;
     // Generar un buffer, poner el resultado en el vertexbuffer que acabamos de crear
     glGenBuffers(1, &vertexbuffer);
@@ -88,17 +92,18 @@ void VideoDriver::Draw(){
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
     glVertexAttribPointer(
-    0,                  // atributo 0. No hay razón particular para el 0, pero debe corresponder en el shader.
-    3,                  // tamaño
-    GL_FLOAT,           // tipo
-    GL_FALSE,           // normalizado?
-    0,                    // Paso
-    (void*)0            // desfase del buffer
+        0,                  // atributo 0. No hay razón particular para el 0, pero debe corresponder en el shader.
+        3,                  // tamaño
+        GL_FLOAT,           // tipo
+        GL_FALSE,           // normalizado?
+        0,                    // Paso
+        (void*)0            // desfase del buffer
     );
-    // Dibujar el triángulo !
+    // Dibujar el triángulo 
     glDrawArrays(GL_TRIANGLES, 0, 3); // Empezar desde el vértice 0S; 3 vértices en total -> 1 triángulo
     glDisableVertexAttribArray(0);
-    
+    //2DTEST////////////////////
+
     m_window->display();
 }
 

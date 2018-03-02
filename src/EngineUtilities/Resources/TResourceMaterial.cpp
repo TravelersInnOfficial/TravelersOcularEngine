@@ -2,6 +2,7 @@
 
 TResourceMaterial::TResourceMaterial(std::string name){
 	m_name = name;
+	
 	// Cargamos los valores por defecto
 	m_colorDifuse 		= glm::vec3(0.6f, 0.6f, 0.6f);
 	m_colorSpecular 	= glm::vec3(0.0f, 0.0f, 0.0f);
@@ -15,6 +16,7 @@ TResourceMaterial::TResourceMaterial(std::string name){
 	m_shininess = 0.0f;
 	m_shininessStrength = 0.0f;
 	m_reflact = 1.0f;
+	
 	SetLoaded(false);
 }
 

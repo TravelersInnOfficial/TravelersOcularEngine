@@ -8,13 +8,13 @@ class TFLight: public TFNode{
 	friend class SceneManager;
 
 public:
-	void SetColor(toe::core::TOEvector4df color);				// Changes the light color
-	void SetIntensity(float intensity);			// Changes the light intensity
-	void SetActive(bool active);				// Changes the light active state
+	void SetColor(toe::core::TOEvector4df color);	// Changes the light color
+	void SetIntensity(float intensity);				// Changes the light intensity
+	void SetActive(bool active);					// Changes the light active state
 
-	toe::core::TOEvector4df GetColor();	// Returns the light color
-	float GetIntensity();	// Returns the light intensity
-	bool GetActive();		// Returns the light active state
+	toe::core::TOEvector4df GetColor();				// Returns the light color
+	float GetIntensity();							// Returns the light intensity
+	bool GetActive();								// Returns the light active state
 
 private:
 	TFLight(
@@ -24,7 +24,7 @@ private:
 		float intensity = 1.0f
 	);
 	~TFLight();
-	void CreateEstructure();
+	void DrawLight(int num);
 
 };
 

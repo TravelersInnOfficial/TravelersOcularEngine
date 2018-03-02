@@ -33,7 +33,7 @@ public:
     };
 
     struct MouseButtonEvent{
-        ButtonMouse 	button; 
+        KeyboardKey 	button; 
         int           	x;      
         int           	y;      
     };

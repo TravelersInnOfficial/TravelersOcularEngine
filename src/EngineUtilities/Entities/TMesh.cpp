@@ -41,7 +41,7 @@ void TMesh::EndDraw(){
 void TMesh::SendShaderData(){
 	Program* myProgram = VideoDriver::GetInstance()->GetProgram(m_program);
 
-    // --------------------------------------------------------ENVIAMOS LOS VERTICES
+    // -------------------------------------------------------- ENVIAMOS LOS VERTICES
     // BIND VERTEX
     GLuint vertexBuffer = m_mesh->GetVertexBuffer();
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
@@ -51,7 +51,7 @@ void TMesh::SendShaderData(){
 	glVertexAttribPointer(posAttrib,3, GL_FLOAT, GL_FALSE, 0*sizeof(float), 0);
 	glEnableVertexAttribArray(posAttrib);
 
-	// --------------------------------------------------------ENVIAMOS LAS NORMALS
+	// -------------------------------------------------------- ENVIAMOS LAS NORMALS
 	// BIND THE NORMALS
     GLuint normalBuffer = m_mesh->GetNormalBuffer();
 	glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
@@ -61,7 +61,7 @@ void TMesh::SendShaderData(){
 	glVertexAttribPointer(normAttrib, 3, GL_FLOAT, GL_FALSE, 0*sizeof(float), 0);
 	glEnableVertexAttribArray(normAttrib);
 
-	// --------------------------------------------------------ENVIAMOS LAS UV
+	// -------------------------------------------------------- ENVIAMOS LAS UV
 	// BIND THE UV
     GLuint uvBuffer = m_mesh->GetUvBuffer();
 	glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
@@ -71,7 +71,7 @@ void TMesh::SendShaderData(){
 	glVertexAttribPointer(uvAttrib, 2, GL_FLOAT, GL_FALSE, 0*sizeof(float), 0);
 	glEnableVertexAttribArray(uvAttrib);
 
-	// --------------------------------------------------------ENVIAMOS LAS MATRICES
+	// -------------------------------------------------------- ENVIAMOS LAS MATRICES
 	// SEND THE MODELVIEW MATRIX
 	glm::mat4 modelView = ViewMatrix * m_stack.top();
 	GLint mvLocation = glGetUniformLocation(myProgram->GetProgramID(), "ModelViewMatrix");
@@ -87,19 +87,36 @@ void TMesh::SendShaderData(){
 	GLint normalMLocation = glGetUniformLocation(myProgram->GetProgramID(), "NormalMatrix");
 	glUniformMatrix3fv(normalMLocation, 1, GL_FALSE, glm::value_ptr(normalMatrix));
 
-	// --------------------------------------------------------ENVIAMOS LA TEXTURA
+	// -------------------------------------------------------- ENVIAMOS LA TEXTURA
 	TResourceTexture* currentTexture = nullptr;
-	if(m_texture != nullptr){
-		currentTexture = m_texture;
-	}else if(m_mesh!=nullptr){
-		currentTexture = m_mesh->GetTexture();
-	}
+	if(m_texture != nullptr) currentTexture = m_texture;
+	else if(m_mesh != nullptr) currentTexture = m_mesh->GetTexture();
 
-	if(currentTexture!=nullptr){
+	if(currentTexture != nullptr){
 		GLuint TextureID = glGetUniformLocation(myProgram->GetProgramID(), "myTextureSampler");
 		glUniform1i(TextureID, 0);
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, currentTexture->GetTextureId());
 	}
+
+	// -------------------------------------------------------- ENVIAMOS EL MATERIAL
+	TResourceMaterial* currentMaterial = nullptr;
+	if(m_material != nullptr) currentMaterial = m_material;
+	if(currentMaterial != nullptr) currentMaterial = m_mesh->GetMaterial();
+
+	if(currentMaterial != nullptr){
+		GLuint shininess = glGetUniformLocation(myProgram->GetProgramID(), "Material.Shininess");
+		glUniform1f(shininess, currentMaterial->GetShininess());
+
+		GLuint diffuse = glGetUniformLocation(myProgram->GetProgramID(), "Material.Diffuse");
+		glUniform3fv(diffuse, 1, glm::value_ptr(currentMaterial->GetColorDifuse()));
+
+		GLuint specular = glGetUniformLocation(myProgram->GetProgramID(), "Material.Specular");
+		glUniform3fv(specular, 1, glm::value_ptr(currentMaterial->GetColorSpecular()));
+
+		GLuint ambient = glGetUniformLocation(myProgram->GetProgramID(), "Material.Ambient");
+		glUniform3fv(ambient, 1, glm::value_ptr(currentMaterial->GetColorAmbient()));
+	}
+
 }

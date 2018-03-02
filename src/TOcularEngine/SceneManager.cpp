@@ -5,6 +5,7 @@
 
 SceneManager::SceneManager(){
 	m_SceneTreeRoot = new TNode(new TTransform());
+	m_ambientLight = glm::vec3(0.25);
 }
 
 SceneManager::~SceneManager(){
@@ -65,82 +66,75 @@ TFRect* SceneManager::Add2DRect(toe::core::TOEvector2df position, toe::core::TOE
 	return toRet;
 }
 
-bool SceneManager::DeleteCamera(TFCamera* cam){
+bool SceneManager::DeleteCamera(TFCamera* cam, bool deleteChildren){
 	bool toRet = false;
 	std::vector<TFCamera*>::iterator it = m_cameras.begin();
-	for(; it!= m_cameras.end(); ++it){
-		if(*it == cam){ m_cameras.erase(it); toRet = true;}
+	for(; it != m_cameras.end() && !toRet; ++it){
+		if(*it == cam){
+			if(deleteChildren) std::cout<<"DELETE CHILDREN NOT IMPLEMENTED"<<std::endl;
+			delete cam;
+			m_cameras.erase(it);
+			toRet = true;
+		}
 	}
 	return toRet;
 }
 
-bool SceneManager::DeleteLight(TFLight* light){
+bool SceneManager::DeleteLight(TFLight* light, bool deleteChildren){
 	bool toRet = false;
 	std::vector<TFLight*>::iterator it = m_lights.begin();
-	for(; it!= m_lights.end(); ++it){
-		if(*it == light){ m_lights.erase(it); toRet = true;}
+	for(; it!= m_lights.end() && !toRet; ++it){
+		if(*it == light){
+			if(deleteChildren) std::cout<<"DELETE CHILDREN NOT IMPLEMENTED"<<std::endl;
+			delete light;
+			m_lights.erase(it);
+			toRet = true;
+		}
 	}
 	return toRet;
 }
 
-bool SceneManager::DeleteMesh(TFMesh* mesh){
-	delete mesh;
-	return true;
+bool SceneManager::DeleteMesh(TFMesh* mesh, bool deleteChildren){
+	bool toRet = false;
+	std::vector<TFMesh*>::iterator it = m_meshes.begin();
+	for(; it!= m_meshes.end() && !toRet; ++it){
+		if(*it == mesh){
+			if(deleteChildren) std::cout<<"DELETE CHILDREN NOT IMPLEMENTED"<<std::endl;
+			delete mesh;
+			m_meshes.erase(it);
+			toRet = true;
+		}
+	}
+	return toRet;
 }
 
 void SceneManager::Update(){
 	
 }
 
-void SceneManager::DrawLight(TFLight* light){
-	Program* myProgram = VideoDriver::GetInstance()->GetProgramVector()[STANDARD_SHADER];
-
-	//glm::vec3 location = glm::vec3(0.0f, 0.0f, 0.0f);
-	glm::vec3 location = glm::vec3(light->m_positionNode->GetTraslation());
-	location.z = VideoDriver::xdist;
-	GLint lightPLocation = glGetUniformLocation(myProgram->GetProgramID(), "Light.Position");
-	glUniform3fv(lightPLocation, 1, glm::value_ptr(location));
-
-	//glm::vec3 ambient = glm::vec3(0.0f, 0.0f, 0.0f);
-	glm::vec3 ambient = glm::vec3(0.0f, 0.0f, 0.0f);
-	GLint ambLocation = glGetUniformLocation(myProgram->GetProgramID(), "Light.Ambient");
-	glUniform3fv(ambLocation, 1, glm::value_ptr(ambient));
-
-	//glm::vec3 diffuse = glm::vec3(0.8f, 0.8f, 0.8f);
-	glm::vec3 diffuse = glm::vec3(light->GetIntensity());
-	GLint diffLocation = glGetUniformLocation(myProgram->GetProgramID(), "Light.Diffuse");
-	glUniform3fv(diffLocation, 1, glm::value_ptr(diffuse));
-
-	//glm::vec3 specular = glm::vec3(1.0f, 0.0f, 0.0f);
-	toe::core::TOEvector4df color = light->GetColor() * light->GetIntensity();
-	
-	glm::vec3 specular = glm::vec3(color.X, color.Y, color.X2);
-	GLint specLocation = glGetUniformLocation(myProgram->GetProgramID(), "Light.Specular");
-	glUniform3fv(specLocation, 1, glm::value_ptr(specular));
+void SceneManager::SetAmbientLight(toe::core::TOEvector3df ambientLight){
+	m_ambientLight = glm::vec3(ambientLight.X, ambientLight.Y, ambientLight.Z);
 }
 
 void SceneManager::Draw(){
-	//VideoDriver::ViewMatrix = main_camera->m_entityNode->GetTransformMatrix();
-	//VideoDriver::ProjMatrix = ((TCamera*)main_camera->m_entityNode->GetEntity())->GetProjectionMatrix();
-	
 	// Select active camera and set view and projection matrix
 	TEntity::SetViewMatrixPtr( main_camera->m_entityNode->GetTransformMatrix() );
-	TEntity::SetProjMatrixPtr( ( (TCamera*)(main_camera->m_entityNode->GetEntity()) )->GetProjectionMatrix() );
-	
-	std::vector<TFLight*>::iterator it = m_lights.begin();
-    for(;it!=m_lights.end();++it){
-		DrawLight(*it);
-    }
 
-	/*
-	glm::mat4 view = main_camera->m_entityNode->GetTransformMatrix();
-    std::map<SHADERTYPE,Program*> p = VideoDriver::GetInstance()->GetProgramVector();
-    std::map<SHADERTYPE,Program*>::iterator it = p.begin();
-    for(;it!=p.end();++it){
-        GLint uniView = glGetUniformLocation(it->second->GetProgramID(), "ViewMatrix");
-	    glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));
-    }
-*/
+	// Gets the Program
+	Program* myProgram = VideoDriver::GetInstance()->GetProgramVector()[STANDARD_SHADER];
+
+	// Sends the Ambient Light
+	GLint ambLocation = glGetUniformLocation(myProgram->GetProgramID(), "SpecialLight.AmbientLight");
+	glUniform3fv(ambLocation, 1, glm::value_ptr(m_ambientLight));
+
+	// Send size of lights
+	GLint size = m_lights.size();
+	GLuint nlightspos = glGetUniformLocation(myProgram->GetProgramID(), "nlights");
+	glUniform1i(nlightspos, size);
+
+	// Draw all lights
+    for(int i = 0; i < size; i++) m_lights[i]->DrawLight(i);
+
     m_SceneTreeRoot->Draw();
 }
 

@@ -28,8 +28,6 @@ protected:
 	);
 	~TFCamera();
 
-	void CreateEstructure();
-
 };
 
 #endif

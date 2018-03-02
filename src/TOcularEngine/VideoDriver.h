@@ -20,7 +20,7 @@ public:
      */
     ~VideoDriver();
 
-    void CreateWindow(std::string window_name, toe::core::TOEvector2df dimensions);
+    void CreateWindows(std::string window_name, toe::core::TOEvector2df dimensions);
     bool Update();
     void Draw();
     void ClearScreen();

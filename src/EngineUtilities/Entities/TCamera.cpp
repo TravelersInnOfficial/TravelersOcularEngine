@@ -109,7 +109,8 @@ glm::mat4 TCamera::RecalculateProjectionMatrix(){
 	if(m_perspective) m_projectionMatrix = CalculatePerspectiveMatrix();
 	else m_projectionMatrix = CalculateOrthogonalMatrix();
 
-	SendMatrixToShader();
+	// Set Entity ProjectionMatrix
+	ProjMatrix = m_projectionMatrix;
 	return(m_projectionMatrix);
 }
 
@@ -119,15 +120,6 @@ glm::mat4 TCamera::CalculatePerspectiveMatrix(){
 
 glm::mat4 TCamera::CalculateOrthogonalMatrix(){
 	return(glm::ortho(m_left, m_right, m_bottom, m_top, m_near, m_far));
-}
-
-void TCamera::SendMatrixToShader(){
-	std::map<SHADERTYPE,Program*> programs = VideoDriver::GetInstance()->GetProgramVector();
-	std::map<SHADERTYPE,Program*>::iterator it = programs.begin();
-	for(; it!=programs.end();++it){
-		GLint uniProj = glGetUniformLocation(it->second->GetProgramID(), "ProjectionMatrix");
-		glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(m_projectionMatrix));
-	}
 }
 
 /*############################################################################################
