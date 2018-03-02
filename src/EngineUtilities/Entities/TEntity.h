@@ -21,6 +21,7 @@ protected:
 	static std::stack<glm::mat4> m_stack;
 	static glm::mat4 ViewMatrix;
 	static glm::mat4 ProjMatrix;
+	
 	SHADERTYPE m_program;
 
 };

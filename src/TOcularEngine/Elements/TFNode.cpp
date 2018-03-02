@@ -1,4 +1,5 @@
 #include "TFNode.h"
+#include "./TFText.h"
 #include "./../SceneManager.h"
 #include "./../VideoDriver.h"
 
@@ -156,4 +157,16 @@ TFNode* TFNode::GetParent(){
 
 std::vector<TFNode*> TFNode::GetChildren(){
 	return m_children;
+}
+
+TFText* TFNode::AddBillboard(toe::core::TOEvector3df position, std::string text, std::string texture){
+	toe::core::TOEvector3df rotation 	= toe::core::TOEvector3df(0, 0, 0);
+	toe::core::TOEvector3df scale 	= toe::core::TOEvector3df(1, 1, 1);
+
+	TFText* myText = new TFText(position, rotation, scale, text, texture);
+	
+	m_billboards.push_back(myText);
+	myText->Attach(m_positionNode);
+
+	return myText;
 }

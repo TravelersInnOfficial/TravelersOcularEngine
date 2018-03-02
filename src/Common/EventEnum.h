@@ -131,7 +131,7 @@ enum KeyboardKey{
     Key_F15         =  99,
     Key_Pause		= 100,
 
-    Key_KeyCount	= 101,
+    Key_KeyCount	= 101
 };
 
 enum ButtonMouse{
