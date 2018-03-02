@@ -45,10 +45,17 @@ int main(){
 
 	CreateTree(&myCamera, &meshOne, &meshTwo, &meshThree, &light1, &light2);
 
+<<<<<<< HEAD
 	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0.0f, 1.5f, 0.0f);
 	meshOne->AddBillboard(pos, "cube");
 	meshTwo->AddBillboard(pos, "mage");
 	//meshThree->AddBillboard(pos, "potion");
+=======
+	// TF Parenting Test
+	meshOne->SetParent(meshThree);
+	meshTwo->SetParent(meshThree);
+	meshThree->RemoveAllChildren();
+>>>>>>> 4db43c77467bcf08a70fe6a7a4a1ee0aeb0cd800
 
 	while(VDriv->Update()){
 		VDriv->Draw();

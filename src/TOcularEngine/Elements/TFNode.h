@@ -33,6 +33,8 @@ public:
 
 	void AddChild(TFNode* children);			// Adds a Children to the TFNode
 	void RemoveChild(TFNode* children);			// Removes Children from the TFNode
+	void RemoveAllChildren();					// Remove ALL Children from the TFNode
+
 	void SetParent(TFNode* parent = nullptr);	// Adds a Parent to the TFNode
 	void RemoveParent();						// Removes Parent from the TFNode
 
