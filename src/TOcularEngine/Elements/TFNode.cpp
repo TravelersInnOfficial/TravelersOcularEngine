@@ -136,17 +136,71 @@ TFNode* TFNode::GetParent(){
 	return m_parent;
 }
 
-TFText* TFNode::AddBillboard(toe::core::TOEvector3df position, std::string text, std::string texture){
-	glm::vec3 rot 	= m_rotationNode->GetRotation(); //toe::core::TOEvector3df(0, 0, 0);
+void TFNode::DeleteAllBillboard(){
+	int size = m_billboards.size();
+	for(int i=0; i<size; i++){
+		// Eliminamos el billboard en el caso de que haya uno
+		if(m_billboards[i] != nullptr){
+			delete m_billboards[i];
+		}
+	}
+	// Dejamos el vector limpio a 0
+	m_billboards.clear();
+}
 
-	toe::core::TOEvector3df rotation 	= toe::core::TOEvector3df(-rot.x, -rot.y, -rot.z);
-	//toe::core::TOEvector3df rotation 	= toe::core::TOEvector3df(90, 0, 0);
+void TFNode::DeleteBillboard(int id){
+	int size = m_billboards.size();
+	if(id>=0 && id<size){
+		// Comprobamos que existe el billboard
+		if(m_billboards[id] != nullptr){
+			// Eliminamos el TFNode que habia en esa posicion
+			delete m_billboards[id];
+			// Liberamos la posicion que este ocupaba
+			m_billboards[id] = nullptr;
+		}
+	}
+}
+
+void TFNode::SetBillboardSize(float charSize, int id){
+	int size = m_billboards.size();
+	if(id>=0 && id<size){
+		// Comprobamos que exista antes
+		if(m_billboards[id] != nullptr){
+			m_billboards[id]->SetSize(charSize);
+		}
+	}
+}
+
+void TFNode::SetBillboardText(std::string text, int id){
+	int size = m_billboards.size();
+	if(id>=0 && id<size){
+		// Comprobamos que exista antes
+		if(m_billboards[id] != nullptr){
+			m_billboards[id]->SetText(text);
+		}
+	}
+}
+
+int TFNode::AddBillboard(toe::core::TOEvector3df position, std::string text, float charSize, std::string texture){
+	// Ponemos la rotacion a 0, en si no se llegara a rotar nunca el billboard
+	toe::core::TOEvector3df rotation 	= toe::core::TOEvector3df(0, 0, 0);
+	// La escala por defecto la pondremos a 1
 	toe::core::TOEvector3df scale 		= toe::core::TOEvector3df(1, 1, 1);
 
-	TFText* myText = new TFText(position, rotation, scale, text, texture);
+	TFText* myText = new TFText(position, rotation, scale, text, charSize, texture);
 	
-	m_billboards.push_back(myText);
 	myText->Attach(m_positionNode);
 
-	return myText;
+	// Miramos si hay un hueco vacio en el vector de billboards
+	int size = m_billboards.size();
+	for(int i=0; i<size; i++){
+		// En el caso de que haya un hueco vacio lo ponemos en esa posicion
+		if(m_billboards[i]==nullptr){
+			m_billboards[i] = myText;
+			return i;
+		}
+	}
+	// En el caso de no haber encontrado ninguna posicion libre lo anyadimos al final
+	m_billboards.push_back(myText);
+	return size;
 }

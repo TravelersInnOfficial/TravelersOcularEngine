@@ -50,10 +50,11 @@ int main(){
 
 	CreateTree(&myCamera, &meshOne, &meshTwo, &meshThree, &light1, &light2);
 
-	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0.0f, 1.5f, 0.0f);
+	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0.0f, 1.7f, 0.0f);
 	meshOne->AddBillboard(pos, "cube");
-	meshTwo->AddBillboard(pos, "mage");
 	meshThree->AddBillboard(pos, "potion");
+
+	int firstB = meshTwo->AddBillboard(pos, "up", 0.2f);
 
 	VDriv->SetMouseVisibility(false);
 

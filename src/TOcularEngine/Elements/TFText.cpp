@@ -1,6 +1,6 @@
 #include "./TFText.h"
 
-TFText::TFText(	toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale, std::string text, std::string texture):TFNode(){
+TFText::TFText(	toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale, std::string text, float charSize, std::string texture):TFNode(){
 	TTransform* t = (TTransform*) m_rotationNode->GetEntity();
 	t->Rotate(rotation.X, rotation.Y, rotation.Z);
 
@@ -10,7 +10,7 @@ TFText::TFText(	toe::core::TOEvector3df position, toe::core::TOEvector3df rotati
 	t = (TTransform*) m_positionNode->GetEntity();
 	t->Translate(position.X, position.Y, position.Z);
 
-	m_entityNode->SetEntity(new TText(text, texture));
+	m_entityNode->SetEntity(new TText(text, charSize, texture));
 }
 
 TFText::~TFText(){}
@@ -18,4 +18,9 @@ TFText::~TFText(){}
 void TFText::SetText(std::string text){
 	TText* myText = (TText*)m_entityNode->GetEntity();
 	myText->ChangeText(text);
+}
+
+void TFText::SetSize(float charSize){
+	TText* myText = (TText*)m_entityNode->GetEntity();
+	myText->ChangeSize(charSize);
 }
