@@ -57,7 +57,7 @@ int main(){
 
 	while(VDriv->Update()){
 		VDriv->Draw();
-		toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,VDriv->GetTime()/10,0);
+		toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,VDriv->GetTime()/50,0);
 		meshOne->SetRotation(rotation);
 		meshTwo->SetRotation(rotation);
 		meshThree->SetRotation(rotation);

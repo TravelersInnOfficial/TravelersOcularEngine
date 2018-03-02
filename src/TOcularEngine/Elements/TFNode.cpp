@@ -138,6 +138,7 @@ TFNode* TFNode::GetParent(){
 
 TFText* TFNode::AddBillboard(toe::core::TOEvector3df position, std::string text, std::string texture){
 	glm::vec3 rot 	= m_rotationNode->GetRotation(); //toe::core::TOEvector3df(0, 0, 0);
+
 	toe::core::TOEvector3df rotation 	= toe::core::TOEvector3df(-rot.x, -rot.y, -rot.z);
 	//toe::core::TOEvector3df rotation 	= toe::core::TOEvector3df(90, 0, 0);
 	toe::core::TOEvector3df scale 		= toe::core::TOEvector3df(1, 1, 1);
