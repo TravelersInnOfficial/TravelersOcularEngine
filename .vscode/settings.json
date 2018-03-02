@@ -61,7 +61,8 @@
         "__config": "cpp",
         "__nullptr": "cpp",
         "bitset": "cpp",
-        "deque": "cpp"
+        "deque": "cpp",
+        "hash_map": "cpp"
     },
     "files.exclude": {
         "**/.git": true,

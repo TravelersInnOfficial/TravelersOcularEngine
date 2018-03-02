@@ -11,6 +11,8 @@
 #include <TOEvector2d.h>
 
 class VideoDriver{
+    friend class TFDrawable;
+    friend class TFRect;
 public:
     /**
      * @brief Video Driver destructor
@@ -83,6 +85,9 @@ public:
 
     std::map<SHADERTYPE,Program*> GetProgramVector();
 
+    toe::core::TOEvector2df GetWindowDimensions();
+
+    void PrintDrawable(TFDrawable& object);
 
 private:
     sf::RenderWindow* m_window;

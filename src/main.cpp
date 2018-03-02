@@ -41,8 +41,12 @@ int main(){
 
 	CreateTree(&myCamera, &meshOne, &meshTwo, &meshThree);
 
+	//TFRect* rect = nullptr;
+	//rect = VDriv->GetSceneManager()->Add2DRect(toe::core::TOEvector2df(0,0),toe::core::TOEvector2df(100,100)); 
+
 	VDriv->SetClearScreenColor(toe::core::TOEvector4df(0.7, 0.7, 1, 1));
 	while(VDriv->Update()){
+		//VDriv->PrintDrawable(*rect);
 		VDriv->Draw();
 		toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,VDriv->GetTime()/10,0);
 		meshOne->SetRotation(rotation);

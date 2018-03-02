@@ -9,24 +9,7 @@ namespace toe{
     TFMesh* AddCube(toe::core::TOEvector3df position = toe::core::TOEvector3df(0,0,0),
                  toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,0,0),
                  toe::core::TOEvector3df scale = toe::core::TOEvector3df(1,1,1));
-
-    namespace core{ 
-        class rect{
-            public:
-                rect(float x, float y, float w, float h){ m_x = x; m_y = y; m_w = w; m_h = h;};
-                ~rect();
-
-            private:
-
-            float m_x = 0.0f;
-            float m_y = 0.0f;
-            float m_w = 0.0f;
-            float m_h = 0.0f;
-        };
-
-        void Draw2DRect(float color ,toe::core::rect );
-    }
-
+                 
     namespace{
         VideoDriver* privateVideoDriver;
         SceneManager* privateSceneManager;

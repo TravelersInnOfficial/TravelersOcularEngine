@@ -4,7 +4,8 @@
 #include "./Elements/TFCamera.h"
 #include "./Elements/TFLight.h"
 #include "./Elements/TFMesh.h"
-
+#include "./Elements/TFDrawables/TFRect.h"
+#include <TOEvector2d.h>
 #include <vector>
 
 class SceneManager{
@@ -54,6 +55,16 @@ public:
     TFMesh*     AddMesh(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale, std::string meshPath);
 
     /**
+     * @brief Adds a 2d rectangle to the screen
+     * 
+     * @param position 
+     * @param size 
+     * @param rotation 
+     * @return TFRect* 
+     */
+    TFRect*     Add2DRect(toe::core::TOEvector2df position, toe::core::TOEvector2df size, float rotation = 0.0f);
+    
+    /**
      * @brief Deletes the Camera given
      * 
      * @return true The camera has been deleted
@@ -86,10 +97,10 @@ public:
 
     TNode* GetRootNode();
 
+    GLuint vao;
 private:
     TNode* m_SceneTreeRoot;
 
-    GLuint vao;
     Program* program;
 
     std::vector<TFCamera*>  m_cameras;  // Pointers to the cameras created
