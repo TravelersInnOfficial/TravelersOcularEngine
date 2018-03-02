@@ -22,8 +22,6 @@ public:
 
 private:
 
-	SHADERTYPE m_program;
-
 	TResourceMesh* 		m_mesh;
 	TResourceTexture* 	m_texture;
 	TResourceMaterial* 	m_material;

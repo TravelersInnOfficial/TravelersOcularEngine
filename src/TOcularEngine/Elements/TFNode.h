@@ -7,8 +7,11 @@
 #include "./../../EngineUtilities/TNode.h"
 #include "./../../EngineUtilities/Entities/TTransform.h"
 #include "./../../EngineUtilities/Entities/TMesh.h"
+#include "./../../EngineUtilities/Entities/TText.h"
 #include "./../../EngineUtilities/Entities/TLight.h"
 #include "./../../EngineUtilities/Entities/TCamera.h"
+
+class TFText;
 
 class SceneManager;
 
@@ -35,6 +38,8 @@ public:
 	void SetParent(TFNode* parent = nullptr);	// Adds a Parent to the TFNode
 	void RemoveParent();						// Removes Parent from the TFNode
 
+	TFText* AddBillboard(toe::core::TOEvector3df position, std::string text, std::string texture = "");
+
 	TFNode* GetParent();
 	std::vector<TFNode*> GetChildren();
 
@@ -44,8 +49,9 @@ protected:
 	TNode* m_positionNode;
 	TNode* m_entityNode;
 	
-	std::vector<TFNode*> m_children;
-	TFNode* m_parent;				// If Parent is null, this TFNode is attatched to the ROOT NODE
+	std::vector<TFText*> m_billboards;	// Vector of billboards of the TFNode
+	std::vector<TFNode*> m_children;	// Vector of children of the TFNode
+	TFNode* m_parent;					// If Parent is null, this TFNode is attatched to the ROOT NODE
 
 	TFNode();
 	virtual ~TFNode();

@@ -33,7 +33,7 @@ void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh*
 
 int main(){
 	VideoDriver* VDriv = toe::GetVideoDriver();
-	VDriv->CreateWindow("Wizards&Warlocks",toe::core::TOEvector2df(800,600));
+	VDriv->CreateWindows("Wizards&Warlocks",toe::core::TOEvector2df(800,600));
 	VDriv->SetClearScreenColor(toe::core::TOEvector4df(0.7, 0.7, 1, 1));
 
 	TFCamera* myCamera = nullptr;
@@ -45,10 +45,10 @@ int main(){
 
 	CreateTree(&myCamera, &meshOne, &meshTwo, &meshThree, &light1, &light2);
 
-	// TF Parenting Test
-	meshOne->SetParent(meshThree);
-	meshTwo->SetParent(meshThree);
-	meshThree->RemoveAllChildren();
+	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0.0f, 1.5f, 0.0f);
+	meshOne->AddBillboard(pos, "cube");
+	meshTwo->AddBillboard(pos, "mage");
+	meshThree->AddBillboard(pos, "potion");
 
 	while(VDriv->Update()){
 		VDriv->Draw();
