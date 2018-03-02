@@ -5,7 +5,9 @@ enum SHADERTYPE {
 	STANDARD_SHADER = 0,
 	CARTOON_SHADER  = 1,
 	GHOST_SHADER    = 2,
-    WATER_SHADER    = 3
+    WATER_SHADER    = 3,
+    TEXT_SHADER		= 4,
+	TWOD_SHADER		= 5
 };
 
 #endif

@@ -45,13 +45,13 @@ int main(){
 
 	CreateTree(&myCamera, &meshOne, &meshTwo, &meshThree, &light1, &light2);
 
-	// TF Parenting Test
-	meshOne->SetParent(meshThree);
-	meshTwo->SetParent(meshThree);
-	meshThree->RemoveAllChildren();
+	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0.0f, 1.5f, 0.0f);
+	meshOne->AddBillboard(pos, "cube");
+	meshTwo->AddBillboard(pos, "mage");
+	meshThree->AddBillboard(pos, "potion");
 
-	//TFRect* rect = nullptr;
-	//rect = VDriv->GetSceneManager()->Add2DRect(toe::core::TOEvector2df(0,0),toe::core::TOEvector2df(100,100)); 
+	TFRect* rect = nullptr;
+	rect = VDriv->GetSceneManager()->Add2DRect(toe::core::TOEvector2df(100,100)); 
 
 	VDriv->SetClearScreenColor(toe::core::TOEvector4df(0.7, 0.7, 1, 1));
 	while(VDriv->Update()){

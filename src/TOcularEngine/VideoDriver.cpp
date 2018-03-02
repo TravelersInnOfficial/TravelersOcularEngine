@@ -16,6 +16,10 @@ VideoDriver* VideoDriver::GetInstance(){
 }
 
 VideoDriver::~VideoDriver(){
+    Drop();
+}
+
+void VideoDriver::Drop(){
     std::map<SHADERTYPE, Program*>::iterator it = m_programs.begin();
     for(;it!=m_programs.end();++it){
         m_programs.erase(it);
@@ -70,40 +74,8 @@ bool VideoDriver::Update(){
 void VideoDriver::Draw(){
     privateSceneManager->Draw();
 
-    //2DTEST////////////////////
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-    static const GLfloat g_vertex_buffer_data[] = {
-        -1.0f, -1.0f, 0.0f,
-        1.0f, -1.0f, 0.0f,
-        0.0f,  1.0f, 0.0f,
-    };
-         
-    GLuint vertexbuffer;
-    // Generar un buffer, poner el resultado en el vertexbuffer que acabamos de crear
-    glGenBuffers(1, &vertexbuffer);
-    // Los siguientes comandos le darán características especiales al 'vertexbuffer' 
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    // Darle nuestros vértices a  OpenGL.
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
-
-    // 1rst attribute buffer : vértices
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    glVertexAttribPointer(
-        0,                  // atributo 0. No hay razón particular para el 0, pero debe corresponder en el shader.
-        3,                  // tamaño
-        GL_FLOAT,           // tipo
-        GL_FALSE,           // normalizado?
-        0,                    // Paso
-        (void*)0            // desfase del buffer
-    );
-    // Dibujar el triángulo 
-    glDrawArrays(GL_TRIANGLES, 0, 3); // Empezar desde el vértice 0S; 3 vértices en total -> 1 triángulo
-    glDisableVertexAttribArray(0);
-    //2DTEST////////////////////
-
+    // Volvemos a poner el shader por default para el display de los datos
+    glUseProgram(GetProgram(STANDARD_SHADER)->GetProgramID());
     m_window->display();
 }
 
@@ -130,18 +102,44 @@ void VideoDriver::SetShaderProgram(SHADERTYPE p){
 }
 
 void VideoDriver::initShaders(){
-    //LOAD IN RESOURCE MANAGER
-    TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/VShader.glsl");
-    TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/FShader.glsl");
+    // CARGAMOS EL PROGRAMA STANDAR
+        // LOAD IN RESOURCE MANAGER
+        TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/VShader.glsl");
+        TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/FShader.glsl");
 
-    //CARGAMOS LOS SHADERS
-	std::map<std::string, GLenum> shaders = std::map<std::string, GLenum>();	
-	shaders.insert(std::pair<std::string, GLenum>("../src/EngineUtilities/Shaders/VShader.glsl", GL_VERTEX_SHADER));
-	shaders.insert(std::pair<std::string, GLenum>("../src/EngineUtilities/Shaders/FShader.glsl", GL_FRAGMENT_SHADER));
+        // CARGAMOS LOS SHADERS
+    	std::map<std::string, GLenum> shaders = std::map<std::string, GLenum>();	
+    	shaders.insert(std::pair<std::string, GLenum>("../src/EngineUtilities/Shaders/VShader.glsl", GL_VERTEX_SHADER));
+    	shaders.insert(std::pair<std::string, GLenum>("../src/EngineUtilities/Shaders/FShader.glsl", GL_FRAGMENT_SHADER));
+        
+        Program* p = new Program(shaders);
+        m_programs.insert(std::pair<SHADERTYPE, Program*>(STANDARD_SHADER,p));
+
+    // CARGAMOS EL PROGRAMA DE TEXTO
+        // LOAD IN RESOURCE MANAGER
+        TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/VShaderText.glsl");
+        TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/FShaderText.glsl");
+
+        // CARGAMOS LOS SHADERS
+        shaders = std::map<std::string, GLenum>();
+        shaders.insert(std::pair<std::string, GLenum>("../src/EngineUtilities/Shaders/VShaderText.glsl", GL_VERTEX_SHADER));
+        shaders.insert(std::pair<std::string, GLenum>("../src/EngineUtilities/Shaders/FShaderText.glsl", GL_FRAGMENT_SHADER));
+
+        p = new Program(shaders);
+        m_programs.insert(std::pair<SHADERTYPE, Program*>(TEXT_SHADER, p));
     
-    Program* p = new Program(shaders);
-    glUseProgram(p->GetProgramID());
-    m_programs.insert(std::pair<SHADERTYPE, Program*>(STANDARD_SHADER,p));
+    // CARGAMOS EL PROGRAMA DE 2D
+        // LOAD IN RESOURCE MANAGER
+        TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/VShader2D.glsl");
+        TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/FShader2D.glsl");
+
+        // CARGAMOS LOS SHADERS
+        shaders = std::map<std::string, GLenum>();
+        shaders.insert(std::pair<std::string, GLenum>("../src/EngineUtilities/Shaders/VShader2D.glsl", GL_VERTEX_SHADER));
+        shaders.insert(std::pair<std::string, GLenum>("../src/EngineUtilities/Shaders/FShader2D.glsl", GL_FRAGMENT_SHADER));
+
+        p = new Program(shaders);
+        m_programs.insert(std::pair<SHADERTYPE, Program*>(TWOD_SHADER, p));
 }
 
 Program* VideoDriver::GetProgram(SHADERTYPE p){
@@ -159,6 +157,3 @@ toe::core::TOEvector2df VideoDriver::GetWindowDimensions(){
     return toRet;
 }
 
-void VideoDriver::PrintDrawable(TFDrawable& object){
-  
-}

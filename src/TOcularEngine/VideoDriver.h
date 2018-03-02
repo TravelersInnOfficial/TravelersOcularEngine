@@ -25,6 +25,8 @@ public:
     void Draw();
     void ClearScreen();
 
+    void Drop();
+
     inline static float zdist = 0.0f;
     inline static float xdist = 0.0f;
 
@@ -64,6 +66,8 @@ public:
      */
     std::string GetWindowName();
 
+    toe::core::TOEvector2df GetWindowDimensions();
+
 //SETTERS
     /**
      * @brief Sets the update clear screen color
@@ -84,10 +88,6 @@ public:
     Program* GetProgram(SHADERTYPE);
 
     std::map<SHADERTYPE,Program*> GetProgramVector();
-
-    toe::core::TOEvector2df GetWindowDimensions();
-
-    void PrintDrawable(TFDrawable& object);
 
 private:
     sf::RenderWindow* m_window;

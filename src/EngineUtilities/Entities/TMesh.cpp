@@ -40,6 +40,7 @@ void TMesh::EndDraw(){
 
 void TMesh::SendShaderData(){
 	Program* myProgram = VideoDriver::GetInstance()->GetProgram(m_program);
+	glUseProgram(myProgram->GetProgramID());
 
     // -------------------------------------------------------- ENVIAMOS LOS VERTICES
     // BIND VERTEX

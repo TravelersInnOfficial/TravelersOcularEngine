@@ -1,7 +1,6 @@
 #include "SceneManager.h"
 #include "VideoDriver.h"
 #include "../EngineUtilities/Entities/TEntity.h"
-#include "./Elements/TFDrawables/TFRect.h"
 
 SceneManager::SceneManager(){
 	m_SceneTreeRoot = new TNode(new TTransform());
@@ -57,12 +56,10 @@ TFMesh* SceneManager::AddMesh(toe::core::TOEvector3df position, toe::core::TOEve
 	return toRet;
 }
 
-TFRect* SceneManager::Add2DRect(toe::core::TOEvector2df position, toe::core::TOEvector2df size, float rotation){
-	TFRect* toRet = new TFRect(size);
-	toRet->SetPosition(position);
-	toRet->SetOrigin(toe::core::TOEvector2df(0,0));
-	toRet->SetRotation(rotation);
-	toRet->SetColor(toe::core::TOEvector4df(255,0,0,255));
+TFRect* SceneManager::Add2DRect(toe::core::TOEvector2df size, toe::core::TOEvector2df position, float rotation){
+	TFRect* toRet = nullptr;
+	toRet = new TFRect(size,position,rotation);
+	toRet->Attach(m_SceneTreeRoot);
 	return toRet;
 }
 

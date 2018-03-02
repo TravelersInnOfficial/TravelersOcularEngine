@@ -83,7 +83,7 @@ bool TObjectLoader::LoadObj(TResourceMesh* mesh, int option){
 	GLuint currentBuffer = mesh->GetVertexBuffer();
 	glBindBuffer(GL_ARRAY_BUFFER, currentBuffer);
 	glBufferData(GL_ARRAY_BUFFER, vertex.size()*sizeof(glm::vec3), &vertex[0], GL_STATIC_DRAW);
-	glBufferStorage(GL_ARRAY_BUFFER, vertex.size()*sizeof(glm::vec3), &vertex[0], GL_STATIC_DRAW);
+	//glBufferStorage(GL_ARRAY_BUFFER, vertex.size()*sizeof(glm::vec3), &vertex[0], GL_STATIC_DRAW);
 
 	// Cargamos el buffer de uvs
 	currentBuffer = mesh->GetUvBuffer();

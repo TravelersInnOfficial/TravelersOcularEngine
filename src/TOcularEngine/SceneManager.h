@@ -4,7 +4,7 @@
 #include "./Elements/TFCamera.h"
 #include "./Elements/TFLight.h"
 #include "./Elements/TFMesh.h"
-#include "./Elements/TFDrawables/TFRect.h"
+#include "./Elements/TFRect.h"
 #include <TOEvector2d.h>
 #include <vector>
 
@@ -62,7 +62,7 @@ public:
      * @param rotation 
      * @return TFRect* 
      */
-    TFRect*     Add2DRect(toe::core::TOEvector2df position, toe::core::TOEvector2df size, float rotation = 0.0f);
+    TFRect*     Add2DRect(toe::core::TOEvector2df size, toe::core::TOEvector2df position = toe::core::TOEvector2df(0,0), float rotation = 0.0f);
     
     /**
      * @brief Deletes the Camera given
