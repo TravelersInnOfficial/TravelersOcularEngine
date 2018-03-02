@@ -1,6 +1,9 @@
 #include "TOcularEngine/TOcularEngine.h"
 #include "TOcularEngine/VideoDriver.h"
 #include "TOcularEngine/SceneManager.h"
+
+#include "EventHandler.h"
+
 void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh** meshThree, TFLight** light1, TFLight** light2){
 	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
 	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0, 0, 0);
@@ -35,6 +38,8 @@ int main(){
 	VideoDriver* VDriv = toe::GetVideoDriver();
 	VDriv->CreateWindows("Wizards&Warlocks",toe::core::TOEvector2df(800,600));
 	VDriv->SetClearScreenColor(toe::core::TOEvector4df(0.7, 0.7, 1, 1));
+    EventHandler* handler = new EventHandler();	
+	VDriv->SetIODriver(handler);
 
 	TFCamera* myCamera = nullptr;
 	TFMesh* meshOne = nullptr;
@@ -56,7 +61,7 @@ int main(){
 		meshOne->SetRotation(rotation);
 		meshTwo->SetRotation(rotation);
 		meshThree->SetRotation(rotation);
-		if(meshTwo != nullptr) meshTwo->SetTranslate(toe::core::TOEvector3df(VideoDriver::xdist, 0.0f, -VideoDriver::zdist));
+		if(meshTwo != nullptr) meshTwo->SetTranslate(toe::core::TOEvector3df(EventHandler::xdist, 0.0f, -EventHandler::zdist));
 	}
 
     return EXIT_SUCCESS;
