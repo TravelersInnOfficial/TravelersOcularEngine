@@ -20,6 +20,18 @@ TFNode::TFNode(){
 }
 
 TFNode::~TFNode(){
+	// Nos encargamos primero de eliminar todos los hijos
+	int size = m_children.size();
+	for(int i=size-1; i>=0; i--){
+		TFNode* node = m_children[i];
+		m_children.erase(m_children.begin() + i);
+		delete node;
+	}
+
+	// Seguidamente eliminamos todos los billboards
+	DeleteAllBillboard();
+
+	//  Para finalizar le quitamos el padre y lo eliminamos
 	RemoveParent();
 	delete m_rotationNode;
 }
@@ -116,7 +128,10 @@ std::vector<TFNode*> TFNode::GetChildren(){
 }
 
 void TFNode::SetParent(TFNode* parent){
-	if(parent == nullptr && parent != m_parent){
+	if(parent != m_parent){
+		if(m_parent != nullptr){
+			m_parent->RemoveChild(this);
+		}
 		m_parent = parent;
 		Attach(m_parent->m_positionNode);
 		m_parent->AddChild(this);
@@ -180,6 +195,8 @@ void TFNode::SetBillboardText(std::string text, int id){
 		}
 	}
 }
+
+void TFNode::DeleteChildren(){}
 
 int TFNode::AddBillboard(toe::core::TOEvector3df position, std::string text, float charSize, std::string texture){
 	// Ponemos la rotacion a 0, en si no se llegara a rotar nunca el billboard

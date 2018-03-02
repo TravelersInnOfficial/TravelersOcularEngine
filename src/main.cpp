@@ -52,15 +52,16 @@ int main(){
 
 	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0.0f, 1.7f, 0.0f);
 	meshOne->AddBillboard(pos, "cube");
+	meshTwo->AddBillboard(pos, "up", 0.2f);
 	meshThree->AddBillboard(pos, "potion");
 
-	int firstB = meshTwo->AddBillboard(pos, "up", 0.2f);
+	meshThree->SetParent(meshTwo);
 
 	VDriv->SetMouseVisibility(false);
 
 	while(VDriv->Update()){
 		VDriv->Draw();
-		toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,VDriv->GetTime()/50,0);
+		toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,VDriv->GetTime()/5,0);
 		meshOne->SetRotation(rotation);
 		meshTwo->SetRotation(rotation);
 		meshThree->SetRotation(rotation);
