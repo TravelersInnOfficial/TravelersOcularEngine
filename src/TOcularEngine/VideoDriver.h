@@ -23,9 +23,6 @@ public:
     void Draw();
     void ClearScreen();
 
-    inline static float zdist = 0.0f;
-    inline static float xdist = 0.0f;
-
 //GETTERS
     /**
      * @brief Returns an instance of the Video Driver
@@ -39,14 +36,14 @@ public:
      * 
      * @return SceneManager* privateSceneManager
      */
-    SceneManager* GetSceneManager(){return privateSceneManager;};
+    SceneManager* GetSceneManager();
 
     /**
      * @brief Returns the private Input/Output Driver from the Video Driver
      * 
      * @return IODriver* privateIODriver
      */
-    IODriver* GetIOManager(){return privateIODriver;};
+    IODriver* GetIOManager();
 
     /**
      * @brief Returns the engine time elapsed in miliseconds
@@ -61,6 +58,10 @@ public:
      * @return std::string m_name
      */
     std::string GetWindowName();
+
+    Program* GetProgram(SHADERTYPE);
+
+    std::map<SHADERTYPE,Program*> GetProgramVector();
 
 //SETTERS
     /**
@@ -79,16 +80,21 @@ public:
 
     void SetShaderProgram(SHADERTYPE);
 
-    Program* GetProgram(SHADERTYPE);
-
-    std::map<SHADERTYPE,Program*> GetProgramVector();
-
+    void SetIODriver(IODriver* driver);
 
 private:
+    /**
+     * @brief Video Driver constructor
+     * 
+     */
+    VideoDriver();
+
+    // Private SFML stuff
     sf::RenderWindow* m_window;
     std::string m_name;
     sf::Clock* m_clock;
 
+    // Private Graphic Engine stuff
     SceneManager* privateSceneManager = nullptr;
     IODriver* privateIODriver = nullptr;
 
@@ -96,11 +102,6 @@ private:
     toe::core::TOEvector4df m_clearSceenColor;
 
     std::map<SHADERTYPE, Program*> m_programs;
-    /**
-     * @brief Video Driver constructor
-     * 
-     */
-    VideoDriver();
 
     /**
      * @brief Loads the shaders in the Resource Manager

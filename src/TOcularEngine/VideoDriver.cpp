@@ -1,18 +1,14 @@
 #include "VideoDriver.h"
+#include "../EventHandler.h"
 
 VideoDriver::VideoDriver(){
     m_name = "";
     m_window = nullptr;
     m_clock = new sf::Clock;
     privateSceneManager = new SceneManager();
-    privateIODriver = new IODriver();
+    privateIODriver = nullptr;
     close_window = false;
     m_clearSceenColor = toe::core::TOEvector4df(0,0,0,0);
-}
-
-VideoDriver* VideoDriver::GetInstance(){
-    static VideoDriver instance;
-    return &instance;
 }
 
 VideoDriver::~VideoDriver(){
@@ -22,14 +18,11 @@ VideoDriver::~VideoDriver(){
     }
     m_programs.clear();
 
-    delete privateIODriver;
+    if(privateIODriver != nullptr)
+        delete privateIODriver;
     delete privateSceneManager;
     delete m_clock;
     delete m_window;
-}
-
-float VideoDriver::GetTime(){
-    return m_clock->getElapsedTime().asMilliseconds();
 }
 
 void VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2df dimensions){
@@ -57,7 +50,8 @@ bool VideoDriver::Update(){
     //UPDATE IO
     sf::Event event;
     while (m_window->pollEvent(event)){
-        close_window = privateIODriver->Update(&event);
+        if(privateIODriver != nullptr)
+            close_window = privateIODriver->Update(&event);
     }
 
     ClearScreen();
@@ -77,6 +71,34 @@ void VideoDriver::ClearScreen(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+VideoDriver* VideoDriver::GetInstance(){
+    static VideoDriver instance;
+    return &instance;
+}
+
+SceneManager* VideoDriver::GetSceneManager(){
+    return privateSceneManager;
+}
+
+IODriver* VideoDriver::GetIOManager(){
+    return privateIODriver;    
+}
+
+float VideoDriver::GetTime(){
+    return m_clock->getElapsedTime().asMilliseconds();
+}
+
+std::string VideoDriver::GetWindowName(){
+    return m_name;
+}
+
+Program* VideoDriver::GetProgram(SHADERTYPE p){
+    return m_programs[p];
+}
+std::map<SHADERTYPE,Program*> VideoDriver::GetProgramVector(){
+    return m_programs;
+}
+
 void VideoDriver::SetClearScreenColor(toe::core::TOEvector4df color){
     m_clearSceenColor = color;
 }
@@ -86,12 +108,12 @@ void VideoDriver::SetWindowName(std::string name){
     m_window->setTitle(m_name.c_str());
 }
 
-std::string VideoDriver::GetWindowName(){
-    return m_name;
-}
-
 void VideoDriver::SetShaderProgram(SHADERTYPE p){
 	glUseProgram(m_programs.find(p)->second->GetProgramID());
+}
+
+void VideoDriver::SetIODriver(IODriver* driver){
+    privateIODriver = driver;
 }
 
 void VideoDriver::initShaders(){
@@ -107,11 +129,4 @@ void VideoDriver::initShaders(){
     Program* p = new Program(shaders);
     glUseProgram(p->GetProgramID());
     m_programs.insert(std::pair<SHADERTYPE, Program*>(STANDARD_SHADER,p));
-}
-
-Program* VideoDriver::GetProgram(SHADERTYPE p){
-    return m_programs[p];
-}
-std::map<SHADERTYPE,Program*> VideoDriver::GetProgramVector(){
-    return m_programs;
 }

@@ -1,5 +1,4 @@
 #include "IODriver.h"
-#include "VideoDriver.h"
 
 TEvent::TEvent(){}
 
@@ -191,31 +190,7 @@ bool IODriver::OnEvent(const TEvent& event){
         if (event.m_key.code == Key_Escape){
             m_close = true;
         }
-        if (event.m_key.code == Key_Left){
-            //addVertices(-2, 0);
-            VideoDriver::xdist -= 0.5f;
-            std::cout << "VideoDriver::Xdist: " << VideoDriver::xdist << "\n";
-        }
-        if (event.m_key.code == Key_Right){
-            //addVertices(2, 0);
-            VideoDriver::xdist += 0.5f;
-            std::cout << "VideoDriver::Xdist: " << VideoDriver::xdist << "\n";
-        }
-        if (event.m_key.code == Key_Down){
-            //addVertices(0, -2);
-            VideoDriver::zdist -= 0.5f;
-            std::cout<<"VideoDriver::zdist: " << VideoDriver::zdist << "\n";
-        }
-        if (event.m_key.code == Key_Up){
-            //addVertices(0, 2);                
-            VideoDriver::zdist += 0.5f;
-            std::cout<<"VideoDriver::zdist: " << VideoDriver::zdist << "\n";
-        }
     }
 
-    if (event.m_type == Type_KeyReleased){ 
-        if(event.m_key.code == Key_Space){
-        } 
-    }
     return m_close;
 }
