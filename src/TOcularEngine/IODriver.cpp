@@ -1,4 +1,5 @@
 #include "IODriver.h"
+#include <SFML/Graphics.hpp>
 
 TEvent::TEvent(){}
 

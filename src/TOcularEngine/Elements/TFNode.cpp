@@ -1,7 +1,8 @@
 #include "TFNode.h"
-#include "./TFText.h"
-#include "./../SceneManager.h"
+#include "./../../EngineUtilities/TNode.h"
+#include "./../../EngineUtilities/Entities/TTransform.h"
 #include "./../VideoDriver.h"
+#include "TFText.h"
 
 TFNode::TFNode(){
 	TTransform* rot = new TTransform();

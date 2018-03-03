@@ -1,5 +1,6 @@
 #include "TText.h"
 #include "../TOcularEngine/VideoDriver.h"
+#include "./../TResourceManager.h"
 
 TText::TText(std::string text, float charSize, std::string texture){
 	// Inicializamos los buffer

@@ -1,6 +1,8 @@
 #include "SceneManager.h"
 #include "VideoDriver.h"
-#include "../EngineUtilities/Entities/TEntity.h"
+#include "./../EngineUtilities/Entities/TEntity.h"
+#include "./../EngineUtilities/Entities/TTransform.h"
+#include "./../EngineUtilities/TNode.h"
 
 SceneManager::SceneManager(){
 	m_SceneTreeRoot = new TNode(new TTransform());

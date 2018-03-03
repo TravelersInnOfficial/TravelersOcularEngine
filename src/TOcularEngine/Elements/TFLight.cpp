@@ -1,4 +1,7 @@
 #include "TFLight.h"
+#include "./../../EngineUtilities/Entities/TTransform.h"
+#include "./../../EngineUtilities/Entities/TLight.h"
+#include "./../../EngineUtilities/TNode.h"
 #include "./../VideoDriver.h"
 
 TFLight::TFLight(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector4df color, float intensity) : TFNode(){

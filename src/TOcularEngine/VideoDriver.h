@@ -1,14 +1,18 @@
 #ifndef VIDEODRIVER_H
 #define VIDEODRIVER_H
 
-#define GLEW_STATIC
-#include <GL/glew.h>
-
 #include "SceneManager.h"
 #include "IODriver.h"
-#include <SFML/System.hpp>
-#include <SFML/Graphics.hpp>
+#include <ShaderTypes.h>
 #include <TOEvector2d.h>
+#include <map>
+
+// Fast-forward declaration
+class Program;
+namespace sf{
+    class RenderWindow;
+    class Clock;
+}
 
 class VideoDriver{
 public:

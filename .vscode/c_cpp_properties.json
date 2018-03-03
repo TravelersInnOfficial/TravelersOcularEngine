@@ -62,7 +62,8 @@
                 "C:/msys64/mingw64/include/c++/7.2.0",
                 "C:/msys64/mingw64/include/c++/7.2.0/x86_64-w64-mingw32",
                 "C:/msys64/mingw64/include/c++/7.3.0",
-                "C:/msys64/mingw64/include/c++/7.3.0/x86_64-w64-mingw32"
+                "C:/msys64/mingw64/include/c++/7.3.0/x86_64-w64-mingw32",
+                "${workspaceRoot}/src/Common"
             ],
             "defines": [
                 "_DEBUG",

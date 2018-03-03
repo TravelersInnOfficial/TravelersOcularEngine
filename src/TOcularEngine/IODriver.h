@@ -1,7 +1,11 @@
 #ifndef IODRIVER_H
 #define IODRIVER_H
-#include <SFML/Graphics.hpp>
 #include <EventEnum.h>
+
+// Fast-forward declaration
+namespace sf{
+    class Event;
+}
 
 class TEvent{
 public:

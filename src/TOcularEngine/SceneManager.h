@@ -6,6 +6,11 @@
 #include "./Elements/TFMesh.h"
 
 #include <vector>
+#include <glm/gtc/type_ptr.hpp>
+
+// Fast-forward declaration
+typedef unsigned int GLuint;
+class Program;
 
 class SceneManager{
 public:
