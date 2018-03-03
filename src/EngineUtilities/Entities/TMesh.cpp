@@ -1,10 +1,8 @@
 #include "TMesh.h"
 
-#include <glm/gtc/type_ptr.hpp>
-#include <stdexcept>
-#include <iostream>
-#include <chrono>
 #include "../TOcularEngine/VideoDriver.h"
+#include <glm/gtc/type_ptr.hpp>
+#include <GL/glew.h>
 
 TMesh::TMesh(std::string meshPath, std::string texturePath){
 	LoadMesh(meshPath);

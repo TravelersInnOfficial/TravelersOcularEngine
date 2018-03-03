@@ -2,6 +2,16 @@
 #include "TMaterialLoader.h"
 #include "./../TResourceManager.h"
 
+//Headers to load models
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
+#include <GL/glew.h>
+#include <iostream>
+#include <fstream>
+#include <stdio.h>
+
 // VBO = VERTEX BUFFER OBJECT
 
 void TObjectLoader::IndexVBO(TResourceMesh* mesh, std::vector<glm::vec3>* vertexVec, std::vector<glm::vec2>* uvVec, std::vector<glm::vec3>* normalVec, std::vector<unsigned int>* indexVec){

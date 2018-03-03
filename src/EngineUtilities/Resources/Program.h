@@ -2,9 +2,12 @@
 #define PROGRAM_H
 
 #include <ShaderTypes.h>
-#include <GL/glew.h>
 #include <map>
 #include <vector>
+#include <string>
+
+typedef unsigned int GLuint;
+typedef unsigned int GLenum;
 
 class Program{
 

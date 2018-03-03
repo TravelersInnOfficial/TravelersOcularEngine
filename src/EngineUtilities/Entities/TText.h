@@ -5,8 +5,6 @@
 #include "./../Resources/TResourceTexture.h"
 #include "../Resources/Program.h"
 
-#include <iostream>
-
 class TText: public TEntity{
 public:
 	TText(std::string text, float charSize, std::string texture);

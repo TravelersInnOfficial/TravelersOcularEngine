@@ -1,19 +1,12 @@
 #ifndef TOBJECTLOADER_H
 #define TOBJECTLOADER_H
 
+#include "./../Resources/TResourceMesh.h"
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
-#include <iostream>
-#include <stdio.h>
+
 #include <vector>
 #include <map>
-#include <fstream>
-
-#include <assimp/cimport.h>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-
-#include "./../Resources/TResourceMesh.h"
 
 struct PackedVertex{
 	glm::vec3 position;

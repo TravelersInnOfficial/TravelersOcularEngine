@@ -6,7 +6,8 @@
 #include "./Elements/TFMesh.h"
 
 #include <vector>
-#include <glm/gtc/type_ptr.hpp>
+#include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp>
 
 // Fast-forward declaration
 typedef unsigned int GLuint;

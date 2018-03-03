@@ -4,6 +4,10 @@
 #include "./../EngineUtilities/Entities/TTransform.h"
 #include "./../EngineUtilities/TNode.h"
 
+// GLEW AND GLM
+#include <GL/glew.h>
+#include <glm/gtc/type_ptr.hpp>
+
 SceneManager::SceneManager(){
 	m_SceneTreeRoot = new TNode(new TTransform());
 	m_ambientLight = glm::vec3(0.25);

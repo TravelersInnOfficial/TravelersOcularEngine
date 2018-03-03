@@ -7,9 +7,9 @@
 #include "Resources/TResourceShader.h"
 #include "Resources/TResourceMaterial.h"
 
-#include <iostream>
 #include <vector>
 #include <map>
+#include <string>
 
 class TResourceManager{
 public:

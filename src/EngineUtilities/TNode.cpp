@@ -1,6 +1,5 @@
 #include "TNode.h"
-#include "./Entities/TTransform.h"
-#include <iostream>
+#include "Entities/TTransform.h"
 #include <glm/gtx/matrix_decompose.hpp>
 
 TNode::TNode(){
