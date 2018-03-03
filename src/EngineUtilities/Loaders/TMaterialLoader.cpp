@@ -2,6 +2,10 @@
 #include "./../TResourceManager.h"
 #include "./../Resources/TResourceMaterial.h"
 
+#include <assimp/cimport.h>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 bool TMaterialLoader::LoadMaterial(std::string name, TResourceMesh* mesh, const aiMaterial* material){
 	TResourceMaterial* recMaterial = TResourceManager::GetInstance()->GetResourceMaterial(name);
 
