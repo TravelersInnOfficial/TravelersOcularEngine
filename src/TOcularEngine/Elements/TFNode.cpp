@@ -118,10 +118,8 @@ void TFNode::RemoveChild(TFNode* children){
 }
 
 void TFNode::RemoveAllChildren(){
-	std::cout<<m_children.size()<<std::endl;
 	for(int i = m_children.size() - 1; i >= 0; i--) RemoveChild(m_children.at(i));
 	m_children.clear();
-	std::cout<<m_children.size()<<std::endl;
 }
 
 std::vector<TFNode*> TFNode::GetChildren(){

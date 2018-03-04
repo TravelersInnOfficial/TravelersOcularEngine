@@ -1,4 +1,5 @@
 #include "TFCamera.h"
+#include <glm/gtc/matrix_transform.hpp>
 #include "./../../EngineUtilities/Entities/TTransform.h"
 #include "./../../EngineUtilities/Entities/TCamera.h"
 #include "./../../EngineUtilities/TNode.h"
@@ -83,8 +84,8 @@ void TFCamera::LookAt(toe::core::TOEvector3df target, toe::core::TOEvector3df up
 	glm::vec3 targetPos	= glm::vec3(target.X, target.Y, target.Z);
 	glm::vec3 upForward = glm::vec3(up.X, up.Y, up.Z);
 
-	// Z
-	glm::vec3 axisZ = position - targetPos;
+	/*// Z
+	glm::vec3 axisZ = targetPos - position;
 	axisZ = glm::normalize(axisZ);
 
 	// Y
@@ -110,7 +111,9 @@ void TFCamera::LookAt(toe::core::TOEvector3df target, toe::core::TOEvector3df up
     matrix[0][3] = 0;
     matrix[1][3] = 0;
     matrix[2][3] = 0;
-    matrix[3][3] = 1.0f;
+    matrix[3][3] = 1.0f;*/
+
+	glm::mat4 matrix = glm::lookAt(position, targetPos, upForward);
 
    	TTransform* rotation = (TTransform*) m_rotationNode->GetEntity();
    	rotation->Load(matrix);
