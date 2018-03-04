@@ -177,6 +177,15 @@ void TFNode::DeleteBillboard(int id){
 	}
 }
 
+void TFNode::SetBillboardPosition(toe::core::TOEvector3df position, int id){
+	int size = m_billboards.size();
+	if(id>=0 && id<size){
+		if(m_billboards[id] != nullptr){
+			m_billboards[id]->SetTranslate(position);
+		}
+	}
+}
+
 void TFNode::SetBillboardSize(float charSize, int id){
 	int size = m_billboards.size();
 	if(id>=0 && id<size){

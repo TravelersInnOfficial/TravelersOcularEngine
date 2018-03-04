@@ -92,7 +92,7 @@ public:
      * @return true The mesh has been deleted
      * @return false The mesh couldn't be deleted
      */
-    bool        DeleteMesh(TFMesh*);
+    bool        DeleteMesh(TFNode*);
 
     /**
      * @brief Sets the Ambient Light

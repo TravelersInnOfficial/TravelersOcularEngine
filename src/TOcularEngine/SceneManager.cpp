@@ -98,8 +98,9 @@ bool SceneManager::DeleteLight(TFLight* light){
 	return toRet;
 }
 
-bool SceneManager::DeleteMesh(TFMesh* mesh){
+bool SceneManager::DeleteMesh(TFNode* node){
 	bool toRet = false;
+	TFMesh* mesh = (TFMesh*)node;
 	std::vector<TFMesh*>::iterator it = m_meshes.begin();
 	for(; it!= m_meshes.end() && !toRet; ++it){
 		if(*it == mesh){

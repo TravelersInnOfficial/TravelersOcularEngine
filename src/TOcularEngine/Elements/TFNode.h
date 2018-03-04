@@ -36,6 +36,7 @@ public:
 	// Devuelve la posicion en el vector para poder editarlo
 	int AddBillboard(toe::core::TOEvector3df position, std::string text, float charSize = 0.2f, std::string texture = "");
 	void SetBillboardText(std::string text, int id = 0);
+	void SetBillboardPosition(toe::core::TOEvector3df position, int id = 0);
 	void SetBillboardSize(float charSize, int id = 0);
 	void DeleteBillboard(int id = 0);
 	void DeleteAllBillboard();
