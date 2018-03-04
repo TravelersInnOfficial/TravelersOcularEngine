@@ -1,6 +1,7 @@
 #include "TResourceMesh.h"
 #include "./../Loaders/TObjectLoader.h"
 #include "./../TResourceManager.h"
+#include "./../TOcularEngine/VideoDriver.h"
 
 #include <GL/glew.h>
 
@@ -24,7 +25,7 @@ TResourceMesh::TResourceMesh(std::string name){
 
 	LoadFile();
 	if(m_basicTexture == nullptr){
-		m_basicTexture = TResourceManager::GetInstance()->GetResourceTexture("../assets/textures/default_texture.png");	
+		m_basicTexture = TResourceManager::GetInstance()->GetResourceTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_texture.png");
 	}
 }
 

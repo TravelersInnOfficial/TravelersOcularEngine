@@ -15,7 +15,7 @@ TMesh::~TMesh(){
 }
 
 void TMesh::LoadMesh(std::string meshPath){
-	if(meshPath.compare("")==0) meshPath = "./../assets/models/cube.obj";
+	if(meshPath.compare("")==0) meshPath = VideoDriver::GetInstance()->GetAssetsPath() + "/models/cube.obj";
 	m_mesh = TResourceManager::GetInstance()->GetResourceMesh(meshPath);
 }
 

@@ -69,6 +69,7 @@ TFRect* SceneManager::Add2DRect(toe::core::TOEvector2df size, toe::core::TOEvect
 	toRet->Attach(m_SceneTreeRoot);
 	return toRet;
 	*/
+	return nullptr;
 }
 
 bool SceneManager::DeleteCamera(TFCamera* cam){

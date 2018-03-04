@@ -26,6 +26,8 @@ public:
      */
     ~VideoDriver();
 
+    static std::string m_assetsPath;
+
     void CreateWindows(std::string window_name, toe::core::TOEvector2df dimensions);
     bool Update();
     void Draw();
@@ -82,6 +84,8 @@ public:
     
     sf::Time GetElapsedTime();
 
+    std::string GetAssetsPath();
+
 //SETTERS
     /**
      * @brief Sets the update clear screen color
@@ -104,6 +108,9 @@ public:
     void SetCursorPosition(int x, int y);
 
     toe::core::TOEvector2di GetCursorPosition();
+
+    void SetAssetsPath(std::string newPath);
+
 private:
     /**
      * @brief Video Driver constructor
@@ -132,6 +139,7 @@ private:
     void initShaders();
 
     std::vector<sf::Event*> m_events;
+
 
 };
 

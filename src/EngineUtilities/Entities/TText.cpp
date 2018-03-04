@@ -23,7 +23,7 @@ TText::TText(std::string text, float charSize, std::string texture){
 	ChangeText(text);
 
 	// Ponemos la textura del texto
-	if(texture.compare("")==0) texture = "./../assets/textures/DefaultFont.bmp";
+	if(texture.compare("")==0) texture = VideoDriver::GetInstance()->GetAssetsPath() + "/textures/DefaultFont.bmp";
 	m_texture = TResourceManager::GetInstance()->GetResourceTexture(texture); 
 
 	m_program = TEXT_SHADER;
