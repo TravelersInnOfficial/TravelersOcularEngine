@@ -14,6 +14,9 @@ namespace toe{
                  toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,0,0),
                  toe::core::TOEvector3df scale = toe::core::TOEvector3df(1,1,1));
 
+    void LoadMesh(std::string path);
+    void LoadTexture(std::string path);
+
     namespace core{ 
         class rect{
             public:

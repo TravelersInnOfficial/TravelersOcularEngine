@@ -153,14 +153,16 @@ bool TObjectLoader::LoadObjFromFileAssimp(TResourceMesh* mesh, std::vector<glm::
 		int iMeshFaces = meshCustom->mNumFaces; 					// Guardamos el NUMERO DE CARAS
 		for(int j = 0; j < iMeshFaces ;j++){				// Iteramos por las CARAS
 			const aiFace& face = meshCustom->mFaces[j];			// Nos guardamos la cara que estamos tratando
-			for(int k = 0; k < 3 ;k++){
-				aiVector3D pos = meshCustom->mVertices[face.mIndices[k]];			// POSICION DEL VERTICE
-				aiVector3D normal = meshCustom->mNormals[face.mIndices[k]];			// NORMAL DEL VERTICE
-				aiVector3D uv = meshCustom->mTextureCoords[0][face.mIndices[k]];	// COORDENADA DE TEXTURA
-				
-				vertexVec->push_back(glm::vec3(pos.x, pos.y, pos.z));				// |		
-				uvVec->push_back(glm::vec2(uv.x, 1.0f-uv.y));						// |
-				normalVec->push_back(glm::vec3(normal.x, normal.y, normal.z));		// | Lo guardamos para DEVOLVER
+			if(face.mNumIndices == 3){
+				for(int k = 0; k < 3 ;k++){
+					aiVector3D pos = meshCustom->mVertices[face.mIndices[k]];			// POSICION DEL VERTICE
+					aiVector3D normal = meshCustom->mNormals[face.mIndices[k]];			// NORMAL DEL VERTICE
+					aiVector3D uv = meshCustom->mTextureCoords[0][face.mIndices[k]];	// COORDENADA DE TEXTURA
+					
+					vertexVec->push_back(glm::vec3(pos.x, pos.y, pos.z));				// |		
+					uvVec->push_back(glm::vec2(uv.x, 1.0f-uv.y));						// |
+					normalVec->push_back(glm::vec3(normal.x, normal.y, normal.z));		// | Lo guardamos para DEVOLVER
+				}
 			}
 		}
 	}

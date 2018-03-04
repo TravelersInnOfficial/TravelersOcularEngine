@@ -1,5 +1,7 @@
 #include "TResourceManager.h"
 
+#include <iostream>
+
 TResourceManager* TResourceManager::GetInstance() {
 	static TResourceManager instance;
 	return &instance;

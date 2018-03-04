@@ -12,6 +12,7 @@ VideoDriver::VideoDriver(){
 	m_window = nullptr;
 	m_clock = new sf::Clock;
 	privateSceneManager = new SceneManager();
+	std::cout<<privateSceneManager<<std::endl;	
 	privateIODriver = nullptr;
 	close_window = false;
 	m_clearSceenColor = toe::core::TOEvector4df(0,0,0,0);
@@ -91,6 +92,7 @@ VideoDriver* VideoDriver::GetInstance(){
 }
 
 SceneManager* VideoDriver::GetSceneManager(){
+	std::cout<<privateSceneManager<<std::endl;
 	return privateSceneManager;
 }
 
