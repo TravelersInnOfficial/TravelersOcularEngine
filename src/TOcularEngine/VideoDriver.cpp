@@ -1,7 +1,6 @@
 #include "VideoDriver.h"
 #include "./../EngineUtilities/Resources/Program.h"
 #include "./../EngineUtilities/TResourceManager.h"
-#include <SFML/Graphics.hpp>
 
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -195,4 +194,12 @@ std::vector<sf::Event*> VideoDriver::GetSFMLEvents(){
     std::vector<sf::Event*> toRet = m_events;
     m_events.clear();
     return toRet;
+}
+
+sf::RenderWindow* VideoDriver::GetWindow(){
+    return m_window;
+}
+
+sf::Time VideoDriver::GetElapsedTime(){
+    return m_clock->getElapsedTime();
 }

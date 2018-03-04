@@ -7,6 +7,7 @@
 #include <TOEvector2d.h>
 #include <map>
 #include <vector>
+#include <SFML/Graphics.hpp>
 
 // Fast-forward declaration
 class Program;
@@ -76,6 +77,10 @@ public:
     void SetMouseVisibility(bool visible);
 
     std::vector<sf::Event*> GetSFMLEvents();
+
+    sf::RenderWindow* GetWindow();
+    
+    sf::Time GetElapsedTime();
 
 //SETTERS
     /**
