@@ -57,18 +57,20 @@ TFMesh* SceneManager::AddMesh(toe::core::TOEvector3df position, toe::core::TOEve
 }
 
 TFRect* SceneManager::Add2DRect(toe::core::TOEvector2df size, toe::core::TOEvector2df position, float rotation){
+	/*
 	TFRect* toRet = nullptr;
 	toRet = new TFRect(size,position,rotation);
 	toRet->Attach(m_SceneTreeRoot);
 	return toRet;
+	*/
 }
 
-bool SceneManager::DeleteCamera(TFCamera* cam, bool deleteChildren){
+bool SceneManager::DeleteCamera(TFCamera* cam){
 	bool toRet = false;
 	std::vector<TFCamera*>::iterator it = m_cameras.begin();
 	for(; it != m_cameras.end() && !toRet; ++it){
 		if(*it == cam){
-			if(deleteChildren) std::cout<<"DELETE CHILDREN NOT IMPLEMENTED"<<std::endl;
+			if(cam == main_camera) main_camera = nullptr;
 			delete cam;
 			m_cameras.erase(it);
 			toRet = true;
@@ -77,12 +79,11 @@ bool SceneManager::DeleteCamera(TFCamera* cam, bool deleteChildren){
 	return toRet;
 }
 
-bool SceneManager::DeleteLight(TFLight* light, bool deleteChildren){
+bool SceneManager::DeleteLight(TFLight* light){
 	bool toRet = false;
 	std::vector<TFLight*>::iterator it = m_lights.begin();
 	for(; it!= m_lights.end() && !toRet; ++it){
 		if(*it == light){
-			if(deleteChildren) std::cout<<"DELETE CHILDREN NOT IMPLEMENTED"<<std::endl;
 			delete light;
 			m_lights.erase(it);
 			toRet = true;
@@ -91,12 +92,11 @@ bool SceneManager::DeleteLight(TFLight* light, bool deleteChildren){
 	return toRet;
 }
 
-bool SceneManager::DeleteMesh(TFMesh* mesh, bool deleteChildren){
+bool SceneManager::DeleteMesh(TFMesh* mesh){
 	bool toRet = false;
 	std::vector<TFMesh*>::iterator it = m_meshes.begin();
 	for(; it!= m_meshes.end() && !toRet; ++it){
 		if(*it == mesh){
-			if(deleteChildren) std::cout<<"DELETE CHILDREN NOT IMPLEMENTED"<<std::endl;
 			delete mesh;
 			m_meshes.erase(it);
 			toRet = true;
@@ -142,4 +142,8 @@ void SceneManager::InitScene(){
 
 TNode* SceneManager::GetRootNode(){
 	return m_SceneTreeRoot;
+}
+
+TFCamera* SceneManager::GetMainCamera(){
+	return main_camera;
 }

@@ -39,7 +39,12 @@ public:
 	void SetParent(TFNode* parent = nullptr);	// Adds a Parent to the TFNode
 	void RemoveParent();						// Removes Parent from the TFNode
 
-	TFText* AddBillboard(toe::core::TOEvector3df position, std::string text, std::string texture = "");
+	// Devuelve la posicion en el vector para poder editarlo
+	int AddBillboard(toe::core::TOEvector3df position, std::string text, float charSize = 0.2f, std::string texture = "");
+	void SetBillboardText(std::string text, int id = 0);
+	void SetBillboardSize(float charSize, int id = 0);
+	void DeleteBillboard(int id = 0);
+	void DeleteAllBillboard();
 
 	TFNode* GetParent();
 	std::vector<TFNode*> GetChildren();

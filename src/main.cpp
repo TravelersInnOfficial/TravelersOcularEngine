@@ -1,6 +1,9 @@
 #include "TOcularEngine/TOcularEngine.h"
 #include "TOcularEngine/VideoDriver.h"
 #include "TOcularEngine/SceneManager.h"
+
+#include "EventHandler.h"
+
 void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh** meshThree, TFLight** light1, TFLight** light2){
 	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
 	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0, 0, 0);
@@ -35,6 +38,8 @@ int main(){
 	VideoDriver* VDriv = toe::GetVideoDriver();
 	VDriv->CreateWindows("Wizards&Warlocks",toe::core::TOEvector2df(800,600));
 	VDriv->SetClearScreenColor(toe::core::TOEvector4df(0.7, 0.7, 1, 1));
+    EventHandler* handler = new EventHandler();	
+	VDriv->SetIODriver(handler);
 
 	TFCamera* myCamera = nullptr;
 	TFMesh* meshOne = nullptr;
@@ -45,23 +50,22 @@ int main(){
 
 	CreateTree(&myCamera, &meshOne, &meshTwo, &meshThree, &light1, &light2);
 
-	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0.0f, 1.5f, 0.0f);
+	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0.0f, 1.7f, 0.0f);
 	meshOne->AddBillboard(pos, "cube");
-	meshTwo->AddBillboard(pos, "mage");
 	meshThree->AddBillboard(pos, "potion");
 
-	TFRect* rect = nullptr;
-	rect = VDriv->GetSceneManager()->Add2DRect(toe::core::TOEvector2df(100,100)); 
+	int firstB = meshTwo->AddBillboard(pos, "up", 0.2f);
 
-	VDriv->SetClearScreenColor(toe::core::TOEvector4df(0.7, 0.7, 1, 1));
+	VDriv->SetMouseVisibility(false);
+
 	while(VDriv->Update()){
 		//VDriv->PrintDrawable(*rect);
 		VDriv->Draw();
-		toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,VDriv->GetTime()/10,0);
+		toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,VDriv->GetTime()/50,0);
 		meshOne->SetRotation(rotation);
 		meshTwo->SetRotation(rotation);
 		meshThree->SetRotation(rotation);
-		if(meshTwo != nullptr) meshTwo->SetTranslate(toe::core::TOEvector3df(VideoDriver::xdist, 0.0f, -VideoDriver::zdist));
+		if(meshTwo != nullptr) meshTwo->SetTranslate(toe::core::TOEvector3df(EventHandler::xdist, 0.0f, -EventHandler::zdist));
 	}
 
     return EXIT_SUCCESS;

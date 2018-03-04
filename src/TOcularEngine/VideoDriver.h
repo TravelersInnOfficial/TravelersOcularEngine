@@ -13,6 +13,7 @@
 class VideoDriver{
     friend class TFDrawable;
     friend class TFRect;
+    friend class GUIEngine;
 public:
     /**
      * @brief Video Driver destructor
@@ -24,11 +25,7 @@ public:
     bool Update();
     void Draw();
     void ClearScreen();
-
     void Drop();
-
-    inline static float zdist = 0.0f;
-    inline static float xdist = 0.0f;
 
 //GETTERS
     /**
@@ -43,14 +40,14 @@ public:
      * 
      * @return SceneManager* privateSceneManager
      */
-    SceneManager* GetSceneManager(){return privateSceneManager;};
+    SceneManager* GetSceneManager();
 
     /**
      * @brief Returns the private Input/Output Driver from the Video Driver
      * 
      * @return IODriver* privateIODriver
      */
-    IODriver* GetIOManager(){return privateIODriver;};
+    IODriver* GetIOManager();
 
     /**
      * @brief Returns the engine time elapsed in miliseconds
@@ -67,6 +64,12 @@ public:
     std::string GetWindowName();
 
     toe::core::TOEvector2df GetWindowDimensions();
+
+    Program* GetProgram(SHADERTYPE);
+
+    std::map<SHADERTYPE,Program*> GetProgramVector();
+
+    void SetMouseVisibility(bool visible);
 
 //SETTERS
     /**
@@ -85,15 +88,25 @@ public:
 
     void SetShaderProgram(SHADERTYPE);
 
-    Program* GetProgram(SHADERTYPE);
+    void SetIODriver(IODriver* driver);
+    
+    void SetCursorPosition(int x, int y);
 
-    std::map<SHADERTYPE,Program*> GetProgramVector();
+    toe::core::TOEvector2di GetCursorPosition();
 
 private:
+    /**
+     * @brief Video Driver constructor
+     * 
+     */
+    VideoDriver();
+
+    // Private SFML stuff
     sf::RenderWindow* m_window;
     std::string m_name;
     sf::Clock* m_clock;
 
+    // Private Graphic Engine stuff
     SceneManager* privateSceneManager = nullptr;
     IODriver* privateIODriver = nullptr;
 
@@ -101,11 +114,6 @@ private:
     toe::core::TOEvector4df m_clearSceenColor;
 
     std::map<SHADERTYPE, Program*> m_programs;
-    /**
-     * @brief Video Driver constructor
-     * 
-     */
-    VideoDriver();
 
     /**
      * @brief Loads the shaders in the Resource Manager

@@ -30,3 +30,8 @@ void TFMesh::CreateCube(){
 	TMesh* myMesh = (TMesh*) m_entityNode->GetEntity();
 	myMesh->LoadMesh("");
 }
+
+void TFMesh::CreateSphere(){
+	TMesh* myMesh = (TMesh*) m_entityNode->GetEntity();
+	myMesh->LoadMesh("./../assets/models/sphere.obj");
+}

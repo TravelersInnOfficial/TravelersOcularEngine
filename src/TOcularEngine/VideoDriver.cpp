@@ -1,18 +1,16 @@
 #include "VideoDriver.h"
+#include "../EventHandler.h"
+#include <IMGUI/imgui.h>
+#include <IMGUI/imgui-SFML.h>
 
 VideoDriver::VideoDriver(){
     m_name = "";
     m_window = nullptr;
     m_clock = new sf::Clock;
     privateSceneManager = new SceneManager();
-    privateIODriver = new IODriver();
+    privateIODriver = nullptr;
     close_window = false;
     m_clearSceenColor = toe::core::TOEvector4df(0,0,0,0);
-}
-
-VideoDriver* VideoDriver::GetInstance(){
-    static VideoDriver instance;
-    return &instance;
 }
 
 VideoDriver::~VideoDriver(){
@@ -26,14 +24,11 @@ void VideoDriver::Drop(){
     }
     m_programs.clear();
 
-    delete privateIODriver;
+    if(privateIODriver != nullptr)
+        delete privateIODriver;
     delete privateSceneManager;
     delete m_clock;
     delete m_window;
-}
-
-float VideoDriver::GetTime(){
-    return m_clock->getElapsedTime().asMilliseconds();
 }
 
 void VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2df dimensions){
@@ -61,7 +56,9 @@ bool VideoDriver::Update(){
     //UPDATE IO
     sf::Event event;
     while (m_window->pollEvent(event)){
-        close_window = privateIODriver->Update(&event);
+        if(privateIODriver != nullptr)
+            close_window = privateIODriver->Update(&event);
+            ImGui::SFML::ProcessEvent(event);
     }
 
     ClearScreen();
@@ -84,6 +81,41 @@ void VideoDriver::ClearScreen(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+VideoDriver* VideoDriver::GetInstance(){
+    static VideoDriver instance;
+    return &instance;
+}
+
+SceneManager* VideoDriver::GetSceneManager(){
+    return privateSceneManager;
+}
+
+IODriver* VideoDriver::GetIOManager(){
+    return privateIODriver;    
+}
+
+float VideoDriver::GetTime(){
+    return m_clock->getElapsedTime().asMilliseconds();
+}
+
+std::string VideoDriver::GetWindowName(){
+    return m_name;
+}
+
+toe::core::TOEvector2df VideoDriver::GetWindowDimensions(){
+   toe::core::TOEvector2df toRet(0.0f,0.0f);
+   toRet.X = m_window->getSize().x;
+   toRet.Y = m_window->getSize().y;
+   return toRet;
+}
+
+Program* VideoDriver::GetProgram(SHADERTYPE p){
+    return m_programs[p];
+}
+std::map<SHADERTYPE,Program*> VideoDriver::GetProgramVector(){
+    return m_programs;
+}
+
 void VideoDriver::SetClearScreenColor(toe::core::TOEvector4df color){
     m_clearSceenColor = color;
 }
@@ -93,41 +125,41 @@ void VideoDriver::SetWindowName(std::string name){
     m_window->setTitle(m_name.c_str());
 }
 
-std::string VideoDriver::GetWindowName(){
-    return m_name;
-}
-
 void VideoDriver::SetShaderProgram(SHADERTYPE p){
 	glUseProgram(m_programs.find(p)->second->GetProgramID());
+}
+
+void VideoDriver::SetIODriver(IODriver* driver){
+    privateIODriver = driver;
 }
 
 void VideoDriver::initShaders(){
     // CARGAMOS EL PROGRAMA STANDAR
         // LOAD IN RESOURCE MANAGER
-        TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/VShader.glsl");
-        TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/FShader.glsl");
+        TResourceManager::GetInstance()->GetResourceShader("../src/Engines/TravelersOcularEngine/src/EngineUtilities/Shaders/VShader.glsl");
+        TResourceManager::GetInstance()->GetResourceShader("../src/Engines/TravelersOcularEngine/src/EngineUtilities/Shaders/FShader.glsl");
 
         // CARGAMOS LOS SHADERS
     	std::map<std::string, GLenum> shaders = std::map<std::string, GLenum>();	
-    	shaders.insert(std::pair<std::string, GLenum>("../src/EngineUtilities/Shaders/VShader.glsl", GL_VERTEX_SHADER));
-    	shaders.insert(std::pair<std::string, GLenum>("../src/EngineUtilities/Shaders/FShader.glsl", GL_FRAGMENT_SHADER));
+    	shaders.insert(std::pair<std::string, GLenum>("../src/Engines/TravelersOcularEngine/src/EngineUtilities/Shaders/VShader.glsl", GL_VERTEX_SHADER));
+    	shaders.insert(std::pair<std::string, GLenum>("../src/Engines/TravelersOcularEngine/src/EngineUtilities/Shaders/FShader.glsl", GL_FRAGMENT_SHADER));
         
         Program* p = new Program(shaders);
         m_programs.insert(std::pair<SHADERTYPE, Program*>(STANDARD_SHADER,p));
 
     // CARGAMOS EL PROGRAMA DE TEXTO
         // LOAD IN RESOURCE MANAGER
-        TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/VShaderText.glsl");
-        TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/FShaderText.glsl");
+        TResourceManager::GetInstance()->GetResourceShader("../src/Engines/TravelersOcularEngine/src/EngineUtilities/Shaders/VShaderText.glsl");
+        TResourceManager::GetInstance()->GetResourceShader("../src/Engines/TravelersOcularEngine/src/EngineUtilities/Shaders/FShaderText.glsl");
 
         // CARGAMOS LOS SHADERS
         shaders = std::map<std::string, GLenum>();
-        shaders.insert(std::pair<std::string, GLenum>("../src/EngineUtilities/Shaders/VShaderText.glsl", GL_VERTEX_SHADER));
-        shaders.insert(std::pair<std::string, GLenum>("../src/EngineUtilities/Shaders/FShaderText.glsl", GL_FRAGMENT_SHADER));
+        shaders.insert(std::pair<std::string, GLenum>("../src/Engines/TravelersOcularEngine/src/EngineUtilities/Shaders/VShaderText.glsl", GL_VERTEX_SHADER));
+        shaders.insert(std::pair<std::string, GLenum>("../src/Engines/TravelersOcularEngine/src/EngineUtilities/Shaders/FShaderText.glsl", GL_FRAGMENT_SHADER));
 
         p = new Program(shaders);
         m_programs.insert(std::pair<SHADERTYPE, Program*>(TEXT_SHADER, p));
-    
+    /*
     // CARGAMOS EL PROGRAMA DE 2D
         // LOAD IN RESOURCE MANAGER
         TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/VShader2D.glsl");
@@ -140,20 +172,18 @@ void VideoDriver::initShaders(){
 
         p = new Program(shaders);
         m_programs.insert(std::pair<SHADERTYPE, Program*>(TWOD_SHADER, p));
+        */
 }
 
-Program* VideoDriver::GetProgram(SHADERTYPE p){
-    return m_programs[p];
+void VideoDriver::SetMouseVisibility(bool visible){
+    m_window->setMouseCursorVisible(visible);
 }
 
-std::map<SHADERTYPE,Program*> VideoDriver::GetProgramVector(){
-    return m_programs;
+void VideoDriver::SetCursorPosition(int x, int y){
+    sf::Mouse::setPosition(sf::Vector2i(x, y), *m_window);
 }
 
-toe::core::TOEvector2df VideoDriver::GetWindowDimensions(){
-    toe::core::TOEvector2df toRet(0.0f,0.0f);
-    toRet.X = m_window->getSize().x;
-    toRet.Y = m_window->getSize().y;
-    return toRet;
+toe::core::TOEvector2di VideoDriver::GetCursorPosition(){
+    sf::Vector2i auxVec = sf::Mouse::getPosition(*m_window);
+    return toe::core::TOEvector2di(auxVec.x, auxVec.y);
 }
-

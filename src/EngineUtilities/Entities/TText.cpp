@@ -1,7 +1,7 @@
 #include "TText.h"
 #include "../TOcularEngine/VideoDriver.h"
 
-TText::TText(std::string text, std::string texture){
+TText::TText(std::string text, float charSize, std::string texture){
 	// Inicializamos los buffer
 	m_vbo = 0;
 	glGenBuffers(1, &m_vbo);
@@ -10,6 +10,9 @@ TText::TText(std::string text, std::string texture){
 	glGenBuffers(1, &m_uvbo);
 
 	m_size = 0;
+
+	// Guardamos el tamanyo de las letras
+	m_charSize = charSize;
 
 	// Ponemos el texto del billboard
 	m_text = "";
@@ -32,6 +35,13 @@ void TText::BeginDraw(){
 
 void TText::EndDraw(){}
 
+void TText::ChangeSize(float charSize){
+	if(m_charSize != charSize){
+		m_charSize = charSize;
+		LoadText(m_text);
+	}
+}
+
 void TText::ChangeText(std::string text){
 	if(text.compare(m_text) != 0){
 		m_text = text;
@@ -46,7 +56,23 @@ void TText::SendShaderData(){
 
 	// Enviamos la matriz MVP
 		// Calculamos la matriz MVP
-		glm::mat4 modelView = ViewMatrix;// * m_stack.top();
+
+		// PRIMERO DE TODO QUITAMOS LA ROTACION DE LA MATRIZ DE LA PILA
+		glm::mat4 m_matrix = m_stack.top();
+		m_matrix[0] = glm::vec4(1, 0, 0, m_matrix[0][3]);
+		m_matrix[1] = glm::vec4(0, 1, 0, m_matrix[1][3]);
+		m_matrix[2] = glm::vec4(0, 0, 1, m_matrix[2][3]);
+
+		// SEGUIDAMENTE COGEMOS LA ROTACION DE LA CAMARA Y LA INVERTIMOS
+		// DE ESTA FORMA CONSEGUIMOS QUE SIEMPRE MIRE A LA CAMARA
+		glm::mat3 m_view = ViewMatrix;
+		m_view = glm::inverse(m_view);
+
+		m_matrix[0] = glm::vec4(m_view[0][0], m_view[0][1], m_view[0][2], m_matrix[0][3]);
+		m_matrix[1] = glm::vec4(m_view[1][0], m_view[1][1], m_view[1][2], m_matrix[1][3]);
+		m_matrix[2] = glm::vec4(m_view[2][0], m_view[2][1], m_view[2][2], m_matrix[2][3]);
+
+		glm::mat4 modelView = ViewMatrix * m_matrix;
 		glm::mat4 mvpMatrix = ProjMatrix * modelView;
 
 		// SEND THE MATRIX
@@ -88,7 +114,7 @@ void TText::LoadText(std::string text){
 	std::vector<glm::vec2> textUv;
 
 	int size = m_text.length();
-	float SIZE = 0.3f;
+	float SIZE = m_charSize;
 	float x = -SIZE*size/2;	// Centramos el texto en X
 	float y = -SIZE*size/2;	// Centramos el texto en Y
 	for(int i=0; i<size; i++){
