@@ -2,9 +2,11 @@
 #include "./../EngineUtilities/Resources/Program.h"
 #include "./../EngineUtilities/TResourceManager.h"
 
+
 #define GLEW_STATIC
 #include <GL/glew.h>
 
+#include <GLFW/glfw3.h> //SIEMPRE DESPUES DE INCLUIR GLEW
 std::string	VideoDriver::m_assetsPath = "";
 
 VideoDriver::VideoDriver(){
@@ -38,8 +40,8 @@ void VideoDriver::Drop(){
 void VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2df dimensions){
 	m_name = window_name;
 
-	sf::ContextSettings context = sf::ContextSettings(24, 8, 4, 3);
-	m_window = new sf::RenderWindow(sf::VideoMode(dimensions.X, dimensions.Y), m_name.c_str(), sf::Style::Titlebar | sf::Style::Close, context);
+	m_window = glfwCreateWindow(dimensions.X,dimensions.Y, m_name.c_str(), NULL, NULL);
+    glfwMakeContextCurrent(m_window);
 	
 	/// Iniciamos glew
 	glewExperimental = GL_TRUE;
@@ -58,6 +60,7 @@ void VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2df
 
 bool VideoDriver::Update(){
 	//UPDATE IO
+	/*
 	sf::Event event;
 	while (m_window->pollEvent(event)){
 		if(privateIODriver != nullptr)
@@ -69,15 +72,17 @@ bool VideoDriver::Update(){
 
 	if(close_window) m_window->close();
 	if(!close_window) privateSceneManager->Update();
+	*/
 	return !close_window;
 }
 
 void VideoDriver::Draw(){
-	privateSceneManager->Draw();
+	//privateSceneManager->Draw();
 
 	// Volvemos a poner el shader por default para el display de los datos
 	glUseProgram(GetProgram(STANDARD_SHADER)->GetProgramID());
-	m_window->display();
+	//m_window->display(); 
+	glfwSwapBuffers(m_window);
 }
 
 void VideoDriver::ClearScreen(){
@@ -106,10 +111,9 @@ std::string VideoDriver::GetWindowName(){
 	return m_name;
 }
 
-toe::core::TOEvector2df VideoDriver::GetWindowDimensions(){
-   toe::core::TOEvector2df toRet(0.0f,0.0f);
-   toRet.X = m_window->getSize().x;
-   toRet.Y = m_window->getSize().y;
+toe::core::TOEvector2di VideoDriver::GetWindowDimensions(){
+   toe::core::TOEvector2di toRet(0.0f,0.0f);
+	glfwGetWindowSize(m_window, &toRet.X, &toRet.Y);
    return toRet;
 }
 
@@ -126,7 +130,7 @@ void VideoDriver::SetClearScreenColor(toe::core::TOEvector4df color){
 
 void VideoDriver::SetWindowName(std::string name){
 	m_name = name;
-	m_window->setTitle(m_name.c_str());
+	glfwSetWindowTitle(m_window,m_name.c_str());
 }
 
 void VideoDriver::SetShaderProgram(SHADERTYPE p){
@@ -180,16 +184,18 @@ void VideoDriver::initShaders(){
 }
 
 void VideoDriver::SetMouseVisibility(bool visible){
-	m_window->setMouseCursorVisible(visible);
+	//m_window->setMouseCursorVisible(visible);
+	if(visible == 0) glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN); //GLFW_CURSOR_DISABLED
+	else glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
 void VideoDriver::SetCursorPosition(int x, int y){
-	sf::Mouse::setPosition(sf::Vector2i(x, y), *m_window);
+	//sf::Mouse::setPosition(sf::Vector2i(x, y), *m_window);
 }
 
 toe::core::TOEvector2di VideoDriver::GetCursorPosition(){
-	sf::Vector2i auxVec = sf::Mouse::getPosition(*m_window);
-	return toe::core::TOEvector2di(auxVec.x, auxVec.y);
+	//sf::Vector2i auxVec = sf::Mouse::getPosition(*m_window);
+	return toe::core::TOEvector2di(0, 0);
 }
 
 std::vector<sf::Event*> VideoDriver::GetSFMLEvents(){
@@ -198,7 +204,7 @@ std::vector<sf::Event*> VideoDriver::GetSFMLEvents(){
 	return toRet;
 }
 
-sf::RenderWindow* VideoDriver::GetWindow(){
+GLFWwindow* VideoDriver::GetWindow(){
 	return m_window;
 }
 

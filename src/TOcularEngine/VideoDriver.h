@@ -10,6 +10,7 @@
 #include <SFML/Graphics.hpp>
 
 // Fast-forward declaration
+struct GLFWwindow;
 class Program;
 namespace sf{
     class RenderWindow;
@@ -70,7 +71,7 @@ public:
      */
     std::string GetWindowName();
 
-    toe::core::TOEvector2df GetWindowDimensions();
+    toe::core::TOEvector2di GetWindowDimensions();
 
     Program* GetProgram(SHADERTYPE);
 
@@ -80,7 +81,7 @@ public:
 
     std::vector<sf::Event*> GetSFMLEvents();
 
-    sf::RenderWindow* GetWindow();
+    GLFWwindow* GetWindow();
     
     sf::Time GetElapsedTime();
 
@@ -119,7 +120,7 @@ private:
     VideoDriver();
 
     // Private SFML stuff
-    sf::RenderWindow* m_window;
+    GLFWwindow* m_window;
     std::string m_name;
     sf::Clock* m_clock;
 
