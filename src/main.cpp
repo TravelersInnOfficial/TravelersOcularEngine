@@ -50,18 +50,17 @@ int main(){
 
 	CreateTree(&myCamera, &meshOne, &meshTwo, &meshThree, &light1, &light2);
 
-	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0.0f, 1.7f, 0.0f);
-	meshOne->AddBillboard(pos, "cube");
-	meshTwo->AddBillboard(pos, "up", 0.2f);
-	meshThree->AddBillboard(pos, "potion");
-
+	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0.0f, 1.65f, 0.0f);
+	meshOne->AddBillboard(pos, "Cube");
+	meshTwo->AddBillboard(pos, "Wizard", 0.2f);
+	meshThree->AddBillboard(pos, "Potion");
 	meshThree->SetParent(meshTwo);
 
 	VDriv->SetMouseVisibility(false);
 
 	while(VDriv->Update()){
 		VDriv->Draw();
-		toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,VDriv->GetTime()/5,0);
+		toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0, VDriv->GetTime()/10 ,0);
 		meshOne->SetRotation(rotation);
 		meshTwo->SetRotation(rotation);
 		meshThree->SetRotation(rotation);
