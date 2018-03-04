@@ -14,11 +14,7 @@ void TTransform::Identity(){
 }
 
 void TTransform::Load(glm::mat4 matrix){
-	for(int i=0; i<4; i++){
-		for(int j=0; j<4; j++){
-			m_matrix[i][j] = matrix[i][j];	// Cargamos el valor de la matriz pasado en la propia
-		}
-	}
+	m_matrix = matrix;
 }
 
 void TTransform::Transpose(){

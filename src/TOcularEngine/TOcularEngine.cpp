@@ -1,4 +1,5 @@
 #include "TOcularEngine.h"
+#include "./../EngineUtilities/TResourceManager.h"
 
 VideoDriver* toe::GetVideoDriver(){
     privateVideoDriver = VideoDriver::GetInstance();
@@ -16,4 +17,12 @@ TFMesh* toe::AddSphere(toe::core::TOEvector3df position, toe::core::TOEvector3df
     TFMesh* m = privateSceneManager->AddMesh(position, rotation, scale, "");
     m->CreateSphere();
     return m;
+}
+
+void toe::LoadMesh(std::string path){
+	TResourceManager::GetInstance()->GetResourceMesh(path);
+}
+
+void toe::LoadTexture(std::string path){
+	TResourceManager::GetInstance()->GetResourceTexture(path);
 }

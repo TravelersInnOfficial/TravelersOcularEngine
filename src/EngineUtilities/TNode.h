@@ -23,7 +23,7 @@ public:
 	std::vector<TNode*>	GetChildren();			// Devuelve todos los hijos del nodo
 
 	glm::mat4	GetTransformMatrix();			// Consigue la matriz del arbol
-	glm::vec3  	GetTraslation();				// Returns vec3 Traslation
+	glm::vec3  	GetTranslation();				// Returns vec3 Traslation
 	glm::vec3  	GetRotation();					// Returns vec3 Rotation
 	glm::vec3  	GetScale();						// Returns vec3 Scale
 

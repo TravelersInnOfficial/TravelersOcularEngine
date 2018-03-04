@@ -10,7 +10,8 @@
 
 SceneManager::SceneManager(){
 	m_SceneTreeRoot = new TNode(new TTransform());
-	m_ambientLight = glm::vec3(0.25);
+	m_ambientLight = glm::vec3(1);
+	main_camera = nullptr;
 }
 
 SceneManager::~SceneManager(){
@@ -122,24 +123,32 @@ void SceneManager::SetAmbientLight(toe::core::TOEvector3df ambientLight){
 }
 
 void SceneManager::Draw(){
-	// Select active camera and set view and projection matrix
-	TEntity::SetViewMatrixPtr( main_camera->m_entityNode->GetTransformMatrix() );
+	//std::cout<<"1"<<std::endl;
+	if(main_camera!=nullptr){
+		// Select active camera and set view and projection matrix
+		TEntity::SetViewMatrixPtr( main_camera->m_entityNode->GetTransformMatrix() );
+	}
 
+	//std::cout<<"2"<<std::endl;
 	// Gets the Program
 	Program* myProgram = VideoDriver::GetInstance()->GetProgramVector()[STANDARD_SHADER];
 
+	//std::cout<<"3"<<std::endl;
 	// Sends the Ambient Light
 	GLint ambLocation = glGetUniformLocation(myProgram->GetProgramID(), "SpecialLight.AmbientLight");
 	glUniform3fv(ambLocation, 1, glm::value_ptr(m_ambientLight));
 
+	//std::cout<<"4"<<std::endl;	
 	// Send size of lights
 	GLint size = m_lights.size();
 	GLuint nlightspos = glGetUniformLocation(myProgram->GetProgramID(), "nlights");
 	glUniform1i(nlightspos, size);
 
+	//std::cout<<"5"<<std::endl;
 	// Draw all lights
     for(int i = 0; i < size; i++) m_lights[i]->DrawLight(i);
 
+    //std::cout<<"6"<<std::endl;
     m_SceneTreeRoot->Draw();
 }
 

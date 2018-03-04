@@ -75,8 +75,8 @@ void TFNode::Scale(toe::core::TOEvector3df scale){
 }
 
 toe::core::TOEvector3df TFNode::GetTranslation(){
-	glm::vec3 traslation = m_positionNode->GetTraslation();
-	toe::core::TOEvector3df toRet = toe::core::TOEvector3df(traslation.x,traslation.y,traslation.z);
+	glm::vec3 translation = m_positionNode->GetTranslation();
+	toe::core::TOEvector3df toRet = toe::core::TOEvector3df(translation.x,translation.y,translation.z);
 	return toRet;
 }
 

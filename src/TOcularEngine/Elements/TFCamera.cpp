@@ -77,3 +77,42 @@ float TFCamera::GetBottom(){
 	TCamera* myEntity = (TCamera*) m_entityNode->GetEntity();
 	return myEntity->GetBottom();
 }
+
+void TFCamera::LookAt(toe::core::TOEvector3df target, toe::core::TOEvector3df up){
+	glm::vec3 position 	= m_positionNode->GetTranslation();
+	glm::vec3 targetPos	= glm::vec3(target.X, target.Y, target.Z);
+	glm::vec3 upForward = glm::vec3(up.X, up.Y, up.Z);
+
+	// Z
+	glm::vec3 axisZ = position - targetPos;
+	axisZ = glm::normalize(axisZ);
+
+	// Y
+	upForward = glm::normalize(upForward);
+	glm::vec3 axisY = glm::cross(upForward, axisZ);
+
+	// X
+	glm::vec3 axisX = glm::cross(glm::normalize(axisY), axisZ);
+
+	glm::mat4 matrix;
+	matrix[0][0] = axisX.x;
+    matrix[1][0] = axisX.y;
+    matrix[2][0] = axisX.z;
+    matrix[3][0] = 0;
+    matrix[0][1] = axisY.x;
+    matrix[1][1] = axisY.y;
+    matrix[2][1] = axisY.z;
+    matrix[3][1] = 0;
+    matrix[0][2] = axisZ.x;
+    matrix[1][2] = axisZ.y;
+    matrix[2][2] = axisZ.z;
+    matrix[3][2] = 0;
+    matrix[0][3] = 0;
+    matrix[1][3] = 0;
+    matrix[2][3] = 0;
+    matrix[3][3] = 1.0f;
+
+   	TTransform* rotation = (TTransform*) m_rotationNode->GetEntity();
+   	rotation->Load(matrix);
+}
+
