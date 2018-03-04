@@ -1,5 +1,7 @@
 #include "TRect.h"
 #include "../TOcularEngine/VideoDriver.h"
+#include <GL/glew.h>
+#include "./../TResourceManager.h"
 
 //STATIC PROPERTIES
 int TRect::m_size = 0;

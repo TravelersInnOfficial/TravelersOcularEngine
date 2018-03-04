@@ -1,4 +1,7 @@
 #include "TFRect.h"
+#include "./../../EngineUtilities/Entities/TTransform.h"
+#include "./../../EngineUtilities/Entities/TRect.h"
+#include "./../../EngineUtilities/TNode.h"
 
 TFRect::TFRect(toe::core::TOEvector2df size,
 		toe::core::TOEvector2df position,
