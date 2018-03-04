@@ -2,8 +2,6 @@
 #define TMESH_H
 
 #include "TEntity.h"
-#include <GL/glew.h>
-#include <vector>
 #include "../Resources/Program.h"
 #include "./../TResourceManager.h"
 #include "./../Resources/TResourceMesh.h"

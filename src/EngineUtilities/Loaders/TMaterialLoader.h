@@ -1,11 +1,9 @@
 #ifndef TMATERIALLOADER_H
 #define TMATERIALLOADER_H
 
-#include <assimp/cimport.h>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-
 #include "./../Resources/TResourceMesh.h"
+#include <string>
+class aiMaterial;
 
 class TMaterialLoader{
 public:

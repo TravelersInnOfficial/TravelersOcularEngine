@@ -2,9 +2,7 @@
 #define TRESOURCEMATERIAL_H
 
 #include "TResource.h"
-
-#include <glm/gtc/type_ptr.hpp>
-#include <vector>
+#include <glm/vec3.hpp>
 
 class TResourceMaterial: public TResource {
 

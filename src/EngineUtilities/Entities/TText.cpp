@@ -1,5 +1,9 @@
 #include "TText.h"
 #include "../TOcularEngine/VideoDriver.h"
+#include "./../TResourceManager.h"
+
+#include <GL/glew.h>
+#include <glm/gtc/type_ptr.hpp>
 
 TText::TText(std::string text, float charSize, std::string texture){
 	// Inicializamos los buffer

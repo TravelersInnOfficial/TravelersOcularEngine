@@ -3,17 +3,11 @@
 
 #include <TOEvector3d.h>
 #include <TColor.h>
-#include <glm/gtx/matrix_decompose.hpp>
-#include "./../../EngineUtilities/TNode.h"
-#include "./../../EngineUtilities/Entities/TTransform.h"
-#include "./../../EngineUtilities/Entities/TMesh.h"
-#include "./../../EngineUtilities/Entities/TText.h"
-#include "./../../EngineUtilities/Entities/TRect.h"
-#include "./../../EngineUtilities/Entities/TLight.h"
-#include "./../../EngineUtilities/Entities/TCamera.h"
+#include <vector>
 
+// Fast-forward declaration
 class TFText;
-
+class TNode;
 class SceneManager;
 
 class TFNode{

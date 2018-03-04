@@ -4,6 +4,9 @@
 #include <fstream>
 #include <stdexcept>
 
+// Glew for opengl
+#include <GL/glew.h>
+
 Program::Program(std::map<std::string, GLenum> shaderData){
     // Load all the shaders    
     m_shaders = std::vector<GLuint>(shaderData.size());
@@ -51,7 +54,9 @@ Program::Program(std::map<std::string, GLenum> shaderData){
         delete[] strInfoLog;
 
         glDeleteProgram(m_programID); m_programID = 0;
-        throw std::runtime_error(msg);
+        
+        //throw std::runtime_error(msg);
+        std::cout << msg << std::endl;
     }
 }
 
@@ -98,7 +103,8 @@ GLuint Program::LoadShader(std::string shaderPath, GLenum shaderType){
         delete[] strInfoLog;
 
         glDeleteShader(shaderID); shaderID = 0;
-        throw std::runtime_error(msg);
+        //throw std::runtime_error(msg);
+        std::cout << msg << std::endl;        
 	}
 
     return shaderID;

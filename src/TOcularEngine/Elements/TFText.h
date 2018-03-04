@@ -1,8 +1,8 @@
 #ifndef TFTEXT_H
 #define TFTEXT_H
 
-#include <TOEvector4d.h>
 #include "TFNode.h"
+#include <TOEvector4d.h>
 
 class TFText: public TFNode{
 	friend class TFNode;

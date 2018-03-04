@@ -1,4 +1,7 @@
 #include "TFCamera.h"
+#include "./../../EngineUtilities/Entities/TTransform.h"
+#include "./../../EngineUtilities/Entities/TCamera.h"
+#include "./../../EngineUtilities/TNode.h"
 
 TFCamera::TFCamera(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, bool perspective) : TFNode(){
 	TTransform* t = (TTransform*) m_rotationNode->GetEntity();

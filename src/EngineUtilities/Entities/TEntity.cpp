@@ -14,9 +14,9 @@ void TEntity::SetProgram(SHADERTYPE program){
     m_program = program;
 }
 
+// Initialize static variables
 glm::mat4 TEntity::ViewMatrix;
 glm::mat4 TEntity::ProjMatrix;
-
 
 void TEntity::SetViewMatrixPtr(glm::mat4 view){
     ViewMatrix = view;

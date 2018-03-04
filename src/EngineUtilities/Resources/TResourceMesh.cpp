@@ -2,6 +2,8 @@
 #include "./../Loaders/TObjectLoader.h"
 #include "./../TResourceManager.h"
 
+#include <GL/glew.h>
+
 TResourceMesh::TResourceMesh(std::string name){
 	m_name = name;
 	m_basicTexture = nullptr;

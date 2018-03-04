@@ -5,8 +5,7 @@
 #include "TResourceTexture.h"
 #include "TResourceMaterial.h"
 
-#include <glm/gtc/type_ptr.hpp>
-#include <vector>
+typedef unsigned int GLuint;
 
 class TResourceMesh: public TResource {
 

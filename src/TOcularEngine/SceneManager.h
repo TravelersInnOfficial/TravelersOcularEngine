@@ -7,6 +7,12 @@
 #include "./Elements/TFRect.h"
 #include <TOEvector2d.h>
 #include <vector>
+#include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp>
+
+// Fast-forward declaration
+typedef unsigned int GLuint;
+class Program;
 
 class SceneManager{
 public:

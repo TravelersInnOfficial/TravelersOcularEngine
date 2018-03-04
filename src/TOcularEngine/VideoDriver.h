@@ -1,14 +1,18 @@
 #ifndef VIDEODRIVER_H
 #define VIDEODRIVER_H
 
-#define GLEW_STATIC
-#include <GL/glew.h>
-
 #include "SceneManager.h"
 #include "IODriver.h"
-#include <SFML/System.hpp>
-#include <SFML/Graphics.hpp>
+#include <ShaderTypes.h>
 #include <TOEvector2d.h>
+#include <map>
+
+// Fast-forward declaration
+class Program;
+namespace sf{
+    class RenderWindow;
+    class Clock;
+}
 
 class VideoDriver{
     friend class TFDrawable;
@@ -93,7 +97,6 @@ public:
     void SetCursorPosition(int x, int y);
 
     toe::core::TOEvector2di GetCursorPosition();
-
 private:
     /**
      * @brief Video Driver constructor

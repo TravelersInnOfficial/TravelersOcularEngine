@@ -1,10 +1,8 @@
 #include "TResourceManager.h"
 
-static TResourceManager* instance = nullptr;
-
 TResourceManager* TResourceManager::GetInstance() {
-	if (instance == nullptr) instance = new TResourceManager();
-	return instance;
+	static TResourceManager instance;
+	return &instance;
 }
 
 TResourceManager::TResourceManager(){}

@@ -3,6 +3,9 @@
 
 #include "TResource.h"
 
+// Fast-forward declaration
+typedef unsigned int GLuint;
+
 class TResourceTexture: public TResource {
 
 public:

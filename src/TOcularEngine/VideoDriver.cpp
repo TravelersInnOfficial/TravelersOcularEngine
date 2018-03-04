@@ -2,6 +2,12 @@
 #include "../EventHandler.h"
 #include <IMGUI/imgui.h>
 #include <IMGUI/imgui-SFML.h>
+#include "./../EngineUtilities/Resources/Program.h"
+#include "./../EngineUtilities/TResourceManager.h"
+#include <SFML/Graphics.hpp>
+
+#define GLEW_STATIC
+#include <GL/glew.h>
 
 VideoDriver::VideoDriver(){
     m_name = "";

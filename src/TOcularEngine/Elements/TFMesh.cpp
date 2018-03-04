@@ -1,4 +1,7 @@
 #include "TFMesh.h"
+#include "./../../EngineUtilities/Entities/TTransform.h"
+#include "./../../EngineUtilities/Entities/TMesh.h"
+#include "./../../EngineUtilities/TNode.h"
 
 TFMesh::TFMesh(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale, std::string meshPath) : TFNode(){	
 	TTransform* t = (TTransform*) m_rotationNode->GetEntity();

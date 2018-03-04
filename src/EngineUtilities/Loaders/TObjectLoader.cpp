@@ -2,7 +2,21 @@
 #include "TMaterialLoader.h"
 #include "./../TResourceManager.h"
 
+//Headers to load models
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
+#include <GL/glew.h>
+#include <iostream>
+#include <fstream>
+#include <stdio.h>
+
 // VBO = VERTEX BUFFER OBJECT
+
+bool PackedVertex::operator<(const PackedVertex that) const{
+	return memcmp((void*)this, (void*)&that, sizeof(PackedVertex))>0;
+};
 
 void TObjectLoader::IndexVBO(TResourceMesh* mesh, std::vector<glm::vec3>* vertexVec, std::vector<glm::vec2>* uvVec, std::vector<glm::vec3>* normalVec, std::vector<unsigned int>* indexVec){
 	std::map<PackedVertex, unsigned int> VertexToOutIndex;

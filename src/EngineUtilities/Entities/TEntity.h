@@ -1,10 +1,10 @@
 #ifndef TENTITY_H
 #define TENTITY_H
 
-#include <stack>
-#include <glm/gtc/matrix_transform.hpp>
 #include "../Common/ShaderTypes.h"
 #include "../Resources/Program.h"
+#include <stack>
+#include <glm/mat4x4.hpp>
 
 class TEntity{
 public:

@@ -1,4 +1,7 @@
 #include "./TFText.h"
+#include "./../../EngineUtilities/Entities/TTransform.h"
+#include "./../../EngineUtilities/Entities/TText.h"
+#include "./../../EngineUtilities/TNode.h"
 
 TFText::TFText(	toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale, std::string text, float charSize, std::string texture):TFNode(){
 	TTransform* t = (TTransform*) m_rotationNode->GetEntity();

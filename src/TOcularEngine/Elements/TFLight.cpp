@@ -1,5 +1,12 @@
 #include "TFLight.h"
+#include "./../../EngineUtilities/Entities/TTransform.h"
+#include "./../../EngineUtilities/Entities/TLight.h"
+#include "./../../EngineUtilities/TNode.h"
 #include "./../VideoDriver.h"
+
+// GLEW AND GLM
+#include <GL/glew.h>
+#include <glm/gtc/type_ptr.hpp>
 
 TFLight::TFLight(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector4df color, float intensity) : TFNode(){
 	TTransform* t = (TTransform*) m_rotationNode->GetEntity();
