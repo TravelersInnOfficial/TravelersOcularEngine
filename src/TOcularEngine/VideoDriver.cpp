@@ -1,7 +1,4 @@
 #include "VideoDriver.h"
-#include "../EventHandler.h"
-#include <IMGUI/imgui.h>
-#include <IMGUI/imgui-SFML.h>
 #include "./../EngineUtilities/Resources/Program.h"
 #include "./../EngineUtilities/TResourceManager.h"
 #include <SFML/Graphics.hpp>
@@ -64,7 +61,7 @@ bool VideoDriver::Update(){
     while (m_window->pollEvent(event)){
         if(privateIODriver != nullptr)
             close_window = privateIODriver->Update(&event);
-            ImGui::SFML::ProcessEvent(event);
+            m_events.push_back(&event);
     }
 
     ClearScreen();
@@ -192,4 +189,10 @@ void VideoDriver::SetCursorPosition(int x, int y){
 toe::core::TOEvector2di VideoDriver::GetCursorPosition(){
     sf::Vector2i auxVec = sf::Mouse::getPosition(*m_window);
     return toe::core::TOEvector2di(auxVec.x, auxVec.y);
+}
+
+std::vector<sf::Event*> VideoDriver::GetSFMLEvents(){
+    std::vector<sf::Event*> toRet = m_events;
+    m_events.clear();
+    return toRet;
 }

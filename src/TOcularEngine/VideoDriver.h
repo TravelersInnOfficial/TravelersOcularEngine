@@ -6,6 +6,7 @@
 #include <ShaderTypes.h>
 #include <TOEvector2d.h>
 #include <map>
+#include <vector>
 
 // Fast-forward declaration
 class Program;
@@ -17,7 +18,6 @@ namespace sf{
 class VideoDriver{
     friend class TFDrawable;
     friend class TFRect;
-    friend class GUIEngine;
 public:
     /**
      * @brief Video Driver destructor
@@ -75,6 +75,8 @@ public:
 
     void SetMouseVisibility(bool visible);
 
+    std::vector<sf::Event*> GetSFMLEvents();
+
 //SETTERS
     /**
      * @brief Sets the update clear screen color
@@ -123,6 +125,8 @@ private:
      * 
      */
     void initShaders();
+
+    std::vector<sf::Event*> m_events;
 
 };
 
