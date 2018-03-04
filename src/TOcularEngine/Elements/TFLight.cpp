@@ -68,7 +68,7 @@ void TFLight::DrawLight(int num){
 		std::string str = "Light["+std::to_string(num)+"].";
 		std::string aux = "";
 
-		glm::vec3 location = m_entityNode->GetTraslation();
+		glm::vec3 location = m_entityNode->GetTranslation();
 		aux = str +"Position";
 		GLint lightPLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
 		glUniform3fv(lightPLocation, 1, glm::value_ptr(location));

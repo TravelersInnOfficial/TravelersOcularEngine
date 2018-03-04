@@ -123,7 +123,7 @@ glm::mat4 TNode::GetTransformMatrix(){
 	return toReturn;
 }
 
-glm::vec3 TNode::GetTraslation(){
+glm::vec3 TNode::GetTranslation(){
 	glm::mat4 myTransform = GetTransformMatrix();
 	
 	glm::vec3 scale;
