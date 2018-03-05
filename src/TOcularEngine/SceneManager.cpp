@@ -103,14 +103,25 @@ bool SceneManager::DeleteLight(TFLight* light){
 bool SceneManager::DeleteMesh(TFNode* node){
 	bool toRet = false;
 	TFMesh* mesh = (TFMesh*)node;
-	std::vector<TFMesh*>::iterator it = m_meshes.begin();
-	for(; it!= m_meshes.end() && !toRet; ++it){
-		if(*it == mesh){
-			delete mesh;
-			m_meshes.erase(it);
+
+	int size = m_meshes.size();
+	for(int i=size-1; i>=0; i--){
+		TFMesh* current = m_meshes[i];
+		if(current == mesh){
+			m_meshes.erase(m_meshes.begin() + i);
+			delete current;
 			toRet = true;
+			break;
 		}
 	}
+	/*std::vector<TFMesh*>::iterator it = m_meshes.begin();
+	for(; it!= m_meshes.end() && !toRet; ++it){
+		if(*it == mesh){
+			m_meshes.erase(it);
+			delete mesh;
+			toRet = true;
+		}
+	}*/
 	return toRet;
 }
 

@@ -15,6 +15,7 @@ TCamera::TCamera(bool perspective, float left, float right, float bottom, float 
 	m_program = STANDARD_SHADER;
 }
 
+
 TCamera::~TCamera(){}
 
 /*############################################################################################
