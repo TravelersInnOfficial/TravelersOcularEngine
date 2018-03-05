@@ -2,11 +2,6 @@
 #define IODRIVER_H
 #include <EventEnum.h>
 
-// Fast-forward declaration
-namespace sf{
-    class Event;
-}
-
 class TEvent{
 public:
 	TEvent();
@@ -99,7 +94,6 @@ class IODriver{
 public:
     IODriver();
     virtual ~IODriver();
-    bool Update(sf::Event* event);
     bool UpdateKeyboard(int key, int action);
     bool UpdateMousePosition(int xpos, int ypos);
     bool UpdateMouseButtons(int button, int action);

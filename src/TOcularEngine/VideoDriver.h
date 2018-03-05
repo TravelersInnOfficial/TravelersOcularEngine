@@ -7,15 +7,10 @@
 #include <TOEvector2d.h>
 #include <map>
 #include <vector>
-#include <SFML/Graphics.hpp>
 
 // Fast-forward declaration
 struct GLFWwindow;
 class Program;
-namespace sf{
-    class RenderWindow;
-    class Clock;
-}
 
 class VideoDriver{
     friend class TFDrawable;
@@ -29,7 +24,7 @@ public:
 
     static std::string m_assetsPath;
 
-    void CreateWindows(std::string window_name, toe::core::TOEvector2df dimensions);
+    bool CreateWindows(std::string window_name, toe::core::TOEvector2df dimensions);
     bool Update();
     void Draw();
     void ClearScreen();
@@ -79,11 +74,7 @@ public:
 
     void SetMouseVisibility(bool visible);
 
-    std::vector<sf::Event*> GetSFMLEvents();
-
     GLFWwindow* GetWindow();
-    
-    sf::Time GetElapsedTime();
 
     std::string GetAssetsPath();
 
@@ -106,9 +97,9 @@ public:
 
     void SetIODriver(IODriver* driver);
     
-    void SetCursorPosition(int x, int y);
+    void SetCursorPosition(float x, float y);
 
-    toe::core::TOEvector2di GetCursorPosition();
+    toe::core::TOEvector2df GetCursorPosition();
 
     void SetAssetsPath(std::string newPath);
 
@@ -122,7 +113,6 @@ private:
     // Private SFML stuff
     GLFWwindow* m_window;
     std::string m_name;
-    sf::Clock* m_clock;
 
     // Private Graphic Engine stuff
     static SceneManager* privateSceneManager;
@@ -139,13 +129,12 @@ private:
      */
     void initShaders();
 
-    std::vector<sf::Event*> m_events;
     static void keyboard_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
     static void mouse_position_callback(GLFWwindow* window, double xpos, double ypos);
     static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
     static void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
-
+    static void glwf_error_callback(int error, const char* description);
 };
 
 #endif

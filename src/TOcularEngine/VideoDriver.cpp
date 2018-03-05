@@ -14,7 +14,6 @@ IODriver* VideoDriver::privateIODriver = nullptr;
 VideoDriver::VideoDriver(){
 	m_name = "";
 	m_window = nullptr;
-	m_clock = new sf::Clock;
 	privateSceneManager = new SceneManager();
 	privateIODriver = nullptr;
 	close_window = false;
@@ -35,15 +34,21 @@ void VideoDriver::Drop(){
 	if(privateIODriver != nullptr)
 		delete privateIODriver;
 	delete privateSceneManager;
-	delete m_clock;
 	delete m_window;
 }
 
-void VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2df dimensions){
+void VideoDriver::glwf_error_callback(int error, const char* description)
+{
+    fprintf(stderr, "Error %d: %s\n", error, description);
+}
+
+bool VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2df dimensions){
 	m_name = window_name;
 
 	//initialize glfw
- 	glfwInit( );
+	glfwSetErrorCallback(VideoDriver::glwf_error_callback);
+    if (!glfwInit())
+        return false;
 
 	//initialize gflwindow parameters
 	glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 4 );
@@ -75,6 +80,7 @@ void VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2df
 
 	initShaders();
 	privateSceneManager->InitScene();
+	return true;
 }
 
 void VideoDriver::keyboard_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
@@ -102,40 +108,18 @@ void VideoDriver::mouse_scroll_callback(GLFWwindow* window, double xoffset, doub
 }
 
 bool VideoDriver::Update(){
-
-	glfwPollEvents();
-	//close_window = !glfwWindowShouldClose(m_window);
-	/*while (!glfwWindowShouldClose(m_window))
-    {
-        glfwPollEvents();
-	}*/
-	
 	//UPDATE IO
-	/*
-	sf::Event event;
-	while (m_window->pollEvent(event)){
-		if(privateIODriver != nullptr)
-			close_window = privateIODriver->Update(&event);
-			m_events.push_back(&event);
-	}
-*/
+	glfwPollEvents();
 	ClearScreen();
-/*
-	if(close_window) m_window->close();
+
+	if(close_window) glfwSetWindowShouldClose(m_window, GLFW_TRUE);
 	if(!close_window) privateSceneManager->Update();
-	*/
 	return !close_window;
 }
 
 void VideoDriver::Draw(){
 	privateSceneManager->Draw();
-
-	// Volvemos a poner el shader por default para el display de los datos
 	glUseProgram(GetProgram(STANDARD_SHADER)->GetProgramID());
-	int display_w, display_h;
-	glfwGetFramebufferSize(m_window, &display_w, &display_h);
-	//glViewport(0, 0, display_w, display_h);
-	//m_window->display(); 
 	glfwSwapBuffers(m_window);
 }
 
@@ -158,7 +142,7 @@ IODriver* VideoDriver::GetIOManager(){
 }
 
 float VideoDriver::GetTime(){
-	return m_clock->getElapsedTime().asMilliseconds() * 100;
+	return (float) (glfwGetTime()*1000);
 }
 
 std::string VideoDriver::GetWindowName(){
@@ -166,9 +150,9 @@ std::string VideoDriver::GetWindowName(){
 }
 
 toe::core::TOEvector2di VideoDriver::GetWindowDimensions(){
-   toe::core::TOEvector2di toRet(0.0f,0.0f);
+   	toe::core::TOEvector2di toRet(0.0f,0.0f);
 	glfwGetWindowSize(m_window, &toRet.X, &toRet.Y);
-   return toRet;
+   	return toRet;
 }
 
 Program* VideoDriver::GetProgram(SHADERTYPE p){
@@ -238,32 +222,22 @@ void VideoDriver::initShaders(){
 }
 
 void VideoDriver::SetMouseVisibility(bool visible){
-	//m_window->setMouseCursorVisible(visible);
 	if(visible == 0) glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN); //GLFW_CURSOR_DISABLED
 	else glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
-void VideoDriver::SetCursorPosition(int x, int y){
-	//sf::Mouse::setPosition(sf::Vector2i(x, y), *m_window);
+void VideoDriver::SetCursorPosition(float x, float y){
+	glfwSetCursorPos (m_window, (double) x, (double) y);
 }
 
-toe::core::TOEvector2di VideoDriver::GetCursorPosition(){
-	//sf::Vector2i auxVec = sf::Mouse::getPosition(*m_window);
-	return toe::core::TOEvector2di(0, 0);
-}
-
-std::vector<sf::Event*> VideoDriver::GetSFMLEvents(){
-	std::vector<sf::Event*> toRet = m_events;
-	m_events.clear();
-	return toRet;
+toe::core::TOEvector2df VideoDriver::GetCursorPosition(){
+	double x, y;
+	glfwGetCursorPos(m_window, &x, &y);
+	return toe::core::TOEvector2df((float)x, (float)y);
 }
 
 GLFWwindow* VideoDriver::GetWindow(){
 	return m_window;
-}
-
-sf::Time VideoDriver::GetElapsedTime(){
-	return m_clock->getElapsedTime();
 }
 
 void VideoDriver::SetAssetsPath(std::string newPath){
