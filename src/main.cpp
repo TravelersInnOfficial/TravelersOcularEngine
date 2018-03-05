@@ -62,7 +62,8 @@ int main(){
 	while(VDriv->Update()){
 		//VDriv->PrintDrawable(*rect);
 		VDriv->Draw();
-		toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0, VDriv->GetTime()/10 ,0);
+		toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0, VDriv->GetTime()/10000 ,0);
+		std::cout<<VDriv->GetTime()/10000<<std::endl;
 		meshOne->SetRotation(rotation);
 		meshTwo->SetRotation(rotation);
 		meshThree->SetRotation(rotation);

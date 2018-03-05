@@ -111,6 +111,7 @@ glm::mat4 TCamera::RecalculateProjectionMatrix(){
 	else m_projectionMatrix = CalculateOrthogonalMatrix();
 
 	// Set Entity ProjectionMatrix
+	m_projectionMatrix = glm::scale(m_projectionMatrix, glm::vec3(1, 1, -1));
 	ProjMatrix = m_projectionMatrix;
 	return(m_projectionMatrix);
 }

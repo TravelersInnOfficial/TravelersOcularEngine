@@ -16,7 +16,6 @@ VideoDriver::VideoDriver(){
 	m_window = nullptr;
 	m_clock = new sf::Clock;
 	privateSceneManager = new SceneManager();
-	std::cout<<privateSceneManager<<std::endl;	
 	privateIODriver = nullptr;
 	close_window = false;
 	m_clearSceenColor = toe::core::TOEvector4df(0,0,0,0);
@@ -71,6 +70,8 @@ void VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2df
 	glDepthFunc(GL_LESS);
 	glEnable(GL_CULL_FACE);		//|
 	glCullFace(GL_BACK);		//| Habilitar el backface culing
+
+	glFrontFace(GL_CW);
 
 	initShaders();
 	privateSceneManager->InitScene();
@@ -149,7 +150,6 @@ VideoDriver* VideoDriver::GetInstance(){
 }
 
 SceneManager* VideoDriver::GetSceneManager(){
-	std::cout<<privateSceneManager<<std::endl;
 	return privateSceneManager;
 }
 
@@ -158,7 +158,7 @@ IODriver* VideoDriver::GetIOManager(){
 }
 
 float VideoDriver::GetTime(){
-	return m_clock->getElapsedTime().asMilliseconds();
+	return m_clock->getElapsedTime().asMilliseconds() * 100;
 }
 
 std::string VideoDriver::GetWindowName(){

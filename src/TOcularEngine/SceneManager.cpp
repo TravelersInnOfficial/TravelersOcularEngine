@@ -9,7 +9,8 @@
 #include <glm/gtc/type_ptr.hpp>
 
 SceneManager::SceneManager(){
-	m_SceneTreeRoot = new TNode(new TTransform());
+	TTransform* myTransform = new TTransform();
+	m_SceneTreeRoot = new TNode(myTransform);
 	m_ambientLight = glm::vec3(1);
 	main_camera = nullptr;
 }
@@ -138,6 +139,7 @@ void SceneManager::Draw(){
 	if(main_camera!=nullptr){
 		// Select active camera and set view and projection matrix
 		TEntity::SetViewMatrixPtr( main_camera->m_entityNode->GetTransformMatrix() );
+		TEntity::SetViewMatrixPtr(glm::inverse(TEntity::ViewMatrix));
 	}
 
 	//std::cout<<"2"<<std::endl;
