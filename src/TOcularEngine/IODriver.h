@@ -100,6 +100,10 @@ public:
     IODriver();
     virtual ~IODriver();
     bool Update(sf::Event* event);
+    bool UpdateKeyboard(int key, int action);
+    bool UpdateMousePosition(int xpos, int ypos);
+    bool UpdateMouseButtons(int button, int action);
+    bool UpdateMouseWheel(int xoffset, int yoffset);
 protected:
 	virtual bool OnEvent(const TEvent& event);
     bool m_close;

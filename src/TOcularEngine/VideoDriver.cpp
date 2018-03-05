@@ -8,6 +8,8 @@
 
 #include <GLFW/glfw3.h> //SIEMPRE DESPUES DE INCLUIR GLEW
 std::string	VideoDriver::m_assetsPath = "";
+SceneManager* VideoDriver::privateSceneManager = nullptr;
+IODriver* VideoDriver::privateIODriver = nullptr;
 
 VideoDriver::VideoDriver(){
 	m_name = "";
@@ -41,9 +43,24 @@ void VideoDriver::Drop(){
 void VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2df dimensions){
 	m_name = window_name;
 
+	//initialize glfw
+ 	glfwInit( );
+
+	//initialize gflwindow parameters
+	glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 4 );
+    glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 1 );
+    glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
+    glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE );
+    glfwWindowHint( GLFW_RESIZABLE, GL_FALSE );
+
+	//create glfwindow and make it the current window
 	m_window = glfwCreateWindow(dimensions.X,dimensions.Y, m_name.c_str(), NULL, NULL);
     glfwMakeContextCurrent(m_window);
-	
+	glfwSetKeyCallback(m_window, VideoDriver::keyboard_callback);
+	glfwSetCursorPosCallback(m_window, VideoDriver::mouse_position_callback);
+	glfwSetMouseButtonCallback(m_window, VideoDriver::mouse_button_callback);
+	glfwSetScrollCallback(m_window, VideoDriver::mouse_scroll_callback);
+
 	/// Iniciamos glew
 	glewExperimental = GL_TRUE;
 	glewInit();
@@ -59,7 +76,39 @@ void VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2df
 	privateSceneManager->InitScene();
 }
 
+void VideoDriver::keyboard_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
+    if(privateIODriver!=nullptr){
+		privateIODriver->UpdateKeyboard(key,action);
+	}
+}
+
+void VideoDriver::mouse_position_callback(GLFWwindow* window, double xpos, double ypos){
+	if(privateIODriver!=nullptr){
+		privateIODriver->UpdateMousePosition(xpos,ypos);
+	}
+}
+
+void VideoDriver::mouse_button_callback(GLFWwindow* window, int button, int action, int mods){
+	if(privateIODriver!=nullptr){
+		privateIODriver->UpdateMouseButtons(button,action);
+	}
+}
+
+void VideoDriver::mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset){
+	if(privateIODriver!=nullptr){
+		privateIODriver->UpdateMouseWheel(xoffset, yoffset);
+	}
+}
+
 bool VideoDriver::Update(){
+
+	glfwPollEvents();
+	//close_window = !glfwWindowShouldClose(m_window);
+	/*while (!glfwWindowShouldClose(m_window))
+    {
+        glfwPollEvents();
+	}*/
+	
 	//UPDATE IO
 	/*
 	sf::Event event;
@@ -68,9 +117,9 @@ bool VideoDriver::Update(){
 			close_window = privateIODriver->Update(&event);
 			m_events.push_back(&event);
 	}
-
+*/
 	ClearScreen();
-
+/*
 	if(close_window) m_window->close();
 	if(!close_window) privateSceneManager->Update();
 	*/
@@ -78,10 +127,13 @@ bool VideoDriver::Update(){
 }
 
 void VideoDriver::Draw(){
-	//privateSceneManager->Draw();
+	privateSceneManager->Draw();
 
 	// Volvemos a poner el shader por default para el display de los datos
 	glUseProgram(GetProgram(STANDARD_SHADER)->GetProgramID());
+	int display_w, display_h;
+	glfwGetFramebufferSize(m_window, &display_w, &display_h);
+	//glViewport(0, 0, display_w, display_h);
 	//m_window->display(); 
 	glfwSwapBuffers(m_window);
 }

@@ -57,7 +57,7 @@ int main(){
 	meshThree->AddBillboard(pos, "Potion");
 	meshThree->SetParent(meshTwo);
 
-	VDriv->SetMouseVisibility(false);
+	//VDriv->SetMouseVisibility(false);
 
 	while(VDriv->Update()){
 		//VDriv->PrintDrawable(*rect);

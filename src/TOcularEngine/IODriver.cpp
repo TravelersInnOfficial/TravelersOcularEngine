@@ -1,5 +1,7 @@
 #include "IODriver.h"
 #include <SFML/Graphics.hpp>
+#include <iostream>
+#include <GLFW/glfw3.h> //SIEMPRE DESPUES DE INCLUIR GLEW
 
 TEvent::TEvent(){}
 
@@ -10,6 +12,98 @@ IODriver::IODriver(){
 }
 
 IODriver::~IODriver(){}
+
+bool IODriver::UpdateKeyboard(int key, int action){
+    std::cout<<"key: "<<key<<"\n";
+    std::cout<<"action: "<<action<<"\n";
+    TEvent glfwEvent;
+    glfwEvent.m_type = Type_Unknow;
+
+    //GLFW_PRESS or GLFW_RELEASE.
+    switch(action){
+        case GLFW_PRESS:{
+            glfwEvent.m_type = Type_KeyPressed;
+            // Key Data
+            glfwEvent.m_key.code     = (KeyboardKey) key;
+            glfwEvent.m_key.alt      = false;
+            glfwEvent.m_key.control  = false;
+            glfwEvent.m_key.shift    = false;
+            glfwEvent.m_key.system   = false;
+            break;
+        }
+        case GLFW_RELEASE:{
+            glfwEvent.m_type = Type_KeyReleased;
+            // Key Data
+            glfwEvent.m_key.code     = (KeyboardKey) key;
+            glfwEvent.m_key.alt      = false;
+            glfwEvent.m_key.control  = false;
+            glfwEvent.m_key.shift    = false;
+            glfwEvent.m_key.system   = false;
+            break;
+        }
+    }
+
+    const TEvent* pointer = &glfwEvent;
+    return OnEvent(*pointer);
+}
+
+bool IODriver::UpdateMousePosition(int xpos, int ypos){
+    std::cout<<"mouse x pos: "<<xpos<<"\n";
+    std::cout<<"mouse y pos: "<<ypos<<"\n";
+    TEvent glfwEvent;
+    glfwEvent.m_type = Type_MouseMoved;
+
+    glfwEvent.m_mouseMove.x = xpos;
+    glfwEvent.m_mouseMove.y = ypos;
+
+    const TEvent* pointer = &glfwEvent;
+    return OnEvent(*pointer);
+}
+
+bool IODriver::UpdateMouseButtons(int button, int action){
+    std::cout<<"button: "<<button<<"\n";
+    std::cout<<"action: "<<action<<"\n";
+    TEvent glfwEvent;
+    glfwEvent.m_type = Type_Unknow;
+
+    switch(button){
+        case GLFW_PRESS:{
+            glfwEvent.m_type = Type_MouseButtonPressed;
+            // Mouse Button
+            glfwEvent.m_mouseButton.button   = (KeyboardKey) button;
+            glfwEvent.m_mouseButton.x        = 0;
+            glfwEvent.m_mouseButton.y        = 0;
+            break;
+        }
+        case GLFW_RELEASE:{
+            glfwEvent.m_type = Type_MouseButtonReleased;
+            // Mouse Button
+            glfwEvent.m_mouseButton.button   = (KeyboardKey) button;
+            glfwEvent.m_mouseButton.x        = 0;
+            glfwEvent.m_mouseButton.y        = 0;
+            break;
+        }
+    }
+
+    const TEvent* pointer = &glfwEvent;
+    return OnEvent(*pointer);
+}
+
+bool IODriver::UpdateMouseWheel(int xoffset, int yoffset){
+    std::cout<<"xoffset: "<<xoffset<<"\n";
+	std::cout<<"yoffset: "<<yoffset<<"\n";
+    TEvent glfwEvent;
+    glfwEvent.m_type = Type_MouseWheelScrolled;
+
+    //TODO:: EDIT
+    glfwEvent.m_mouseWheel.delta = 0;
+    glfwEvent.m_mouseWheel.x     = xoffset;
+    glfwEvent.m_mouseWheel.y     = yoffset;
+    
+
+    const TEvent* pointer = &glfwEvent;
+    return OnEvent(*pointer);
+}
 
 bool IODriver::Update(sf::Event* event){
 
@@ -45,6 +139,7 @@ bool IODriver::Update(sf::Event* event){
             sfEvent.m_text.unicode = event->text.unicode; 
             break;
         }
+        /*
         case sf::Event::KeyPressed:{
             sfEvent.m_type = Type_KeyPressed;
             // Key Data
@@ -95,7 +190,7 @@ bool IODriver::Update(sf::Event* event){
             sfEvent.m_mouseMove.x = event->mouseMove.x;
             sfEvent.m_mouseMove.y = event->mouseMove.y;
             break;
-        }
+        }*/
         case sf::Event::MouseEntered:{
             sfEvent.m_type = Type_MouseEntered;
             // No Data
