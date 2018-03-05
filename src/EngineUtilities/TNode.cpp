@@ -149,6 +149,7 @@ glm::vec3 TNode::GetRotation(){
 
 	rotation = glm::conjugate(rotation);
 	glm::vec3 toRet = glm::eulerAngles(rotation);
+
 	return toRet;
 }
 

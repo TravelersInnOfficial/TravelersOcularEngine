@@ -114,8 +114,13 @@ void TFCamera::LookAt(toe::core::TOEvector3df target, toe::core::TOEvector3df up
     matrix[3][3] = 1.0f;*/
 
 	glm::mat4 matrix = glm::lookAt(position, targetPos, upForward);
+	TTransform* rotation = (TTransform*) m_rotationNode->GetEntity();
 
-   	TTransform* rotation = (TTransform*) m_rotationNode->GetEntity();
+	glm::vec3 rot2 = m_rotationNode->GetRotation();
+
+   
    	rotation->Load(matrix);
+
+   	glm::vec3 rot1 = m_rotationNode->GetRotation();
 }
 
