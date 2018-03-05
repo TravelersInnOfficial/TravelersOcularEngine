@@ -105,6 +105,7 @@ public:
     bool UpdateMouseButtons(int button, int action);
     bool UpdateMouseWheel(int xoffset, int yoffset);
 protected:
+    KeyboardKey ConvertKeyGLFW(int key);
 	virtual bool OnEvent(const TEvent& event);
     bool m_close;
 };
