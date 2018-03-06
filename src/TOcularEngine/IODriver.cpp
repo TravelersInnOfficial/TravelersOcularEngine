@@ -13,8 +13,6 @@ IODriver::IODriver(){
 IODriver::~IODriver(){}
 
 bool IODriver::UpdateKeyboard(int key, int action){
-    std::cout<<"key: "<<key<<"\n";
-    std::cout<<"action: "<<action<<"\n";
     TEvent glfwEvent;
     glfwEvent.m_type = Type_Unknow;
 
@@ -47,8 +45,6 @@ bool IODriver::UpdateKeyboard(int key, int action){
 }
 
 bool IODriver::UpdateMousePosition(int xpos, int ypos){
-    std::cout<<"mouse x pos: "<<xpos<<"\n";
-    std::cout<<"mouse y pos: "<<ypos<<"\n";
     TEvent glfwEvent;
     glfwEvent.m_type = Type_MouseMoved;
 
@@ -60,8 +56,6 @@ bool IODriver::UpdateMousePosition(int xpos, int ypos){
 }
 
 bool IODriver::UpdateMouseButtons(int button, int action){
-    std::cout<<"button: "<<button<<"\n";
-    std::cout<<"action: "<<action<<"\n";
     TEvent glfwEvent;
     glfwEvent.m_type = Type_Unknow;
 
@@ -89,8 +83,6 @@ bool IODriver::UpdateMouseButtons(int button, int action){
 }
 
 bool IODriver::UpdateMouseWheel(int xoffset, int yoffset){
-    std::cout<<"xoffset: "<<xoffset<<"\n";
-	std::cout<<"yoffset: "<<yoffset<<"\n";
     TEvent glfwEvent;
     glfwEvent.m_type = Type_MouseWheelScrolled;
 
