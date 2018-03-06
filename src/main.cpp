@@ -55,19 +55,14 @@ int main(){
 	meshOne->AddBillboard(pos, "Cube");
 	meshTwo->AddBillboard(pos, "Wizard", 0.2f);
 	meshThree->AddBillboard(pos, "Potion");
-	meshThree->SetParent(meshTwo);
 
 	VDriv->SetMouseVisibility(false);
 
+	meshTwo->SetRotation(toe::core::TOEvector3df(0,0,0));
+
 	while(VDriv->Update()){
-		//VDriv->PrintDrawable(*rect);
 		VDriv->Draw();
-		toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0, VDriv->GetTime()/10000 ,0);
-		std::cout<<VDriv->GetTime()/10000<<std::endl;
-		meshOne->SetRotation(rotation);
-		meshTwo->SetRotation(rotation);
-		meshThree->SetRotation(rotation);
-		if(meshTwo != nullptr) meshTwo->SetTranslate(toe::core::TOEvector3df(EventHandler::xdist, 0.0f, -EventHandler::zdist));
+		if(meshTwo != nullptr) meshTwo->SetRotation(toe::core::TOEvector3df(EventHandler::xdist, EventHandler::ydist, EventHandler::zdist));
 	}
 
     return EXIT_SUCCESS;

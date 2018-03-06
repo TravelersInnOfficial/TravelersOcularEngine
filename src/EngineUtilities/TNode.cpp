@@ -1,6 +1,9 @@
 #include "TNode.h"
 #include "Entities/TTransform.h"
 #include <glm/gtx/matrix_decompose.hpp>
+#include <iostream>
+#include "glm/ext.hpp"
+#include <cmath>
 
 TNode::TNode(){
 	m_parent = nullptr;
@@ -116,7 +119,7 @@ glm::mat4 TNode::GetTransformMatrix(){
 	}
 
 	while(auxParent != nullptr){
-		toReturn = ((TTransform*)auxParent->GetEntity())->GetTransform() * toReturn;
+		toReturn = toReturn * ((TTransform*)auxParent->GetEntity())->GetTransform();
 		auxParent = auxParent->GetParent();
 	}
 	
@@ -139,16 +142,23 @@ glm::vec3 TNode::GetTranslation(){
 
 glm::vec3 TNode::GetRotation(){
 	glm::mat4 myTransform = GetTransformMatrix();
-	
+
 	glm::vec3 scale;
 	glm::quat rotation;
 	glm::vec3 translation;
 	glm::vec3 skew;
 	glm::vec4 perspective;
-	glm::decompose(myTransform, scale, rotation, translation, skew, perspective);
 
+	glm::decompose(myTransform, scale, rotation, translation, skew, perspective);
+	rotation = glm::quat(rotation.y, rotation.x, rotation.z, rotation.w);
 	rotation = glm::conjugate(rotation);
 	glm::vec3 toRet = glm::eulerAngles(rotation);
+
+	toRet = glm::vec3(toRet.y, toRet.z, toRet.x);
+	toRet = glm::degrees(toRet);
+
+	toRet.y = 180 - toRet.y;
+	toRet.z = -toRet.z;
 
 	return toRet;
 }

@@ -5,11 +5,11 @@
 #include "./../../EngineUtilities/TNode.h"
 
 TFCamera::TFCamera(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, bool perspective) : TFNode(){
-	TTransform* t = (TTransform*) m_rotationNode->GetEntity();
-	t->Rotate(rotation.X, rotation.Y, rotation.Z);
-
-	t = (TTransform*) m_scaleNode->GetEntity();
+	TTransform* t = (TTransform*) m_scaleNode->GetEntity();
 	t->Scale(1.0f, 1.0f, 1.0f);
+
+	t = (TTransform*) m_rotationNode->GetEntity();
+	t->Rotate(rotation.X, rotation.Y, rotation.Z);
 
 	t = (TTransform*) m_positionNode->GetEntity();
 	t->Translate(position.X, position.Y, position.Z);
@@ -82,7 +82,7 @@ float TFCamera::GetBottom(){
 void TFCamera::LookAt(toe::core::TOEvector3df target, toe::core::TOEvector3df up){
 	glm::vec3 position 	= m_positionNode->GetTranslation();
 	glm::vec3 targetPos	= glm::vec3(target.X, target.Y, target.Z);
-	glm::vec3 upForward = glm::vec3(up.X, up.Y, up.Z);
+	glm::vec3 upForward = glm::vec3(1, 0, 0);
 
 	/*// Z
 	glm::vec3 axisZ = targetPos - position;
@@ -115,12 +115,9 @@ void TFCamera::LookAt(toe::core::TOEvector3df target, toe::core::TOEvector3df up
 
 	glm::mat4 matrix = glm::lookAt(position, targetPos, upForward);
 	TTransform* rotation = (TTransform*) m_rotationNode->GetEntity();
-
-	glm::vec3 rot2 = m_rotationNode->GetRotation();
-
    
    	rotation->Load(matrix);
 
-   	glm::vec3 rot1 = m_rotationNode->GetRotation();
+   	//glm::vec3 rot1 = m_rotationNode->GetRotation();
 }
 

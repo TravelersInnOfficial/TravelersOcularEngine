@@ -9,11 +9,11 @@
 #include <glm/gtc/type_ptr.hpp>
 
 TFLight::TFLight(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector4df color, float intensity) : TFNode(){
-	TTransform* t = (TTransform*) m_rotationNode->GetEntity();
-	t->Rotate(rotation.X, rotation.Y, rotation.Z);
-
-	t = (TTransform*) m_scaleNode->GetEntity();
+	TTransform* t = (TTransform*) m_scaleNode->GetEntity();
 	t->Scale(1, 1, 1);
+
+	t = (TTransform*) m_rotationNode->GetEntity();
+	t->Rotate(rotation.X, rotation.Y, rotation.Z);
 
 	t = (TTransform*) m_positionNode->GetEntity();
 	t->Translate(position.X, position.Y, position.Z);

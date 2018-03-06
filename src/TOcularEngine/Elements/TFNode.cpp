@@ -5,14 +5,11 @@
 #include "TFText.h"
 
 TFNode::TFNode(){
-	TTransform* rot = new TTransform();
-	m_rotationNode = new TNode(rot);
+	m_scaleNode = new TNode(new TTransform());
 
-	TTransform* esc = new TTransform();
-	m_scaleNode = new TNode(m_rotationNode, esc);
+	m_rotationNode = new TNode(m_scaleNode, new TTransform());
 	
-	TTransform* pos = new TTransform();
-	m_positionNode = new TNode(m_scaleNode, pos);
+	m_positionNode = new TNode(m_rotationNode, new TTransform());
 
 	m_entityNode = new TNode();
 	m_entityNode->SetParent(m_positionNode);
@@ -34,11 +31,11 @@ TFNode::~TFNode(){
 
 	//  Para finalizar le quitamos el padre y lo eliminamos
 	RemoveParent();
-	delete m_rotationNode;
+	delete m_scaleNode;
 }
 
 void TFNode::Attach(TNode* root){
-	m_rotationNode->SetParent(root);
+	m_scaleNode->SetParent(root);
 }
 
 void TFNode::SetTranslate(toe::core::TOEvector3df translation){

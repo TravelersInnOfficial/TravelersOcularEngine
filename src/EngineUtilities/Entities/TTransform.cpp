@@ -52,7 +52,6 @@ void TTransform::BeginDraw(){
 void TTransform::EndDraw(){
 	// Desapilar matriz y ponerla como actual
 	m_stack.pop();
-	//PrintMatrix(m_stack.top());
 }
 
 void TTransform::PrintMatrix(glm::mat4 mat){

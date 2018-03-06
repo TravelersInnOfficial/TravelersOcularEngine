@@ -59,7 +59,7 @@ TFLight* SceneManager::AddLight(toe::core::TOEvector3df position, toe::core::TOE
 TFMesh* SceneManager::AddMesh(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale, std::string meshPath){
 	TFMesh* toRet = nullptr;
 	toRet = new TFMesh(position, rotation, scale, meshPath);
-	m_meshes.push_back(toRet);
+	m_meshes.push_back((TFMesh*)toRet);
 	toRet->Attach(m_SceneTreeRoot);
 	return toRet;
 }

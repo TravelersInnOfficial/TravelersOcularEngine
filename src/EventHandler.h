@@ -10,8 +10,9 @@ public:
 
 	bool OnEvent(const TEvent& event);
 
-    static float zdist;
     static float xdist;
+    static float ydist;
+    static float zdist;
 };
 
 #endif

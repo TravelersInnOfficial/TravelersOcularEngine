@@ -4,11 +4,11 @@
 #include "./../../EngineUtilities/TNode.h"
 
 TFText::TFText(	toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale, std::string text, float charSize, std::string texture):TFNode(){
-	TTransform* t = (TTransform*) m_rotationNode->GetEntity();
-	t->Rotate(rotation.X, rotation.Y, rotation.Z);
-
-	t = (TTransform*) m_scaleNode->GetEntity();
+	TTransform*  t = (TTransform*) m_scaleNode->GetEntity();
 	t->Scale(scale.X, scale.Y, scale.Z);
+
+	t = (TTransform*) m_rotationNode->GetEntity();
+	t->Rotate(rotation.X, rotation.Y, rotation.Z);
 
 	t = (TTransform*) m_positionNode->GetEntity();
 	t->Translate(position.X, position.Y, position.Z);
