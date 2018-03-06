@@ -30,3 +30,21 @@ void toe::LoadMesh(std::string path){
 void toe::LoadTexture(std::string path){
 	TResourceManager::GetInstance()->GetResourceTexture(path);
 }
+
+GLuint toe::GetTextureID(std::string path){
+    return TResourceManager::GetInstance()->GetResourceTexture(path)->GetTextureId();
+}
+
+toe::core::TOEvector2di toe::GetTextureDims(std::string path){
+    int w = TResourceManager::GetInstance()->GetResourceTexture(path)->GetWidth();
+    int h = TResourceManager::GetInstance()->GetResourceTexture(path)->GetHeight();
+    return toe::core::TOEvector2di(w,h);
+}
+
+int toe::GetTextureWidth(std::string path){
+    return TResourceManager::GetInstance()->GetResourceTexture(path)->GetWidth();
+}
+
+int toe::GetTextureHeight(std::string path){
+    return TResourceManager::GetInstance()->GetResourceTexture(path)->GetHeight();
+}

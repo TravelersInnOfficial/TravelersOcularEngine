@@ -7,17 +7,12 @@
 #include <TOEvector2d.h>
 #include <map>
 #include <vector>
-#include <SFML/Graphics.hpp>
 
 // Fast-forward declaration
+struct GLFWwindow;
 class Program;
-namespace sf{
-    class RenderWindow;
-    class Clock;
-}
 
 class VideoDriver{
-    friend class TFDrawable;
     friend class TFRect;
 public:
     /**
@@ -28,7 +23,7 @@ public:
 
     static std::string m_assetsPath;
 
-    void CreateWindows(std::string window_name, toe::core::TOEvector2df dimensions);
+    bool CreateWindows(std::string window_name, toe::core::TOEvector2df dimensions);
     bool Update();
     void Draw();
     void ClearScreen();
@@ -70,7 +65,7 @@ public:
      */
     std::string GetWindowName();
 
-    toe::core::TOEvector2df GetWindowDimensions();
+    toe::core::TOEvector2di GetWindowDimensions();
 
     Program* GetProgram(SHADERTYPE);
 
@@ -78,11 +73,7 @@ public:
 
     void SetMouseVisibility(bool visible);
 
-    std::vector<sf::Event*> GetSFMLEvents();
-
-    sf::RenderWindow* GetWindow();
-    
-    sf::Time GetElapsedTime();
+    GLFWwindow* GetWindow();
 
     std::string GetAssetsPath();
 
@@ -119,13 +110,12 @@ private:
     VideoDriver();
 
     // Private SFML stuff
-    sf::RenderWindow* m_window;
+    GLFWwindow* m_window;
     std::string m_name;
-    sf::Clock* m_clock;
 
     // Private Graphic Engine stuff
-    SceneManager* privateSceneManager = nullptr;
-    IODriver* privateIODriver = nullptr;
+    static SceneManager* privateSceneManager;
+    static IODriver* privateIODriver;
 
     bool close_window;
     toe::core::TOEvector4df m_clearSceenColor;
@@ -138,9 +128,12 @@ private:
      */
     void initShaders();
 
-    std::vector<sf::Event*> m_events;
+    static void keyboard_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+    static void mouse_position_callback(GLFWwindow* window, double xpos, double ypos);
+    static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+    static void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
-
+    static void glwf_error_callback(int error, const char* description);
 };
 
 #endif

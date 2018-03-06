@@ -56,7 +56,7 @@ int main(){
 	meshTwo->AddBillboard(pos, "Wizard", 0.2f);
 	meshThree->AddBillboard(pos, "Potion");
 
-	VDriv->SetMouseVisibility(false);
+	//VDriv->SetMouseVisibility(false);
 
 	meshTwo->SetRotation(toe::core::TOEvector3df(0,0,0));
 
