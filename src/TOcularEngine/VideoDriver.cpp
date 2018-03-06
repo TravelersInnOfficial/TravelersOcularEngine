@@ -4,8 +4,8 @@
 
 
 #define GLEW_STATIC
-#include <GL/glew.h>
 
+#include <GL/glew.h>
 #include <GLFW/glfw3.h> //SIEMPRE DESPUES DE INCLUIR GLEW
 std::string	VideoDriver::m_assetsPath = "";
 SceneManager* VideoDriver::privateSceneManager = nullptr;

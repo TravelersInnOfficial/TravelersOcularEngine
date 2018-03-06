@@ -31,6 +31,6 @@ void toe::LoadTexture(std::string path){
 	TResourceManager::GetInstance()->GetResourceTexture(path);
 }
 
-int toe::GetTextureID(std::string path){
-    return (int) TResourceManager::GetInstance()->GetResourceTexture(path)->GetTextureId();
+GLuint toe::GetTextureID(std::string path){
+    return TResourceManager::GetInstance()->GetResourceTexture(path)->GetTextureId();
 }
