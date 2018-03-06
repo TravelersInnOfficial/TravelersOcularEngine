@@ -13,7 +13,6 @@ struct GLFWwindow;
 class Program;
 
 class VideoDriver{
-    friend class TFDrawable;
     friend class TFRect;
 public:
     /**
