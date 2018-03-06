@@ -35,6 +35,8 @@ void VideoDriver::Drop(){
 		delete privateIODriver;
 	delete privateSceneManager;
 	delete m_window;
+	glfwDestroyWindow(m_window);
+	glfwTerminate();
 }
 
 void VideoDriver::glwf_error_callback(int error, const char* description)
@@ -226,14 +228,14 @@ void VideoDriver::SetMouseVisibility(bool visible){
 	else glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
-void VideoDriver::SetCursorPosition(float x, float y){
+void VideoDriver::SetCursorPosition(int x, int y){
 	glfwSetCursorPos (m_window, (double) x, (double) y);
 }
 
-toe::core::TOEvector2df VideoDriver::GetCursorPosition(){
+toe::core::TOEvector2di VideoDriver::GetCursorPosition(){
 	double x, y;
 	glfwGetCursorPos(m_window, &x, &y);
-	return toe::core::TOEvector2df((float)x, (float)y);
+	return toe::core::TOEvector2di((int)x, (int)y);
 }
 
 GLFWwindow* VideoDriver::GetWindow(){

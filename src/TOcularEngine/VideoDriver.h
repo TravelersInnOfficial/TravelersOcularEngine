@@ -97,9 +97,9 @@ public:
 
     void SetIODriver(IODriver* driver);
     
-    void SetCursorPosition(float x, float y);
+    void SetCursorPosition(int x, int y);
 
-    toe::core::TOEvector2df GetCursorPosition();
+    toe::core::TOEvector2di GetCursorPosition();
 
     void SetAssetsPath(std::string newPath);
 

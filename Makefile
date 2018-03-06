@@ -4,14 +4,14 @@
     CCFLAGS				:= -O3 -g -Wall
     CPPFLAGS        	:= -I/mingw64/include -I/mingw64/include/bullet -I./src/Common
     LDFLAGS				:= -L/mingw64/lib
-    LIBS 				:= -lopengl32 -lsfml-window -lsfml-graphics -lsfml-system -lglew32 -lassimp
+    LIBS 				:= -lopengl32 -lglew32 -lassimp
 else
     Target				:= EngineTest
     CXXFLAGS			:= -O3 -g -Wall -std=c++11
     CCFLAGS				:= -O3 -g -Wall
     CPPFLAGS        	:= -I/usr/include -I/usr/include/bullet -I./src/Common -I/usr/local/include/assimp -I/usr/include/GLFW
     LDFLAGS				:= -L./libs/Linux -L./usr/local/lib/
-    LIBS 				:= -lGL -lsfml-window -lsfml-graphics -lsfml-system -lGLEW -lassimp -lglfw
+    LIBS 				:= -lGL -lGLEW -lassimp -lglfw
 endif
 
 BinPath 			:= ./bin
