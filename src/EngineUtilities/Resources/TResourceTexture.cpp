@@ -50,3 +50,10 @@ bool TResourceTexture::LoadFile(){
 GLuint TResourceTexture::GetTextureId(){
 	return m_textureID;
 }
+
+int  TResourceTexture::GetWidth(){
+	return m_width;
+}
+int  TResourceTexture::GetHeight(){
+	return m_height;
+}

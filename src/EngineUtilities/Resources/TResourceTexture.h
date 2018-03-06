@@ -20,6 +20,8 @@ public:
     bool LoadFile();
 
     GLuint GetTextureId();
+    int GetWidth();
+    int GetHeight();
 
 private:
     unsigned char* m_imageData;

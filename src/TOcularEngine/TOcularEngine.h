@@ -20,6 +20,9 @@ namespace toe{
     void LoadMesh(std::string path);
     void LoadTexture(std::string path);
     GLuint GetTextureID(std::string path);
+    toe::core::TOEvector2di GetTextureDims(std::string path);
+    int GetTextureWidth(std::string path);
+    int GetTextureHeight(std::string path);
 
     namespace core{ 
         class rect{
