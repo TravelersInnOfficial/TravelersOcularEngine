@@ -28,6 +28,7 @@ public:
     void Draw();
     void ClearScreen();
     void Drop();
+    void SetReceiver();
 
 //GETTERS
     /**

@@ -62,10 +62,7 @@ bool VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2df
 	//create glfwindow and make it the current window
 	m_window = glfwCreateWindow(dimensions.X,dimensions.Y, m_name.c_str(), NULL, NULL);
     glfwMakeContextCurrent(m_window);
-	glfwSetKeyCallback(m_window, VideoDriver::keyboard_callback);
-	glfwSetCursorPosCallback(m_window, VideoDriver::mouse_position_callback);
-	glfwSetMouseButtonCallback(m_window, VideoDriver::mouse_button_callback);
-	glfwSetScrollCallback(m_window, VideoDriver::mouse_scroll_callback);
+	SetReceiver();
 
 	/// Iniciamos glew
 	glewExperimental = GL_TRUE;
@@ -85,6 +82,13 @@ bool VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2df
 	return true;
 }
 
+void VideoDriver::SetReceiver(){
+	glfwSetKeyCallback(m_window, VideoDriver::keyboard_callback);
+	glfwSetCursorPosCallback(m_window, VideoDriver::mouse_position_callback);
+	glfwSetMouseButtonCallback(m_window, VideoDriver::mouse_button_callback);
+	glfwSetScrollCallback(m_window, VideoDriver::mouse_scroll_callback);
+}
+
 void VideoDriver::keyboard_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
     if(privateIODriver!=nullptr){
 		privateIODriver->UpdateKeyboard(key,action);
@@ -98,6 +102,7 @@ void VideoDriver::mouse_position_callback(GLFWwindow* window, double xpos, doubl
 }
 
 void VideoDriver::mouse_button_callback(GLFWwindow* window, int button, int action, int mods){
+	std::cout<<"Pressed"<<std::endl;
 	if(privateIODriver!=nullptr){
 		privateIODriver->UpdateMouseButtons(button,action);
 	}
