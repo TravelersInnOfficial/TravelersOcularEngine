@@ -30,7 +30,7 @@ void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh*
 	(*meshThree)->SetTexture("./../assets/textures/potion.png");
 
 	pos = toe::core::TOEvector3df(-5, 0, -5);
-	color = toe::core::TOEvector4df(1.0f, 0.5f, 0.3f, 1.0f);
+	color = toe::core::TOEvector4df(0.8f, 0.8f, 0.8f, 1.0f);
 	*light1 = sm->AddLight(pos, rot, color, intensity);
 
 	//pos = toe::core::TOEvector3df(10, 0, 0);
