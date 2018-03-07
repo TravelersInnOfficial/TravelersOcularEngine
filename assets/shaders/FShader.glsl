@@ -25,6 +25,7 @@ struct TLight {
     vec3 Position;
     vec3 Diffuse;
     vec3 Specular;
+    float Attenuation;
 };
 
 uniform TLight Light[20];
@@ -38,7 +39,8 @@ uniform SLight SpecialLight;
 vec3  Phong (int num) {
     // CALCULAR LOS DIFERENTES VECTORES	 
 	vec3 n = normalize(Normal);
-    vec3 s = normalize(Light[num].Position - Position);
+    vec3 vecToLight = Light[num].Position - Position;
+    vec3 s = normalize(vecToLight);
 	vec3 v = normalize(-Position);
 	vec3 r = reflect(-s, n);
   	
@@ -48,8 +50,11 @@ vec3  Phong (int num) {
     // COMPONENTE ESPECULAR  
     vec3 Specular = Light[num].Specular * pow(max(dot(r, v), 0.0), Material.Shininess) * Material.Specular;
     
+    // CALCULAMOS ATENUACION
+    float Attenuation = 1.0 / (1.0 + Light[num].Attenuation * pow(length(vecToLight), 2));
+
     // ENVIAMOS EL RESULTADO
-    return Diffuse + Specular;
+    return Attenuation * (Diffuse + Specular);
 } 
 
 void main() {
