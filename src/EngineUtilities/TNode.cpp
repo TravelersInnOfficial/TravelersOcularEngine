@@ -160,7 +160,7 @@ glm::vec3 TNode::GetRotation(){
 	toRet.y = toRet.y;
 	toRet.z = 180-toRet.z;
 
-	std::cout<<toRet.x<<" "<<toRet.y<<" "<<toRet.z<<std::endl;
+	//std::cout<<toRet.x<<" "<<toRet.y<<" "<<toRet.z<<std::endl;
 
 	return toRet;
 }
