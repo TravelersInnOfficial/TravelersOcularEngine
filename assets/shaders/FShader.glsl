@@ -60,7 +60,7 @@ void main() {
 
     // SUMAMOS AMBIENTAL
     vec3 Ambient = SpecialLight.AmbientLight * vec3(texture(myTextureSampler, TexCoords)) * Material.Ambient;
-    result += vec4(Ambient, 0.0);
+    result += vec4(Ambient, 1.0);
 
 	FragColor = result;
 }

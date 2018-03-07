@@ -69,6 +69,8 @@ bool VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2df
 	glewExperimental = GL_TRUE;
 	glewInit();
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glShadeModel(GL_SMOOTH);	// Habilitar el smooth de caras
 	glEnable(GL_TEXTURE_2D);	// Habilitar el test de profundidad
 	glEnable(GL_DEPTH_TEST);	// Aceptar el fragmento si está más cerca de la cámara que el fragmento anterior
