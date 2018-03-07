@@ -16,7 +16,6 @@ VideoDriver::VideoDriver(){
 	m_window = nullptr;
 	privateSceneManager = new SceneManager();
 	privateIODriver = nullptr;
-	close_window = false;
 	m_clearSceenColor = toe::core::TOEvector4df(0,0,0,0);
 }
 
@@ -40,8 +39,7 @@ void VideoDriver::Drop(){
 	delete m_window;
 }
 
-void VideoDriver::glwf_error_callback(int error, const char* description)
-{
+void VideoDriver::glwf_error_callback(int error, const char* description){
     fprintf(stderr, "Error %d: %s\n", error, description);
 }
 
@@ -93,27 +91,19 @@ void VideoDriver::SetReceiver(){
 }
 
 void VideoDriver::keyboard_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
-    if(privateIODriver!=nullptr){
-		privateIODriver->UpdateKeyboard(key,action);
-	}
+    if(privateIODriver!=nullptr) privateIODriver->UpdateKeyboard(key,action);
 }
 
 void VideoDriver::mouse_position_callback(GLFWwindow* window, double xpos, double ypos){
-	if(privateIODriver!=nullptr){
-		privateIODriver->UpdateMousePosition(xpos,ypos);
-	}
+	if(privateIODriver!=nullptr) privateIODriver->UpdateMousePosition(xpos,ypos);
 }
 
 void VideoDriver::mouse_button_callback(GLFWwindow* window, int button, int action, int mods){
-	if(privateIODriver!=nullptr){
-		privateIODriver->UpdateMouseButtons(button,action);
-	}
+	if(privateIODriver!=nullptr) privateIODriver->UpdateMouseButtons(button,action);
 }
 
 void VideoDriver::mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset){
-	if(privateIODriver!=nullptr){
-		privateIODriver->UpdateMouseWheel(xoffset, yoffset);
-	}
+	if(privateIODriver!=nullptr) privateIODriver->UpdateMouseWheel(xoffset, yoffset);
 }
 
 bool VideoDriver::Update(){
@@ -121,9 +111,8 @@ bool VideoDriver::Update(){
 	glfwPollEvents();
 	ClearScreen();
 
-	if(close_window) glfwSetWindowShouldClose(m_window, GLFW_TRUE);
-	if(!close_window) privateSceneManager->Update();
-	return !close_window;
+	privateSceneManager->Update();
+	return true;
 }
 
 void VideoDriver::Draw(){
@@ -255,4 +244,8 @@ void VideoDriver::SetAssetsPath(std::string newPath){
 
 std::string VideoDriver::GetAssetsPath(){
 	return m_assetsPath;
+}
+
+void VideoDriver::CloseWindow(){
+	if(m_window != nullptr) glfwSetWindowShouldClose(m_window, GLFW_TRUE);
 }

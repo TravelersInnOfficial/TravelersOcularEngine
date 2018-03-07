@@ -101,7 +101,6 @@ public:
 protected:
     KeyboardKey ConvertKeyGLFW(int key);
 	virtual bool OnEvent(const TEvent& event);
-    bool m_close;
 };
 
 #endif

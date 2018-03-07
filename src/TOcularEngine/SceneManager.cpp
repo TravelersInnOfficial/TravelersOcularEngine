@@ -11,7 +11,7 @@
 SceneManager::SceneManager(){
 	TTransform* myTransform = new TTransform();
 	m_SceneTreeRoot = new TNode(myTransform);
-	m_ambientLight = glm::vec3(1);
+	m_ambientLight = glm::vec3(0.25f);
 	main_camera = nullptr;
 }
 

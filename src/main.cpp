@@ -9,9 +9,11 @@ void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh*
 	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0, 0, 0);
 	toe::core::TOEvector3df rot = toe::core::TOEvector3df(0, 0, 0);
 	toe::core::TOEvector3df scale = toe::core::TOEvector3df(1.0f, 1.0f, 1.0f);
+	toe::core::TOEvector4df color = toe::core::TOEvector4df(1.0f, 1.0f, 1.0f, 1.0f);
+	float intensity = 1.0f;
 	std::string path = "";
 
-	pos = toe::core::TOEvector3df(0, 0, -5);
+	pos = toe::core::TOEvector3df(0, 0, -3);
 	*myCamera = sm->AddCamera(pos, rot, true);
 
 	pos = toe::core::TOEvector3df(-1.5f, 0.0f, 0);
@@ -27,11 +29,13 @@ void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh*
 	*meshThree = sm->AddMesh(pos, rot, scale, path);
 	(*meshThree)->SetTexture("./../assets/textures/potion.png");
 
-	toe::core::TOEvector3df lightPos = toe::core::TOEvector3df(0.0f, 0.0f, 0.0f);
-	toe::core::TOEvector3df lightRot = toe::core::TOEvector3df(0.0f, 0.0f, 0.0f);
-	toe::core::TOEvector4df    color = toe::core::TOEvector4df(1.0f, 1.0f, 1.0f, 1.0f);
-	float intensity = 1.0f;
-	*light1 = sm->AddLight(lightPos, lightRot, color, intensity);
+	pos = toe::core::TOEvector3df(-5, 0, -5);
+	color = toe::core::TOEvector4df(0.8f, 0.8f, 0.8f, 1.0f);
+	*light1 = sm->AddLight(pos, rot, color, intensity);
+
+	//pos = toe::core::TOEvector3df(10, 0, 0);
+	//color = toe::core::TOEvector4df(0.0f, 0.0f, 1.0f, 1.0f);
+	//*light2 = sm->AddLight(pos, rot, color, intensity);
 }
 
 int main(){
@@ -60,11 +64,16 @@ int main(){
 
 	meshTwo->SetRotation(toe::core::TOEvector3df(0,0,0));
 
-	while(VDriv->Update()){
+	while(!EventHandler::m_close){
+		handler->UpdateMousePosition(0, 0);
+		VDriv->Update();
 		VDriv->Draw();
-		if(meshTwo != nullptr) meshTwo->SetRotation(toe::core::TOEvector3df(EventHandler::xdist, EventHandler::ydist, EventHandler::zdist));
-		meshTwo->GetRotation();
+		if(meshTwo != nullptr){
+			meshTwo->SetTranslate(toe::core::TOEvector3df(EventHandler::xdist, EventHandler::ydist, EventHandler::zdist));
+			meshTwo->SetRotation(toe::core::TOEvector3df(EventHandler::xdistGiro, EventHandler::ydistGiro, EventHandler::zdist));
+		}
 	}
 
+	VDriv->CloseWindow();
     return EXIT_SUCCESS;
 }

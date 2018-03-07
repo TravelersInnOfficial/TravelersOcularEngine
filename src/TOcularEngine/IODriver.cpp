@@ -7,7 +7,6 @@ TEvent::TEvent(){}
 TEvent::~TEvent(){}
 
 IODriver::IODriver(){
-    m_close = false;
 }
 
 IODriver::~IODriver(){}
@@ -59,8 +58,6 @@ bool IODriver::UpdateMouseButtons(int button, int action){
     TEvent glfwEvent;
     glfwEvent.m_type = Type_Unknow;
 
-
-
     switch(action){
         case GLFW_PRESS:{
             glfwEvent.m_type = Type_MouseButtonPressed;
@@ -100,15 +97,7 @@ bool IODriver::UpdateMouseWheel(int xoffset, int yoffset){
 
 
 bool IODriver::OnEvent(const TEvent& event){
-    if (event.m_type == Type_Closed) m_close = true;
-
-    if(event.m_type == Type_KeyPressed){
-        if (event.m_key.code == Key_Escape){
-            m_close = true;
-        }
-    }
-
-    return m_close;
+    return false;
 }
 
 KeyboardKey IODriver::ConvertKeyGLFW(int key){
