@@ -120,7 +120,7 @@ void TText::LoadText(std::string text){
 	int size = m_text.length();
 	float SIZE = m_charSize;
 	float x = -SIZE*size/2;	// Centramos el texto en X
-	float y = -SIZE*size/2;	// Centramos el texto en Y
+	float y = -SIZE;	// Centramos el texto en Y
 	for(int i=0; i<size; i++){
 		// Sacamos los 4 puntos de la letra
 		glm::vec3 vertexUpLeft 		= glm::vec3(x+i*SIZE 			, y+SIZE 	, 0);
