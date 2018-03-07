@@ -10,7 +10,7 @@
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 
-// Fast-forward declaration
+// Forward declaration
 typedef unsigned int GLuint;
 class Program;
 
@@ -112,10 +112,10 @@ public:
     TFCamera* GetMainCamera();
 
 private:
-    GLuint vao;
+    GLuint m_vao;
     TNode* m_SceneTreeRoot;
 
-    Program* program;
+    //Program* m_program;
 
     std::vector<TFCamera*>  m_cameras;  // Pointers to the cameras created
     std::vector<TFLight*>   m_lights;   // Pointers to the lights created

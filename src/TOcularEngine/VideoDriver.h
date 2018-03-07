@@ -8,7 +8,7 @@
 #include <map>
 #include <vector>
 
-// Fast-forward declaration
+// Forward declaration
 struct GLFWwindow;
 class Program;
 
