@@ -27,6 +27,7 @@ private:
     unsigned char* m_imageData;
     int m_width;
     int m_height;
+    bool m_loaded;
     GLuint m_textureID;
 
 };

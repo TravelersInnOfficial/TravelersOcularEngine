@@ -3,11 +3,15 @@
 #include <SOIL2/SOIL2.h>
 #include <GL/glew.h>
 
+#include <iostream>
+
 TResourceTexture::TResourceTexture(std::string name){
 	m_name = name;
 
 	glBindBuffer(GL_TEXTURE_2D, 0);	
 	glGenBuffers(1, &m_textureID);
+
+	m_loaded = false;
 
 	LoadFile();
 }
@@ -17,7 +21,7 @@ TResourceTexture::TResourceTexture(){
 }
 
 TResourceTexture::~TResourceTexture(){
-	SOIL_free_image_data(m_imageData);	// Liberar el array de datos
+	if(m_loaded) SOIL_free_image_data(m_imageData);	// Liberar el array de datos
 	glBindBuffer(GL_TEXTURE_2D, 0);		// |
 	glDeleteBuffers(1, &m_textureID);	// | Eliminar el buffer de datos de OpenGL
 }
@@ -27,6 +31,7 @@ bool TResourceTexture::LoadFile(){
 	SetLoaded(toRet);
 
 	if(toRet){
+		m_loaded = true;
 		// Generamos la nueva texgura
 		glGenTextures(1, &m_textureID);
 		
