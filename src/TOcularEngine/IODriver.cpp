@@ -59,7 +59,9 @@ bool IODriver::UpdateMouseButtons(int button, int action){
     TEvent glfwEvent;
     glfwEvent.m_type = Type_Unknow;
 
-    switch(button){
+
+
+    switch(action){
         case GLFW_PRESS:{
             glfwEvent.m_type = Type_MouseButtonPressed;
             // Mouse Button

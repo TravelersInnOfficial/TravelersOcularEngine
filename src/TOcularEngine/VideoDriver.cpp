@@ -102,7 +102,6 @@ void VideoDriver::mouse_position_callback(GLFWwindow* window, double xpos, doubl
 }
 
 void VideoDriver::mouse_button_callback(GLFWwindow* window, int button, int action, int mods){
-	std::cout<<"Pressed"<<std::endl;
 	if(privateIODriver!=nullptr){
 		privateIODriver->UpdateMouseButtons(button,action);
 	}
