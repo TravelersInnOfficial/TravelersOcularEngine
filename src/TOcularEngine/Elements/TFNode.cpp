@@ -6,9 +6,7 @@
 
 TFNode::TFNode(){
 	m_scaleNode = new TNode(new TTransform());
-
 	m_rotationNode = new TNode(m_scaleNode, new TTransform());
-	
 	m_positionNode = new TNode(m_rotationNode, new TTransform());
 
 	m_entityNode = new TNode();
@@ -72,19 +70,19 @@ void TFNode::Scale(toe::core::TOEvector3df scale){
 }
 
 toe::core::TOEvector3df TFNode::GetTranslation(){
-	glm::vec3 translation = m_positionNode->GetTranslation();
+	glm::vec3 translation = m_entityNode->GetTranslation();
 	toe::core::TOEvector3df toRet = toe::core::TOEvector3df(translation.x,translation.y,translation.z);
 	return toRet;
 }
 
 toe::core::TOEvector3df TFNode::GetRotation(){
-	glm::vec3 rotation = m_positionNode->GetRotation();
+	glm::vec3 rotation = m_entityNode->GetRotation();
 	toe::core::TOEvector3df toRet = toe::core::TOEvector3df(rotation.x,rotation.y,rotation.z);
 	return toRet;
 }
 
 toe::core::TOEvector3df TFNode::GetScale(){
-	glm::vec3 scale = m_positionNode->GetScale();
+	glm::vec3 scale = m_entityNode->GetScale();
 	toe::core::TOEvector3df toRet = toe::core::TOEvector3df(scale.x,scale.y,scale.z);
 	return toRet;
 }

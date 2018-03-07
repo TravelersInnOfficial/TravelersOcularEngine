@@ -136,8 +136,8 @@ glm::vec3 TNode::GetTranslation(){
 	glm::vec4 perspective;
 	glm::decompose(myTransform, scale, rotation, translation, skew, perspective);
 
-	glm::vec3 toRet = glm::vec3(translation.x, translation.y, translation.z);
-	return toRet;
+	std::cout<<glm::to_string(myTransform)<<std::endl;
+	return translation;
 }
 
 glm::vec3 TNode::GetRotation(){
