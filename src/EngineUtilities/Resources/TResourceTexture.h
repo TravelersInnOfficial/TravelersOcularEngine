@@ -3,7 +3,7 @@
 
 #include "TResource.h"
 
-// Fast-forward declaration
+// Forward declaration
 typedef unsigned int GLuint;
 
 class TResourceTexture: public TResource {

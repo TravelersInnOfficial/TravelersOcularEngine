@@ -5,7 +5,7 @@
 #include <TColor.h>
 #include <vector>
 
-// Fast-forward declaration
+// Forward declaration
 class TFText;
 class TNode;
 class SceneManager;

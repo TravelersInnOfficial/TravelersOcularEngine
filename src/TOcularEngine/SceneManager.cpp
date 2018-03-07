@@ -34,9 +34,9 @@ SceneManager::~SceneManager(){
 	}
 	m_meshes.clear();
 
-	glDeleteVertexArrays(1, &vao);
+	glDeleteVertexArrays(1, &m_vao);
 	delete m_SceneTreeRoot;
-	delete program;
+	//delete program;
 }
 
 TFCamera* SceneManager::AddCamera(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, bool perspective){
@@ -166,8 +166,8 @@ void SceneManager::Draw(){
 }
 
 void SceneManager::InitScene(){
-	glGenVertexArrays(1, &vao); // CREAMOS EL ARRAY DE VERTICES PARA LOS OBJETOS
-	glBindVertexArray(vao);
+	glGenVertexArrays(1, &m_vao); // CREAMOS EL ARRAY DE VERTICES PARA LOS OBJETOS
+	glBindVertexArray(m_vao);
 }
 
 TNode* SceneManager::GetRootNode(){
