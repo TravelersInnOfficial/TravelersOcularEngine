@@ -150,15 +150,18 @@ glm::vec3 TNode::GetRotation(){
 	glm::vec4 perspective;
 
 	glm::decompose(myTransform, scale, rotation, translation, skew, perspective);
-	rotation = glm::quat(rotation.y, rotation.x, rotation.z, rotation.w);
+	rotation = glm::quat(rotation.z, rotation.x, rotation.y, rotation.w);
 	rotation = glm::conjugate(rotation);
 	glm::vec3 toRet = glm::eulerAngles(rotation);
 
-	toRet = glm::vec3(toRet.y, toRet.z, toRet.x);
+	toRet = glm::vec3(toRet.y, -toRet.x, toRet.z);
 	toRet = glm::degrees(toRet);
 
-	toRet.y = 180 - toRet.y;
-	toRet.z = -toRet.z;
+	toRet.x = -toRet.x;
+	toRet.y = toRet.y;
+	toRet.z = 180-toRet.z;
+
+	//std::cout<<toRet.x<<" "<<toRet.y<<" "<<toRet.z<<std::endl;
 
 	return toRet;
 }

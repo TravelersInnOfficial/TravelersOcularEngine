@@ -130,12 +130,12 @@ void TText::LoadText(std::string text){
 
 		// Con los 4 puntos sacamos los 2 triangulos que deberian haber
 		textVertex.push_back(vertexUpLeft    );
-    	textVertex.push_back(vertexDownLeft  );
     	textVertex.push_back(vertexUpRight   );
+    	textVertex.push_back(vertexDownLeft  );
 
     	textVertex.push_back(vertexDownRight );
-    	textVertex.push_back(vertexUpRight	 );
     	textVertex.push_back(vertexDownLeft	 );
+    	textVertex.push_back(vertexUpRight	 );
 
     	// Una vez ya tenemos los vertices calculamos los UV de la letra
     	// En nuestra imagen tenemos 16 columnas y filas, de ahi dividirlo entre 16
@@ -151,12 +151,12 @@ void TText::LoadText(std::string text){
 
 	    // Al igual que antes sacamos los uv de los 2 triangulos que deberian haber
 	    textUv.push_back(uvUpLeft	 );
-	    textUv.push_back(uvDownLeft  );
 	    textUv.push_back(uvUpRight	 );
+	    textUv.push_back(uvDownLeft  );
 
 	    textUv.push_back(uvDownRight );
-	    textUv.push_back(uvUpRight	 );
 	    textUv.push_back(uvDownLeft	 );
+	    textUv.push_back(uvUpRight	 );
 	}
 
 	m_size = textVertex.size();
