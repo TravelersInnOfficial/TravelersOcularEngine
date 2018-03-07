@@ -1,5 +1,6 @@
 #include "./TTransform.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <iostream>
 
 TTransform::TTransform(){
@@ -34,9 +35,23 @@ void TTransform::Rotate(float X, float Y, float Z, float W){
 }
 
 void TTransform::Rotate(float X, float Y, float Z){
-	Rotate(1, 0, 0, X);
-	Rotate(0, 1, 0, Y);
-	Rotate(0, 0, 1, Z);
+	glm::quat axisX = glm::angleAxis(glm::radians(X), glm::vec3(1,0,0));
+
+
+	glm::quat axisY = glm::angleAxis(glm::radians(Y), glm::vec3(0,1,0));
+	glm::quat axisZ = glm::angleAxis(glm::radians(Z), glm::vec3(0,0,1));
+
+
+	glm::quat crossed = glm::cross(axisZ, axisY);
+
+ 	glm::mat4 final1 = glm::toMat4(crossed);
+ 	glm::mat4 final2 = glm::toMat4(axisX);
+
+ 	m_matrix = final1 * m_matrix * final2;
+
+	//Rotate(1, 0, 0, X);
+	//Rotate(0, 1, 0, Y);
+	//Rotate(0, 0, 1, Z);
 }
 
 void TTransform::Scale(float X, float Y, float Z){

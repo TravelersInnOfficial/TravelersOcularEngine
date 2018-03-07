@@ -63,6 +63,7 @@ int main(){
 	while(VDriv->Update()){
 		VDriv->Draw();
 		if(meshTwo != nullptr) meshTwo->SetRotation(toe::core::TOEvector3df(EventHandler::xdist, EventHandler::ydist, EventHandler::zdist));
+		meshTwo->GetRotation();
 	}
 
     return EXIT_SUCCESS;

@@ -136,7 +136,6 @@ glm::vec3 TNode::GetTranslation(){
 	glm::vec4 perspective;
 	glm::decompose(myTransform, scale, rotation, translation, skew, perspective);
 
-	std::cout<<glm::to_string(myTransform)<<std::endl;
 	return translation;
 }
 
@@ -150,8 +149,8 @@ glm::vec3 TNode::GetRotation(){
 	glm::vec4 perspective;
 
 	glm::decompose(myTransform, scale, rotation, translation, skew, perspective);
-	rotation = glm::quat(rotation.z, rotation.x, rotation.y, rotation.w);
-	rotation = glm::conjugate(rotation);
+	rotation = glm::quat(rotation.z, -rotation.x, rotation.y, rotation.w);
+	//rotation = glm::conjugate(rotation);
 	glm::vec3 toRet = glm::eulerAngles(rotation);
 
 	toRet = glm::vec3(toRet.y, -toRet.x, toRet.z);
@@ -161,7 +160,7 @@ glm::vec3 TNode::GetRotation(){
 	toRet.y = toRet.y;
 	toRet.z = 180-toRet.z;
 
-	//std::cout<<toRet.x<<" "<<toRet.y<<" "<<toRet.z<<std::endl;
+	std::cout<<toRet.x<<" "<<toRet.y<<" "<<toRet.z<<std::endl;
 
 	return toRet;
 }
