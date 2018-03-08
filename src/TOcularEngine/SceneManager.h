@@ -4,6 +4,7 @@
 #include "./Elements/TFCamera.h"
 #include "./Elements/TFLight.h"
 #include "./Elements/TFMesh.h"
+#include "./Elements/TFDome.h"
 #include "./Elements/2DElements/TFRect.h"
 #include <TOEvector2d.h>
 #include <vector>
@@ -59,6 +60,15 @@ public:
      * @return TFMesh* NewMesh
      */
     TFMesh*     AddMesh(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale, std::string meshPath);
+
+    /**
+     * @brief Adds a Dome/Skybox to the scene tree
+     * 
+     * @param position (toe::core::TOEvector3df)
+     * @param meshPath (std::string)
+     * @return TFMesh* NewDome
+     */
+    TFDome* AddDome(toe::core::TOEvector3df position = toe::core::TOEvector3df(0.0f,0.0f,0.0f), std::string meshPath = "", std::string texturePath = "");
 
     /**
      * @brief Adds a 2d rectangle to the screen
@@ -124,7 +134,8 @@ private:
     std::vector<TFDrawable*> m_2Delems;
 
     glm::vec3 m_ambientLight;
-    TFCamera* main_camera;
+    TFCamera* m_main_camera;
+    TFDome* m_dome;
 
     glm::mat4 GetTransformInTree(TNode* node);
 };
