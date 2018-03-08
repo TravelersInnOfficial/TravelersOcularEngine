@@ -4,7 +4,7 @@
 #include "./Elements/TFCamera.h"
 #include "./Elements/TFLight.h"
 #include "./Elements/TFMesh.h"
-#include "./Elements/TFRect.h"
+#include "./Elements/2DElements/TFRect.h"
 #include <TOEvector2d.h>
 #include <vector>
 #include <glm/vec3.hpp>
@@ -105,6 +105,7 @@ public:
 
     void DrawLight(TFLight* light, int num);
     void Draw();
+    void Draw2DElements();
 
     TNode* GetRootNode();
 
@@ -120,6 +121,7 @@ private:
     std::vector<TFCamera*>  m_cameras;  // Pointers to the cameras created
     std::vector<TFLight*>   m_lights;   // Pointers to the lights created
     std::vector<TFMesh*>    m_meshes;    // Pointers to the nodes created
+    std::vector<TFDrawable*> m_2Delems;
 
     glm::vec3 m_ambientLight;
     TFCamera* main_camera;

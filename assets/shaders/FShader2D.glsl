@@ -1,12 +1,7 @@
 #version 130
 
-// TEMPORAL TEXTURE WITHOUT MATERIALS
-uniform sampler2D myTextureSampler;
-
-in vec2 TexCoords;      // UV COORDENADAS DE TEXTURA
-
 out vec4 color;
 
-void main() {
-	color = texture( myTextureSampler, TexCoords);
+void main(){
+	color = vec4(1.0f, 0.5f, 0.2f, 1.0f);
 }

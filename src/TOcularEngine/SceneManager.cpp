@@ -34,6 +34,12 @@ SceneManager::~SceneManager(){
 	}
 	m_meshes.clear();
 
+	size = m_2Delems.size();
+	for(int i = size - 1; i>=0; i--){
+		delete m_2Delems[i];
+	}
+	m_2Delems.clear();
+
 	glDeleteVertexArrays(1, &m_vao);
 	delete m_SceneTreeRoot;
 	//delete program;
@@ -65,13 +71,10 @@ TFMesh* SceneManager::AddMesh(toe::core::TOEvector3df position, toe::core::TOEve
 }
 
 TFRect* SceneManager::Add2DRect(toe::core::TOEvector2df size, toe::core::TOEvector2df position, float rotation){
-	/*
 	TFRect* toRet = nullptr;
-	toRet = new TFRect(size,position,rotation);
-	toRet->Attach(m_SceneTreeRoot);
+	toRet = new TFRect(position);
+	m_2Delems.push_back(toRet);
 	return toRet;
-	*/
-	return nullptr;
 }
 
 bool SceneManager::DeleteCamera(TFCamera* cam){
@@ -163,6 +166,13 @@ void SceneManager::Draw(){
 
     //std::cout<<"6"<<std::endl;
     m_SceneTreeRoot->Draw();
+}
+
+void SceneManager::Draw2DElements(){
+	//DRAW 2D ELEMENTS AFTER THE 3D SCENE
+	for(int i = 0; i< m_2Delems.size(); i++){
+		m_2Delems[i]->Draw();
+	}
 }
 
 void SceneManager::InitScene(){

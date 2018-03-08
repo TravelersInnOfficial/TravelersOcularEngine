@@ -116,7 +116,15 @@ bool VideoDriver::Update(){
 }
 
 void VideoDriver::Draw(){
+	//DRAW 3D SCENE
 	privateSceneManager->Draw();
+
+	//DRAW 2D ELEMENTS
+	start2DDrawState();
+	glUseProgram(GetProgram(TWOD_SHADER)->GetProgramID());
+	privateSceneManager->Draw2DElements();
+	end2DDrawState();
+
 	glUseProgram(GetProgram(STANDARD_SHADER)->GetProgramID());
 	glfwSwapBuffers(m_window);
 }
@@ -203,20 +211,60 @@ void VideoDriver::initShaders(){
 
 		p = new Program(shaders);
 		m_programs.insert(std::pair<SHADERTYPE, Program*>(TEXT_SHADER, p));
-	/*
-	// CARGAMOS EL PROGRAMA DE 2D
+
+	// CARGAMOS EL PROGRAMA DE POLIGONOS 2D 
 		// LOAD IN RESOURCE MANAGER
-		TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/VShader2D.glsl");
-		TResourceManager::GetInstance()->GetResourceShader("../src/EngineUtilities/Shaders/FShader2D.glsl");
+		TResourceManager::GetInstance()->GetResourceShader(m_assetsPath + "/shaders/VShader2D.glsl");
+		TResourceManager::GetInstance()->GetResourceShader(m_assetsPath + "/shaders/FShader2D.glsl");
 
 		// CARGAMOS LOS SHADERS
 		shaders = std::map<std::string, GLenum>();
-		shaders.insert(std::pair<std::string, GLenum>("../src/EngineUtilities/Shaders/VShader2D.glsl", GL_VERTEX_SHADER));
-		shaders.insert(std::pair<std::string, GLenum>("../src/EngineUtilities/Shaders/FShader2D.glsl", GL_FRAGMENT_SHADER));
+		shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShader2D.glsl", GL_VERTEX_SHADER));
+		shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShader2D.glsl", GL_FRAGMENT_SHADER));
 
 		p = new Program(shaders);
-		m_programs.insert(std::pair<SHADERTYPE, Program*>(TWOD_SHADER, p));
-		*/
+		m_programs.insert(std::pair<SHADERTYPE, Program*>(TWOD_SHADER, p));	
+}
+
+void VideoDriver::start2DDrawState(){
+
+	//GUARDAMOS EL ESTADO ACTUAL
+	glMatrixMode(GL_PROJECTION);	//activamos la matriz Projection
+	glPushMatrix(); 				//guardamos en la pila el estado actual de la matriz Projection
+	glLoadIdentity(); 				//cargamos la matriz identidad en la matriz Projection
+
+	//creamos una vista ortografica de la camara
+	toe::core::TOEvector2di dims = GetWindowDimensions();	//cojemos las dimensiones de la ventana
+	glOrtho(0, dims.X, dims.Y, 0, -1.0f, 1.0f);				//sup-izq, inf-izq, inf-der, sup-der, near, far
+
+	glMatrixMode(GL_MODELVIEW);		//activamos la matriz ModelView
+	glPushMatrix(); 				//guardamos en la pila el estado actual de la matriz ModelView
+	glLoadIdentity(); 				//cargamos la matriz identidad en la matriz ModelView
+	
+	glPushAttrib(GL_DEPTH_TEST);	//guardamos en la pila el estado actual del test de profundidad
+	glDepthMask(GL_FALSE);			//desactivamos la escritura en el buffer de profundidad
+	glDisable(GL_DEPTH_TEST);		//desactivamos el test de profundidad
+	glDisable(GL_CULL_FACE);		//desactivamos el backface culling
+
+	///////////////////////////////////
+	///////////START 2D DRAW///////////
+	///////////////////////////////////
+}
+
+void VideoDriver::end2DDrawState(){
+	///////////////////////////////////
+	////////////END 2D DRAW////////////
+	///////////////////////////////////
+	//VOLVER AL ESTADO ANTERIOR
+	glPopAttrib();					//recuperamos de la pila el estado del test de profundidad
+	glDepthMask(GL_TRUE); 			//activamos la escritura en el buffer de profundidad
+	glEnable(GL_DEPTH_TEST);		//activamos el test de profundidad
+	glEnable(GL_CULL_FACE);			//activamos el backface culling
+
+	glMatrixMode(GL_MODELVIEW);		//activamos la matriz ModelView
+	glPopMatrix();					//recuperamos el estado anterior de la pila y se lo asignamos
+	glMatrixMode(GL_PROJECTION);	//activamos la matriz Projection
+	glPopMatrix();					//recuperamos el estado anterior de la pila y se lo asignamos
 }
 
 void VideoDriver::SetMouseVisibility(bool visible){

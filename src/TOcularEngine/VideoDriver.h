@@ -23,12 +23,12 @@ public:
 
 	static std::string m_assetsPath;
 
-	bool CreateWindows(std::string window_name, toe::core::TOEvector2df dimensions);
-	bool Update();
-	void Draw();
-	void ClearScreen();
-	void Drop();
-	void SetReceiver();
+    bool CreateWindows(std::string window_name, toe::core::TOEvector2df dimensions);
+    bool Update();
+    void Draw();
+    void ClearScreen();
+    void Drop();
+    void SetReceiver();
 
 //GETTERS
 	/**
@@ -129,6 +129,9 @@ private:
 	 * 
 	 */
 	void initShaders();
+
+	void start2DDrawState();
+	void end2DDrawState();
 
 	static void keyboard_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	static void mouse_position_callback(GLFWwindow* window, double xpos, double ypos);

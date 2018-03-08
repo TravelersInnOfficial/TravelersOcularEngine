@@ -36,6 +36,8 @@ void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh*
 	//pos = toe::core::TOEvector3df(10, 0, 0);
 	//color = toe::core::TOEvector4df(0.0f, 0.0f, 1.0f, 1.0f);
 	//*light2 = sm->AddLight(pos, rot, color, attenuation);
+
+	sm->Add2DRect(toe::core::TOEvector2df(0,0));
 }
 
 int main(){
@@ -71,6 +73,7 @@ int main(){
 		if(meshTwo != nullptr){
 			meshTwo->SetTranslate(toe::core::TOEvector3df(EventHandler::xdist, EventHandler::ydist, EventHandler::zdist));
 			meshTwo->SetRotation(toe::core::TOEvector3df(EventHandler::xdistGiro, EventHandler::ydistGiro, EventHandler::zdist));
+			//myCamera->SetTranslate(toe::core::TOEvector3df(EventHandler::xdist, EventHandler::ydist, EventHandler::zdist));			myCamera->SetRotation(toe::core::TOEvector3df(EventHandler::xdistGiro, EventHandler::ydistGiro, EventHandler::zdist));
 		}
 	}
 
