@@ -5,14 +5,16 @@
 #include <GL/glew.h>
 
 TMesh::TMesh(std::string meshPath, std::string texturePath){
+	m_mesh = nullptr;
+	m_texture = nullptr;
+	m_material = nullptr;
+
 	LoadMesh(meshPath);
 	ChangeTexture(texturePath);
 	m_program = STANDARD_SHADER;
-
 }
 
-TMesh::~TMesh(){
-}
+TMesh::~TMesh(){ }
 
 void TMesh::LoadMesh(std::string meshPath){
 	if(meshPath.compare("")==0) meshPath = VideoDriver::GetInstance()->GetAssetsPath() + "/models/cube.obj";
@@ -20,17 +22,19 @@ void TMesh::LoadMesh(std::string meshPath){
 }
 
 void TMesh::ChangeTexture(std::string texturePath){
-	if(texturePath != "") m_texture = TResourceManager::GetInstance()->GetResourceTexture(texturePath);
+	if(texturePath.compare("")!=0) m_texture = TResourceManager::GetInstance()->GetResourceTexture(texturePath);
 	else m_texture = nullptr;
 }
 
 void TMesh::BeginDraw(){
-	// Bind and send the data to the VERTEX SHADER
-	SendShaderData();
-	// Bind and draw elements depending of how many vbos
-	GLuint elementsBuffer = m_mesh->GetElementBuffer();
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBuffer);
-	glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
+	if(m_mesh != nullptr){
+		// Bind and send the data to the VERTEX SHADER
+		SendShaderData();
+		// Bind and draw elements depending of how many vbos
+		GLuint elementsBuffer = m_mesh->GetElementBuffer();
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBuffer);
+		glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
+	}
 }
 
 void TMesh::EndDraw(){
@@ -102,7 +106,7 @@ void TMesh::SendShaderData(){
 	// -------------------------------------------------------- ENVIAMOS EL MATERIAL
 	TResourceMaterial* currentMaterial = nullptr;
 	if(m_material != nullptr) currentMaterial = m_material;
-	if(currentMaterial != nullptr) currentMaterial = m_mesh->GetMaterial();
+	if(currentMaterial == nullptr) currentMaterial = m_mesh->GetMaterial();
 
 	if(currentMaterial != nullptr){
 		GLuint shininess = glGetUniformLocation(myProgram->GetProgramID(), "Material.Shininess");
