@@ -44,10 +44,10 @@ public:
      * @param position (toe::core::TOEvector3df)
      * @param rotation (toe::core::TOEvector3df)
      * @param color (toe::core::TOEvector4df)
-     * @param intensity (float)
+     * @param attenuation (float)
      * @return TFLight* NewLight
      */
-    TFLight*    AddLight(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector4df color, float intensity);
+    TFLight*    AddLight(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector4df color, float attenuation);
 
     /**
      * @brief Adds a new Mesh to the scene tree

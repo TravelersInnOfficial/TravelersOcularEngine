@@ -22,31 +22,36 @@ bool EventHandler::OnEvent(const TEvent& event){
 
     if(event.m_type == Type_KeyPressed){
         if (event.m_key.code == Key_Escape) m_close = true;
+
         if (event.m_key.code == Key_Left) xdist -= 1.0f;
         if (event.m_key.code == Key_Right) xdist += 1.0f;
         if (event.m_key.code == Key_Down) zdist -= 1.0f;
         if (event.m_key.code == Key_Up) zdist += 1.0f;
+
+        if (event.m_key.code == Key_A) ydistGiro -= 20.0f;
+        if (event.m_key.code == Key_D) ydistGiro += 20.0f;
+        if (event.m_key.code == Key_S) xdistGiro -= 20.0f;
+        if (event.m_key.code == Key_W) xdistGiro += 20.0f;
     }
 
     if(event.m_type == Type_MouseMoved){
-        if(event.m_mouseMove.x>lastPosX){
+        /*if(event.m_mouseMove.x>lastPosX){
             lastPosX = event.m_mouseMove.x;
-            ydistGiro += 5.0f;
+            ydistGiro += 30.0f;
         }
         if(event.m_mouseMove.x<lastPosX){
             lastPosX = event.m_mouseMove.x;
-            ydistGiro -= 5.0f;
+            ydistGiro -= 30.0f;
         }
 
         if(event.m_mouseMove.y>lastPosY){
             lastPosY = event.m_mouseMove.y;
-            xdistGiro += 5.0f;
+            xdistGiro += 30.0f;
         }
         if(event.m_mouseMove.y<lastPosY){
             lastPosY = event.m_mouseMove.y;
-            xdistGiro -= 5.0f;
-        }
-
+            xdistGiro -= 30.0f;
+        }*/
     }
     
     return m_close;

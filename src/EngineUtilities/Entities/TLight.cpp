@@ -1,9 +1,9 @@
 #include "TLight.h"
 #include "../TOcularEngine/VideoDriver.h"
 
-TLight::TLight(TColor color, float intensity){
+TLight::TLight(TColor color, float attenuation){
 	m_color = color;
-	m_intensity = intensity;
+	m_attenuation = attenuation;
 	m_program = STANDARD_SHADER;
 }
 
@@ -18,12 +18,12 @@ TColor TLight::GetColor(){
 	return m_color;
 }
 
-void TLight::SetIntensity(float intensity){
-	m_intensity = intensity;
+void TLight::SetAttenuation(float attenuation){
+	m_attenuation = attenuation;
 }
 
-float TLight::GetIntensity(){
-	return m_intensity;
+float TLight::GetAttenuation(){
+	return m_attenuation;
 }
 
 void TLight::SetActive(bool active){

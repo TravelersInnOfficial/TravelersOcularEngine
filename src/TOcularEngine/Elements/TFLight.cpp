@@ -8,7 +8,7 @@
 #include <GL/glew.h>
 #include <glm/gtc/type_ptr.hpp>
 
-TFLight::TFLight(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector4df color, float intensity) : TFNode(){
+TFLight::TFLight(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector4df color, float attenuation) : TFNode(){
 	TTransform* t = (TTransform*) m_scaleNode->GetEntity();
 	t->Scale(1, 1, 1);
 
@@ -20,7 +20,7 @@ TFLight::TFLight(toe::core::TOEvector3df position, toe::core::TOEvector3df rotat
 
 	glm::vec4 glmColor = glm::vec4(color.X, color.Y, color.X2, color.Y2);
 	TColor myColor = TColor(glmColor);
-	m_entityNode->SetEntity(new TLight(myColor, intensity));
+	m_entityNode->SetEntity(new TLight(myColor, attenuation));
 }
 
 TFLight::~TFLight(){
@@ -33,9 +33,9 @@ void TFLight::SetColor(toe::core::TOEvector4df color){
 	myEntity->SetColor(myColor);
 }
 
-void TFLight::SetIntensity(float intensity){
+void TFLight::SetAttenuation(float attenuation){
 	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
-	myEntity->SetIntensity(intensity);
+	myEntity->SetAttenuation(attenuation);
 }
 
 toe::core::TOEvector4df TFLight::GetColor(){
@@ -45,9 +45,9 @@ toe::core::TOEvector4df TFLight::GetColor(){
 	return toRetColor;
 }
 
-float TFLight::GetIntensity(){
+float TFLight::GetAttenuation(){
 	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
-	return myEntity->GetIntensity();
+	return myEntity->GetAttenuation();
 }
 
 void TFLight::SetActive(bool active){
@@ -86,8 +86,7 @@ void TFLight::DrawLight(int num){
 
 		aux = str +"Attenuation";
 		GLint AttenuationLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
-		float att = 1 - GetIntensity();
-		if(att <= 0) att = 0.001f;
+		float att = GetAttenuation();
 		glUniform1f(AttenuationLocation, att);
 	}
 }

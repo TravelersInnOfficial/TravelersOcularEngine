@@ -48,9 +48,9 @@ TFCamera* SceneManager::AddCamera(toe::core::TOEvector3df position, toe::core::T
 	return toRet;
 }
 
-TFLight* SceneManager::AddLight(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector4df color, float intensity){
+TFLight* SceneManager::AddLight(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector4df color, float attenuation){
 	TFLight* toRet = nullptr;
-	toRet = new TFLight(position, rotation, color, intensity);
+	toRet = new TFLight(position, rotation, color, attenuation);
 	m_lights.push_back(toRet);
 	toRet->Attach(m_SceneTreeRoot);
 	return toRet;
