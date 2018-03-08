@@ -4,7 +4,7 @@
     CCFLAGS				:= -O3 -g -Wall
     CPPFLAGS        	:= -I/mingw64/include -I/mingw64/include/bullet -I./src/Common
     LDFLAGS				:= -L/mingw64/lib
-    LIBS 				:= -lopengl32 -lglew32 -lassimp
+    LIBS 				:= -lopengl32 -lglew32 -lassimp -lglfw3
 else
     Target				:= EngineTest
     CXXFLAGS			:= -O3 -g -Wall -std=c++11

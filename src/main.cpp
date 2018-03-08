@@ -57,7 +57,7 @@ int main(){
 
 	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0.0f, 1.4f, 0.0f);
 	meshOne->AddBillboard(pos, "Cube");
-	meshTwo->AddBillboard(pos, "Senyo de  la destruccion asdf", 0.2f);
+	meshTwo->AddBillboard(pos, "Wizard", 0.2f);
 	meshThree->AddBillboard(pos, "Potion");
 
 	VDriv->SetMouseVisibility(false);
