@@ -14,9 +14,6 @@ EventHandler::EventHandler(){
 
 EventHandler::~EventHandler(){}
 
-float lastPosX = 0;
-float lastPosY = 0;
-
 bool EventHandler::OnEvent(const TEvent& event){
     if (event.m_type == Type_Closed) m_close = true;
 
@@ -32,26 +29,6 @@ bool EventHandler::OnEvent(const TEvent& event){
         if (event.m_key.code == Key_D) ydistGiro += 20.0f;
         if (event.m_key.code == Key_S) xdistGiro -= 20.0f;
         if (event.m_key.code == Key_W) xdistGiro += 20.0f;
-    }
-
-    if(event.m_type == Type_MouseMoved){
-        /*if(event.m_mouseMove.x>lastPosX){
-            lastPosX = event.m_mouseMove.x;
-            ydistGiro += 30.0f;
-        }
-        if(event.m_mouseMove.x<lastPosX){
-            lastPosX = event.m_mouseMove.x;
-            ydistGiro -= 30.0f;
-        }
-
-        if(event.m_mouseMove.y>lastPosY){
-            lastPosY = event.m_mouseMove.y;
-            xdistGiro += 30.0f;
-        }
-        if(event.m_mouseMove.y<lastPosY){
-            lastPosY = event.m_mouseMove.y;
-            xdistGiro -= 30.0f;
-        }*/
     }
     
     return m_close;
