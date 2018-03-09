@@ -1,6 +1,7 @@
 #ifndef SCENEMANAGER_H
 #define SCENEMANAGER_H
 
+#include "./Elements/TFParticleSystem.h"
 #include "./Elements/TFCamera.h"
 #include "./Elements/TFLight.h"
 #include "./Elements/TFMesh.h"
@@ -81,6 +82,17 @@ public:
     TFRect*     Add2DRect(toe::core::TOEvector2df size, toe::core::TOEvector2df position = toe::core::TOEvector2df(0,0), float rotation = 0.0f);
     
     /**
+     * @brief Adds a Particle System in the scene
+     * 
+     * @param position  (toe::core::TOEvector3df)
+     * @param rotation  (toe::core::TOEvector3df)
+     * @param scale     (toe::core::TOEvector3df)
+     * 
+     * @return TFParticleSystem* 
+     */
+    TFParticleSystem* AddParticleSystem(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale);
+
+    /**
      * @brief Deletes the Camera given
      * 
      * @return true The camera has been deleted
@@ -130,7 +142,7 @@ private:
 
     std::vector<TFCamera*>  m_cameras;  // Pointers to the cameras created
     std::vector<TFLight*>   m_lights;   // Pointers to the lights created
-    std::vector<TFMesh*>    m_meshes;    // Pointers to the nodes created
+    std::vector<TFNode*>    m_objects;  // Pointers to the nodes created
     std::vector<TFDrawable*> m_2Delems;
 
     glm::vec3 m_ambientLight;
