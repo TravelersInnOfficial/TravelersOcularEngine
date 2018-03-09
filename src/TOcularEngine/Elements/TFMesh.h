@@ -11,6 +11,7 @@ public:
 	void SetMesh(std::string meshPath = "");			// Replaces the Mesh with a new one
 	void CreateCube();									// Replaces the Mesh with a Cube
 	void CreateSphere();								// Replaces the Mesh with a Sphere
+	void SetInvisible();								// Assigns and invisible texture (0,0,0,0)
 
 protected:
 	TFMesh(
