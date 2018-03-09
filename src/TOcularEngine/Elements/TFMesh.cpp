@@ -39,3 +39,8 @@ void TFMesh::CreateSphere(){
 	TMesh* myMesh = (TMesh*) m_entityNode->GetEntity();
 	myMesh->LoadMesh(VideoDriver::GetInstance()->GetAssetsPath() + "/models/sphere.obj");
 }
+
+
+void TFMesh::SetInvisible(){
+	SetTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/invisible_texture.png");
+}
