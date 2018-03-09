@@ -43,7 +43,8 @@ SceneManager::~SceneManager(){
 
 	glDeleteVertexArrays(1, &m_vao);
 	delete m_SceneTreeRoot;
-	//delete program;
+
+	m_dome = nullptr;
 }
 
 TFCamera* SceneManager::AddCamera(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, bool perspective){
@@ -72,12 +73,15 @@ TFMesh* SceneManager::AddMesh(toe::core::TOEvector3df position, toe::core::TOEve
 }
 
 TFDome* SceneManager::AddDome(toe::core::TOEvector3df position, std::string meshPath, std::string texturePath){
-	if(m_dome != nullptr) delete m_dome;
-	
-	TFDome* toRet = new TFDome(position, toe::core::TOEvector3df(0.0f,0.0f,0.0f), toe::core::TOEvector3df(1.0f,1.0f,1.0f), meshPath, texturePath);
-	m_dome = toRet;
-	toRet->Attach(m_SceneTreeRoot);
-	return toRet;
+	if(m_dome == nullptr){
+		TFDome* toRet = new TFDome(position, toe::core::TOEvector3df(0.0f,0.0f,0.0f), toe::core::TOEvector3df(10.0f,10.0f,10.0f), meshPath, texturePath);
+		m_dome = toRet;
+		m_dome->AttachFirst(m_SceneTreeRoot);	
+	}
+	else {
+		m_dome->SetTexture(texturePath);
+	}
+	return m_dome;
 }
 
 TFRect* SceneManager::Add2DRect(toe::core::TOEvector2df size, toe::core::TOEvector2df position, float rotation){

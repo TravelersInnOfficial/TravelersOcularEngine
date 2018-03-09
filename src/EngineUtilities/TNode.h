@@ -12,14 +12,15 @@ public:
 	TNode(TNode* parent, TEntity* entity);
 	~TNode();
 
-	int 		AddChild(TNode* child);			// Anyade un hijo al vector de hijos del nodo
-	int 		RemoveChild(TNode* child);		// Quita un hijo del vector de hijos del nodo
 	bool 		SetEntity(TEntity* entity);		// Le asigna la entidad al nodo
-	TEntity*	GetEntity();					// Devuelve la entidad al nodo
 	bool 		SetParent(TNode* parent);		// Le asigna la entidad al nodo
-	TNode*		GetParent();					// Devuelve el padre del nodo
+	int 		AddChild(TNode* child);			// Anyade un hijo al vector de hijos del nodo
+	int 		AddFirstChild(TNode* child);			// Anyade un hijo al vector de hijos del nodo
+	int 		RemoveChild(TNode* child);		// Quita un hijo del vector de hijos del nodo
 	void		Draw();							// Pinta el nodo
 
+	TEntity*	GetEntity();					// Devuelve la entidad al nodo
+	TNode*		GetParent();					// Devuelve el padre del nodo
 	std::vector<TNode*>	GetChildren();			// Devuelve todos los hijos del nodo
 
 	glm::mat4	GetTransformMatrix();			// Consigue la matriz del arbol

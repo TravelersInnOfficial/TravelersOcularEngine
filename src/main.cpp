@@ -4,8 +4,11 @@
 
 #include "EventHandler.h"
 
-void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh** meshThree, TFLight** light1, TFLight** light2){
+void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh** meshThree, TFLight** light1, TFLight** light2, TFMesh** dom){
 	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
+
+	//dom = (TFMesh*)sm->AddDome(toe::core::TOEvector3df(0, 0, 0), "./../assets/models/sphere1.obj", "./../assets/textures/skydome.jpg");
+
 	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0, 0, 0);
 	toe::core::TOEvector3df rot = toe::core::TOEvector3df(0, 0, 0);
 	toe::core::TOEvector3df scale = toe::core::TOEvector3df(1.0f, 1.0f, 1.0f);
@@ -35,8 +38,10 @@ void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh*
 
 	//pos = toe::core::TOEvector3df(10, 0, 0);
 	//color = toe::core::TOEvector4df(0.0f, 0.0f, 1.0f, 1.0f);
-	//*light2 = sm->AddLight(pos, rot, color, attenuation);
-
+	//*light2 = sm->AddLight(pos, rot, color, attenuation);	
+	*dom = (TFMesh*)sm->AddDome();
+	sm->SetAmbientLight(toe::core::TOEvector3df(0.1, 0.1, 0.1));
+	
 	sm->Add2DRect(toe::core::TOEvector2df(0,0));
 }
 
@@ -52,11 +57,12 @@ int main(){
 	TFMesh* meshOne = nullptr;
 	TFMesh* meshTwo = nullptr;
 	TFMesh* meshThree = nullptr;
+	TFMesh* dom = nullptr;
 	TFLight* light1 = nullptr;
 	TFLight* light2 = nullptr;
 
-	CreateTree(&myCamera, &meshOne, &meshTwo, &meshThree, &light1, &light2);
-
+	CreateTree(&myCamera, &meshOne, &meshTwo, &meshThree, &light1, &light2, &dom);
+	
 	// Anyadir los billboard
 	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0.0f, 1.4f, 0.0f);
 	meshOne->AddBillboard(pos, "Cube");
@@ -79,6 +85,8 @@ int main(){
 			meshTwo->SetRotation(toe::core::TOEvector3df(EventHandler::xdistGiro, EventHandler::ydistGiro, EventHandler::zdist));
 			//myCamera->SetTranslate(toe::core::TOEvector3df(EventHandler::xdist, EventHandler::ydist, EventHandler::zdist));			myCamera->SetRotation(toe::core::TOEvector3df(EventHandler::xdistGiro, EventHandler::ydistGiro, EventHandler::zdist));
 		}
+		myCamera->SetRotation(toe::core::TOEvector3df(EventHandler::xdistGiro, EventHandler::ydistGiro, EventHandler::zdist));
+		dom->SetScale(toe::core::TOEvector3df(EventHandler::xdist +1, EventHandler::xdist +1, EventHandler::xdist +1));
 	}
 
 	VDriv->CloseWindow();

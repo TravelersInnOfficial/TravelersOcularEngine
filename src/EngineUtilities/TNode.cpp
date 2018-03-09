@@ -49,6 +49,12 @@ int TNode::AddChild(TNode* child){
 	return position;	// Devolvemos la posicion en la que se pone el hijo
 }
 
+int TNode::AddFirstChild(TNode* child){
+	int position = 0;
+	m_children.insert(m_children.begin(), child);
+	return position;	// Devolvemos la posicion en la que se pone el hijo
+}
+
 int TNode::RemoveChild(TNode* child){
 	int size = m_children.size();
 	for(int i=0; i<size; i++){
@@ -85,7 +91,8 @@ bool TNode::SetParent(TNode* parent){
 			m_parent->RemoveChild(this);
 		}
 		m_parent = parent;
-		m_parent->AddChild(this);
+		// This is made in tfnode attach
+		//m_parent->AddChild(this);
 		
 		toReturn = true;
 	}

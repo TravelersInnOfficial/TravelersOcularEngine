@@ -11,6 +11,7 @@ TFNode::TFNode(){
 
 	m_entityNode = new TNode();
 	m_entityNode->SetParent(m_positionNode);
+	m_positionNode->AddChild(m_entityNode);
 
 	m_parent = nullptr;
 }
@@ -34,6 +35,12 @@ TFNode::~TFNode(){
 
 void TFNode::Attach(TNode* root){
 	m_scaleNode->SetParent(root);
+	if(root != nullptr) root->AddChild(m_scaleNode);
+}
+
+void TFNode::AttachFirst(TNode* root){
+	m_scaleNode->SetParent(root);
+	if(root != nullptr) root->AddFirstChild(m_scaleNode);	
 }
 
 void TFNode::SetTranslate(toe::core::TOEvector3df translation){
