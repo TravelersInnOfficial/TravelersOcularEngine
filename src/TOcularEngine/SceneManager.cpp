@@ -85,8 +85,7 @@ TFDome* SceneManager::AddDome(toe::core::TOEvector3df position, std::string mesh
 }
 
 TFRect* SceneManager::Add2DRect(toe::core::TOEvector2df size, toe::core::TOEvector2df position, float rotation){
-	TFRect* toRet = nullptr;
-	toRet = new TFRect(position);
+	TFRect* toRet = new TFRect(size, position, rotation);
 	m_2Delems.push_back(toRet);
 	return toRet;
 }
