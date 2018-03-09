@@ -10,7 +10,7 @@ struct Particle{
 	void InitParticle();
 	glm::vec3 pos, speed, translation;
 	unsigned char r, g, b;
-	float size;
+	float size, rotation;
 	float life, cameraDistance;
 
 	bool operator<(Particle& that){
@@ -48,6 +48,7 @@ private:
 	
 	GLuint 				m_vbo;	// Vertex buffer del mesh basico
 	GLuint				m_pbo; 	// Buffer con las posiciones de las particulas
+	GLuint				m_ebo;	// Buffer con los extras de las particulas
 	GLuint				m_cbo;	// Buffer con los colores de las particular
 
 	glm::vec3 			m_center; 				// Centro absoluto del sistema de particulas
@@ -55,7 +56,8 @@ private:
 
 	Particle 			m_particleContainer		[m_maxParticles*1];		// Array con todas las particulas
 	unsigned char 		m_particlesColorData	[m_maxParticles*3];		// Array con todos los colores de las particulas
-	float				m_particlePositionData	[m_maxParticles*4];		// Array con las posiciones de las particulas
+	float				m_particlePositionData	[m_maxParticles*3];		// Array con las posiciones de las particulas
+	float 				m_particlesExtra		[m_maxParticles*2];		// Array con el tamanyo y la rotacion de las particulas
 };
 
 #endif

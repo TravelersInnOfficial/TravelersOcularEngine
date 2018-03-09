@@ -1,6 +1,7 @@
 #include "./TParticleSystem.h"
 #include "../TOcularEngine/VideoDriver.h"
 #include "./../TResourceManager.h"
+#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/norm.hpp>
 #include <GL/glew.h>
@@ -39,7 +40,8 @@ void Particle::InitParticle(){
 	g = (unsigned char)(rand() % 255);
 	b = (unsigned char)(rand() % 255);
 
-	size = (rand() % 5)/10.0f;
+	size = (rand() % 10)/10.0f;
+	rotation = (rand() % 360);
 	life = 20.0f;
 	cameraDistance = 0.0f;
 }
@@ -60,13 +62,19 @@ TParticleSystem::TParticleSystem(std::string path){
 	// Inicializamos el buffer vacio, se rellenara a cada frame con las nuevas posiciones
 	glGenBuffers(1, &m_pbo);
 	glBindBuffer(GL_ARRAY_BUFFER, m_pbo);
-	glBufferData(GL_ARRAY_BUFFER, m_maxParticles * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, m_maxParticles * 3 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
 
 	// Preparamos el buffer que se utiizara para los colores de las particulas
 	// Inicializamos el buffer vacio, se rellenara a cada frame con las nuevas posiciones
 	glGenBuffers(1, &m_cbo);
 	glBindBuffer(GL_ARRAY_BUFFER, m_cbo);
 	glBufferData(GL_ARRAY_BUFFER, m_maxParticles * 3 * sizeof(GLubyte), NULL, GL_STREAM_DRAW);
+
+	// Preparamos el buffer que se utilizara para los extras de las particulas
+	// Inicializamos el buffer vacio, se rellenara a cada frame con las nuevas posiciones
+	glGenBuffers(1, &m_ebo);
+	glBindBuffer(GL_ARRAY_BUFFER, m_ebo);
+	glBufferData(GL_ARRAY_BUFFER, m_maxParticles * 2 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
 
 	m_program = PARTICLE_SHADER;
 	m_particleCount = 0;
@@ -94,6 +102,8 @@ void TParticleSystem::ResetShaderData(){
 	GLint indexAttrib = glGetAttribLocation(idProgram, "ParticleCenter");
 	glVertexAttribDivisor(indexAttrib, 0);
 	indexAttrib = glGetAttribLocation(idProgram, "ParticleColor");
+	glVertexAttribDivisor(indexAttrib, 0);
+	indexAttrib = glGetAttribLocation(idProgram, "ParticleExtra");
 	glVertexAttribDivisor(indexAttrib, 0);
 }
 
@@ -144,7 +154,7 @@ void TParticleSystem::SendShaderData(){
 		indexAttrib = glGetAttribLocation(idProgram, "ParticleCenter");
 
 		glBindBuffer(GL_ARRAY_BUFFER, m_pbo);
-		glVertexAttribPointer(indexAttrib, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
+		glVertexAttribPointer(indexAttrib, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 		glVertexAttribDivisor(indexAttrib, 1);
 		glEnableVertexAttribArray(indexAttrib);
@@ -154,7 +164,17 @@ void TParticleSystem::SendShaderData(){
 		indexAttrib = glGetAttribLocation(idProgram, "ParticleColor");
 
 		glBindBuffer(GL_ARRAY_BUFFER, m_cbo);
-		glVertexAttribPointer(indexAttrib, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, (void*)0);
+		glVertexAttribPointer(indexAttrib, 3, GL_UNSIGNED_BYTE, GL_TRUE, 0, (void*)0);
+
+		glVertexAttribDivisor(indexAttrib, 1);
+		glEnableVertexAttribArray(indexAttrib);
+
+	// Enviamos los extras de las particulas
+		// Le decimos al shader que el atributo se le va a pasar una vez por particula
+		indexAttrib = glGetAttribLocation(idProgram, "ParticleExtra");
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_ebo);
+		glVertexAttribPointer(indexAttrib, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 		glVertexAttribDivisor(indexAttrib, 1);
 		glEnableVertexAttribArray(indexAttrib);
@@ -204,15 +224,16 @@ void TParticleSystem::Update(float deltaTime){
 	            //ParticlesContainer[i].pos += glm::vec3(0.0f,10.0f, 0.0f) * (float)delta;
 
 	            // Fill the GPU buffer
-	            m_particlePositionData[4*m_particleCount+0] = p.pos.x + p.translation.x;
-	            m_particlePositionData[4*m_particleCount+1] = p.pos.y + p.translation.y;
-	            m_particlePositionData[4*m_particleCount+2] = p.pos.z + p.translation.z;
-	            m_particlePositionData[4*m_particleCount+3] = p.size;
+	            m_particlePositionData[3*m_particleCount+0] = p.pos.x + p.translation.x;
+	            m_particlePositionData[3*m_particleCount+1] = p.pos.y + p.translation.y;
+	            m_particlePositionData[3*m_particleCount+2] = p.pos.z + p.translation.z;
+	            
+	            m_particlesColorData[3*m_particleCount+0] = p.r;
+	            m_particlesColorData[3*m_particleCount+1] = p.g;
+	            m_particlesColorData[3*m_particleCount+2] = p.b;
 
-	            m_particlesColorData[4*m_particleCount+0] = p.r;
-	            m_particlesColorData[4*m_particleCount+1] = p.g;
-	            m_particlesColorData[4*m_particleCount+2] = p.b;
-	        	
+	            m_particlesExtra[2*m_particleCount+0] = p.size;
+	            m_particlesExtra[2*m_particleCount+1] = p.rotation;
 
 	        }else{
 	            // Particles that just died will be put at the end of the buffer in SortParticles();
@@ -226,12 +247,16 @@ void TParticleSystem::Update(float deltaTime){
 
 	// Rellenamos los buffers
 	glBindBuffer(GL_ARRAY_BUFFER, m_pbo);
-	glBufferData(GL_ARRAY_BUFFER, m_maxParticles * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
-	glBufferSubData(GL_ARRAY_BUFFER, 0, m_particleCount * sizeof(GLfloat) * 4, m_particlePositionData);
+	glBufferData(GL_ARRAY_BUFFER, m_maxParticles * 3 * sizeof(GLfloat), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
+	glBufferSubData(GL_ARRAY_BUFFER, 0, m_particleCount * sizeof(GLfloat) * 3, m_particlePositionData);
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_cbo);
 	glBufferData(GL_ARRAY_BUFFER, m_maxParticles * 3 * sizeof(GLubyte), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
-	glBufferSubData(GL_ARRAY_BUFFER, 0, m_particleCount * sizeof(GLubyte) * 4, m_particlesColorData);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, m_particleCount * sizeof(GLubyte) * 3, m_particlesColorData);
+
+	glBindBuffer(GL_ARRAY_BUFFER, m_ebo);
+	glBufferData(GL_ARRAY_BUFFER, m_maxParticles * 2 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, m_particleCount * sizeof(GLfloat) * 2, m_particlesExtra);
 
 }
 
@@ -258,18 +283,20 @@ int TParticleSystem::FindUnusedParticle(){
 
 void TParticleSystem::SetTranslate(glm::vec3 position){
 	for(int i=0; i<m_maxParticles; i++){
-		m_particleContainer[i].translation = -position;
+		m_particleContainer[i].translation.x += position.x;
+		m_particleContainer[i].translation.y += position.y;
+		m_particleContainer[i].translation.z += position.z;
 	}
 }
 
 void TParticleSystem::Translate(glm::vec3 position){
 	for(int i=0; i<m_maxParticles; i++){
-		m_particleContainer[i].pos -= position;
+		m_particleContainer[i].translation -= position;
 	}
 }
 
 void TParticleSystem::SetTexture(std::string path){
-	if(path.compare("") == 0) m_texture = TResourceManager::GetInstance()->GetResourceTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/fireball.png");
+	if(path.compare("") == 0) m_texture = TResourceManager::GetInstance()->GetResourceTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/PerfectCookie.png");
 	else m_texture = TResourceManager::GetInstance()->GetResourceTexture(path);
 }
 

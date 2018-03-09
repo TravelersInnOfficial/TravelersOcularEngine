@@ -29,10 +29,15 @@ void TFParticleSystem::Translate(toe::core::TOEvector3df translation){
 }
 
 void TFParticleSystem::SetTranslate(toe::core::TOEvector3df translation){
-	TFNode::SetTranslate(translation);
+	glm::vec3 currentPosition = m_entityNode->GetTranslation();
+	glm::vec3 diffPosition = glm::vec3(currentPosition.x - translation.X, 
+									   currentPosition.y - translation.Y, 
+									   currentPosition.z - translation.Z);
 
 	TParticleSystem* mySystem = (TParticleSystem*)m_entityNode->GetEntity();
-	mySystem->SetTranslate(glm::vec3(translation.X, translation.Y, translation.Z));
+	mySystem->SetTranslate(diffPosition);
+	
+	TFNode::SetTranslate(translation);
 }
 
 void TFParticleSystem::SetTexture(std::string path){
