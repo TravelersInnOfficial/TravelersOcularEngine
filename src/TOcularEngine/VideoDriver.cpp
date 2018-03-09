@@ -75,7 +75,6 @@ bool VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2df
 	glDepthFunc(GL_LESS);
 	glEnable(GL_CULL_FACE);		//|
 	glCullFace(GL_BACK);		//| Habilitar el backface culing
-
 	glFrontFace(GL_CW);
 
 	initShaders();
@@ -117,7 +116,6 @@ bool VideoDriver::Update(){
 
 void VideoDriver::Draw(){
 	privateSceneManager->Draw();
-	glUseProgram(GetProgram(STANDARD_SHADER)->GetProgramID());
 	glfwSwapBuffers(m_window);
 }
 
@@ -203,6 +201,19 @@ void VideoDriver::initShaders(){
 
 		p = new Program(shaders);
 		m_programs.insert(std::pair<SHADERTYPE, Program*>(TEXT_SHADER, p));
+
+	// CARGAMOS EL PROGRAMA DE PARTICULAS
+		// LOAD IN RESOURCE MANAGER
+		TResourceManager::GetInstance()->GetResourceShader(m_assetsPath + "/shaders/VShaderParticle.glsl");
+		TResourceManager::GetInstance()->GetResourceShader(m_assetsPath + "/shaders/FShaderParticle.glsl");
+
+		// CARGAMOS LOS SHADERS
+		shaders = std::map<std::string, GLenum>();
+		shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderParticle.glsl", GL_VERTEX_SHADER));
+		shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShaderParticle.glsl", GL_FRAGMENT_SHADER));
+
+		p = new Program(shaders);
+		m_programs.insert(std::pair<SHADERTYPE, Program*>(PARTICLE_SHADER, p));
 	/*
 	// CARGAMOS EL PROGRAMA DE 2D
 		// LOAD IN RESOURCE MANAGER

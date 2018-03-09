@@ -7,7 +7,8 @@ enum SHADERTYPE {
 	GHOST_SHADER    = 2,
     WATER_SHADER    = 3,
     TEXT_SHADER		= 4,
-	TWOD_SHADER		= 5
+	TWOD_SHADER		= 5,
+	PARTICLE_SHADER	= 6
 };
 
 #endif

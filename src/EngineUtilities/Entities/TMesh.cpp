@@ -93,7 +93,7 @@ void TMesh::SendShaderData(){
 
 	if(currentTexture != nullptr){
 		GLuint TextureID = glGetUniformLocation(myProgram->GetProgramID(), "myTextureSampler");
-		glUniform1i(TextureID, 0);
+		glUniform1i(TextureID, 0); 
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, currentTexture->GetTextureId());

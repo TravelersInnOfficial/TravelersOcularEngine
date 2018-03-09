@@ -28,11 +28,11 @@ SceneManager::~SceneManager(){
 	}
 	m_lights.clear();
 
-	size = m_meshes.size();
+	size = m_objects.size();
 	for(int i = size - 1; i>=0; i--){
-		delete m_meshes[i];
+		delete m_objects[i];
 	}
-	m_meshes.clear();
+	m_objects.clear();
 
 	glDeleteVertexArrays(1, &m_vao);
 	delete m_SceneTreeRoot;
@@ -59,7 +59,7 @@ TFLight* SceneManager::AddLight(toe::core::TOEvector3df position, toe::core::TOE
 TFMesh* SceneManager::AddMesh(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale, std::string meshPath){
 	TFMesh* toRet = nullptr;
 	toRet = new TFMesh(position, rotation, scale, meshPath);
-	m_meshes.push_back((TFMesh*)toRet);
+	m_objects.push_back((TFMesh*)toRet);
 	toRet->Attach(m_SceneTreeRoot);
 	return toRet;
 }
@@ -72,6 +72,14 @@ TFRect* SceneManager::Add2DRect(toe::core::TOEvector2df size, toe::core::TOEvect
 	return toRet;
 	*/
 	return nullptr;
+}
+
+TFParticleSystem* SceneManager::AddParticleSystem(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale){
+	TFParticleSystem* toRet = nullptr;
+	toRet = new TFParticleSystem(position, rotation, scale);
+	m_objects.push_back(toRet);
+	toRet->Attach(m_SceneTreeRoot);
+	return toRet;
 }
 
 bool SceneManager::DeleteCamera(TFCamera* cam){
@@ -105,20 +113,20 @@ bool SceneManager::DeleteMesh(TFNode* node){
 	bool toRet = false;
 	TFMesh* mesh = (TFMesh*)node;
 
-	int size = m_meshes.size();
+	int size = m_objects.size();
 	for(int i=size-1; i>=0; i--){
-		TFMesh* current = m_meshes[i];
+		TFNode* current = m_objects[i];
 		if(current == mesh){
-			m_meshes.erase(m_meshes.begin() + i);
+			m_objects.erase(m_objects.begin() + i);
 			delete current;
 			toRet = true;
 			break;
 		}
 	}
-	/*std::vector<TFMesh*>::iterator it = m_meshes.begin();
-	for(; it!= m_meshes.end() && !toRet; ++it){
+	/*std::vector<TFNode*>::iterator it = m_objects.begin();
+	for(; it!= m_objects.end() && !toRet; ++it){
 		if(*it == mesh){
-			m_meshes.erase(it);
+			m_objects.erase(it);
 			delete mesh;
 			toRet = true;
 		}
@@ -135,34 +143,29 @@ void SceneManager::SetAmbientLight(toe::core::TOEvector3df ambientLight){
 }
 
 void SceneManager::Draw(){
-	//std::cout<<"1"<<std::endl;
 	if(main_camera!=nullptr){
 		// Select active camera and set view and projection matrix
 		TEntity::SetViewMatrixPtr( main_camera->m_entityNode->GetTransformMatrix() );
 		TEntity::SetViewMatrixPtr(glm::inverse(TEntity::ViewMatrix));
 	}
 
-	//std::cout<<"2"<<std::endl;
 	// Gets the Program
 	Program* myProgram = VideoDriver::GetInstance()->GetProgramVector()[STANDARD_SHADER];
 
-	//std::cout<<"3"<<std::endl;
 	// Sends the Ambient Light
 	GLint ambLocation = glGetUniformLocation(myProgram->GetProgramID(), "SpecialLight.AmbientLight");
 	glUniform3fv(ambLocation, 1, glm::value_ptr(m_ambientLight));
 
-	//std::cout<<"4"<<std::endl;	
 	// Send size of lights
 	GLint size = m_lights.size();
 	GLuint nlightspos = glGetUniformLocation(myProgram->GetProgramID(), "nlights");
 	glUniform1i(nlightspos, size);
 
-	//std::cout<<"5"<<std::endl;
 	// Draw all lights
     for(int i = 0; i < size; i++) m_lights[i]->DrawLight(i);
 
-    //std::cout<<"6"<<std::endl;
     m_SceneTreeRoot->Draw();
+	glUseProgram(VideoDriver::GetInstance()->GetProgram(STANDARD_SHADER)->GetProgramID());
 }
 
 void SceneManager::InitScene(){

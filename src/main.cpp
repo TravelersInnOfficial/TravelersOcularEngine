@@ -55,6 +55,7 @@ int main(){
 
 	CreateTree(&myCamera, &meshOne, &meshTwo, &meshThree, &light1, &light2);
 
+	// Anyadir los billboard
 	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0.0f, 1.4f, 0.0f);
 	meshOne->AddBillboard(pos, "Cube");
 	meshTwo->AddBillboard(pos, "Wizard", 0.2f);
@@ -62,12 +63,15 @@ int main(){
 
 	VDriv->SetMouseVisibility(false);
 
-	meshTwo->SetRotation(toe::core::TOEvector3df(0,0,0));
+	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
+	TFParticleSystem* ps = sm->AddParticleSystem(toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df(1,1,1));
+
 
 	while(!EventHandler::m_close){
 		handler->UpdateMousePosition(0, 0);
 		VDriv->Update();
 		VDriv->Draw();
+		ps->Update(0.16f);
 		if(meshTwo != nullptr){
 			meshTwo->SetTranslate(toe::core::TOEvector3df(EventHandler::xdist, EventHandler::ydist, EventHandler::zdist));
 			meshTwo->SetRotation(toe::core::TOEvector3df(EventHandler::xdistGiro, EventHandler::ydistGiro, EventHandler::zdist));
