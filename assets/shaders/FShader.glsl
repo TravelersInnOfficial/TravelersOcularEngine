@@ -58,14 +58,18 @@ vec3  Phong (int num) {
 } 
 
 void main() {
+    vec4 texValue = texture(myTextureSampler, TexCoords);
+    if(texValue.a < 0.5) discard;
+
     vec4 result = vec4(0.0f);
     
     // CALCULAMOS DIFFUSE + SPECULAR
     for(int i = 0; i < nlights; i++) result += vec4(Phong(i), 0.0);
 
     // SUMAMOS AMBIENTAL
-    vec3 Ambient = SpecialLight.AmbientLight * vec3(texture(myTextureSampler, TexCoords)) * Material.Ambient;
+    vec3 Ambient = SpecialLight.AmbientLight * vec3(texValue) * Material.Ambient;
     result += vec4(Ambient, 1.0);
 
 	FragColor = result;
+
 }

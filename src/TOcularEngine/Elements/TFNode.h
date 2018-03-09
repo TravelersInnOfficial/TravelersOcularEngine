@@ -14,13 +14,13 @@ class TFNode{
 	friend class SceneManager;
 
 public:
-	void SetTranslate(toe::core::TOEvector3df translation);		// Sets the rotation of the Node
-	void SetRotation(toe::core::TOEvector3df rotation);			// Sets the position of the Node
-	void SetScale(toe::core::TOEvector3df scale);				// Sets the scale of the Node
+	virtual void SetTranslate(toe::core::TOEvector3df translation);	// Sets the rotation of the Node
+	void SetRotation(toe::core::TOEvector3df rotation);				// Sets the position of the Node
+	void SetScale(toe::core::TOEvector3df scale);					// Sets the scale of the Node
 
-	void Translate(toe::core::TOEvector3df translation);		// Adds the position to the current position
-	void Rotate(toe::core::TOEvector3df rotation);				// Adds the rotation to the current rotation
-	void Scale(toe::core::TOEvector3df scale);					// Adds the scale to the current scale
+	virtual void Translate(toe::core::TOEvector3df translation);	// Adds the position to the current position
+	void Rotate(toe::core::TOEvector3df rotation);					// Adds the rotation to the current rotation
+	void Scale(toe::core::TOEvector3df scale);						// Adds the scale to the current scale
 
 	toe::core::TOEvector3df GetTranslation();	// Returns the rotation of the Node
 	toe::core::TOEvector3df GetRotation();		// Returns the position of the Node

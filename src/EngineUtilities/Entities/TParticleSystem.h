@@ -9,13 +9,13 @@ struct Particle{
 	Particle();
 	void InitParticle();
 	glm::vec3 pos, speed;
-	unsigned char r, g, b, a;
+	unsigned char r, g, b;
 	float size;
 	float life, cameraDistance;
 
 	bool operator<(Particle& that){
         // Sort in reverse order : far particles drawn first.
-        return this->cameraDistance > that.cameraDistance;
+        return this->cameraDistance < that.cameraDistance;
     }
 };
 
@@ -52,7 +52,7 @@ private:
 	int 				m_lastUsedParticle; 	// Numero de la ultima particula que se actualizo
 
 	Particle 			m_particleContainer		[m_maxParticles*1];		// Array con todas las particulas
-	unsigned char 		m_particlesColorData	[m_maxParticles*4];		// Array con todos los colores de las particulas
+	unsigned char 		m_particlesColorData	[m_maxParticles*3];		// Array con todos los colores de las particulas
 	float				m_particlePositionData	[m_maxParticles*4];		// Array con las posiciones de las particulas
 };
 

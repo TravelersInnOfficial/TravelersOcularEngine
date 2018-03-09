@@ -2,12 +2,12 @@
 
 in vec3 VertexPosition;  // VERTICE EN COORDENADAS LOCALES
 in vec4 ParticleCenter;	 // CENTRO DE LA PARTICULA Y SIZE
-in vec4 ParticleColor;	 // COLOR DE LA PARTICULA
+in vec3 ParticleColor;	 // COLOR DE LA PARTICULA
 
 uniform mat4 MVP;		 // MATRIZ MODELO*VISTA*PROYECCION
 
 out vec2 TexCoords;   	// COORDENADAS DE TEXTURA
-out vec4 FinalColor;	// COLOR DE LA PARTICULA
+out vec3 FinalColor;	// COLOR DE LA PARTICULA
 
 void main(){
 	//vec3 Position = ParticleCenter.xyz + VertexPosition * ParticleCenter.w;

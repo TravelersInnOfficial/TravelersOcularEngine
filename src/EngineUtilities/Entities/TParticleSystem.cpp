@@ -16,6 +16,7 @@ static const GLfloat g_vertex_buffer_data[] = {
 
 Particle::Particle(){
 	InitParticle();
+	life = -1.0f;
 }
 
 void Particle::InitParticle(){
@@ -35,7 +36,6 @@ void Particle::InitParticle(){
 	r = (unsigned char)(rand() % 255);
 	g = (unsigned char)(rand() % 255);
 	b = (unsigned char)(rand() % 255);
-	a = (unsigned char)(rand() % 255);
 
 	size = (rand() % 5)/10.0f;
 	life = 20.0f;
@@ -64,7 +64,7 @@ TParticleSystem::TParticleSystem(std::string path){
 	// Inicializamos el buffer vacio, se rellenara a cada frame con las nuevas posiciones
 	glGenBuffers(1, &m_cbo);
 	glBindBuffer(GL_ARRAY_BUFFER, m_cbo);
-	glBufferData(GL_ARRAY_BUFFER, m_maxParticles * 4 * sizeof(GLubyte), NULL, GL_STREAM_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, m_maxParticles * 3 * sizeof(GLubyte), NULL, GL_STREAM_DRAW);
 
 	m_program = PARTICLE_SHADER;
 	m_particleCount = 0;
@@ -174,9 +174,11 @@ void TParticleSystem::AddNewParticles(){
 	}
 }
 
+
 void TParticleSystem::Update(float deltaTime){
 	// Anyadimos las particulas nuevas
 	AddNewParticles();
+	SortParticles();
 
 	// Conseguimos la posicion de la camara
 	glm::vec3 CameraPosition = glm::vec3(ViewMatrix[0][3], ViewMatrix[1][3], ViewMatrix[2][3]);
@@ -208,7 +210,6 @@ void TParticleSystem::Update(float deltaTime){
 	            m_particlesColorData[4*m_particleCount+0] = p.r;
 	            m_particlesColorData[4*m_particleCount+1] = p.g;
 	            m_particlesColorData[4*m_particleCount+2] = p.b;
-	            m_particlesColorData[4*m_particleCount+3] = p.a;
 	        	
 
 	        }else{
@@ -227,7 +228,7 @@ void TParticleSystem::Update(float deltaTime){
 	glBufferSubData(GL_ARRAY_BUFFER, 0, m_particleCount * sizeof(GLfloat) * 4, m_particlePositionData);
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_cbo);
-	glBufferData(GL_ARRAY_BUFFER, m_maxParticles * 4 * sizeof(GLubyte), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
+	glBufferData(GL_ARRAY_BUFFER, m_maxParticles * 3 * sizeof(GLubyte), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
 	glBufferSubData(GL_ARRAY_BUFFER, 0, m_particleCount * sizeof(GLubyte) * 4, m_particlesColorData);
 
 }
@@ -255,7 +256,7 @@ int TParticleSystem::FindUnusedParticle(){
 }
 
 void TParticleSystem::SetTexture(std::string path){
-	if(path.compare("") == 0) m_texture = TResourceManager::GetInstance()->GetResourceTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/Wizard.png");
+	if(path.compare("") == 0) m_texture = TResourceManager::GetInstance()->GetResourceTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/fireball.png");
 	else m_texture = TResourceManager::GetInstance()->GetResourceTexture(path);
 }
 

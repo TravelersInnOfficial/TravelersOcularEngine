@@ -21,6 +21,11 @@ TFParticleSystem::~TFParticleSystem(){
 	
 }
 
+void TFParticleSystem::SetTexture(std::string path){
+	TParticleSystem* mySystem = (TParticleSystem*)m_entityNode->GetEntity();
+	mySystem->SetTexture(path);
+}
+
 void TFParticleSystem::Update(float deltaTime){
 	TParticleSystem* mySystem = (TParticleSystem*)m_entityNode->GetEntity();
 	mySystem->Update(deltaTime);
