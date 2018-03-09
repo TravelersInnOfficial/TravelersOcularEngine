@@ -21,6 +21,8 @@ Particle::Particle(){
 
 void Particle::InitParticle(){
 	// Valores por defecto
+	translation = glm::vec3(0,0,0);
+
 	float X = (rand() % 10)/10.0f - 0.5f;
 	float Y = (rand() % 10)/10.0f - 0.5f;
 	float Z = (rand() % 10)/10.0f - 0.5f;
@@ -202,9 +204,9 @@ void TParticleSystem::Update(float deltaTime){
 	            //ParticlesContainer[i].pos += glm::vec3(0.0f,10.0f, 0.0f) * (float)delta;
 
 	            // Fill the GPU buffer
-	            m_particlePositionData[4*m_particleCount+0] = p.pos.x;
-	            m_particlePositionData[4*m_particleCount+1] = p.pos.y;
-	            m_particlePositionData[4*m_particleCount+2] = p.pos.z;
+	            m_particlePositionData[4*m_particleCount+0] = p.pos.x + p.translation.x;
+	            m_particlePositionData[4*m_particleCount+1] = p.pos.y + p.translation.y;
+	            m_particlePositionData[4*m_particleCount+2] = p.pos.z + p.translation.z;
 	            m_particlePositionData[4*m_particleCount+3] = p.size;
 
 	            m_particlesColorData[4*m_particleCount+0] = p.r;
@@ -252,7 +254,18 @@ int TParticleSystem::FindUnusedParticle(){
 
 	// En el caso de no haber encontrado ninguna particula sobreescribimos la primera
 	return 0;
+}
 
+void TParticleSystem::SetTranslate(glm::vec3 position){
+	for(int i=0; i<m_maxParticles; i++){
+		m_particleContainer[i].translation = -position;
+	}
+}
+
+void TParticleSystem::Translate(glm::vec3 position){
+	for(int i=0; i<m_maxParticles; i++){
+		m_particleContainer[i].pos -= position;
+	}
 }
 
 void TParticleSystem::SetTexture(std::string path){

@@ -8,7 +8,7 @@
 struct Particle{
 	Particle();
 	void InitParticle();
-	glm::vec3 pos, speed;
+	glm::vec3 pos, speed, translation;
 	unsigned char r, g, b;
 	float size;
 	float life, cameraDistance;
@@ -32,6 +32,8 @@ public:
 	void Update(float deltaTime);
 
 	void SetTexture(std::string path);
+	void SetTranslate(glm::vec3 position);
+	void Translate(glm::vec3 position);
 private:
 	void SendShaderData();
 	void ResetShaderData();

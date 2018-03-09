@@ -21,6 +21,20 @@ TFParticleSystem::~TFParticleSystem(){
 	
 }
 
+void TFParticleSystem::Translate(toe::core::TOEvector3df translation){
+	TFNode::Translate(translation);
+
+	TParticleSystem* mySystem = (TParticleSystem*)m_entityNode->GetEntity();
+	mySystem->Translate(glm::vec3(translation.X, translation.Y, translation.Z));
+}
+
+void TFParticleSystem::SetTranslate(toe::core::TOEvector3df translation){
+	TFNode::SetTranslate(translation);
+
+	TParticleSystem* mySystem = (TParticleSystem*)m_entityNode->GetEntity();
+	mySystem->SetTranslate(glm::vec3(translation.X, translation.Y, translation.Z));
+}
+
 void TFParticleSystem::SetTexture(std::string path){
 	TParticleSystem* mySystem = (TParticleSystem*)m_entityNode->GetEntity();
 	mySystem->SetTexture(path);

@@ -6,6 +6,9 @@
 class TFParticleSystem: public TFNode{
 	friend class SceneManager;
 public:
+	void SetTranslate(toe::core::TOEvector3df translation) override;
+	void Translate(toe::core::TOEvector3df translation) override;
+
 	void SetTexture(std::string path);
 	void Update(float deltaTime);
 private:

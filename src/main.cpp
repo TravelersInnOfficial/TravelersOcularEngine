@@ -82,11 +82,13 @@ int main(){
 		ps->Update(0.16f);
 		if(meshTwo != nullptr){
 			meshTwo->SetTranslate(toe::core::TOEvector3df(EventHandler::xdist, EventHandler::ydist, EventHandler::zdist));
-			meshTwo->SetRotation(toe::core::TOEvector3df(EventHandler::xdistGiro, EventHandler::ydistGiro, EventHandler::zdist));
+			//meshTwo->SetRotation(toe::core::TOEvector3df(EventHandler::xdistGiro, EventHandler::ydistGiro, EventHandler::zdist));
 			//myCamera->SetTranslate(toe::core::TOEvector3df(EventHandler::xdist, EventHandler::ydist, EventHandler::zdist));			myCamera->SetRotation(toe::core::TOEvector3df(EventHandler::xdistGiro, EventHandler::ydistGiro, EventHandler::zdist));
 		}
-		myCamera->SetRotation(toe::core::TOEvector3df(EventHandler::xdistGiro, EventHandler::ydistGiro, EventHandler::zdist));
-		dom->SetScale(toe::core::TOEvector3df(EventHandler::xdist +1, EventHandler::xdist +1, EventHandler::xdist +1));
+		ps->SetTranslate(meshTwo->GetTranslation());
+
+		//myCamera->SetRotation(toe::core::TOEvector3df(EventHandler::xdistGiro, EventHandler::ydistGiro, EventHandler::zdist));
+		//dom->SetScale(toe::core::TOEvector3df(EventHandler::xdist +1, EventHandler::xdist +1, EventHandler::xdist +1));
 	}
 
 	VDriv->CloseWindow();
