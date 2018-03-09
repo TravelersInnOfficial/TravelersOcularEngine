@@ -90,11 +90,16 @@ bool IODriver::UpdateMouseWheel(int xoffset, int yoffset){
     glfwEvent.m_mouseWheel.x     = xoffset;
     glfwEvent.m_mouseWheel.y     = yoffset;
     
-
     const TEvent* pointer = &glfwEvent;
     return OnEvent(*pointer);
 }
 
+bool IODriver::UpdateShouldClose(){
+    TEvent glfwEvent;
+    glfwEvent.m_type = Type_Closed;
+    const TEvent* pointer = &glfwEvent;
+    return OnEvent(*pointer);
+}
 
 bool IODriver::OnEvent(const TEvent& event){
     return false;

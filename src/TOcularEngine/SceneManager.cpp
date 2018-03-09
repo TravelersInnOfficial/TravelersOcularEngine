@@ -12,7 +12,8 @@ SceneManager::SceneManager(){
 	TTransform* myTransform = new TTransform();
 	m_SceneTreeRoot = new TNode(myTransform);
 	m_ambientLight = glm::vec3(0.25f);
-	main_camera = nullptr;
+	m_main_camera = nullptr;
+	m_dome = nullptr;
 }
 
 SceneManager::~SceneManager(){
@@ -34,6 +35,12 @@ SceneManager::~SceneManager(){
 	}
 	m_objects.clear();
 
+	size = m_2Delems.size();
+	for(int i = size - 1; i>=0; i--){
+		delete m_2Delems[i];
+	}
+	m_2Delems.clear();
+
 	glDeleteVertexArrays(1, &m_vao);
 	delete m_SceneTreeRoot;
 	//delete program;
@@ -44,7 +51,7 @@ TFCamera* SceneManager::AddCamera(toe::core::TOEvector3df position, toe::core::T
 	toRet = new TFCamera(position, rotation, perspective);
 	m_cameras.push_back(toRet);
 	toRet->Attach(m_SceneTreeRoot);
-	main_camera = toRet;
+	m_main_camera = toRet;
 	return toRet;
 }
 
@@ -64,14 +71,20 @@ TFMesh* SceneManager::AddMesh(toe::core::TOEvector3df position, toe::core::TOEve
 	return toRet;
 }
 
-TFRect* SceneManager::Add2DRect(toe::core::TOEvector2df size, toe::core::TOEvector2df position, float rotation){
-	/*
-	TFRect* toRet = nullptr;
-	toRet = new TFRect(size,position,rotation);
+TFDome* SceneManager::AddDome(toe::core::TOEvector3df position, std::string meshPath, std::string texturePath){
+	if(m_dome != nullptr) delete m_dome;
+	
+	TFDome* toRet = new TFDome(position, toe::core::TOEvector3df(0.0f,0.0f,0.0f), toe::core::TOEvector3df(1.0f,1.0f,1.0f), meshPath, texturePath);
+	m_dome = toRet;
 	toRet->Attach(m_SceneTreeRoot);
 	return toRet;
-	*/
-	return nullptr;
+}
+
+TFRect* SceneManager::Add2DRect(toe::core::TOEvector2df size, toe::core::TOEvector2df position, float rotation){
+	TFRect* toRet = nullptr;
+	toRet = new TFRect(position);
+	m_2Delems.push_back(toRet);
+	return toRet;
 }
 
 TFParticleSystem* SceneManager::AddParticleSystem(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale){
@@ -87,7 +100,7 @@ bool SceneManager::DeleteCamera(TFCamera* cam){
 	std::vector<TFCamera*>::iterator it = m_cameras.begin();
 	for(; it != m_cameras.end() && !toRet; ++it){
 		if(*it == cam){
-			if(cam == main_camera) main_camera = nullptr;
+			if(cam == m_main_camera) m_main_camera = nullptr;
 			delete cam;
 			m_cameras.erase(it);
 			toRet = true;
@@ -143,9 +156,9 @@ void SceneManager::SetAmbientLight(toe::core::TOEvector3df ambientLight){
 }
 
 void SceneManager::Draw(){
-	if(main_camera!=nullptr){
+	if(m_main_camera!=nullptr){
 		// Select active camera and set view and projection matrix
-		TEntity::SetViewMatrixPtr( main_camera->m_entityNode->GetTransformMatrix() );
+		TEntity::SetViewMatrixPtr( m_main_camera->m_entityNode->GetTransformMatrix() );
 		TEntity::SetViewMatrixPtr(glm::inverse(TEntity::ViewMatrix));
 	}
 
@@ -168,6 +181,13 @@ void SceneManager::Draw(){
 	glUseProgram(VideoDriver::GetInstance()->GetProgram(STANDARD_SHADER)->GetProgramID());
 }
 
+void SceneManager::Draw2DElements(){
+	//DRAW 2D ELEMENTS AFTER THE 3D SCENE
+	for(int i = 0; i< m_2Delems.size(); i++){
+		m_2Delems[i]->Draw();
+	}
+}
+
 void SceneManager::InitScene(){
 	glGenVertexArrays(1, &m_vao); // CREAMOS EL ARRAY DE VERTICES PARA LOS OBJETOS
 	glBindVertexArray(m_vao);
@@ -178,5 +198,5 @@ TNode* SceneManager::GetRootNode(){
 }
 
 TFCamera* SceneManager::GetMainCamera(){
-	return main_camera;
+	return m_main_camera;
 }

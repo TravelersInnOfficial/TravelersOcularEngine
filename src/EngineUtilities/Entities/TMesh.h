@@ -10,15 +10,15 @@
 class TMesh: public TEntity{
 public:
 	TMesh(std::string meshPath = "", std::string texturePath = "");
-	~TMesh();
+	virtual ~TMesh();
 
-	void BeginDraw();
-	void EndDraw();
+	virtual void BeginDraw();
+	virtual void EndDraw();
 
 	void LoadMesh(std::string meshPath = "");
 	void ChangeTexture(std::string texturePath = "");
 
-private:
+protected:
 
 	TResourceMesh* 		m_mesh;
 	TResourceTexture* 	m_texture;
