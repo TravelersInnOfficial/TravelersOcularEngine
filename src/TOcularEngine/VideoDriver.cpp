@@ -1,7 +1,8 @@
 #include "VideoDriver.h"
 #include "./../EngineUtilities/Resources/Program.h"
 #include "./../EngineUtilities/TResourceManager.h"
-
+#include <stdio.h>
+#include <string.h>
 
 #define GLEW_STATIC
 
@@ -268,8 +269,25 @@ void VideoDriver::end2DDrawState(){
 }
 
 void VideoDriver::SetMouseVisibility(bool visible){
-	if(visible == 0) glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN); //GLFW_CURSOR_DISABLED
-	else glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	//if(visible == 0) glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	//else glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	if(visible == 0){
+		int w = 1;
+		int h = 1;
+		unsigned char pixels[w * h * 4];
+		memset(pixels, 0x00, sizeof(pixels));
+		GLFWimage image;
+		image.width = w;
+		image.height = h;
+		image.pixels = pixels;
+		GLFWcursor* newCursor = glfwCreateCursor(&image, 0, 0);
+		glfwSetCursor(m_window, newCursor);
+	}
+
+	else{
+		GLFWcursor* newCursor = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+		glfwSetCursor(m_window, newCursor);
+	}
 }
 
 void VideoDriver::SetCursorPosition(int x, int y){
