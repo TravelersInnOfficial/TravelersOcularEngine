@@ -118,8 +118,17 @@ public:
 
     /**
      * @brief Sets the Ambient Light
+     * 
+     * @param ambientLight 
      */
     void SetAmbientLight(toe::core::TOEvector3df ambientLight);
+
+    /**
+     * @brief Get the Ambient Light object
+     * 
+     * @return toe::core::TOEvector3df 
+     */
+    toe::core::TOEvector3df GetAmbientLight();
 
     void Update();
 
