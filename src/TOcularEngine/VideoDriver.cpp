@@ -89,6 +89,7 @@ void VideoDriver::SetReceiver(){
 	glfwSetCursorPosCallback(m_window, VideoDriver::mouse_position_callback);
 	glfwSetMouseButtonCallback(m_window, VideoDriver::mouse_button_callback);
 	glfwSetScrollCallback(m_window, VideoDriver::mouse_scroll_callback);
+	glfwSetWindowCloseCallback(m_window, VideoDriver::window_close_callback);
 }
 
 void VideoDriver::keyboard_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
@@ -97,6 +98,9 @@ void VideoDriver::keyboard_callback(GLFWwindow* window, int key, int scancode, i
 
 void VideoDriver::mouse_position_callback(GLFWwindow* window, double xpos, double ypos){
 	if(privateIODriver!=nullptr) privateIODriver->UpdateMousePosition(xpos,ypos);
+}
+void VideoDriver::window_close_callback(GLFWwindow* window){
+	if(privateIODriver!=nullptr) privateIODriver->UpdateShouldClose();
 }
 
 void VideoDriver::mouse_button_callback(GLFWwindow* window, int button, int action, int mods){

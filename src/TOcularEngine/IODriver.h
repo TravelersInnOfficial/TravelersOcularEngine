@@ -98,6 +98,7 @@ public:
     bool UpdateMousePosition(int xpos, int ypos);
     bool UpdateMouseButtons(int button, int action);
     bool UpdateMouseWheel(int xoffset, int yoffset);
+    bool UpdateShouldClose();
 protected:
     KeyboardKey ConvertKeyGLFW(int key);
 	virtual bool OnEvent(const TEvent& event);

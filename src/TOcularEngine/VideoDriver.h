@@ -137,6 +137,7 @@ private:
 	static void mouse_position_callback(GLFWwindow* window, double xpos, double ypos);
 	static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 	static void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+	static void window_close_callback(GLFWwindow* window);
 
 	static void glwf_error_callback(int error, const char* description);
 };
