@@ -57,7 +57,8 @@ protected:
 	TFNode();
 	virtual ~TFNode();
 	void DeleteChildren();
-	void Attach(TNode* root);	// TNode to be attached to (Rotation will be children to the new TNode)	
+	void Attach(TNode* root);		// TNode to be attached to (Rotation will be children to the new TNode)	
+	void AttachFirst(TNode* root);	// TNode to be attached to (Rotation will be children to the new TNode)	
 
 };
 
