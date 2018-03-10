@@ -12,8 +12,7 @@ public:
 	void EndDraw();
 
 private:
-	std::string checkModel(std::string path);
-	std::string checkText(std::string path);
+	void SendShaderData();
 
 };
 
