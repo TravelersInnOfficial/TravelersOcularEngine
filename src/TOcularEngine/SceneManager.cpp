@@ -140,7 +140,10 @@ bool SceneManager::DeleteMesh(TFNode* node){
 }
 
 void SceneManager::Update(){
-	
+	if(m_main_camera != nullptr && m_dome != nullptr){
+		toe::core::TOEvector3df position = m_main_camera->GetTranslation();
+		m_dome->SetTranslate(position);
+	}
 }
 
 void SceneManager::SetAmbientLight(toe::core::TOEvector3df ambientLight){
