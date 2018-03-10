@@ -18,7 +18,7 @@ TFRect::TFRect(toe::core::TOEvector2df size, toe::core::TOEvector2df position, f
     //std::cout<<"m_position ("<<m_position.X<<","<<m_position.Y<<")\n";
     //std::cout<<"m_rotation: "<<m_rotation <<"\n";
     //0,0 en la esquina inferior izquierda
-
+    m_color.SetR(1);
     m_InData.position = position;
     m_InData.size = size;
     m_InData.rotation = rotation;
@@ -35,15 +35,16 @@ void TFRect::Draw() const{
     float vertices[] =
     {
         //first triangle
-        m_position.X, m_position.Y, 0.0f,
-        m_size.X, m_position.Y, 0.0f,
-        m_position.X, m_size.Y, 0.0f,
+        //POSITION                          COLOR
+        m_position.X, m_position.Y, 0.0f,   m_color.GetR(), m_color.GetG(), m_color.GetB(),
+        m_size.X, m_position.Y, 0.0f,       m_color.GetR(), m_color.GetG(), m_color.GetB(),
+        m_position.X, m_size.Y, 0.0f,       m_color.GetR(), m_color.GetG(), m_color.GetB(),
 
         //second triangle
-        m_size.X, m_position.Y, 0.0f,
-        m_size.X, m_size.Y, 0.0f,
-        m_position.X, m_size.Y, 0.0f
-
+        //POSITION                          COLOR
+        m_size.X, m_position.Y, 0.0f,       m_color.GetR(), m_color.GetG(), m_color.GetB(),
+        m_size.X, m_size.Y, 0.0f,           m_color.GetR(), m_color.GetG(), m_color.GetB(),
+        m_position.X, m_size.Y, 0.0f,       m_color.GetR(), m_color.GetG(), m_color.GetB()
     };
     
     GLuint VBO, VAO;
@@ -55,15 +56,22 @@ void TFRect::Draw() const{
     glBindBuffer( GL_ARRAY_BUFFER, VBO );
     glBufferData( GL_ARRAY_BUFFER, sizeof( vertices ), vertices, GL_STATIC_DRAW );
     
+    glRotatef(90, 10, 10, 0);
     GLint posAttrib = glGetAttribLocation(myProgram->GetProgramID(), "position");
-    glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 3 * sizeof( float ), ( GLvoid * ) 0 );
+    glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 6 * sizeof( float ), ( GLvoid * ) 0 );
     glEnableVertexAttribArray(posAttrib);
+
+    GLint colAttrib = glGetAttribLocation(myProgram->GetProgramID(), "color");
+    glEnableVertexAttribArray(colAttrib);
+    glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3*sizeof(float)));
 
     glBindBuffer( GL_ARRAY_BUFFER, 0 ); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
     
     glBindVertexArray( 0 ); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs)
 
 	glBindVertexArray( VAO );
+
+
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
