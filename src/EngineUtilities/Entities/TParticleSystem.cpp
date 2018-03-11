@@ -40,7 +40,8 @@ void Particle::InitParticle(){
 	g = (unsigned char)(rand() % 255);
 	b = (unsigned char)(rand() % 255);
 
-	size = (rand() % 5)/10.0f;
+	//size = (rand() % 5)/20.0f;
+	size = (rand() % 5)/75.0f;
 	rotation = (rand() % 360);
 	life = 20.0f;
 	cameraDistance = 0.0f;
@@ -213,7 +214,8 @@ void TParticleSystem::Update(float deltaTime){
 	        if (p.life > 0.0f){
 
 	            // Simulate simple physics : gravity only, no collisions
-	            p.speed += glm::vec3(0.0f,-0.01f, 0.0f) * deltaTime * 0.5f;
+	            //p.speed += glm::vec3(0.0f,-0.01f, 0.0f) * deltaTime * 0.5f;
+				p.speed += glm::vec3(0.0f,0.5f, 0.0f) * deltaTime * 0.5f;
 	            p.pos += p.speed * deltaTime;
 
 	            p.cameraDistance = 1.0f;

@@ -4,10 +4,8 @@
 
 #include "EventHandler.h"
 
-void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh** meshThree, TFLight** light1, TFLight** light2, TFMesh** dom){
+void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh** meshThree, TFLight** light1, TFMesh** dom){
 	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
-
-	//dom = (TFMesh*)sm->AddDome(toe::core::TOEvector3df(0, 0, 0), "./../assets/models/sphere1.obj", "./../assets/textures/skydome.jpg");
 
 	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0, 0, 0);
 	toe::core::TOEvector3df rot = toe::core::TOEvector3df(0, 0, 0);
@@ -19,38 +17,27 @@ void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh*
 	pos = toe::core::TOEvector3df(0, 0, -3);
 	*myCamera = sm->AddCamera(pos, rot, true);
 
-	pos = toe::core::TOEvector3df(-1.5f, 0.0f, 0);
+	//pos = toe::core::TOEvector3df(-1.5f, 0.0f, 0);
 	//*meshOne = toe::AddCube(pos, rot, scale);
 	//(*meshOne)->SetTexture("./../assets/textures/cube.png");
 
-	pos = toe::core::TOEvector3df(0.0f, 0.0f, 0.0f);
-	rot = toe::core::TOEvector3df(0, 180, 0);
+	pos = toe::core::TOEvector3df(-1.25f, 0.0f, 0.0f);
+	rot = toe::core::TOEvector3df(0, 160, 0);
 	path = "./../assets/models/Wizard.obj";
 	*meshTwo = sm->AddMesh(pos, rot, scale, path);
 
-	pos = toe::core::TOEvector3df(1.5f, 0.0f, 0.0f);
-	path = "./../assets/models/potion.obj";
+	//pos = toe::core::TOEvector3df(1.5f, 0.0f, 0.0f);
+	//path = "./../assets/models/potion.obj";
 	//*meshThree = sm->AddMesh(pos, rot, scale, path);
 	//(*meshThree)->SetTexture("./../assets/textures/potion.png");
 
-	pos = toe::core::TOEvector3df(0, 0, 0);
-	color = toe::core::TOEvector4df(.9f, .9f, .9f, 1.0f);
+	pos = toe::core::TOEvector3df(-1.0f, 0, -1.0f);
+	color = toe::core::TOEvector4df(1.0f, 1.0f, 1.0f, 1.0f);
 	*light1 = sm->AddLight(pos, rot, color, attenuation);
 
-	//pos = toe::core::TOEvector3df(10, 0, 0);
-	//color = toe::core::TOEvector4df(0.0f, 0.0f, 1.0f, 1.0f);
-	//*light2 = sm->AddLight(pos, rot, color, attenuation);	
 	*dom = (TFMesh*)sm->AddDome();
-	
-	//*light2 = sm->AddLight(pos, rot, color, attenuation);
 
 	TFRect* rect1 = toe::Add2DRect(toe::core::TOEvector2df(10,10),toe::core::TOEvector2df(2,2));
-	//rect1->SetWidth(20);
-	//rect1->SetHeight(20);
-	//rect1->SetPosX(20);
-	//rect1->SetPosY(20);
-	//rect1->SetPosition(20,20);
-	//rect1->SetSize(20,20);
 	toe::core::TOEvector2df newpos = toe::core::TOEvector2df(rect1->GetPosX() + rect1->GetWidth(),rect1->GetPosY() + rect1->GetHeight());
 	TFRect* rect2 = toe::Add2DRect(toe::core::TOEvector2df(2,2),newpos);
 	rect2->SetColor(0,1,0);
@@ -70,36 +57,25 @@ int main(){
 	TFMesh* meshThree = nullptr;
 	TFMesh* dom = nullptr;
 	TFLight* light1 = nullptr;
-	TFLight* light2 = nullptr;
 
-	CreateTree(&myCamera, &meshOne, &meshTwo, &meshThree, &light1, &light2, &dom);
+	CreateTree(&myCamera, &meshOne, &meshTwo, &meshThree, &light1, &dom);
 	
-	// Anyadir los billboard
 	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0.0f, 1.4f, 0.0f);
-	//meshOne->AddBillboard(pos, "Cube");
 	meshTwo->AddBillboard(pos, "Wizard", 0.2f);
-	//meshThree->AddBillboard(pos, "Potion");
 
 	VDriv->SetMouseVisibility(false);
 
 	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
-	TFParticleSystem* ps = sm->AddParticleSystem(toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df(1,1,1));
-
+	TFParticleSystem* ps = sm->AddParticleSystem(toe::core::TOEvector3df(1.25f,-0.5,0), toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df(1,1,1));
 
 	while(!EventHandler::m_close){
-		handler->UpdateMousePosition(0, 0);
 		VDriv->Update();
 		VDriv->Draw();
-		ps->SetTranslate(meshTwo->GetTranslation());
 		ps->Update(0.16f);
 		if(meshTwo != nullptr){
 			meshTwo->SetTranslate(toe::core::TOEvector3df(EventHandler::xdist, EventHandler::ydist, EventHandler::zdist));
-			//meshTwo->SetRotation(toe::core::TOEvector3df(EventHandler::xdistGiro, EventHandler::ydistGiro, EventHandler::zdist));
-			//myCamera->SetTranslate(toe::core::TOEvector3df(EventHandler::xdist, EventHandler::ydist, EventHandler::zdist));			myCamera->SetRotation(toe::core::TOEvector3df(EventHandler::xdistGiro, EventHandler::ydistGiro, EventHandler::zdist));
+			meshTwo->SetRotation(toe::core::TOEvector3df(EventHandler::xdistGiro, EventHandler::ydistGiro, 0));
 		}
-
-		//myCamera->SetRotation(toe::core::TOEvector3df(EventHandler::xdistGiro, EventHandler::ydistGiro, EventHandler::zdist));
-		//dom->SetScale(toe::core::TOEvector3df(EventHandler::xdist +1, EventHandler::xdist +1, EventHandler::xdist +1));
 	}
 
 	VDriv->CloseWindow();

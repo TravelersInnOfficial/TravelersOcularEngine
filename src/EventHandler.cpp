@@ -1,11 +1,11 @@
 #include "EventHandler.h"
 #include "TOcularEngine/VideoDriver.h"
 
-float EventHandler::xdist = 0.0f;
+float EventHandler::xdist = -1.25f;
 float EventHandler::ydist = 0.0f;
 float EventHandler::zdist = 0.0f;
 float EventHandler::xdistGiro = 0.0f;
-float EventHandler::ydistGiro = 0.0f;
+float EventHandler::ydistGiro = 160.0f;
 float EventHandler::zdistGiro = 0.0f;
 bool EventHandler::m_close = false;
 
