@@ -6,7 +6,6 @@
 TFDome::TFDome( toe::core::TOEvector3df position, 
                 toe::core::TOEvector3df rotation, 
                 toe::core::TOEvector3df scale, 
-                std::string meshPath, 
                 std::string texturePath): TFNode()
 {
 
@@ -19,7 +18,7 @@ TFDome::TFDome( toe::core::TOEvector3df position,
 	t = (TTransform*) m_positionNode->GetEntity();
 	t->Translate(position.X, position.Y, position.Z);
 
-	m_entityNode->SetEntity(new TDome(meshPath, texturePath));
+	m_entityNode->SetEntity(new TDome(texturePath));
 }
 TFDome::~TFDome(){
     
