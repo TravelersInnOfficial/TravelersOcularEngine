@@ -87,7 +87,7 @@ TFMesh* SceneManager::AddMesh(toe::core::TOEvector3df position, toe::core::TOEve
 
 TFDome* SceneManager::AddDome(toe::core::TOEvector3df position, std::string texturePath){
 	if(m_dome == nullptr){
-		TFDome* toRet = new TFDome(position, toe::core::TOEvector3df(0.0f,0.0f,0.0f), toe::core::TOEvector3df(5.0f,5.0f,5.0f), texturePath);
+		TFDome* toRet = new TFDome(position, toe::core::TOEvector3df(0.0f,0.0f,0.0f), toe::core::TOEvector3df(50.0f,50.0f,50.0f), texturePath);
 		m_dome = toRet;
 		m_dome->AttachFirst(m_SceneTreeRoot);	
 	}
