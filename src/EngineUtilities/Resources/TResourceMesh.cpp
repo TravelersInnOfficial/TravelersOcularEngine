@@ -9,6 +9,7 @@ TResourceMesh::TResourceMesh(std::string name){
 	m_name = name;
 	m_basicTexture = nullptr;
 	m_basicMaterial = nullptr;
+	m_vertices = std::vector<glm::vec3>();
 
 	// Inicializamos los buffer
 	m_vbo = 0;
@@ -33,6 +34,7 @@ TResourceMesh::TResourceMesh(){
 	m_name = "";
 	m_basicTexture = nullptr;
 	m_basicMaterial = nullptr;
+	m_vertices = std::vector<glm::vec3>();
 
 	// Inicializamos los buffer
 	m_vbo = 0;
@@ -72,7 +74,7 @@ void TResourceMesh::AddMaterial(TResourceMaterial* material){
 }
 
 bool TResourceMesh::LoadFile(){
-	bool toRet = TObjectLoader::LoadObjAssimp(this);
+	bool toRet = TObjectLoader::LoadObjAssimp(this, &m_vertices);
 	SetLoaded(toRet);
 	return toRet;
 }
@@ -107,4 +109,8 @@ void TResourceMesh::SetElementSize(int value){
 
 int TResourceMesh::GetElementSize(){
 	return m_elementSize;
+}
+
+std::vector<glm::vec3> TResourceMesh::GetVerticesArray(){
+	return m_vertices;
 }

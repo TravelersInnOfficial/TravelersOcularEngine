@@ -17,6 +17,7 @@ public:
 
 	void LoadMesh(std::string meshPath = "");
 	void ChangeTexture(std::string texturePath = "");
+	void DrawBoundingBox();
 
 protected:
 

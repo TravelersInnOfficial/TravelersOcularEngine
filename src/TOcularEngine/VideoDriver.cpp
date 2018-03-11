@@ -250,6 +250,19 @@ void VideoDriver::initShaders(){
 
 		p = new Program(shaders);
 		m_programs.insert(std::pair<SHADERTYPE, Program*>(SPRITE_SHADER, p));	
+
+	// CARGAMOS EL PROGRAMA DE BOUNDIN BOXES
+		// LOAD IN RESOURCE MANAGER
+		TResourceManager::GetInstance()->GetResourceShader(m_assetsPath + "/shaders/VShaderBB.glsl");
+		TResourceManager::GetInstance()->GetResourceShader(m_assetsPath + "/shaders/FShaderBB.glsl");
+
+		// CARGAMOS LOS SHADERS
+		shaders = std::map<std::string, GLenum>();
+		shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderBB.glsl", GL_VERTEX_SHADER));
+		shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShaderBB.glsl", GL_FRAGMENT_SHADER));
+
+		p = new Program(shaders);
+		m_programs.insert(std::pair<SHADERTYPE, Program*>(BB_SHADER, p));	
 }
 
 void VideoDriver::start2DDrawState(){

@@ -68,8 +68,8 @@ bool TObjectLoader::GetSimilarVertexIndex_fast(PackedVertex* packed, std::map<Pa
 	return output;
 }
 
-bool TObjectLoader::LoadObj(TResourceMesh* mesh, int option){
-	std::vector<glm::vec3> vertex;
+bool TObjectLoader::LoadObj(TResourceMesh* mesh, std::vector<glm::vec3>* vertex, int option){
+	//std::vector<glm::vec3> vertex;
 	std::vector<glm::vec2> uv;
 	std::vector<glm::vec3> normal;
 	std::vector<unsigned int> index;
@@ -77,10 +77,10 @@ bool TObjectLoader::LoadObj(TResourceMesh* mesh, int option){
 	bool loaded = false;
 	switch(option){
 		case 0:
-			loaded = LoadObjFromFileAssimp(mesh, &vertex, &uv, &normal);
+			loaded = LoadObjFromFileAssimp(mesh, vertex, &uv, &normal);
 			break;
 		case 1:
-			loaded = LoadObjFromFileCustom(mesh, &vertex, &uv, &normal);
+			loaded = LoadObjFromFileCustom(mesh, vertex, &uv, &normal);
 			break;
 		default:
 			std::cout<<"La opcion a la que intenta acceder no existe. Opcion: "<<option<<std::endl;
@@ -91,12 +91,12 @@ bool TObjectLoader::LoadObj(TResourceMesh* mesh, int option){
 	}
 
 
-	IndexVBO(mesh, &vertex, &uv, &normal, &index);
+	IndexVBO(mesh, vertex, &uv, &normal, &index);
 
 	// Cargamos el buffer de vertices
 	GLuint currentBuffer = mesh->GetVertexBuffer();
 	glBindBuffer(GL_ARRAY_BUFFER, currentBuffer);
-	glBufferData(GL_ARRAY_BUFFER, vertex.size()*sizeof(glm::vec3), &vertex[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertex->size()*sizeof(glm::vec3), &(*vertex)[0], GL_STATIC_DRAW);
 	//glBufferStorage(GL_ARRAY_BUFFER, vertex.size()*sizeof(glm::vec3), &vertex[0], GL_STATIC_DRAW);
 
 	// Cargamos el buffer de uvs
@@ -125,8 +125,8 @@ bool TObjectLoader::LoadObj(TResourceMesh* mesh, int option){
 //
 // ============================================================================================================================================
 
-bool TObjectLoader::LoadObjAssimp(TResourceMesh* mesh){
-	return LoadObj(mesh, 0);
+bool TObjectLoader::LoadObjAssimp(TResourceMesh* mesh, std::vector<glm::vec3>* vertex){
+	return LoadObj(mesh, vertex, 0);
 }
 
 bool TObjectLoader::LoadObjFromFileAssimp(TResourceMesh* mesh, std::vector<glm::vec3>* vertexVec, std::vector<glm::vec2>* uvVec, std::vector<glm::vec3>* normalVec){
@@ -205,8 +205,8 @@ bool TObjectLoader::LoadObjFromFileAssimp(TResourceMesh* mesh, std::vector<glm::
 //
 // ============================================================================================================================================
 
-bool TObjectLoader::LoadObjCustom(TResourceMesh* mesh){
-	return LoadObj(mesh, 1);
+bool TObjectLoader::LoadObjCustom(TResourceMesh* mesh, std::vector<glm::vec3>* vertex){
+	return LoadObj(mesh, vertex, 1);
 }
 
 bool TObjectLoader::LoadObjFromFileCustom(TResourceMesh* mesh, std::vector<glm::vec3>* vertexVec, std::vector<glm::vec2>* uvVec, std::vector<glm::vec3>* normalVec){

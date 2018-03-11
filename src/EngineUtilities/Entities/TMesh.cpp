@@ -2,6 +2,7 @@
 
 #include "../TOcularEngine/VideoDriver.h"
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <GL/glew.h>
 
 TMesh::TMesh(std::string meshPath, std::string texturePath){
@@ -122,4 +123,101 @@ void TMesh::SendShaderData(){
 		glUniform3fv(ambient, 1, glm::value_ptr(currentMaterial->GetColorAmbient()));
 	}
 
+}
+
+void TMesh::DrawBoundingBox() {
+	Program* myProgram = VideoDriver::GetInstance()->GetProgram(BB_SHADER);
+	glUseProgram(myProgram->GetProgramID());	
+	/*
+		if (mesh->vertices.size() == 0)
+	return;
+	*/
+
+	// Cube 1x1x1, centered on origin
+	GLfloat vertices[] = {
+		-0.5, -0.5, -0.5, 1.0,
+		0.5, -0.5, -0.5, 1.0,
+		0.5,  0.5, -0.5, 1.0,
+		-0.5,  0.5, -0.5, 1.0,
+		-0.5, -0.5,  0.5, 1.0,
+		0.5, -0.5,  0.5, 1.0,
+		0.5,  0.5,  0.5, 1.0,
+		-0.5,  0.5,  0.5, 1.0,
+	};
+	GLuint vbo_vertices;
+	glGenBuffers(1, &vbo_vertices);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	GLushort elements[] = {
+		0, 1, 2, 3,
+		4, 5, 6, 7,
+		0, 4, 1, 5, 2, 6, 3, 7
+	};
+	GLuint ibo_elements;
+	glGenBuffers(1, &ibo_elements);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_elements);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	
+	GLfloat
+	min_x, max_x,
+	min_y, max_y,
+	min_z, max_z;
+	
+	//min_x = max_x = mesh->vertices[0].x;
+	//min_y = max_y = mesh->vertices[0].y;
+	//min_z = max_z = mesh->vertices[0].z;
+	std::vector<glm::vec3> vertvec = m_mesh->GetVerticesArray();
+
+	min_x = max_x = vertvec[0].x;	
+	min_y = max_y = vertvec[0].y;
+	min_z = max_z = vertvec[0].z;
+	
+	for (int i = 0; i < vertvec.size(); i++) {
+		if (vertvec[i].x < min_x) min_x = vertvec[i].x;
+		if (vertvec[i].x > max_x) max_x = vertvec[i].x;
+		if (vertvec[i].y < min_y) min_y = vertvec[i].y;
+		if (vertvec[i].y > max_y) max_y = vertvec[i].y;
+		if (vertvec[i].z < min_z) min_z = vertvec[i].z;
+		if (vertvec[i].z > max_z) max_z = vertvec[i].z;
+	}
+
+	glm::vec3 size = glm::vec3(max_x-min_x, max_y-min_y, max_z-min_z);
+	glm::vec3 center = glm::vec3((min_x+max_x)/2, (min_y+max_y)/2, (min_z+max_z)/2);
+	glm::mat4 transform = glm::translate(glm::mat4(1), center) * glm::scale(glm::mat4(1), size);
+
+	// Apply object's transformation matrix 
+	glm::mat4 m = ProjMatrix * ViewMatrix * m_stack.top() * transform;
+	GLuint uniform_m = glGetUniformLocation(myProgram->GetProgramID(), "MVP");
+	glUniformMatrix4fv(uniform_m, 1, GL_FALSE, glm::value_ptr(m));
+
+	GLuint attribute_v_coord = glGetUniformLocation(myProgram->GetProgramID(), "VertexPosition");	
+	glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
+	glEnableVertexAttribArray(attribute_v_coord);
+
+	glVertexAttribPointer(
+		attribute_v_coord,  // attribute
+		4,                  // number of elements per vertex, here (x,y,z,w)
+		GL_FLOAT,           // the type of each element
+		GL_FALSE,           // take our values as-is
+		0,                  // no extra data between each position
+		0                   // offset of first element
+	);
+
+	GLuint linecolor = glGetUniformLocation(myProgram->GetProgramID(), "LineColor");
+	glUniform3fv(linecolor, 1, glm::value_ptr(glm::vec3(0.0f, 0.0f, 1.0f)));
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_elements);
+	glDrawElements(GL_LINE_LOOP, 4, GL_UNSIGNED_SHORT, 0);
+	glDrawElements(GL_LINE_LOOP, 4, GL_UNSIGNED_SHORT, (GLvoid*)(4*sizeof(GLushort)));
+	glDrawElements(GL_LINES, 8, GL_UNSIGNED_SHORT, (GLvoid*)(8*sizeof(GLushort)));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	glDisableVertexAttribArray(attribute_v_coord);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glDeleteBuffers(1, &vbo_vertices);
+	glDeleteBuffers(1, &ibo_elements);
 }

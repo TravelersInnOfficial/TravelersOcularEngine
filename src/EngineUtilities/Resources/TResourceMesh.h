@@ -4,6 +4,8 @@
 #include "TResource.h"
 #include "TResourceTexture.h"
 #include "TResourceMaterial.h"
+#include <vector>
+#include <glm/vec3.hpp>
 
 typedef unsigned int GLuint;
 
@@ -56,6 +58,11 @@ public:
      **************************************************************************/  
     int GetElementSize();
 
+    /**************************************************************************
+     * @brief Devuelve el array de Vertices que tiene el modelo
+     **************************************************************************/  
+    std::vector<glm::vec3> GetVerticesArray();
+
 private:
     int m_elementSize;
     TResourceTexture*   m_basicTexture;
@@ -64,7 +71,9 @@ private:
     GLuint m_vbo;
     GLuint m_uvbo;
     GLuint m_ebo;
-    GLuint m_nbo;  
+    GLuint m_nbo;
+
+    std::vector<glm::vec3> m_vertices;
 };
 
 #endif

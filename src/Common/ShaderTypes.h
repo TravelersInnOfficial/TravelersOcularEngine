@@ -9,7 +9,8 @@ enum SHADERTYPE {
     TEXT_SHADER		= 4,
 	TWOD_SHADER		= 5,
 	PARTICLE_SHADER	= 6,
-	SPRITE_SHADER = 7
+	SPRITE_SHADER 	= 7,
+	BB_SHADER 		= 8
 };
 
 #endif
