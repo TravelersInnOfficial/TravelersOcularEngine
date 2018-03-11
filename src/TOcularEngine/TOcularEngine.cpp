@@ -23,13 +23,13 @@ TFMesh* toe::AddSphere(toe::core::TOEvector3df position, toe::core::TOEvector3df
     return m;
 }
 
-TFRect* toe::Add2DRect(toe::core::TOEvector2df size ,toe::core::TOEvector2df position, float rotation){
-    TFRect* toRet = privateSceneManager->Add2DRect(size, position, rotation);
+TFRect* toe::Add2DRect(toe::core::TOEvector2df position, toe::core::TOEvector2df size, float rotation){
+    TFRect* toRet = privateSceneManager->Add2DRect(position, size, rotation);
     return toRet;
 }
 
-TFSprite* toe::AddSprite(std::string texture, toe::core::TOEvector2df position){
-    TFSprite* toRet = privateSceneManager->AddSprite(texture, position);
+TFSprite* toe::AddSprite(std::string texture, toe::core::TOEvector2df position, toe::core::TOEvector2df size){
+    TFSprite* toRet = privateSceneManager->AddSprite(texture, position, size);
     return toRet;
 }
 

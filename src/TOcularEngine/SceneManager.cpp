@@ -95,14 +95,14 @@ TFDome* SceneManager::AddDome(toe::core::TOEvector3df position, std::string text
 	return m_dome;
 }
 
-TFRect* SceneManager::Add2DRect(toe::core::TOEvector2df size, toe::core::TOEvector2df position, float rotation){
-	TFRect* toRet = new TFRect(size, position, rotation);
+TFRect* SceneManager::Add2DRect(toe::core::TOEvector2df position, toe::core::TOEvector2df size, float rotation){
+	TFRect* toRet = new TFRect(position, size, rotation);
 	m_2Delems.push_back(toRet);
 	return toRet;
 }
 
-TFSprite* SceneManager::AddSprite(std::string texture, toe::core::TOEvector2df position){
-	TFSprite* toRet =  new TFSprite(texture, position);
+TFSprite* SceneManager::AddSprite(std::string texture, toe::core::TOEvector2df position, toe::core::TOEvector2df size){
+	TFSprite* toRet =  new TFSprite(texture, position, size);
 	m_2Delems.push_back(toRet);
 	return toRet;
 }

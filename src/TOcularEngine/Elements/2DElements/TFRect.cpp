@@ -3,7 +3,7 @@
 #include "./../../../EngineUtilities/Resources/Program.h"
 #include "./../../VideoDriver.h"
 
-TFRect::TFRect(toe::core::TOEvector2df size, toe::core::TOEvector2df position, float rotation){
+TFRect::TFRect(toe::core::TOEvector2df position, toe::core::TOEvector2df size, float rotation){
 /*
     toe::core::TOEvector2df* m_position = nullptr;
     toe::core::TOEvector2df* m_size = nullptr;

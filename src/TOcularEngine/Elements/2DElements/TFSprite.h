@@ -2,7 +2,7 @@
 #define TFSPRITE_H
 
 #include "TFDrawable.h"
-#include <TOEvector4d.h>
+
 //FAST FORWARD DECLARATION
 class TResourceTexture;
 typedef unsigned int GLuint;
@@ -23,10 +23,13 @@ public:
     void Rotate(float deg) override;
     void SetRotation(float deg) override;
 
+    void SetTexture(std::string texture);
+
 private:
-    TFSprite(std::string texture, toe::core::TOEvector2df position = toe::core::TOEvector2df(0,0), toe::core::TOEvector2df size = toe::core::TOEvector2df(10,10));
+    TFSprite(std::string texture, toe::core::TOEvector2df position, toe::core::TOEvector2df size);
     ~TFSprite();
 
+    void p_recalculate_size();
     TResourceTexture* 	m_texture;
     GLuint m_VAO, m_VBO;
 };

@@ -22,7 +22,7 @@ public:
     void SetRotation(float deg) override;
 
 private:
-    TFRect(toe::core::TOEvector2df size, toe::core::TOEvector2df position, float rotation);
+    TFRect(toe::core::TOEvector2df position, toe::core::TOEvector2df size, float rotation);
     ~TFRect();
 
     void p_recalculate_size();
