@@ -17,6 +17,11 @@ SceneManager::SceneManager(){
 }
 
 SceneManager::~SceneManager(){
+	ClearElements();
+	glDeleteVertexArrays(1, &m_vao);
+}
+
+void SceneManager::ClearElements(){
 	int size = m_cameras.size();
 	for(int i = size - 1; i >= 0; i--){
 		delete m_cameras[i];
@@ -41,9 +46,17 @@ SceneManager::~SceneManager(){
 	}
 	m_2Delems.clear();
 
-	glDeleteVertexArrays(1, &m_vao);
 	delete m_SceneTreeRoot;
+	m_SceneTreeRoot = nullptr;
+	m_dome = nullptr;
+}
 
+void SceneManager::ResetManager(){
+	ClearElements();
+	TTransform* myTransform = new TTransform();
+	m_SceneTreeRoot = new TNode(myTransform);
+	m_ambientLight = glm::vec3(0.25f);
+	m_main_camera = nullptr;
 	m_dome = nullptr;
 }
 
@@ -78,9 +91,7 @@ TFDome* SceneManager::AddDome(toe::core::TOEvector3df position, std::string mesh
 		m_dome = toRet;
 		m_dome->AttachFirst(m_SceneTreeRoot);	
 	}
-	else {
-		m_dome->SetTexture(texturePath);
-	}
+	else m_dome->SetTexture(texturePath);
 	return m_dome;
 }
 
@@ -155,8 +166,8 @@ toe::core::TOEvector3df SceneManager::GetAmbientLight(){
 }
 
 void SceneManager::Draw(){
+	// Select active camera and set view and projection matrix
 	if(m_main_camera!=nullptr){
-		// Select active camera and set view and projection matrix
 		TEntity::SetViewMatrixPtr( m_main_camera->m_entityNode->GetTransformMatrix() );
 		TEntity::SetViewMatrixPtr(glm::inverse(TEntity::ViewMatrix));
 	}

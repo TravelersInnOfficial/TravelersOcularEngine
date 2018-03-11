@@ -40,7 +40,6 @@ void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh*
 	//color = toe::core::TOEvector4df(0.0f, 0.0f, 1.0f, 1.0f);
 	//*light2 = sm->AddLight(pos, rot, color, attenuation);	
 	*dom = (TFMesh*)sm->AddDome();
-	sm->SetAmbientLight(toe::core::TOEvector3df(0.1, 0.1, 0.1));
 	
 	//*light2 = sm->AddLight(pos, rot, color, attenuation);
 
