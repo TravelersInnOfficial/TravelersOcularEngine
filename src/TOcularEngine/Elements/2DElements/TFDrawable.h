@@ -44,7 +44,7 @@ public:
 protected:
     toe::core::TOEvector2df* m_position = nullptr;
     toe::core::TOEvector2df* m_size = nullptr;
-    float* m_rotation = nullptr;
+    float m_rotation = 0.0;
     TColor* m_color = nullptr;
 
     SHADERTYPE m_program = TWOD_SHADER;

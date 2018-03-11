@@ -30,7 +30,6 @@ TFSprite::TFSprite( std::string texture, toe::core::TOEvector2df position, toe::
 TFSprite::~TFSprite(){
     delete m_size;
     delete m_position;
-
 }
 
 void TFSprite::Draw() const{
@@ -38,14 +37,14 @@ void TFSprite::Draw() const{
 	glUseProgram(myProgram->GetProgramID());
 
     float vertices[] = {
-        //  X     Y     Z       U     V
-         m_position->X, m_position->Y, 0.0f,  -1.0f, 0.0f,//-1.0f, -1.0f,
-         m_size->X, m_position->Y, 0.0f,       0.0f, 0.0f,
-         m_position->X, m_size->Y, 0.0f,       -1.0f, -1.0f,//-1.0f, 0.0f,
+        //  X     Y     Z                        U     V
+         m_position->X, m_position->Y, 0.0f,    -1.0f,  0.0f,//-1.0f, -1.0f,
+         m_size->X, m_position->Y, 0.0f,         0.0f,  0.0f,
+         m_position->X, m_size->Y, 0.0f,        -1.0f, -1.0f,//-1.0f, 0.0f,
          
-         m_size->X, m_position->Y, 0.0f,       0.0f, 0.0f,//0.0f, -1.0f,
-         m_size->X, m_size->Y, 0.0f,            0.0f, -1.0f, //0.0f, 0.0f,
-         m_position->X, m_size->Y, 0.0f,       -1.0f, -1.0f
+         m_size->X, m_position->Y, 0.0f,         0.0f,  0.0f,//0.0f, -1.0f,
+         m_size->X, m_size->Y, 0.0f,             0.0f, -1.0f, //0.0f, 0.0f,
+         m_position->X, m_size->Y, 0.0f,        -1.0f, -1.0f
     };
 
     glBindVertexArray( m_VAO );
@@ -113,12 +112,12 @@ void TFSprite::SetHeight(float h){
 }
 
 void TFSprite::Rotate(float deg){ 
-    *m_rotation += deg; 
+    m_rotation += deg; 
     m_InData.rotation += deg; 
 }
 
 void TFSprite::SetRotation(float deg){
-    m_rotation = &deg;
+    m_rotation = deg;
     m_InData.rotation = deg;
 }
 

@@ -14,7 +14,7 @@ TFRect::TFRect(toe::core::TOEvector2df position, toe::core::TOEvector2df size, f
 
     m_position = new toe::core::TOEvector2df((position.X*10 - w_dims.X) / w_dims.X , (position.Y*10 - w_dims.Y) / w_dims.Y);
     m_size = new toe::core::TOEvector2df(m_position->X + (std::abs(size.X * 10) / w_dims.X), m_position->Y + (std::abs(size.Y * 10) / w_dims.Y));
-    m_rotation = &rotation;
+    m_rotation = rotation;
 
     m_color = new TColor();
     m_color->SetR(1);
@@ -27,14 +27,11 @@ TFRect::TFRect(toe::core::TOEvector2df position, toe::core::TOEvector2df size, f
     glGenVertexArrays( 1, &m_VAO );
     m_VBO = 0;
     glGenBuffers( 1, &m_VBO );
-
-
 }
 
 TFRect::~TFRect(){
-    delete m_position;
     delete m_size;
-    delete m_rotation;
+    delete m_position;
     delete m_color;
 }
 
@@ -123,11 +120,11 @@ void TFRect::SetHeight(float h){
 }
 
 void TFRect::Rotate(float deg){ 
-    *m_rotation += deg; 
+    m_rotation += deg; 
     m_InData.rotation += deg; 
 }
 
 void TFRect::SetRotation(float deg){
-    m_rotation = &deg;
+    m_rotation = deg;
     m_InData.rotation = deg;
 }
