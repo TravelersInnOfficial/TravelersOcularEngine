@@ -86,7 +86,6 @@ bool IODriver::UpdateMouseWheel(int xoffset, int yoffset){
     glfwEvent.m_type = Type_MouseWheelScrolled;
 
     //TODO:: EDIT
-    glfwEvent.m_mouseWheel.delta = 0;
     glfwEvent.m_mouseWheel.x     = xoffset;
     glfwEvent.m_mouseWheel.y     = yoffset;
     

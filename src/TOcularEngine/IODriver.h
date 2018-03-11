@@ -26,7 +26,6 @@ public:
     };
 
     struct MouseWheelEvent{
-        int 			delta; 
         int 			x;     
         int 			y;     
     };
