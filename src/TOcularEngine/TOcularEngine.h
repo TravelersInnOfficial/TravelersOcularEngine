@@ -17,9 +17,11 @@ namespace toe{
                  toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,0,0),
                  toe::core::TOEvector3df scale = toe::core::TOEvector3df(1,1,1));
 
-    TFRect* Add2DRect(toe::core::TOEvector2df size = toe::core::TOEvector2df(10,10),
-                 toe::core::TOEvector2df position = toe::core::TOEvector2df(0.0f),
+    TFRect* Add2DRect(toe::core::TOEvector2df position = toe::core::TOEvector2df(0.0f),
+                 toe::core::TOEvector2df size = toe::core::TOEvector2df(10,10),
                  float rotation = 0.0f);
+
+    TFSprite* AddSprite(std::string texture = "", toe::core::TOEvector2df position = toe::core::TOEvector2df(0,0), toe::core::TOEvector2df size = toe::core::TOEvector2df(10,10));
 
     void LoadMesh(std::string path);
     void LoadTexture(std::string path);
