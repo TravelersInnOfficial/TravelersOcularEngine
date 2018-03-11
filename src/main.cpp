@@ -45,8 +45,8 @@ void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh*
 	TFRect* rect2 = toe::Add2DRect(newpos,toe::core::TOEvector2df(50,50));
 	rect2->SetColor(0,1,0);
 
-	TFSprite* sprite = toe::AddSprite("",toe::core::TOEvector2df(100,0),toe::core::TOEvector2df(100,100));
-	sprite->SetTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/PerfectCookie.png");
+	TFSprite* sprite = toe::AddSprite("",toe::core::TOEvector2df(650,0),toe::core::TOEvector2df(534/3.5f,624/3.5f));
+	sprite->SetTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_sprite.png");
 
 }
 
