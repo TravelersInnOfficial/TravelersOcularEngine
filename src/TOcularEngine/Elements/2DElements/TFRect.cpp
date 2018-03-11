@@ -12,8 +12,8 @@ TFRect::TFRect(toe::core::TOEvector2df position, toe::core::TOEvector2df size, f
 */
     w_dims = VideoDriver::GetInstance()->GetWindowDimensions();
 
-    m_position = new toe::core::TOEvector2df((position.X*10 - w_dims.X) / w_dims.X , (position.Y*10 - w_dims.Y) / w_dims.Y);
-    m_size = new toe::core::TOEvector2df(m_position->X + (std::abs(size.X * 10) / w_dims.X), m_position->Y + (std::abs(size.Y * 10) / w_dims.Y));
+    m_position = new toe::core::TOEvector2df((position.X*2 - w_dims.X) / w_dims.X , (position.Y*2 - w_dims.Y) / w_dims.Y);
+    m_size = new toe::core::TOEvector2df(m_position->X + (std::abs(size.X *2) / w_dims.X), m_position->Y + (std::abs(size.Y *2) / w_dims.Y));
     m_rotation = rotation;
 
     m_color = new TColor();
@@ -81,41 +81,41 @@ void TFRect::Draw() const{
 }
 
 void TFRect::p_recalculate_size(){
-    m_size = new toe::core::TOEvector2df(m_position->X + (std::abs(m_InData.size.X * 10) / w_dims.X), m_position->Y + (std::abs(m_InData.size.Y * 10) / w_dims.Y));
+    m_size = new toe::core::TOEvector2df(m_position->X + (std::abs(m_InData.size.X *2) / w_dims.X), m_position->Y + (std::abs(m_InData.size.Y *2) / w_dims.Y));
 }
 
 void TFRect::SetPosition(float x, float y){
-    m_position = new toe::core::TOEvector2df((x*10 - w_dims.X) / w_dims.X , (y*10 - w_dims.Y) / w_dims.Y);
+    m_position = new toe::core::TOEvector2df((x*2 - w_dims.X) / w_dims.X , (y*2 - w_dims.Y) / w_dims.Y);
     m_InData.position.X = x;
     m_InData.position.Y = y;
     p_recalculate_size();
 }
 
 void TFRect::SetPosX(float x){
-    m_position->X = (x*10 - w_dims.X) / w_dims.X;
+    m_position->X = (x*2 - w_dims.X) / w_dims.X;
     m_InData.position.X = x;
     p_recalculate_size();
 }
 
 void TFRect::SetPosY(float y){
-    m_position->Y = (y*10 - w_dims.Y) / w_dims.Y;
+    m_position->Y = (y*2 - w_dims.Y) / w_dims.Y;
     m_InData.position.Y = y;
     p_recalculate_size();
 }
 
 void TFRect::SetSize(float w, float h){
-    m_size = new toe::core::TOEvector2df(m_position->X + (std::abs(w * 10) / w_dims.X), m_position->Y + (std::abs(h * 10) / w_dims.Y));
+    m_size = new toe::core::TOEvector2df(m_position->X + (std::abs(w *2) / w_dims.X), m_position->Y + (std::abs(h *2) / w_dims.Y));
     m_InData.size.X = w;
     m_InData.size.Y = h;
 }
 
 void TFRect::SetWidth(float w){
-    m_size->X = m_position->X + (std::abs(w * 10) / w_dims.X);
+    m_size->X = m_position->X + (std::abs(w *2) / w_dims.X);
     m_InData.size.X = w;
 }
 
 void TFRect::SetHeight(float h){
-    m_size->Y =  m_position->Y + (std::abs(h * 10) / w_dims.Y);
+    m_size->Y =  m_position->Y + (std::abs(h *2) / w_dims.Y);
     m_InData.size.Y = h;
 }
 
