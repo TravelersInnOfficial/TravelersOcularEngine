@@ -17,9 +17,10 @@ void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh*
 	pos = toe::core::TOEvector3df(0, 0, -3);
 	*myCamera = sm->AddCamera(pos, rot, true);
 
-	//pos = toe::core::TOEvector3df(-1.5f, 0.0f, 0);
-	//*meshOne = toe::AddCube(pos, rot, scale);
-	//(*meshOne)->SetTexture("./../assets/textures/cube.png");
+	pos = toe::core::TOEvector3df(0, 0, 0);
+	*meshOne = toe::AddCube(pos, rot, scale);
+	(*meshOne)->SetTexture("./../assets/textures/cube.png");
+	(*meshOne)->SetInvisible();
 
 	pos = toe::core::TOEvector3df(-1.25f, 0.0f, 0.0f);
 	rot = toe::core::TOEvector3df(0, 160, 0);
@@ -69,6 +70,11 @@ int main(){
 	
 	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0.0f, 1.4f, 0.0f);
 	meshTwo->AddBillboard(pos, "Wizard", 0.2f);
+	
+	pos = toe::core::TOEvector3df(-.7f, 2.1f, 0.0f);
+	meshOne->AddBillboard(pos, "Flechas para MOVER MESH");
+	pos = toe::core::TOEvector3df(-1.0f, 1.9f, 0.0f);
+	meshOne->AddBillboard(pos, "WASD para ROTAR MESH");
 
 	VDriv->SetMouseVisibility(false);
 
