@@ -41,9 +41,19 @@ void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh*
 	//color = toe::core::TOEvector4df(0.0f, 0.0f, 1.0f, 1.0f);
 	//*light2 = sm->AddLight(pos, rot, color, attenuation);	
 	*dom = (TFMesh*)sm->AddDome();
-	sm->SetAmbientLight(toe::core::TOEvector3df(0.1, 0.1, 0.1));
+	
+	//*light2 = sm->AddLight(pos, rot, color, attenuation);
 
-	//toe::Add2DRect(toe::core::TOEvector2df(10,10),toe::core::TOEvector2df(0,0));
+	TFRect* rect1 = toe::Add2DRect(toe::core::TOEvector2df(10,10),toe::core::TOEvector2df(2,2));
+	//rect1->SetWidth(20);
+	//rect1->SetHeight(20);
+	//rect1->SetPosX(20);
+	//rect1->SetPosY(20);
+	//rect1->SetPosition(20,20);
+	//rect1->SetSize(20,20);
+	toe::core::TOEvector2df newpos = toe::core::TOEvector2df(rect1->GetPosX() + rect1->GetWidth(),rect1->GetPosY() + rect1->GetHeight());
+	TFRect* rect2 = toe::Add2DRect(toe::core::TOEvector2df(2,2),newpos);
+	rect2->SetColor(0,1,0);
 }
 
 int main(){

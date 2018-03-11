@@ -17,6 +17,11 @@ SceneManager::SceneManager(){
 }
 
 SceneManager::~SceneManager(){
+	ClearElements();
+	glDeleteVertexArrays(1, &m_vao);
+}
+
+void SceneManager::ClearElements(){
 	int size = m_cameras.size();
 	for(int i = size - 1; i >= 0; i--){
 		delete m_cameras[i];
@@ -41,9 +46,17 @@ SceneManager::~SceneManager(){
 	}
 	m_2Delems.clear();
 
-	glDeleteVertexArrays(1, &m_vao);
 	delete m_SceneTreeRoot;
+	m_SceneTreeRoot = nullptr;
+	m_dome = nullptr;
+}
 
+void SceneManager::ResetManager(){
+	ClearElements();
+	TTransform* myTransform = new TTransform();
+	m_SceneTreeRoot = new TNode(myTransform);
+	m_ambientLight = glm::vec3(0.25f);
+	m_main_camera = nullptr;
 	m_dome = nullptr;
 }
 
@@ -72,15 +85,13 @@ TFMesh* SceneManager::AddMesh(toe::core::TOEvector3df position, toe::core::TOEve
 	return toRet;
 }
 
-TFDome* SceneManager::AddDome(toe::core::TOEvector3df position, std::string meshPath, std::string texturePath){
+TFDome* SceneManager::AddDome(toe::core::TOEvector3df position, std::string texturePath){
 	if(m_dome == nullptr){
-		TFDome* toRet = new TFDome(position, toe::core::TOEvector3df(0.0f,0.0f,0.0f), toe::core::TOEvector3df(2.0f,2.0f,2.0f), meshPath, texturePath);
+		TFDome* toRet = new TFDome(position, toe::core::TOEvector3df(0.0f,0.0f,0.0f), toe::core::TOEvector3df(50.0f,50.0f,50.0f), texturePath);
 		m_dome = toRet;
 		m_dome->AttachFirst(m_SceneTreeRoot);	
 	}
-	else {
-		m_dome->SetTexture(texturePath);
-	}
+	else if(texturePath.compare("") != 0) m_dome->SetTexture(texturePath);
 	return m_dome;
 }
 
@@ -140,7 +151,10 @@ bool SceneManager::DeleteMesh(TFNode* node){
 }
 
 void SceneManager::Update(){
-	
+	if(m_main_camera != nullptr && m_dome != nullptr){
+		toe::core::TOEvector3df position = m_main_camera->GetTranslation();
+		m_dome->SetTranslate(position);
+	}
 }
 
 void SceneManager::SetAmbientLight(toe::core::TOEvector3df ambientLight){
@@ -152,8 +166,8 @@ toe::core::TOEvector3df SceneManager::GetAmbientLight(){
 }
 
 void SceneManager::Draw(){
+	// Select active camera and set view and projection matrix
 	if(m_main_camera!=nullptr){
-		// Select active camera and set view and projection matrix
 		TEntity::SetViewMatrixPtr( m_main_camera->m_entityNode->GetTransformMatrix() );
 		TEntity::SetViewMatrixPtr(glm::inverse(TEntity::ViewMatrix));
 	}

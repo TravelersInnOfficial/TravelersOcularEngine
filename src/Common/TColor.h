@@ -18,10 +18,10 @@ public:
 
 	glm::vec4 GetRGBA();
 	glm::vec3 GetRGB();
-	float GetR();
-	float GetG();
-	float GetB();
-	float GetA();
+	float GetR() const;
+	float GetG() const;
+	float GetB() const;
+	float GetA() const;
 
 	float CapValues(float valueToCap);
 	glm::vec3 CapValues(glm::vec3 valueToCap);

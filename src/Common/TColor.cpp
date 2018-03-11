@@ -52,19 +52,19 @@ glm::vec3 TColor::GetRGB(){
 	return(glm::vec3(m_rgba.x, m_rgba.y, m_rgba.z));
 }
 
-float TColor::GetR(){
+float TColor::GetR() const{
 	return(m_rgba.x);
 }
 
-float TColor::GetG(){
+float TColor::GetG() const{
 	return(m_rgba.y);
 }
 
-float TColor::GetB(){
+float TColor::GetB() const{
 	return(m_rgba.z);
 }
 
-float TColor::GetA(){
+float TColor::GetA() const{
 	return(m_rgba.w);
 }
 

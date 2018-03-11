@@ -69,7 +69,7 @@ public:
      * @param meshPath (std::string)
      * @return TFMesh* NewDome
      */
-    TFDome* AddDome(toe::core::TOEvector3df position = toe::core::TOEvector3df(0.0f,0.0f,0.0f), std::string meshPath = "", std::string texturePath = "");
+    TFDome*     AddDome(toe::core::TOEvector3df position = toe::core::TOEvector3df(0.0f,0.0f,0.0f), std::string texturePath = "");
 
     /**
      * @brief Adds a 2d rectangle to the screen
@@ -129,25 +129,20 @@ public:
      * @return toe::core::TOEvector3df 
      */
     toe::core::TOEvector3df GetAmbientLight();
+    TNode* GetRootNode();
+    TFCamera* GetMainCamera();
 
     void Update();
-
     void InitScene();
+    void ResetManager();
 
     void DrawLight(TFLight* light, int num);
     void Draw();
     void Draw2DElements();
 
-    TNode* GetRootNode();
-
-    
-    TFCamera* GetMainCamera();
-
 private:
     GLuint m_vao;
     TNode* m_SceneTreeRoot;
-
-    //Program* m_program;
 
     std::vector<TFCamera*>  m_cameras;  // Pointers to the cameras created
     std::vector<TFLight*>   m_lights;   // Pointers to the lights created
@@ -159,5 +154,6 @@ private:
     TFDome* m_dome;
 
     glm::mat4 GetTransformInTree(TNode* node);
+    void ClearElements();
 };
 #endif
