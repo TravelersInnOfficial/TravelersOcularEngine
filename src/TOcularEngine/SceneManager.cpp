@@ -91,7 +91,7 @@ TFDome* SceneManager::AddDome(toe::core::TOEvector3df position, std::string text
 		m_dome = toRet;
 		m_dome->AttachFirst(m_SceneTreeRoot);	
 	}
-	else m_dome->SetTexture(texturePath);
+	else if(texturePath.compare("") != 0) m_dome->SetTexture(texturePath);
 	return m_dome;
 }
 

@@ -11,6 +11,7 @@ std::string getModel(){
 std::string checkText(std::string path){
 	std::string toRet = path;
 	if(path.compare("")==0) toRet = VideoDriver::GetInstance()->GetAssetsPath() + "/textures/skydome.jpg";
+	std::cout<<toRet<<std::endl;
 	return toRet;
 }
 
