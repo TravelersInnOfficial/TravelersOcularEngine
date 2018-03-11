@@ -36,16 +36,16 @@ public:
     virtual void Rotate(float deg) = 0;
     virtual void SetRotation(float deg) = 0;
 
-    virtual void SetColor(float r, float g, float b, float a = 1.0f) {  m_color.SetR(r);
-                                                                        m_color.SetG(g);
-                                                                        m_color.SetB(b);
-                                                                        m_color.SetA(a);}
+    virtual void SetColor(float r, float g, float b, float a = 1.0f) {  m_color->SetR(r);
+                                                                        m_color->SetG(g);
+                                                                        m_color->SetB(b);
+                                                                        m_color->SetA(a);}
 
 protected:
-    toe::core::TOEvector2df m_position = toe::core::TOEvector2df(0,0);
-    toe::core::TOEvector2df m_size = toe::core::TOEvector2df(0,0);
-    float m_rotation = 0.0f;
-    TColor m_color = TColor();
+    toe::core::TOEvector2df* m_position = nullptr;
+    toe::core::TOEvector2df* m_size = nullptr;
+    float* m_rotation = nullptr;
+    TColor* m_color = nullptr;
 
     SHADERTYPE m_program = TWOD_SHADER;
     toe::core::TOEvector2di w_dims;

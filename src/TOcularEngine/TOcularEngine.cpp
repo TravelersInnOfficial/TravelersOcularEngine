@@ -28,6 +28,11 @@ TFRect* toe::Add2DRect(toe::core::TOEvector2df size ,toe::core::TOEvector2df pos
     return toRet;
 }
 
+TFSprite* toe::AddSprite(std::string texture, toe::core::TOEvector2df position){
+    TFSprite* toRet = privateSceneManager->AddSprite(texture, position);
+    return toRet;
+}
+
 void toe::LoadMesh(std::string path){
 	TResourceManager::GetInstance()->GetResourceMesh(path);
 }

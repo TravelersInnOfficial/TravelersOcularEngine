@@ -101,6 +101,12 @@ TFRect* SceneManager::Add2DRect(toe::core::TOEvector2df size, toe::core::TOEvect
 	return toRet;
 }
 
+TFSprite* SceneManager::AddSprite(std::string texture, toe::core::TOEvector2df position){
+	TFSprite* toRet =  new TFSprite(texture, position);
+	m_2Delems.push_back(toRet);
+	return toRet;
+}
+
 TFParticleSystem* SceneManager::AddParticleSystem(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale){
 	TFParticleSystem* toRet = nullptr;
 	toRet = new TFParticleSystem(position, rotation, scale);
