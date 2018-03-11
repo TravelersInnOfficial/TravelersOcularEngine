@@ -80,13 +80,33 @@ float TFCamera::GetBottom(){
 }
 
 void TFCamera::LookAt(toe::core::TOEvector3df target, toe::core::TOEvector3df up){
-	glm::vec3 position 	= m_positionNode->GetTranslation();
-	glm::vec3 targetPos	= glm::vec3(target.X, target.Y, target.Z);
-	glm::vec3 upForward = glm::vec3(1, 0, 0);
 
-	glm::mat4 matrix = glm::lookAt(position, targetPos, upForward);
-	TTransform* rotation = (TTransform*) m_rotationNode->GetEntity();
-   
-   	rotation->Load(matrix);
+	glm::vec3 position 	= m_entityNode->GetTranslation();
+	glm::vec3 targetPos	= glm::vec3(target.X, target.Y, target.Z);
+
+	glm::vec3 zaxis = glm::normalize(targetPos - position);
+	glm::vec3 xaxis = glm::normalize(glm::cross(glm::vec3(0,1,0), zaxis));
+	glm::vec3 yaxis = glm::cross(zaxis, xaxis);
+
+	glm::mat4 matrix;
+	matrix[0][0] = xaxis.x; // First column, first row
+    matrix[0][1] = xaxis.y;
+    matrix[0][2] = xaxis.z;
+    matrix[1][0] = yaxis.x; // First column, second row
+    matrix[1][1] = yaxis.y;
+    matrix[1][2] = yaxis.z;
+    matrix[2][0] = zaxis.x; // First column, third row
+    matrix[2][1] = zaxis.y;
+    matrix[2][2] = zaxis.z; 
+
+    bool niceMatrix = true;
+	if(glm::any(glm::isnan(matrix[0]))) niceMatrix = false;
+	if(glm::any(glm::isnan(matrix[1]))) niceMatrix = false;
+	if(glm::any(glm::isnan(matrix[2]))) niceMatrix = false;
+
+   if(niceMatrix){
+		TTransform* rotation = (TTransform*) m_rotationNode->GetEntity();
+	   	rotation->Load(matrix);
+	}
 
 }

@@ -14,6 +14,8 @@ void TTransform::Identity(){
 	m_matrix = glm::mat4(1.0f);
 }
 
+
+#include <glm/gtx/string_cast.hpp>
 void TTransform::Load(glm::mat4 matrix){
 	m_matrix = matrix;
 }

@@ -31,10 +31,11 @@ void VideoDriver::Drop(){
 
 	if(privateIODriver != nullptr) delete privateIODriver;
 	if(privateSceneManager != nullptr) delete privateSceneManager;
-	
+
 	glfwDestroyWindow(m_window);
 	glfwTerminate();
-	delete m_window;
+	// Ya la elimina GLFW con el DestroyWindow
+	//delete m_window;
 }
 
 void VideoDriver::glwf_error_callback(int error, const char* description){
