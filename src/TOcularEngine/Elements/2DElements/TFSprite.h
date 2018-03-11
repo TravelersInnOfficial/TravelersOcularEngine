@@ -24,7 +24,7 @@ public:
     void SetRotation(float deg) override;
 
 private:
-    TFSprite(std::string texture, toe::core::TOEvector2df position, toe::core::TOEvector2df size = toe::core::TOEvector2df(0,0));
+    TFSprite(std::string texture, toe::core::TOEvector2df position = toe::core::TOEvector2df(0,0), toe::core::TOEvector2df size = toe::core::TOEvector2df(10,10));
     ~TFSprite();
 
     TResourceTexture* 	m_texture;

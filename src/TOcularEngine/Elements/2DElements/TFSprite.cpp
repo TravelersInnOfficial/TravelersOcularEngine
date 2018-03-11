@@ -11,7 +11,7 @@ TFSprite::TFSprite( std::string texture, toe::core::TOEvector2df position, toe::
     m_position = new toe::core::TOEvector2df((position.X*10 - w_dims.X) / w_dims.X , (position.Y*10 - w_dims.Y) / w_dims.Y);
     m_size = new toe::core::TOEvector2df(m_position->X + (std::abs(size.X * 10) / w_dims.X), m_position->Y + (std::abs(size.Y * 10) / w_dims.Y));
 
-    if(texture.compare("")==0) texture = VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_font.png";
+    if(texture.compare("")==0) texture = VideoDriver::GetInstance()->GetAssetsPath() + "/textures/fireball.png";
 	m_texture = TResourceManager::GetInstance()->GetResourceTexture(texture);
 
     m_program = SPRITE_SHADER;
@@ -35,16 +35,19 @@ void TFSprite::Draw() const{
 
     float vertices[] = {
         //  X     Y     Z       U     V
-         0.0f, 0.8f, 0.0f,   0.5f, 1.0f,
-        -0.8f,-0.8f, 0.0f,   0.0f, 0.0f,
-         0.8f,-0.8f, 0.0f,   1.0f, 0.0f,
+         m_position->X, m_position->Y, 0.0f,  -1.0f, 0.0f,//-1.0f, -1.0f,
+         m_size->X, m_position->Y, 0.0f,       0.0f, 0.0f,
+         m_position->X, m_size->Y, 0.0f,       -1.0f, -1.0f,//-1.0f, 0.0f,
+         
+         m_size->X, m_position->Y, 0.0f,       0.0f, 0.0f,//0.0f, -1.0f,
+         m_size->X, m_size->Y, 0.0f,            0.0f, -1.0f, //0.0f, 0.0f,
+         m_position->X, m_size->Y, 0.0f,       -1.0f, -1.0f
     };
 
     glBindVertexArray( m_VAO );
 
     glBindBuffer( GL_ARRAY_BUFFER, m_VBO );
     glBufferData( GL_ARRAY_BUFFER, sizeof( vertices ), vertices, GL_STATIC_DRAW );
-
 
     //posicion
     GLint posAttrib = glGetAttribLocation(myProgram->GetProgramID(), "VertexPosition");
@@ -63,7 +66,7 @@ void TFSprite::Draw() const{
     glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_texture->GetTextureId());
 
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
 void TFSprite::SetPosition(float x, float y){
