@@ -1,13 +1,13 @@
  ifeq ($(OS),Windows_NT)
     Target				:= EngineTest.exe
-    CXXFLAGS			:= -O3 -g -Wall -std=c++11 -m64
+    CXXFLAGS			:= -O3 -g -Wall -std=c++17 -m64
     CCFLAGS				:= -O3 -g -Wall
     CPPFLAGS        	:= -I/mingw64/include -I/mingw64/include/bullet -I./src/Common
     LDFLAGS				:= -L/mingw64/lib
     LIBS 				:= -lopengl32 -lglew32 -lassimp -lglfw3
 else
     Target				:= EngineTest
-    CXXFLAGS			:= -O3 -g -Wall -std=c++11
+    CXXFLAGS			:= -O3 -g -Wall -std=c++17
     CCFLAGS				:= -O3 -g -Wall
     CPPFLAGS        	:= -I/usr/include -I/usr/include/bullet -I./src/Common -I/usr/local/include/assimp -I/usr/include/GLFW
     LDFLAGS				:= -L./libs/Linux -L./usr/local/lib/

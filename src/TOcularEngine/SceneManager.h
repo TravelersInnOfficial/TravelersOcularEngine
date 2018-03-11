@@ -7,6 +7,7 @@
 #include "./Elements/TFMesh.h"
 #include "./Elements/TFDome.h"
 #include "./Elements/2DElements/TFRect.h"
+#include "./Elements/2DElements/TFSprite.h"
 #include <TOEvector2d.h>
 #include <vector>
 #include <glm/vec3.hpp>
@@ -81,6 +82,15 @@ public:
      */
     TFRect*     Add2DRect(toe::core::TOEvector2df size, toe::core::TOEvector2df position, float rotation);
     
+    /**
+     * @brief Adds a 2d sprite to the screen
+     * 
+     * @param texture 
+     * @param position 
+     * @return TFSprite* 
+     */
+    TFSprite* AddSprite(std::string texture, toe::core::TOEvector2df position);
+
     /**
      * @brief Adds a Particle System in the scene
      * 

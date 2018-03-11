@@ -21,6 +21,8 @@ namespace toe{
                  toe::core::TOEvector2df position = toe::core::TOEvector2df(0.0f),
                  float rotation = 0.0f);
 
+    TFSprite* AddSprite(std::string texture = "", toe::core::TOEvector2df position = toe::core::TOEvector2df(0,0));
+
     void LoadMesh(std::string path);
     void LoadTexture(std::string path);
     GLuint GetTextureID(std::string path);
