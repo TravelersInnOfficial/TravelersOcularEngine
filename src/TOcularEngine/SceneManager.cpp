@@ -74,7 +74,7 @@ TFMesh* SceneManager::AddMesh(toe::core::TOEvector3df position, toe::core::TOEve
 
 TFDome* SceneManager::AddDome(toe::core::TOEvector3df position, std::string meshPath, std::string texturePath){
 	if(m_dome == nullptr){
-		TFDome* toRet = new TFDome(position, toe::core::TOEvector3df(0.0f,0.0f,0.0f), toe::core::TOEvector3df(10.0f,10.0f,10.0f), meshPath, texturePath);
+		TFDome* toRet = new TFDome(position, toe::core::TOEvector3df(0.0f,0.0f,0.0f), toe::core::TOEvector3df(2.0f,2.0f,2.0f), meshPath, texturePath);
 		m_dome = toRet;
 		m_dome->AttachFirst(m_SceneTreeRoot);	
 	}
@@ -85,8 +85,7 @@ TFDome* SceneManager::AddDome(toe::core::TOEvector3df position, std::string mesh
 }
 
 TFRect* SceneManager::Add2DRect(toe::core::TOEvector2df size, toe::core::TOEvector2df position, float rotation){
-	TFRect* toRet = nullptr;
-	toRet = new TFRect(position);
+	TFRect* toRet = new TFRect(size, position, rotation);
 	m_2Delems.push_back(toRet);
 	return toRet;
 }
@@ -146,6 +145,10 @@ void SceneManager::Update(){
 
 void SceneManager::SetAmbientLight(toe::core::TOEvector3df ambientLight){
 	m_ambientLight = glm::vec3(ambientLight.X, ambientLight.Y, ambientLight.Z);
+}
+
+toe::core::TOEvector3df SceneManager::GetAmbientLight(){
+	return toe::core::TOEvector3df(m_ambientLight.x, m_ambientLight.y, m_ambientLight.z);
 }
 
 void SceneManager::Draw(){

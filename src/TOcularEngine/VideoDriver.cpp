@@ -123,7 +123,6 @@ void VideoDriver::Draw(){
 
 	//DRAW 2D ELEMENTS
 	start2DDrawState();
-	glUseProgram(GetProgram(TWOD_SHADER)->GetProgramID());
 	privateSceneManager->Draw2DElements();
 	end2DDrawState();
 

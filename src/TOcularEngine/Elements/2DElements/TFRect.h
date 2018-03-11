@@ -4,12 +4,13 @@
 #include "TFDrawable.h"
 
 class TFRect: public TFDrawable{
+    friend class SceneManager;
 public:
-    TFRect(toe::core::TOEvector2df position = toe::core::TOEvector2df(0,0));
-    ~TFRect();
     void Draw() const override;
 
 private:
+    TFRect(toe::core::TOEvector2df size, toe::core::TOEvector2df position, float rotation);
+    ~TFRect();
 
 };
 

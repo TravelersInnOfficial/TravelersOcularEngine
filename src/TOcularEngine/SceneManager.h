@@ -79,7 +79,7 @@ public:
      * @param rotation 
      * @return TFRect* 
      */
-    TFRect*     Add2DRect(toe::core::TOEvector2df size, toe::core::TOEvector2df position = toe::core::TOEvector2df(0,0), float rotation = 0.0f);
+    TFRect*     Add2DRect(toe::core::TOEvector2df size, toe::core::TOEvector2df position, float rotation);
     
     /**
      * @brief Adds a Particle System in the scene
@@ -118,8 +118,17 @@ public:
 
     /**
      * @brief Sets the Ambient Light
+     * 
+     * @param ambientLight 
      */
     void SetAmbientLight(toe::core::TOEvector3df ambientLight);
+
+    /**
+     * @brief Get the Ambient Light object
+     * 
+     * @return toe::core::TOEvector3df 
+     */
+    toe::core::TOEvector3df GetAmbientLight();
 
     void Update();
 

@@ -12,11 +12,6 @@ struct Particle{
 	unsigned char r, g, b;
 	float size, rotation;
 	float life, cameraDistance;
-
-	bool operator<(Particle& that){
-        // Sort in reverse order : far particles drawn first.
-        return this->cameraDistance < that.cameraDistance;
-    }
 };
 
 
@@ -37,7 +32,6 @@ public:
 private:
 	void SendShaderData();
 	void ResetShaderData();
-	void SortParticles();
 	int FindUnusedParticle();
 	void AddNewParticles();
 

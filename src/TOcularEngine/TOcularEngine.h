@@ -17,6 +17,10 @@ namespace toe{
                  toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,0,0),
                  toe::core::TOEvector3df scale = toe::core::TOEvector3df(1,1,1));
 
+    TFRect* Add2DRect(toe::core::TOEvector2df size = toe::core::TOEvector2df(10,10),
+                 toe::core::TOEvector2df position = toe::core::TOEvector2df(0.0f),
+                 float rotation = 0.0f);
+
     void LoadMesh(std::string path);
     void LoadTexture(std::string path);
     GLuint GetTextureID(std::string path);
@@ -38,7 +42,7 @@ namespace toe{
             float m_h = 0.0f;
         };
 
-        void Draw2DRect(float color ,toe::core::rect );
+       
     }
 
     namespace{

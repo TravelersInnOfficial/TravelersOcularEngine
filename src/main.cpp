@@ -42,8 +42,8 @@ void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh*
 	//*light2 = sm->AddLight(pos, rot, color, attenuation);	
 	*dom = (TFMesh*)sm->AddDome();
 	sm->SetAmbientLight(toe::core::TOEvector3df(0.1, 0.1, 0.1));
-	
-	//sm->Add2DRect(toe::core::TOEvector2df(0,0));
+
+	//toe::Add2DRect(toe::core::TOEvector2df(10,10),toe::core::TOEvector2df(0,0));
 }
 
 int main(){

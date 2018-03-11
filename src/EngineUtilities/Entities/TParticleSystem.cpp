@@ -40,7 +40,7 @@ void Particle::InitParticle(){
 	g = (unsigned char)(rand() % 255);
 	b = (unsigned char)(rand() % 255);
 
-	size = (rand() % 10)/10.0f;
+	size = (rand() % 5)/10.0f;
 	rotation = (rand() % 360);
 	life = 20.0f;
 	cameraDistance = 0.0f;
@@ -200,10 +200,6 @@ void TParticleSystem::AddNewParticles(){
 void TParticleSystem::Update(float deltaTime){
 	// Anyadimos las particulas nuevas
 	AddNewParticles();
-	SortParticles();
-
-	// Conseguimos la posicion de la camara
-	glm::vec3 CameraPosition = glm::vec3(ViewMatrix[0][3], ViewMatrix[1][3], ViewMatrix[2][3]);
 
 	m_particleCount = 0;
 	for(int i=0; i<m_maxParticles; i++){
@@ -220,8 +216,7 @@ void TParticleSystem::Update(float deltaTime){
 	            p.speed += glm::vec3(0.0f,-0.01f, 0.0f) * deltaTime * 0.5f;
 	            p.pos += p.speed * deltaTime;
 
-	            p.cameraDistance = glm::length2( (p.pos + m_center) - CameraPosition);
-	            //ParticlesContainer[i].pos += glm::vec3(0.0f,10.0f, 0.0f) * (float)delta;
+	            p.cameraDistance = 1.0f;
 
 	            // Fill the GPU buffer
 	            m_particlePositionData[3*m_particleCount+0] = p.pos.x + p.translation.x;
@@ -235,12 +230,12 @@ void TParticleSystem::Update(float deltaTime){
 	            m_particlesExtra[2*m_particleCount+0] = p.size;
 	            m_particlesExtra[2*m_particleCount+1] = p.rotation;
 
+	            m_particleCount++;
+
 	        }else{
 	            // Particles that just died will be put at the end of the buffer in SortParticles();
 	            p.cameraDistance = -1.0f;
 	        }
-
-	        m_particleCount++;
 
 	    }
 	}
@@ -298,8 +293,4 @@ void TParticleSystem::Translate(glm::vec3 position){
 void TParticleSystem::SetTexture(std::string path){
 	if(path.compare("") == 0) m_texture = TResourceManager::GetInstance()->GetResourceTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/PerfectCookie.png");
 	else m_texture = TResourceManager::GetInstance()->GetResourceTexture(path);
-}
-
-void TParticleSystem::SortParticles(){
-	std::sort(&m_particleContainer[0], &m_particleContainer[m_maxParticles]);
 }
