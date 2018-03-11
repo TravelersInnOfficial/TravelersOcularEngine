@@ -69,7 +69,7 @@ public:
      * @param meshPath (std::string)
      * @return TFMesh* NewDome
      */
-    TFDome* AddDome(toe::core::TOEvector3df position = toe::core::TOEvector3df(0.0f,0.0f,0.0f), std::string meshPath = "", std::string texturePath = "");
+    TFDome*     AddDome(toe::core::TOEvector3df position = toe::core::TOEvector3df(0.0f,0.0f,0.0f), std::string texturePath = "");
 
     /**
      * @brief Adds a 2d rectangle to the screen

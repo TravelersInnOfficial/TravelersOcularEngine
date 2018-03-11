@@ -4,10 +4,8 @@
 #include "../TOcularEngine/VideoDriver.h"
 
 // String validation when calling father constructor
-std::string checkModel(std::string path){
-	std::string toRet = path;
-	if(path.compare("")==0) toRet = VideoDriver::GetInstance()->GetAssetsPath() + "/models/dome.obj";
-	return toRet;
+std::string getModel(){
+	return VideoDriver::GetInstance()->GetAssetsPath() + "/models/dome.obj";
 }
 
 std::string checkText(std::string path){
@@ -17,8 +15,9 @@ std::string checkText(std::string path){
 }
 
 // Constructor
-TDome::TDome(std::string meshPath, std::string texturePath)
- : TMesh(checkModel(meshPath), checkText(texturePath)) 
+TDome::TDome(std::string texturePath)
+ : TMesh( 	getModel(), 
+			checkText(texturePath)) 
 {
 	// This shader draws without lights
 	m_program = TEXT_SHADER;

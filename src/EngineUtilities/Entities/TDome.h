@@ -5,7 +5,7 @@
 
 class TDome: public TMesh{
 public:
-	TDome(std::string meshPath = "", std::string texturePath = "");
+	TDome(std::string texturePath = "");
 	~TDome();
 
 	void BeginDraw();
