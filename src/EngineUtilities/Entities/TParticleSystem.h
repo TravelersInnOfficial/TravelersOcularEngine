@@ -5,16 +5,42 @@
 #include "./TEntity.h"
 #include "./../Resources/TResourceTexture.h"
 
+class ParticleManager{
+public:	
+	/**
+	 * @brief      Create the object
+	 */
+	ParticleManager();
+
+	/**
+	 * @brief      Destroys the object.
+	 */
+	~ParticleManager();
+
+	/**
+	 * @brief      Init the values of the particle
+	 *
+	 * @param      p     Instance of the particle that is going to be initialized
+	 */
+	void InitParticle(Particle& p);
+
+	/**
+	 * @brief      Update the value
+	 *
+	 * @param      p          Instance of the particle that is going to be update
+	 * @param[in]  deltaTime  The delta time
+	 */
+	void UpdateParticle(Particle& p, float deltaTime);
+private:
+};
+
 struct Particle{
 	Particle();
-	void InitParticle();
 	glm::vec3 pos, speed, translation;
 	unsigned char r, g, b;
 	float size, rotation;
-	float life, cameraDistance;
+	float life;
 };
-
-
 
 class TParticleSystem: public TEntity{
 public:
@@ -35,6 +61,7 @@ private:
 	int FindUnusedParticle();
 	void AddNewParticles();
 
+	ParticleManager*	m_manager;
 	TResourceTexture*	m_texture;
 
 	int 				m_particleCount;		// Numero de particulas activas en el momento
@@ -45,7 +72,6 @@ private:
 	GLuint				m_ebo;	// Buffer con los extras de las particulas
 	GLuint				m_cbo;	// Buffer con los colores de las particular
 
-	glm::vec3 			m_center; 				// Centro absoluto del sistema de particulas
 	int 				m_lastUsedParticle; 	// Numero de la ultima particula que se actualizo
 
 	Particle 			m_particleContainer		[m_maxParticles*1];		// Array con todas las particulas

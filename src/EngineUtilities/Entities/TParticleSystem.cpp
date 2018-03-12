@@ -15,45 +15,73 @@ static const GLfloat g_vertex_buffer_data[] = {
  0.5f, 0.5f, 0.0f,
 };
 
-Particle::Particle(){
-	InitParticle();
-	life = -1.0f;
-}
+// ==============================================================================================================================================================
+//
+//	PARTICLE MANAGER
+//
+// ==============================================================================================================================================================
 
-void Particle::InitParticle(){
+ParticleManager::ParticleManager(){}
+
+ParticleManager::~ParticleManager(){}
+
+void ParticleManager::InitParticle(Particle& p){
 	// Valores por defecto
-	translation = glm::vec3(0,0,0);
+	p.translation = glm::vec3(0,0,0);
 
 	float X = (rand() % 10)/10.0f - 0.5f;
 	float Y = (rand() % 10)/10.0f - 0.5f;
 	float Z = (rand() % 10)/10.0f - 0.5f;
 
-	pos 	= glm::vec3(X, Y, Z);
+	p.pos 	= glm::vec3(X, Y, Z);
 
 	X = (rand() % 4)/10.0f - 0.2f;
 	Y = (rand() % 4)/10.0f - 0.2f;
 	Z = (rand() % 4)/10.0f - 0.2f;
 
-	speed 	= glm::vec3(X,Y,Z);
+	p.speed = glm::vec3(X,Y,Z);
 
-	r = (unsigned char)(rand() % 255);
-	g = (unsigned char)(rand() % 255);
-	b = (unsigned char)(rand() % 255);
+	p.r = (unsigned char)(rand() % 255);
+	p.g = (unsigned char)(rand() % 255);
+	p.b = (unsigned char)(rand() % 255);
 
 	//size = (rand() % 5)/20.0f;
-	size = (rand() % 5)/75.0f;
-	rotation = (rand() % 360);
-	life = 20.0f;
-	cameraDistance = 0.0f;
+	p.size = (rand() % 5)/75.0f;
+	p.rotation = (rand() % 360);
+	p.life = 20.0f;
 }
 
+void ParticleManager::UpdateParticle(Particle& p, float deltaTime){
+	// Simulate simple physics : gravity only, no collisions
+	//p.speed += glm::vec3(0.0f,-0.01f, 0.0f) * deltaTime * 0.5f;
+	p.speed += glm::vec3(0.0f,0.5f, 0.0f) * deltaTime * 0.5f;
+	p.pos += p.speed * deltaTime;
+}
+
+// ==============================================================================================================================================================
+//
+//	PARTICLE
+//
+// ==============================================================================================================================================================
+
+Particle::Particle(){
+	life = -1.0f;
+}
+
+// ==============================================================================================================================================================
+//
+//	PARTICLE SYSTEM
+//
+// ==============================================================================================================================================================
 
 TParticleSystem::~TParticleSystem(){
-	m_lastUsedParticle = 0;
-	m_center = glm::vec3(0,0,0);
+	delete m_manager;
 }
 
 TParticleSystem::TParticleSystem(std::string path){
+	//Inicializamos el manager de particulas y las particulas
+	m_manager = new ParticleManager();
+
 	// Cargamos en el vertex buffer el mesh que vamos a utilizar
 	glGenBuffers(1, &m_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
@@ -82,6 +110,7 @@ TParticleSystem::TParticleSystem(std::string path){
 	m_lastUsedParticle = 0;
 
 	SetTexture(path);
+
 }
 
 void TParticleSystem::BeginDraw(){
@@ -193,10 +222,9 @@ void TParticleSystem::AddNewParticles(){
 	int size = 10;
 	for(int i=0; i<size; i++){
 		int pos = FindUnusedParticle();
-		m_particleContainer[pos].InitParticle();
+		m_manager->InitParticle(m_particleContainer[pos]);
 	}
 }
-
 
 void TParticleSystem::Update(float deltaTime){
 	// Anyadimos las particulas nuevas
@@ -213,12 +241,7 @@ void TParticleSystem::Update(float deltaTime){
 	        p.life -= deltaTime;
 	        if (p.life > 0.0f){
 
-	            // Simulate simple physics : gravity only, no collisions
-	            //p.speed += glm::vec3(0.0f,-0.01f, 0.0f) * deltaTime * 0.5f;
-				p.speed += glm::vec3(0.0f,0.5f, 0.0f) * deltaTime * 0.5f;
-	            p.pos += p.speed * deltaTime;
-
-	            p.cameraDistance = 1.0f;
+	        	m_manager->UpdateParticle(p, deltaTime);
 
 	            // Fill the GPU buffer
 	            m_particlePositionData[3*m_particleCount+0] = p.pos.x + p.translation.x;
@@ -234,11 +257,7 @@ void TParticleSystem::Update(float deltaTime){
 
 	            m_particleCount++;
 
-	        }else{
-	            // Particles that just died will be put at the end of the buffer in SortParticles();
-	            p.cameraDistance = -1.0f;
 	        }
-
 	    }
 	}
 
