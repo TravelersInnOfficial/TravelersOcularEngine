@@ -35,6 +35,9 @@ void TMesh::BeginDraw(){
 		GLuint elementsBuffer = m_mesh->GetElementBuffer();
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBuffer);
 		glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
+
+		// Draw bounding box
+		DrawBoundingBox();
 	}
 }
 
@@ -125,12 +128,13 @@ void TMesh::SendShaderData(){
 
 }
 
+// Funcion basada en https://en.wikibooks.org/wiki/OpenGL_Programming/Bounding_box
 void TMesh::DrawBoundingBox() {
 	Program* myProgram = VideoDriver::GetInstance()->GetProgram(BB_SHADER);
-	glUseProgram(myProgram->GetProgramID());	
+	glUseProgram(myProgram->GetProgramID());
 	/*
-		if (mesh->vertices.size() == 0)
-	return;
+	if (mesh->vertices.size() == 0)
+		return;
 	*/
 
 	// Cube 1x1x1, centered on origin
@@ -166,11 +170,8 @@ void TMesh::DrawBoundingBox() {
 	min_y, max_y,
 	min_z, max_z;
 	
-	//min_x = max_x = mesh->vertices[0].x;
-	//min_y = max_y = mesh->vertices[0].y;
-	//min_z = max_z = mesh->vertices[0].z;
+	// All vertices from mesh
 	std::vector<glm::vec3> vertvec = m_mesh->GetVerticesArray();
-
 	min_x = max_x = vertvec[0].x;	
 	min_y = max_y = vertvec[0].y;
 	min_z = max_z = vertvec[0].z;
@@ -193,7 +194,12 @@ void TMesh::DrawBoundingBox() {
 	GLuint uniform_m = glGetUniformLocation(myProgram->GetProgramID(), "MVP");
 	glUniformMatrix4fv(uniform_m, 1, GL_FALSE, glm::value_ptr(m));
 
-	GLuint attribute_v_coord = glGetUniformLocation(myProgram->GetProgramID(), "VertexPosition");	
+	// Send light color
+	GLuint linecolor = glGetUniformLocation(myProgram->GetProgramID(), "LineColor");
+	glUniform3fv(linecolor, 1, glm::value_ptr(glm::vec3(0.3f, 0.7f, 1.0f)));
+
+	// Send each vertex data
+	GLuint attribute_v_coord = glGetAttribLocation(myProgram->GetProgramID(), "VertexPosition");	
 	glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
 	glEnableVertexAttribArray(attribute_v_coord);
 
@@ -205,9 +211,6 @@ void TMesh::DrawBoundingBox() {
 		0,                  // no extra data between each position
 		0                   // offset of first element
 	);
-
-	GLuint linecolor = glGetUniformLocation(myProgram->GetProgramID(), "LineColor");
-	glUniform3fv(linecolor, 1, glm::value_ptr(glm::vec3(0.0f, 0.0f, 1.0f)));
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_elements);
 	glDrawElements(GL_LINE_LOOP, 4, GL_UNSIGNED_SHORT, 0);
