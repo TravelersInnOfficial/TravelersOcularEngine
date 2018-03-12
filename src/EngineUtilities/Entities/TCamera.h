@@ -14,7 +14,7 @@ public:
 				float bottom = -0.75f,
 				float top = 0.75f,
 				float near = 1.0f,
-				float far = 100.0f
+				float far = 2000.0f
 			);
 	~TCamera();
 
