@@ -2,13 +2,11 @@
 #include "TOcularEngine/VideoDriver.h"
 
 float EventHandler::xdist = 0.0f;
-float EventHandler::ydist = 0.0f;
-float EventHandler::zdist = -3.0f;
+float EventHandler::ydist = 3.0f;
+float EventHandler::zdist = -10.0f;
 float EventHandler::xdistGiro = 0.0f;
 float EventHandler::ydistGiro = 0.0f;
 float EventHandler::zdistGiro = 0.0f;
-float EventHandler::lastPosY = 0.0f;
-float EventHandler::lastPosX = 0.0f;
 bool EventHandler::m_close = false;
 
 EventHandler::EventHandler(){
@@ -31,22 +29,10 @@ bool EventHandler::OnEvent(const TEvent& event){
     }
 
     if(event.m_type == Type_MouseMoved){
-        if(event.m_mouseMove.x>lastPosX){
-            lastPosX = event.m_mouseMove.x;
-            ydistGiro += 1.0f;
-        }
-        if(event.m_mouseMove.x<lastPosX){
-            lastPosX = event.m_mouseMove.x;
-            ydistGiro -= 1.0f;
-        }
-        if(event.m_mouseMove.y>lastPosY){
-            lastPosY = event.m_mouseMove.y;
-            xdistGiro += 1.0f;
-        }
-        if(event.m_mouseMove.y<lastPosY){
-            lastPosY = event.m_mouseMove.y;
-            xdistGiro -= 1.0f;
-        }
+        if(event.m_mouseMove.x>screenCenterX) ydistGiro += 1.0f;
+        if(event.m_mouseMove.x<screenCenterX) ydistGiro -= 1.0f;
+        if(event.m_mouseMove.y>screenCenterY) xdistGiro += 1.0f;
+        if(event.m_mouseMove.y<screenCenterY) xdistGiro -= 1.0f;
     }
     
     return m_close;

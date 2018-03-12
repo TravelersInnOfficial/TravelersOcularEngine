@@ -21,7 +21,6 @@ void CreateTree(){
 	meshOne->SetInvisible();
 
 	pos = toe::core::TOEvector3df(-1.25f, 0.0f, 0.0f);
-	rot = toe::core::TOEvector3df(0, 160, 0);
 	path = "./../assets/models/table.obj";
 	TFMesh* meshTwo = sm->AddMesh(pos, rot, scale, path);
 
@@ -30,9 +29,6 @@ void CreateTree(){
 	TFLight* light1 = sm->AddLight(pos, rot, color, attenuation);
 
 	TFMesh* dom = (TFMesh*)sm->AddDome();
-
-	TFSprite* sprite = toe::AddSprite("",toe::core::TOEvector2df(650,0),toe::core::TOEvector2df(534/3.5f,624/3.5f));
-	sprite->SetTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_sprite.png");
 
 	pos = toe::core::TOEvector3df(0.0f, 1.4f, 0.0f);
 	meshTwo->AddBillboard(pos, "Wizard", 0.2f);
@@ -59,10 +55,18 @@ int main(){
 
 	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
 	TFParticleSystem* ps = sm->AddParticleSystem(toe::core::TOEvector3df(1.25f,-0.5,0), toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df(1,1,1));
+	
+	handler->screenCenterX = VDriv->GetScreenResolution().X/2;
+	handler->screenCenterY = VDriv->GetScreenResolution().Y/2;
+
+	TFSprite* sprite = toe::AddSprite("",toe::core::TOEvector2df(VDriv->GetScreenResolution().X - 534/3.5f, 0), toe::core::TOEvector2df(534/3.5f,624/3.5f));
+	sprite->SetTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_sprite.png");
 
 	while(!EventHandler::m_close){
+		VDriv->SetMouseVisibility(true);
 		VDriv->Update();
 		VDriv->Draw();
+		VDriv->SetCursorPosition(VDriv->GetScreenResolution().X/2,VDriv->GetScreenResolution().Y/2);
 		ps->Update(0.16f);
 		myCamera->SetTranslate(toe::core::TOEvector3df(EventHandler::xdist, EventHandler::ydist, EventHandler::zdist));
 		myCamera->SetRotation(toe::core::TOEvector3df(EventHandler::xdistGiro, EventHandler::ydistGiro, EventHandler::zdistGiro));

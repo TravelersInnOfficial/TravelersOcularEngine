@@ -10,9 +10,11 @@ public:
 
 	bool OnEvent(const TEvent& event);
 
+    float screenCenterX;
+    float screenCenterY;
+
     static bool m_close;
-    static float lastPosX;
-    static float lastPosY;
+    
     static float xdist;
     static float ydist;
     static float zdist;
