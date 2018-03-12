@@ -10,7 +10,7 @@ void CreateTree(){
 	toe::core::TOEvector3df rot = toe::core::TOEvector3df(0, 180, 0);
 	toe::core::TOEvector3df scale = toe::core::TOEvector3df(1.0f, 1.0f, 1.0f);
 	toe::core::TOEvector4df color = toe::core::TOEvector4df(1.0f, 1.0f, 1.0f, 1.0f);
-	float attenuation = 0.000001f;
+	float attenuation = 0.1f;
 	std::string path = "";
 	TFMesh* mesh = nullptr;
 

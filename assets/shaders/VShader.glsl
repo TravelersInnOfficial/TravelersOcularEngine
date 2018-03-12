@@ -7,14 +7,17 @@ in vec2 TextureCoords;   // COORDENADAS DE TEXTURA
 out vec3 Position;    // VERTICES EN COORDENADAS DE VISTA
 out vec3 Normal;      // NORMAL EN COORDENADAS DE VISTA
 out vec2 TexCoords;   // COORDENADAS DE TEXTURA
+out vec3 WorldPosition;
 
 uniform mat4 ModelViewMatrix;
 uniform mat3 NormalMatrix;
 uniform mat4 MVP;
+uniform mat4 ModelMatrix;
 
 void main() {
 	// TRANSFORMAR VERTICE Y NORMAL A COORDENADAS DE VISTA
 	Position = vec3 (ModelViewMatrix * vec4(VertexPosition, 1.0f));
+	WorldPosition = vec3 (ModelMatrix * vec4(VertexPosition, 1.0f));
 	Normal = normalize (NormalMatrix * VertexNormal);
 
 	// LAS COORDENADAS DE TEXTURA NO SUFREN TRANSFORMACION

@@ -7,6 +7,7 @@ uniform sampler2D myTextureSampler;
 in vec3 Position;  		// VERTICES EN COORDENADAS DE VISTA
 in vec3 Normal;  		// NORMAL EN COORDENADAS DE VISTA
 in vec2 TexCoords;      // UV COORDENADAS DE TEXTURA
+in vec3 WorldPosition;  // VERTICES EN COORDENADAS DE MUNDO
   
 // SALIDA PARA COMUNICAR CON EL RESTO DEL PIPELINE
 out vec4 FragColor;	// COLOR FINAL DEL FRAGMENTO
@@ -39,7 +40,7 @@ uniform SLight SpecialLight;
 vec3  Phong (int num) {
     // CALCULAR LOS DIFERENTES VECTORES	 
 	vec3 n = normalize(Normal);
-    vec3 vecToLight = Light[num].Position - Position;
+    vec3 vecToLight = Light[num].Position - WorldPosition;
     vec3 s = normalize(vecToLight);
 	vec3 v = normalize(-Position);
 	vec3 r = reflect(-s, n);

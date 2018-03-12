@@ -78,6 +78,10 @@ void TMesh::SendShaderData(){
 	glEnableVertexAttribArray(uvAttrib);
 
 	// -------------------------------------------------------- ENVIAMOS LAS MATRICES
+	// SEND THE MODEL MATRIX
+	GLint mmLocation = glGetUniformLocation(myProgram->GetProgramID(), "ModelMatrix");
+	glUniformMatrix4fv(mmLocation, 1, GL_FALSE, glm::value_ptr(m_stack.top()));
+
 	// SEND THE MODELVIEW MATRIX
 	glm::mat4 modelView = ViewMatrix * m_stack.top();
 	GLint mvLocation = glGetUniformLocation(myProgram->GetProgramID(), "ModelViewMatrix");
