@@ -62,9 +62,6 @@ void TText::SendShaderData(){
 
 		// PRIMERO DE TODO QUITAMOS LA ROTACION DE LA MATRIZ DE LA PILA
 		glm::mat4 m_matrix = m_stack.top();
-		m_matrix[0] = glm::vec4(1, 0, 0, m_matrix[0][3]);
-		m_matrix[1] = glm::vec4(0, 1, 0, m_matrix[1][3]);
-		m_matrix[2] = glm::vec4(0, 0, 1, m_matrix[2][3]);
 
 		// SEGUIDAMENTE COGEMOS LA ROTACION DE LA CAMARA Y LA INVERTIMOS
 		// DE ESTA FORMA CONSEGUIMOS QUE SIEMPRE MIRE A LA CAMARA
