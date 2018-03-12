@@ -4,7 +4,7 @@
 
 #include "EventHandler.h"
 
-void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh** meshThree, TFLight** light1, TFMesh** dom){
+void CreateTree(){
 	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
 
 	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0, 0, 0);
@@ -14,70 +14,48 @@ void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh*
 	float attenuation = 0.05f;
 	std::string path = "";
 
-	pos = toe::core::TOEvector3df(0, 0, -3);
-	*myCamera = sm->AddCamera(pos, rot, true);
-
 	pos = toe::core::TOEvector3df(0, 0, 0);
-	*meshOne = toe::AddCube(pos, rot, scale);
-	(*meshOne)->SetTexture("./../assets/textures/cube.png");
-	(*meshOne)->SetInvisible();
+	TFMesh* meshOne = nullptr;
+	meshOne = toe::AddCube(pos, rot, scale);
+	meshOne->SetTexture("./../assets/textures/cube.png");
+	meshOne->SetInvisible();
 
 	pos = toe::core::TOEvector3df(-1.25f, 0.0f, 0.0f);
 	rot = toe::core::TOEvector3df(0, 160, 0);
 	path = "./../assets/models/table.obj";
-	*meshTwo = sm->AddMesh(pos, rot, scale, path);
-
-	//pos = toe::core::TOEvector3df(1.5f, 0.0f, 0.0f);
-	//path = "./../assets/models/potion.obj";
-	//*meshThree = sm->AddMesh(pos, rot, scale, path);
-	//(*meshThree)->SetTexture("./../assets/textures/potion.png");
+	TFMesh* meshTwo = sm->AddMesh(pos, rot, scale, path);
 
 	pos = toe::core::TOEvector3df(-1.0f, 0, -1.0f);
 	color = toe::core::TOEvector4df(1.0f, 1.0f, 1.0f, 1.0f);
-	*light1 = sm->AddLight(pos, rot, color, attenuation);
+	TFLight* light1 = sm->AddLight(pos, rot, color, attenuation);
 
-	*dom = (TFMesh*)sm->AddDome();
-	
-	//*light2 = sm->AddLight(pos, rot, color, attenuation);
-
-	TFRect* rect1 = toe::Add2DRect(toe::core::TOEvector2df(0,0),toe::core::TOEvector2df(100,100));
-
-	toe::core::TOEvector2df newpos = toe::core::TOEvector2df(rect1->GetPosX() + rect1->GetWidth(),rect1->GetPosY() + rect1->GetHeight());
-	TFRect* rect2 = toe::Add2DRect(newpos,toe::core::TOEvector2df(50,50));
-	rect2->SetColor(0,1,0);
+	TFMesh* dom = (TFMesh*)sm->AddDome();
 
 	TFSprite* sprite = toe::AddSprite("",toe::core::TOEvector2df(650,0),toe::core::TOEvector2df(534/3.5f,624/3.5f));
 	sprite->SetTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_sprite.png");
 
-}
-
-int main(){
-	VideoDriver::m_assetsPath = "./../assets";
-	VideoDriver* VDriv = toe::GetVideoDriver();
-	VDriv->CreateWindows("Wizards & Warlocks", VDriv->GetScreenResolution(), true);
-	//VDriv->SetClearScreenColor(toe::core::TOEvector4df(0.7, 0.7, 1, 1));
-	VDriv->SetClearScreenColor(toe::core::TOEvector4df(0, 0, 0, 0));
-    EventHandler* handler = new EventHandler();	
-	VDriv->SetIODriver(handler);
-
-	TFCamera* myCamera = nullptr;
-	TFMesh* meshOne = nullptr;
-	TFMesh* meshTwo = nullptr;
-	TFMesh* meshThree = nullptr;
-	TFMesh* dom = nullptr;
-	TFLight* light1 = nullptr;
-
-	CreateTree(&myCamera, &meshOne, &meshTwo, &meshThree, &light1, &dom);
-	
-	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0.0f, 1.4f, 0.0f);
+	pos = toe::core::TOEvector3df(0.0f, 1.4f, 0.0f);
 	meshTwo->AddBillboard(pos, "Wizard", 0.2f);
 	
 	pos = toe::core::TOEvector3df(-.7f, 2.1f, 0.0f);
 	meshOne->AddBillboard(pos, "Flechas para MOVER MESH");
 	pos = toe::core::TOEvector3df(-1.0f, 1.9f, 0.0f);
 	meshOne->AddBillboard(pos, "WASD para ROTAR MESH");
+}
 
+int main(){
+	VideoDriver::m_assetsPath = "./../assets";
+	EventHandler* handler = new EventHandler();	
+	VideoDriver* VDriv = toe::GetVideoDriver();
+	SceneManager* sceneManager = VDriv->GetSceneManager();
+	
+	VDriv->CreateWindows("TOE Demonstrative Application", VDriv->GetScreenResolution(), true);
+	VDriv->SetClearScreenColor(toe::core::TOEvector4df(0.7, 0.7, 1, 1));
+	VDriv->SetIODriver(handler);
 	VDriv->SetMouseVisibility(false);
+
+	CreateTree();
+	TFCamera* myCamera = sceneManager->AddCamera();
 
 	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
 	TFParticleSystem* ps = sm->AddParticleSystem(toe::core::TOEvector3df(1.25f,-0.5,0), toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df(1,1,1));
@@ -86,10 +64,8 @@ int main(){
 		VDriv->Update();
 		VDriv->Draw();
 		ps->Update(0.16f);
-		if(meshTwo != nullptr){
-			meshTwo->SetTranslate(toe::core::TOEvector3df(EventHandler::xdist, EventHandler::ydist, EventHandler::zdist));
-			meshTwo->SetRotation(toe::core::TOEvector3df(EventHandler::xdistGiro, EventHandler::ydistGiro, 0));
-		}
+		myCamera->SetTranslate(toe::core::TOEvector3df(EventHandler::xdist, EventHandler::ydist, EventHandler::zdist));
+		myCamera->SetRotation(toe::core::TOEvector3df(EventHandler::xdistGiro, EventHandler::ydistGiro, EventHandler::zdistGiro));
 	}
 
 	VDriv->CloseWindow();

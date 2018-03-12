@@ -11,6 +11,8 @@ public:
 	bool OnEvent(const TEvent& event);
 
     static bool m_close;
+    static float lastPosX;
+    static float lastPosY;
     static float xdist;
     static float ydist;
     static float zdist;

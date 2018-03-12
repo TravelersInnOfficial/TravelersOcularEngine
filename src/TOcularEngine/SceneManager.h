@@ -39,7 +39,7 @@ public:
      * @param perspective (bool)
      * @return TFCamera* NewCamera
      */
-    TFCamera*   AddCamera(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, bool perspective);
+    TFCamera*   AddCamera(toe::core::TOEvector3df position = toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,0,0), bool perspective = true);
 
     /**
      * @brief Adds a new Light to the scene tree
@@ -50,7 +50,7 @@ public:
      * @param attenuation (float)
      * @return TFLight* NewLight
      */
-    TFLight*    AddLight(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector4df color, float attenuation);
+    TFLight*    AddLight(toe::core::TOEvector3df position = toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,0,0), toe::core::TOEvector4df color = toe::core::TOEvector4df(1,1,1,1), float attenuation = 0.05f);
 
     /**
      * @brief Adds a new Mesh to the scene tree
@@ -61,7 +61,7 @@ public:
      * @param meshPath (std::string)
      * @return TFMesh* NewMesh
      */
-    TFMesh*     AddMesh(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale, std::string meshPath);
+    TFMesh*     AddMesh(toe::core::TOEvector3df position = toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df scale = toe::core::TOEvector3df(0,0,0), std::string meshPath = "");
 
     /**
      * @brief Adds a Dome/Skybox to the scene tree
