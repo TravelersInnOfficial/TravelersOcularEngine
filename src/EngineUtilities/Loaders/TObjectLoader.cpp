@@ -18,6 +18,18 @@ bool PackedVertex::operator<(const PackedVertex that) const{
 	return memcmp((void*)this, (void*)&that, sizeof(PackedVertex))>0;
 };
 
+bool TObjectLoader::GetSimilarVertexIndex_fast(PackedVertex* packed, std::map<PackedVertex,unsigned int>* VertexToOutIndex, unsigned int* result){
+	std::map<PackedVertex,unsigned int>::iterator it = VertexToOutIndex->find(*packed);
+	bool output = false;
+	if ( it == VertexToOutIndex->end() ){
+		output = false;
+	}else{
+		*result = it->second;
+		output = true;
+	}
+	return output;
+}
+
 void TObjectLoader::IndexVBO(TResourceMesh* mesh, std::vector<glm::vec3>* vertexVec, std::vector<glm::vec2>* uvVec, std::vector<glm::vec3>* normalVec, std::vector<unsigned int>* indexVec){
 	std::map<PackedVertex, unsigned int> VertexToOutIndex;
 	std::vector<glm::vec3> temp_vertices, temp_normals;
@@ -56,17 +68,6 @@ void TObjectLoader::IndexVBO(TResourceMesh* mesh, std::vector<glm::vec3>* vertex
 	}
 }
 
-bool TObjectLoader::GetSimilarVertexIndex_fast(PackedVertex* packed, std::map<PackedVertex,unsigned int>* VertexToOutIndex, unsigned int* result){
-	std::map<PackedVertex,unsigned int>::iterator it = VertexToOutIndex->find(*packed);
-	bool output = false;
-	if ( it == VertexToOutIndex->end() ){
-		output = false;
-	}else{
-		*result = it->second;
-		output = true;
-	}
-	return output;
-}
 
 bool TObjectLoader::LoadObj(TResourceMesh* mesh, std::vector<glm::vec3>* vertex, int option){
 	//std::vector<glm::vec3> vertex;

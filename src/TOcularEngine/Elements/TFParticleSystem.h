@@ -2,6 +2,7 @@
 #define TFPARTICLESYSTEM_H
 
 #include "TFNode.h"
+#include "./../../Common/ParticleManager.h"
 
 class TFParticleSystem: public TFNode{
 	friend class SceneManager;
@@ -10,6 +11,7 @@ public:
 	void Translate(toe::core::TOEvector3df translation) override;
 
 	void SetTexture(std::string path);
+	void SetManager(ParticleManager* manager);
 	void Update(float deltaTime);
 private:
 	TFParticleSystem(

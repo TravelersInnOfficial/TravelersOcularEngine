@@ -45,6 +45,11 @@ void TFParticleSystem::SetTexture(std::string path){
 	mySystem->SetTexture(path);
 }
 
+void TFParticleSystem::SetManager(ParticleManager* manager){
+	TParticleSystem* mySystem = (TParticleSystem*)m_entityNode->GetEntity();
+	mySystem->SetManager(manager);
+}
+
 void TFParticleSystem::Update(float deltaTime){
 	TParticleSystem* mySystem = (TParticleSystem*)m_entityNode->GetEntity();
 	mySystem->Update(deltaTime);

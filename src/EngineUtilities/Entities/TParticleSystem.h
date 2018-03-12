@@ -4,43 +4,7 @@
 #include <glm/vec3.hpp>
 #include "./TEntity.h"
 #include "./../Resources/TResourceTexture.h"
-
-class ParticleManager{
-public:	
-	/**
-	 * @brief      Create the object
-	 */
-	ParticleManager();
-
-	/**
-	 * @brief      Destroys the object.
-	 */
-	~ParticleManager();
-
-	/**
-	 * @brief      Init the values of the particle
-	 *
-	 * @param      p     Instance of the particle that is going to be initialized
-	 */
-	void InitParticle(Particle& p);
-
-	/**
-	 * @brief      Update the value
-	 *
-	 * @param      p          Instance of the particle that is going to be update
-	 * @param[in]  deltaTime  The delta time
-	 */
-	void UpdateParticle(Particle& p, float deltaTime);
-private:
-};
-
-struct Particle{
-	Particle();
-	glm::vec3 pos, speed, translation;
-	unsigned char r, g, b;
-	float size, rotation;
-	float life;
-};
+#include "./../../Common/ParticleManager.h"
 
 class TParticleSystem: public TEntity{
 public:
@@ -53,6 +17,7 @@ public:
 	void Update(float deltaTime);
 
 	void SetTexture(std::string path);
+	void SetManager(ParticleManager* manager);
 	void SetTranslate(glm::vec3 position);
 	void Translate(glm::vec3 position);
 private:
