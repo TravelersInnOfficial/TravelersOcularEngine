@@ -45,8 +45,7 @@ void TMesh::EndDraw(){
 }
 
 void TMesh::SendShaderData(){
-	Program* myProgram = VideoDriver::GetInstance()->GetProgram(m_program);
-	glUseProgram(myProgram->GetProgramID());
+	Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(m_program);
 
     // -------------------------------------------------------- ENVIAMOS LOS VERTICES
     // BIND VERTEX
@@ -130,8 +129,7 @@ void TMesh::SendShaderData(){
 
 // Funcion basada en https://en.wikibooks.org/wiki/OpenGL_Programming/Bounding_box
 void TMesh::DrawBoundingBox() {
-	Program* myProgram = VideoDriver::GetInstance()->GetProgram(BB_SHADER);
-	glUseProgram(myProgram->GetProgramID());
+	Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(BB_SHADER);
 	/*
 	if (mesh->vertices.size() == 0)
 		return;

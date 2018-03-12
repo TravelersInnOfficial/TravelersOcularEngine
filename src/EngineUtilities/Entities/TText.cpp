@@ -55,8 +55,7 @@ void TText::ChangeText(std::string text){
 
 void TText::SendShaderData(){
 	// Ponemos en uso el shader del texto
-		Program* myProgram = VideoDriver::GetInstance()->GetProgram(m_program);
-		glUseProgram(myProgram->GetProgramID());
+		Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(m_program);
 
 	// Enviamos la matriz MVP
 		// Calculamos la matriz MVP

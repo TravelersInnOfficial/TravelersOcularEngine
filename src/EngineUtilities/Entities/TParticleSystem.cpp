@@ -79,11 +79,8 @@ void TParticleSystem::ResetShaderData(){
 }
 
 void TParticleSystem::SendShaderData(){
-	Program* myProgram = VideoDriver::GetInstance()->GetProgram(m_program);
+	Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(m_program);
 	GLuint idProgram = myProgram->GetProgramID();
-
-	// Le decimos que programa debe utilizar
-	glUseProgram(idProgram);
 
 	// Enviamos la matriz MVP
 		// Calculamos la matriz MVP

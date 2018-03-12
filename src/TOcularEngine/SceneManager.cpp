@@ -179,7 +179,7 @@ void SceneManager::Draw(){
 	}
 
 	// Gets the Program
-	Program* myProgram = VideoDriver::GetInstance()->GetProgramVector()[STANDARD_SHADER];
+	Program* myProgram = VideoDriver::GetInstance()->GetProgram(STANDARD_SHADER);
 
 	// Sends the Ambient Light
 	GLint ambLocation = glGetUniformLocation(myProgram->GetProgramID(), "SpecialLight.AmbientLight");
@@ -194,7 +194,6 @@ void SceneManager::Draw(){
     for(int i = 0; i < size; i++) m_lights[i]->DrawLight(i);
 
     m_SceneTreeRoot->Draw();
-	glUseProgram(VideoDriver::GetInstance()->GetProgram(STANDARD_SHADER)->GetProgramID());
 }
 
 void SceneManager::Draw2DElements(){

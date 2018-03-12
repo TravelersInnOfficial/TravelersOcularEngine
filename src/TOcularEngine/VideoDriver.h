@@ -95,7 +95,7 @@ public:
 	 */
 	void SetWindowName(std::string name);
 
-	void SetShaderProgram(SHADERTYPE);
+	Program* SetShaderProgram(SHADERTYPE);
 
 	void SetIODriver(IODriver* driver);
 	
@@ -117,6 +117,7 @@ private:
 	// Private SFML stuff
 	GLFWwindow* m_window;
 	std::string m_name;
+	SHADERTYPE m_lastShaderUsed;
 
 	// Private Graphic Engine stuff
 	static SceneManager* privateSceneManager;

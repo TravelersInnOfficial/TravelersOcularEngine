@@ -14,6 +14,7 @@ IODriver* VideoDriver::privateIODriver = nullptr;
 
 VideoDriver::VideoDriver(){
 	m_name = "";
+	m_lastShaderUsed = NONE_SHADER;
 	m_window = nullptr;
 	privateSceneManager = new SceneManager();
 	privateIODriver = nullptr;
@@ -128,7 +129,7 @@ void VideoDriver::Draw(){
 	privateSceneManager->Draw2DElements();
 	end2DDrawState();
 
-	glUseProgram(GetProgram(STANDARD_SHADER)->GetProgramID());
+	SetShaderProgram(STANDARD_SHADER);
 	glfwSwapBuffers(m_window);
 }
 
@@ -181,8 +182,14 @@ void VideoDriver::SetWindowName(std::string name){
 	glfwSetWindowTitle(m_window,m_name.c_str());
 }
 
-void VideoDriver::SetShaderProgram(SHADERTYPE p){
-	glUseProgram(m_programs.find(p)->second->GetProgramID());
+Program* VideoDriver::SetShaderProgram(SHADERTYPE p){
+	Program* toRet = m_programs.find(p)->second;
+	if(m_lastShaderUsed != p){
+		glUseProgram(toRet->GetProgramID());
+	}
+	m_lastShaderUsed = p;
+
+	return toRet;
 }
 
 void VideoDriver::SetIODriver(IODriver* driver){
