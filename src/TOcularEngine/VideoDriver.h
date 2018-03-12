@@ -115,6 +115,7 @@ private:
 	// Private SFML stuff
 	GLFWwindow* m_window;
 	std::string m_name;
+	SHADERTYPE m_lastShaderUsed;
 
 	// Private Graphic Engine stuff
 	static SceneManager* privateSceneManager;
