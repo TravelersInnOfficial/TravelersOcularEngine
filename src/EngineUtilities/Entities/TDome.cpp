@@ -43,8 +43,7 @@ void TDome::BeginDraw(){
 void TDome::EndDraw(){ }
 
 void TDome::SendShaderData(){
-	Program* myProgram = VideoDriver::GetInstance()->GetProgram(m_program);
-	glUseProgram(myProgram->GetProgramID());
+	Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(m_program);
 
     // -------------------------------------------------------- ENVIAMOS LOS VERTICES
     // BIND VERTEX

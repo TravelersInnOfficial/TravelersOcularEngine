@@ -37,8 +37,7 @@ TFRect::~TFRect(){
 
 void TFRect::Draw() const{
 
-    Program* myProgram = VideoDriver::GetInstance()->GetProgram(m_program);
-    glUseProgram(myProgram->GetProgramID());
+    Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(m_program);
 
     //https://open.gl/media/img/c2_dc.png Screen coordinates
     float vertices[] =

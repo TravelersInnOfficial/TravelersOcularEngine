@@ -181,8 +181,11 @@ void VideoDriver::SetWindowName(std::string name){
 	glfwSetWindowTitle(m_window,m_name.c_str());
 }
 
-void VideoDriver::SetShaderProgram(SHADERTYPE p){
-	glUseProgram(m_programs.find(p)->second->GetProgramID());
+Program* VideoDriver::SetShaderProgram(SHADERTYPE p){
+	Program* toRet = m_programs.find(p)->second;
+	glUseProgram(toRet->GetProgramID());
+
+	return toRet;
 }
 
 void VideoDriver::SetIODriver(IODriver* driver){

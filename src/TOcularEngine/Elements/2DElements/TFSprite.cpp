@@ -33,8 +33,7 @@ TFSprite::~TFSprite(){
 }
 
 void TFSprite::Draw() const{
-    Program* myProgram = VideoDriver::GetInstance()->GetProgram(m_program);
-	glUseProgram(myProgram->GetProgramID());
+    Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(m_program);
 
     float vertices[] = {
         //  X     Y     Z                        U     V

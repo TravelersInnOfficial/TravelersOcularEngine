@@ -93,7 +93,7 @@ public:
 	 */
 	void SetWindowName(std::string name);
 
-	void SetShaderProgram(SHADERTYPE);
+	Program* SetShaderProgram(SHADERTYPE);
 
 	void SetIODriver(IODriver* driver);
 	

@@ -64,7 +64,7 @@ void TFLight::DrawLight(int num){
 	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
 
 	if(myEntity->GetActive()){
-		Program* myProgram = VideoDriver::GetInstance()->GetProgramVector()[STANDARD_SHADER];
+		Program* myProgram = VideoDriver::GetInstance()->GetProgram(STANDARD_SHADER);
 		std::string str = "Light["+std::to_string(num)+"].";
 		std::string aux = "";
 
