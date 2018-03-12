@@ -5,6 +5,7 @@ TLight::TLight(TColor color, float attenuation){
 	m_color = color;
 	m_attenuation = attenuation;
 	m_program = STANDARD_SHADER;
+	m_active = true;
 }
 
 TLight::~TLight(){}

@@ -35,16 +35,19 @@ void CreateTree(){
 	color = toe::core::TOEvector4df(1.0f, 0.0f, 0.0f, 1.0f);
 	sm->AddLight(pos, rot, color, attenuation);
 	mesh = sm->AddMesh(pos);
+	mesh->CreateSphere();
 
 	pos = toe::core::TOEvector3df(0.0f, 0, 0);
 	color = toe::core::TOEvector4df(0.0f, 1.0f, 0.0f, 1.0f);
 	sm->AddLight(pos, rot, color, attenuation);
 	mesh = sm->AddMesh(pos);
+	mesh->CreateSphere();
 
 	pos = toe::core::TOEvector3df(3.0f, 0, 0);
 	color = toe::core::TOEvector4df(0.0f, 0.0f, 1.0f, 1.0f);
 	sm->AddLight(pos, rot, color, attenuation);
 	mesh = sm->AddMesh(pos);
+	mesh->CreateSphere();
 
 	// OTROS ###################################################
 	sm->AddDome();
