@@ -26,8 +26,12 @@ VideoDriver::~VideoDriver(){
 
 void VideoDriver::Drop(){
 	std::map<SHADERTYPE, Program*>::iterator it = m_programs.begin();
-	for(;it!=m_programs.end();++it){ m_programs.erase(it); }
+	for(;it!=m_programs.end();++it){ 
+		delete it->second;
+	}
 	m_programs.clear();
+
+
 
 	if(privateIODriver != nullptr) delete privateIODriver;
 	if(privateSceneManager != nullptr) delete privateSceneManager;
