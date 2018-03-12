@@ -24,7 +24,7 @@ void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh*
 
 	pos = toe::core::TOEvector3df(-1.25f, 0.0f, 0.0f);
 	rot = toe::core::TOEvector3df(0, 160, 0);
-	path = "./../assets/models/Wizard.obj";
+	path = "./../assets/models/table.obj";
 	*meshTwo = sm->AddMesh(pos, rot, scale, path);
 
 	//pos = toe::core::TOEvector3df(1.5f, 0.0f, 0.0f);
@@ -54,8 +54,9 @@ void CreateTree(TFCamera** myCamera, TFMesh** meshOne, TFMesh** meshTwo, TFMesh*
 int main(){
 	VideoDriver::m_assetsPath = "./../assets";
 	VideoDriver* VDriv = toe::GetVideoDriver();
-	VDriv->CreateWindows("Wizards & Warlocks", toe::core::TOEvector2df(800,600));
-	VDriv->SetClearScreenColor(toe::core::TOEvector4df(0.7, 0.7, 1, 1));
+	VDriv->CreateWindows("Wizards & Warlocks", VDriv->GetScreenResolution(), true);
+	//VDriv->SetClearScreenColor(toe::core::TOEvector4df(0.7, 0.7, 1, 1));
+	VDriv->SetClearScreenColor(toe::core::TOEvector4df(0, 0, 0, 0));
     EventHandler* handler = new EventHandler();	
 	VDriv->SetIODriver(handler);
 

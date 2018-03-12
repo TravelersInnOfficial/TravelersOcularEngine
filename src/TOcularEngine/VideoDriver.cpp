@@ -19,6 +19,10 @@ VideoDriver::VideoDriver(){
 	privateSceneManager = new SceneManager();
 	privateIODriver = nullptr;
 	m_clearSceenColor = toe::core::TOEvector4df(0,0,0,0);
+	
+	// Iinitialize GLFW
+	glfwSetErrorCallback(VideoDriver::glwf_error_callback);
+    glfwInit();
 }
 
 VideoDriver::~VideoDriver(){
@@ -27,33 +31,23 @@ VideoDriver::~VideoDriver(){
 
 void VideoDriver::Drop(){
 	std::map<SHADERTYPE, Program*>::iterator it = m_programs.begin();
-	for(;it!=m_programs.end();++it){ 
-		delete it->second;
-	}
+	for(;it!=m_programs.end();++it) delete it->second;
 	m_programs.clear();
-
-
 
 	if(privateIODriver != nullptr) delete privateIODriver;
 	if(privateSceneManager != nullptr) delete privateSceneManager;
 
 	glfwDestroyWindow(m_window);
 	glfwTerminate();
-	// Ya la elimina GLFW con el DestroyWindow
-	//delete m_window;
+	//delete m_window; // Ya la elimina GLFW con el DestroyWindow
 }
 
 void VideoDriver::glwf_error_callback(int error, const char* description){
     fprintf(stderr, "Error %d: %s\n", error, description);
 }
 
-bool VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2df dimensions){
+bool VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2di dimensions, bool fullscreen){
 	m_name = window_name;
-
-	//initialize glfw
-	glfwSetErrorCallback(VideoDriver::glwf_error_callback);
-    if (!glfwInit())
-        return false;
 
 	//initialize gflwindow parameters
 	glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 4 );
@@ -63,8 +57,14 @@ bool VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2df
     glfwWindowHint( GLFW_RESIZABLE, GL_FALSE );
 
 	//create glfwindow and make it the current window
-	m_window = glfwCreateWindow(dimensions.X,dimensions.Y, m_name.c_str(), NULL, NULL);
-    glfwMakeContextCurrent(m_window);
+	GLFWmonitor* monitor = nullptr;
+	if(fullscreen){
+		glfwWindowHint( GLFW_DECORATED, GL_FALSE );
+		monitor = glfwGetPrimaryMonitor();
+	}
+	m_window = glfwCreateWindow(dimensions.X,dimensions.Y, m_name.c_str(), monitor, NULL);
+    
+	glfwMakeContextCurrent(m_window);
 	SetReceiver();
 
 	/// Iniciamos glew
@@ -363,4 +363,9 @@ std::string VideoDriver::GetAssetsPath(){
 
 void VideoDriver::CloseWindow(){
 	if(m_window != nullptr) glfwSetWindowShouldClose(m_window, GLFW_TRUE);
+}
+
+toe::core::TOEvector2di VideoDriver::GetScreenResolution(){
+    const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+    return toe::core::TOEvector2di(mode->width, mode->height);
 }

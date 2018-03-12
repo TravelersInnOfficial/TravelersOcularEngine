@@ -23,7 +23,7 @@ public:
 
 	static std::string m_assetsPath;
 
-    bool CreateWindows(std::string window_name, toe::core::TOEvector2df dimensions);
+    bool CreateWindows(std::string window_name, toe::core::TOEvector2di dimensions, bool fullscreeen = false);
     bool Update();
     void Draw();
     void ClearScreen();
@@ -65,6 +65,8 @@ public:
 	 * @return std::string m_name
 	 */
 	std::string GetWindowName();
+
+	toe::core::TOEvector2di GetScreenResolution();
 
 	toe::core::TOEvector2di GetWindowDimensions();
 
