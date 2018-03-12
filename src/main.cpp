@@ -6,37 +6,48 @@
 
 void CreateTree(){
 	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
-
 	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0, 0, 0);
-	toe::core::TOEvector3df rot = toe::core::TOEvector3df(0, 0, 0);
+	toe::core::TOEvector3df rot = toe::core::TOEvector3df(0, 180, 0);
 	toe::core::TOEvector3df scale = toe::core::TOEvector3df(1.0f, 1.0f, 1.0f);
 	toe::core::TOEvector4df color = toe::core::TOEvector4df(1.0f, 1.0f, 1.0f, 1.0f);
-	float attenuation = 0.05f;
+	float attenuation = 0.000001f;
 	std::string path = "";
+	TFMesh* mesh = nullptr;
 
-	pos = toe::core::TOEvector3df(0, 0, 0);
-	TFMesh* meshOne = nullptr;
-	meshOne = toe::AddCube(pos, rot, scale);
-	meshOne->SetTexture("./../assets/textures/cube.png");
-	meshOne->SetInvisible();
-
-	pos = toe::core::TOEvector3df(-1.25f, 0.0f, 0.0f);
-	path = "./../assets/models/table.obj";
-	TFMesh* meshTwo = sm->AddMesh(pos, rot, scale, path);
-
-	pos = toe::core::TOEvector3df(-1.0f, 0, -1.0f);
-	color = toe::core::TOEvector4df(1.0f, 1.0f, 1.0f, 1.0f);
-	TFLight* light1 = sm->AddLight(pos, rot, color, attenuation);
-
-	TFMesh* dom = (TFMesh*)sm->AddDome();
-
+	// MAGO ###################################################
+	pos = toe::core::TOEvector3df(2.00f, 0.0f, 0.0f);
+	path = "./../assets/models/Wizard.obj";
+	mesh = sm->AddMesh(pos, rot, scale, path);
 	pos = toe::core::TOEvector3df(0.0f, 1.4f, 0.0f);
-	meshTwo->AddBillboard(pos, "Wizard", 0.2f);
-	
-	pos = toe::core::TOEvector3df(-.7f, 2.1f, 0.0f);
-	meshOne->AddBillboard(pos, "Flechas para MOVER MESH");
-	pos = toe::core::TOEvector3df(-1.0f, 1.9f, 0.0f);
-	meshOne->AddBillboard(pos, "WASD para ROTAR MESH");
+	mesh->AddBillboard(pos, "Wizard", 0.2f);
+
+	// PAREDES ###################################################
+	pos = toe::core::TOEvector3df(0.00f, 1.2f, 1.0f);
+	scale = toe::core::TOEvector3df(20.0f, 5.0f, 0.1f);
+	path = "";
+	mesh = sm->AddMesh(pos, rot, scale, path);
+	pos = toe::core::TOEvector3df(0.0f, 1.4f, 0.0f);
+	mesh->AddBillboard(pos, "Wizard", 0.2f);
+
+	// LUCES ###################################################
+	scale = toe::core::TOEvector3df(0.5f, 0.5f, 0.5f);
+	pos = toe::core::TOEvector3df(-3.0f, 0, 0);
+	color = toe::core::TOEvector4df(1.0f, 0.0f, 0.0f, 1.0f);
+	sm->AddLight(pos, rot, color, attenuation);
+	mesh = sm->AddMesh(pos);
+
+	pos = toe::core::TOEvector3df(0.0f, 0, 0);
+	color = toe::core::TOEvector4df(0.0f, 1.0f, 0.0f, 1.0f);
+	sm->AddLight(pos, rot, color, attenuation);
+	mesh = sm->AddMesh(pos);
+
+	pos = toe::core::TOEvector3df(3.0f, 0, 0);
+	color = toe::core::TOEvector4df(0.0f, 0.0f, 1.0f, 1.0f);
+	sm->AddLight(pos, rot, color, attenuation);
+	mesh = sm->AddMesh(pos);
+
+	// OTROS ###################################################
+	sm->AddDome();
 }
 
 int main(){

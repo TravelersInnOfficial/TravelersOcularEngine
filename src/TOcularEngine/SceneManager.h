@@ -61,7 +61,7 @@ public:
      * @param meshPath (std::string)
      * @return TFMesh* NewMesh
      */
-    TFMesh*     AddMesh(toe::core::TOEvector3df position = toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df scale = toe::core::TOEvector3df(0,0,0), std::string meshPath = "");
+    TFMesh*     AddMesh(toe::core::TOEvector3df position = toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df scale = toe::core::TOEvector3df(1.0f,1.0f,1.0f), std::string meshPath = "");
 
     /**
      * @brief Adds a Dome/Skybox to the scene tree
