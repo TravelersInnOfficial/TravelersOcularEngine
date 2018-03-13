@@ -20,6 +20,8 @@ public:
 
     void Rotate(float deg) override;
     void SetRotation(float deg) override;
+    
+    void Erase() override;
 
 private:
     TFRect(toe::core::TOEvector2df position, toe::core::TOEvector2df size, float rotation);

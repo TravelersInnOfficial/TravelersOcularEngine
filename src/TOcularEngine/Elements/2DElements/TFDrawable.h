@@ -41,6 +41,8 @@ public:
                                                                         m_color->SetB(b);
                                                                         m_color->SetA(a);}
 
+    virtual void Erase() = 0;
+
 protected:
     toe::core::TOEvector2df* m_position = nullptr;
     toe::core::TOEvector2df* m_size = nullptr;
