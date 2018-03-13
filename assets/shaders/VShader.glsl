@@ -18,7 +18,7 @@ void main() {
 	// TRANSFORMAR VERTICE Y NORMAL A COORDENADAS DE VISTA
 	Position = vec3 (ModelViewMatrix * vec4(VertexPosition, 1.0f));
 	WorldPosition = vec3 (ModelMatrix * vec4(VertexPosition, 1.0f));
-	Normal = normalize (NormalMatrix * VertexNormal);
+	Normal = normalize (ModelViewMatrix * vec4(VertexNormal,0)).xyz;
 
 	// LAS COORDENADAS DE TEXTURA NO SUFREN TRANSFORMACION
 	TexCoords = TextureCoords;    

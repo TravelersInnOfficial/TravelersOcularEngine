@@ -40,21 +40,26 @@ uniform mat4 ViewMatrix;
 
 // FUNCION QUE CALCULA EL MODELO DE REFLEXION DE PHONG
 vec3  Phong (int num) {
+	vec3 eyeDir = -Position;
 	// CALCULAR LOS DIFERENTES VECTORES	 
 	vec3 cameraPos = vec3(ViewMatrix[3][0], ViewMatrix[3][1], ViewMatrix[3][2]);
 	vec3 n = normalize(Normal); 
-	vec3 objToToLight = Light[num].Position - WorldPosition;
+	vec3 lightPos = (ViewMatrix * vec4(Light[num].Position, 1)).xyz;
+	vec3 objToToLight = lightPos + eyeDir;
 	vec3 s = normalize(objToToLight);
 	vec3 v = normalize(cameraPos - WorldPosition);
-	vec3 r = reflect(s, n);
+	vec3 r = reflect(-s, n);
   	
-	// COMPONENTE DIFUSA 
-	vec3 Diffuse = Light[num].Diffuse * max(dot(s, n), 0.0) * vec3(texture(myTextureSampler, TexCoords)) * Material.Diffuse;
+
+	// COMPONENTE DIFUSA
+	vec3 Diffuse = vec3(0);
+	Diffuse = Light[num].Diffuse * clamp(dot(n,s), 0, 1) * vec3(texture(myTextureSampler, TexCoords)) * Material.Diffuse;
 
 	// COMPONENTE ESPECULAR  
 	vec3 Specular = vec3(0);
-	//if(dot(s, n) > 0) Specular = Light[num].Specular * pow(max(dot(r, v), 0.0), Material.Shininess) * Material.Specular;
-	if(dot(s, n) > 0) Specular = max(Light[num].Specular * pow(max(dot(r, v), 0.0), 100) * 0.5, 0.0);
+	vec3 R = reflect(-s, n);
+	vec3 E = normalize(eyeDir);
+	if(dot(s, n) > 0) Specular = Light[num].Specular * pow(clamp(dot(E,R),0,1), 100) * 1;
 
 	// CALCULAMOS ATENUACION
 	float Attenuation = 1.0 / (1.0 + Light[num].Attenuation * pow(length(objToToLight), 2));
