@@ -87,6 +87,10 @@ void TMesh::SendShaderData(){
 	GLint mvLocation = glGetUniformLocation(myProgram->GetProgramID(), "ModelViewMatrix");
 	glUniformMatrix4fv(mvLocation, 1, GL_FALSE, glm::value_ptr(modelView));
 
+	// SEND THE VIEW MATRIX
+	GLint vLocation = glGetUniformLocation(myProgram->GetProgramID(), "ViewMatrix");
+	glUniformMatrix4fv(vLocation, 1, GL_FALSE, glm::value_ptr(ViewMatrix));
+
 	// SEND THE MODELVIEWPROJECTION MATRIX
 	glm::mat4 mvpMatrix = ProjMatrix * modelView;
 	GLint mvpLocation = glGetUniformLocation(myProgram->GetProgramID(), "MVP");

@@ -15,19 +15,20 @@ void CreateTree(){
 	TFMesh* mesh = nullptr;
 
 	// MAGO ###################################################
-	pos = toe::core::TOEvector3df(2.00f, 0.0f, 0.0f);
-	path = "./../assets/models/Wizard.obj";
-	mesh = sm->AddMesh(pos, rot, scale, path);
-	pos = toe::core::TOEvector3df(0.0f, 1.4f, 0.0f);
-	mesh->AddBillboard(pos, "Wizard", 0.2f);
+	//pos = toe::core::TOEvector3df(2.00f, 0.0f, 0.0f);
+	//path = "./../assets/models/Wizard.obj";
+	//mesh = sm->AddMesh(pos, rot, scale, path);
+	//pos = toe::core::TOEvector3df(0.0f, 1.4f, 0.0f);
+	//mesh->AddBillboard(pos, "Wizard", 0.2f);
 
 	// PAREDES ###################################################
-	pos = toe::core::TOEvector3df(0.00f, 1.2f, 1.0f);
-	scale = toe::core::TOEvector3df(20.0f, 5.0f, 0.1f);
+	pos = toe::core::TOEvector3df(0.0f, 0.0f, 5.0f);
+	scale = toe::core::TOEvector3df(2.0f, 2.0f, 2.0f);
 	path = "";
 	mesh = sm->AddMesh(pos, rot, scale, path);
 	pos = toe::core::TOEvector3df(0.0f, 1.4f, 0.0f);
 	mesh->AddBillboard(pos, "Wizard", 0.2f);
+	mesh->CreateSphere();
 
 	// LUCES ###################################################
 	scale = toe::core::TOEvector3df(0.5f, 0.5f, 0.5f);
@@ -37,7 +38,7 @@ void CreateTree(){
 	mesh = sm->AddMesh(pos);
 	mesh->CreateSphere();
 
-	pos = toe::core::TOEvector3df(0.0f, 0, 0);
+	pos = toe::core::TOEvector3df(0, 0, 0.0f);
 	color = toe::core::TOEvector4df(0.0f, 1.0f, 0.0f, 1.0f);
 	sm->AddLight(pos, rot, color, attenuation);
 	mesh = sm->AddMesh(pos);
@@ -81,7 +82,7 @@ int main(){
 		VDriv->Update();
 		VDriv->Draw();
 		VDriv->SetCursorPosition(VDriv->GetScreenResolution().X/2,VDriv->GetScreenResolution().Y/2);
-		ps->Update(0.16f);
+		//ps->Update(0.16f);
 		myCamera->SetTranslate(toe::core::TOEvector3df(EventHandler::xdist, EventHandler::ydist, EventHandler::zdist));
 		myCamera->SetRotation(toe::core::TOEvector3df(EventHandler::xdistGiro, EventHandler::ydistGiro, EventHandler::zdistGiro));
 	}

@@ -55,6 +55,7 @@ bool VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2di
     glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
     glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE );
     glfwWindowHint( GLFW_RESIZABLE, GL_FALSE );
+	glHint(GL_POLYGON_SMOOTH_HINT, GL_FASTEST); 
 
 	//create glfwindow and make it the current window
 	GLFWmonitor* monitor = nullptr;
@@ -71,13 +72,16 @@ bool VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2di
 	glewExperimental = GL_TRUE;
 	glewInit();
 
-	glShadeModel(GL_SMOOTH);	// Habilitar el smooth de caras
-	glEnable(GL_TEXTURE_2D);	// Habilitar el test de profundidad
-	glEnable(GL_DEPTH_TEST);	// Aceptar el fragmento si está más cerca de la cámara que el fragmento anterior
+	glShadeModel(GL_SMOOTH);		//|
+	glEnable(GL_POLYGON_SMOOTH);	//| Habilitar el smooth de caras
+	glEnable(GL_TEXTURE_2D);		// Habilitar el test de profundidad
+	glEnable(GL_DEPTH_TEST);		// Aceptar el fragmento si está más cerca de la cámara que el fragmento anterior
 	glDepthFunc(GL_LESS);
-	glEnable(GL_CULL_FACE);		//|
-	glCullFace(GL_BACK);		//| Habilitar el backface culing
+	glEnable(GL_CULL_FACE);			//|
+	glCullFace(GL_BACK);			//| Habilitar el backface culing
 	glFrontFace(GL_CW);
+
+	glShadeModel(GL_SMOOTH); 
 
 	initShaders();
 	privateSceneManager->InitScene();
