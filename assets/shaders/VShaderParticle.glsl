@@ -22,7 +22,7 @@ void main(){
 	vec4 Vertex = vec4(VertexPosition * A, 1);	// Lo Rotamos en Z
 	Vertex = Vertex * ParticleExtra.x;			// Escalamos
 	Vertex = (Vertex * MRot);					// Rotamos
-	Vertex = Vertex * vec4(ParticleCenter, 1);	// Transladamos
+	Vertex = Vertex + vec4(ParticleCenter, 1);	// Transladamos
 
     gl_Position = MVP * Vertex;
 
