@@ -25,10 +25,10 @@ void CreateTree(){
 	pos = toe::core::TOEvector3df(0.0f, 0.0f, 7.0f);
 	scale = toe::core::TOEvector3df(2.0f, 2.0f, 2.0f);
 	path = "";
-	mesh = sm->AddMesh(pos, rot, scale, path);
+	//mesh = sm->AddMesh(pos, rot, scale, path);
 	//pos = toe::core::TOEvector3df(0.0f, 1.4f, 0.0f);
 	//mesh->AddBillboard(pos, "Wizard", 0.2f);
-	mesh->CreateSphere();
+	//mesh->CreateSphere();
 
 	// LUCES ###################################################
 	scale = toe::core::TOEvector3df(0.5f, 0.5f, 0.5f);
@@ -77,7 +77,13 @@ int main(){
 	TFSprite* sprite = toe::AddSprite("",toe::core::TOEvector2df(VDriv->GetScreenResolution().X - 534/3.5f, 0), toe::core::TOEvector2df(534/3.5f,624/3.5f));
 	sprite->SetTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_sprite.png");
 
+	TFMesh* mesh = sm->AddMesh(toe::core::TOEvector3df(0.0f, 0.0f, 7.0f), toe::core::TOEvector3df(0.0f, 180.0f, 0.0f), toe::core::TOEvector3df(2.0f, 2.0f, 2.0f), "");
+	mesh->CreateSphere();
+
 	while(!EventHandler::m_close){
+		toe::core::TOEvector3df rot = mesh->GetRotation();
+		rot.Y += 0.5;
+		mesh->SetRotation(rot);
 		VDriv->SetMouseVisibility(true);
 		VDriv->Update();
 		VDriv->Draw();

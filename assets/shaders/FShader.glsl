@@ -54,21 +54,13 @@ vec3  Phong (int num) {
 	// COMPONENTE ESPECULAR  
 	vec3 Specular = vec3(0);
 	//if(dot(s, n) > 0) Specular = Light[num].Specular * pow(max(dot(r, v), 0.0), Material.Shininess) * Material.Specular;
-	
-	if(dot(s, n) > 0){
-		Specular =	Light[num].Specular * 
-					pow(max(dot(r, v), 0.0), 100) *
-					1;
-	}
-
-	if(Specular.x < 0) Specular.x = 0; if(Specular.y < 0) Specular.y = 0; if(Specular.z < 0) Specular.z = 0;
+	if(dot(s, n) > 0) Specular = max(Light[num].Specular * pow(max(dot(r, v), 0.0), 100) * 0.5, 0.0);
 
 	// CALCULAMOS ATENUACION
 	float Attenuation = 1.0 / (1.0 + Light[num].Attenuation * pow(length(objToToLight), 2));
 
 	// ENVIAMOS EL RESULTADO
 	return Attenuation * (Diffuse + Specular);
-	//return 1 * (Diffuse + Specular);
 } 
 
 void main() {
