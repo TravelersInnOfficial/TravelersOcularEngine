@@ -40,6 +40,7 @@ void SceneManager::ClearElements(){
 	}
 	m_objects.clear();
 
+
 	size = m_2Delems.size();
 	for(int i = size - 1; i>=0; i--){
 		delete m_2Delems[i];
@@ -105,6 +106,18 @@ TFSprite* SceneManager::AddSprite(std::string texture, toe::core::TOEvector2df p
 	TFSprite* toRet =  new TFSprite(texture, position, size);
 	m_2Delems.push_back(toRet);
 	return toRet;
+}
+
+void SceneManager::Delete2Delement(TFDrawable* elem){
+	std::vector<TFDrawable*>::iterator it = m_2Delems.begin();
+	for(; it != m_2Delems.end(); ++it){
+
+		if(*it == elem){ 
+			m_2Delems.erase(it);
+	
+			break;
+		}
+	}
 }
 
 TFParticleSystem* SceneManager::AddParticleSystem(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale){

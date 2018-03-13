@@ -25,6 +25,8 @@ public:
 
     void SetTexture(std::string texture);
 
+    void Erase() override;
+
 private:
     TFSprite(std::string texture, toe::core::TOEvector2df position, toe::core::TOEvector2df size);
     ~TFSprite();

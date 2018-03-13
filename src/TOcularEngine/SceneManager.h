@@ -81,6 +81,13 @@ public:
      * @return TFRect* 
      */
     TFRect*     Add2DRect(toe::core::TOEvector2df position, toe::core::TOEvector2df size, float rotation);
+
+    /**
+    * @brief Deletes a 2D element from draw vector
+    * 
+    * @param elem (TFDrawable*)
+    */
+    void Delete2Delement(TFDrawable* elem);
     
     /**
      * @brief Adds a 2d sprite to the screen

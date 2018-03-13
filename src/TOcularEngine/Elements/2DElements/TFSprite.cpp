@@ -32,6 +32,11 @@ TFSprite::~TFSprite(){
     delete m_position;
 }
 
+void TFSprite::Erase(){
+    VideoDriver::GetInstance()->GetSceneManager()->Delete2Delement(this);
+    TFSprite::~TFSprite();
+}
+
 void TFSprite::Draw() const{
     Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(m_program);
 

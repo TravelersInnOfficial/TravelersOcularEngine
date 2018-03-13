@@ -17,7 +17,6 @@ TFRect::TFRect(toe::core::TOEvector2df position, toe::core::TOEvector2df size, f
     m_rotation = rotation;
 
     m_color = new TColor();
-    m_color->SetR(1);
 
     m_InData.position = position;
     m_InData.size = size;
@@ -33,6 +32,11 @@ TFRect::~TFRect(){
     delete m_size;
     delete m_position;
     delete m_color;
+}
+
+void TFRect::Erase(){
+    VideoDriver::GetInstance()->GetSceneManager()->Delete2Delement(this);
+    TFRect::~TFRect();
 }
 
 void TFRect::Draw() const{
