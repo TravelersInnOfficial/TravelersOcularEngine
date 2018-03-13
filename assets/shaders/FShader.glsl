@@ -39,20 +39,20 @@ uniform SLight SpecialLight;
 // FUNCION QUE CALCULA EL MODELO DE REFLEXION DE PHONG
 vec3  Phong (int num) {
     // CALCULAR LOS DIFERENTES VECTORES	 
-	vec3 n = normalize(Normal);
-    vec3 vecToLight = Light[num].Position - WorldPosition;
-    vec3 s = normalize(vecToLight);
-	vec3 v = normalize(-Position);
+	vec3 n = normalize(Normal); 
+    vec3 objToToLight = Light[num].Position - WorldPosition;
+    vec3 s = normalize(objToToLight);
+	vec3 v = normalize(-WorldPosition);
 	vec3 r = reflect(-s, n);
   	
     // COMPONENTE DIFUSA 
-    vec3 Diffuse = Light[num].Diffuse * max(dot(s, n), 0.0) * vec3(texture(myTextureSampler, TexCoords)) * Material.Diffuse;  
+    vec3 Diffuse = Light[num].Diffuse * max(dot(s, n), 0.0) * vec3(texture(myTextureSampler, TexCoords)) * Material.Diffuse;
     
     // COMPONENTE ESPECULAR  
     vec3 Specular = Light[num].Specular * pow(max(dot(r, v), 0.0), Material.Shininess) * Material.Specular;
     
     // CALCULAMOS ATENUACION
-    float Attenuation = 1.0 / (1.0 + Light[num].Attenuation * pow(length(vecToLight), 2));
+    float Attenuation = 1.0 / (1.0 + Light[num].Attenuation * pow(length(objToToLight), 2));
 
     // ENVIAMOS EL RESULTADO
     return Attenuation * (Diffuse + Specular);
@@ -72,5 +72,4 @@ void main() {
     result += vec4(Ambient, 1.0);
 
 	FragColor = result;
-
 }

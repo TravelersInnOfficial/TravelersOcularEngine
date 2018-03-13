@@ -93,7 +93,7 @@ void TMesh::SendShaderData(){
 	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(mvpMatrix));
 
 	// SEND THE NORMAL MATRIX
-	glm::mat3 normalMatrix = glm::transpose(glm::inverse(modelView));
+	glm::mat3 normalMatrix = glm::transpose(glm::inverse(m_stack.top()));
 	GLint normalMLocation = glGetUniformLocation(myProgram->GetProgramID(), "NormalMatrix");
 	glUniformMatrix3fv(normalMLocation, 1, GL_FALSE, glm::value_ptr(normalMatrix));
 
