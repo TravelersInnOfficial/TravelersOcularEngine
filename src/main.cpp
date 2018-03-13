@@ -10,7 +10,7 @@ void CreateTree(){
 	toe::core::TOEvector3df rot = toe::core::TOEvector3df(0, 180, 0);
 	toe::core::TOEvector3df scale = toe::core::TOEvector3df(1.0f, 1.0f, 1.0f);
 	toe::core::TOEvector4df color = toe::core::TOEvector4df(1.0f, 1.0f, 1.0f, 1.0f);
-	float attenuation = 0.1f;
+	float attenuation = 0.0001f;
 	std::string path = "";
 	TFMesh* mesh = nullptr;
 
@@ -22,12 +22,12 @@ void CreateTree(){
 	//mesh->AddBillboard(pos, "Wizard", 0.2f);
 
 	// PAREDES ###################################################
-	pos = toe::core::TOEvector3df(0.0f, 0.0f, 5.0f);
+	pos = toe::core::TOEvector3df(0.0f, 0.0f, 7.0f);
 	scale = toe::core::TOEvector3df(2.0f, 2.0f, 2.0f);
 	path = "";
 	mesh = sm->AddMesh(pos, rot, scale, path);
-	pos = toe::core::TOEvector3df(0.0f, 1.4f, 0.0f);
-	mesh->AddBillboard(pos, "Wizard", 0.2f);
+	//pos = toe::core::TOEvector3df(0.0f, 1.4f, 0.0f);
+	//mesh->AddBillboard(pos, "Wizard", 0.2f);
 	mesh->CreateSphere();
 
 	// LUCES ###################################################
@@ -35,19 +35,19 @@ void CreateTree(){
 	pos = toe::core::TOEvector3df(-3.0f, 0, 0);
 	color = toe::core::TOEvector4df(1.0f, 0.0f, 0.0f, 1.0f);
 	sm->AddLight(pos, rot, color, attenuation);
-	mesh = sm->AddMesh(pos);
+	mesh = sm->AddMesh(pos, rot, scale);
 	mesh->CreateSphere();
 
 	pos = toe::core::TOEvector3df(0, 0, 0.0f);
 	color = toe::core::TOEvector4df(0.0f, 1.0f, 0.0f, 1.0f);
 	sm->AddLight(pos, rot, color, attenuation);
-	mesh = sm->AddMesh(pos);
+	mesh = sm->AddMesh(pos, rot, scale);
 	mesh->CreateSphere();
 
 	pos = toe::core::TOEvector3df(3.0f, 0, 0);
 	color = toe::core::TOEvector4df(0.0f, 0.0f, 1.0f, 1.0f);
 	sm->AddLight(pos, rot, color, attenuation);
-	mesh = sm->AddMesh(pos);
+	mesh = sm->AddMesh(pos, rot, scale);
 	mesh->CreateSphere();
 
 	// OTROS ###################################################

@@ -141,7 +141,7 @@ bool TObjectLoader::LoadObjFromFileAssimp(TResourceMesh* mesh, std::vector<glm::
 
 	const struct aiScene* scene = nullptr;
 	Assimp::Importer importer;
-	scene = importer.ReadFile(path.c_str(), aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType);
+	scene = importer.ReadFile(path.c_str(),  aiProcessPreset_TargetRealtime_Fast);
 	
 	if(!scene){													// |
 		std::cout<<"Could not open file " + path<<std::endl;	// |

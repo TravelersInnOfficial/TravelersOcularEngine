@@ -46,21 +46,29 @@ vec3  Phong (int num) {
 	vec3 objToToLight = Light[num].Position - WorldPosition;
 	vec3 s = normalize(objToToLight);
 	vec3 v = normalize(cameraPos - WorldPosition);
-	vec3 r = reflect(-normalize(Light[num].Position - WorldPosition), n);
+	vec3 r = reflect(s, n);
   	
 	// COMPONENTE DIFUSA 
 	vec3 Diffuse = Light[num].Diffuse * max(dot(s, n), 0.0) * vec3(texture(myTextureSampler, TexCoords)) * Material.Diffuse;
-	
+
 	// COMPONENTE ESPECULAR  
 	vec3 Specular = vec3(0);
-	if(dot(s, n) > 0) Specular = Light[num].Specular * pow(max(dot(r, v), 0.0), Material.Shininess) * Material.Specular;
+	//if(dot(s, n) > 0) Specular = Light[num].Specular * pow(max(dot(r, v), 0.0), Material.Shininess) * Material.Specular;
+	
+	if(dot(s, n) > 0){
+		Specular =	Light[num].Specular * 
+					pow(max(dot(r, v), 0.0), 100) *
+					1;
+	}
+
+	if(Specular.x < 0) Specular.x = 0; if(Specular.y < 0) Specular.y = 0; if(Specular.z < 0) Specular.z = 0;
 
 	// CALCULAMOS ATENUACION
 	float Attenuation = 1.0 / (1.0 + Light[num].Attenuation * pow(length(objToToLight), 2));
 
 	// ENVIAMOS EL RESULTADO
-	//return Attenuation * (Diffuse + Specular);
 	return Attenuation * (Diffuse + Specular);
+	//return 1 * (Diffuse + Specular);
 } 
 
 void main() {

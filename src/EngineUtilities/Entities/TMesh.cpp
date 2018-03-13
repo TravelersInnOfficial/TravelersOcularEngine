@@ -37,7 +37,7 @@ void TMesh::BeginDraw(){
 		glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
 
 		// Draw bounding box
-		DrawBoundingBox();
+		// DrawBoundingBox();
 	}
 }
 
@@ -96,8 +96,9 @@ void TMesh::SendShaderData(){
 	GLint mvpLocation = glGetUniformLocation(myProgram->GetProgramID(), "MVP");
 	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(mvpMatrix));
 
-	// SEND THE NORMAL MATRIX
-	glm::mat3 normalMatrix = glm::transpose(glm::inverse(m_stack.top()));
+	// SEND THE NORMAL MATRIX (ROTAMOS LAS NORMALES)
+	glm::mat3 normalMatrix = m_stack.top();
+	normalMatrix = glm::transpose(glm::inverse(normalMatrix));
 	GLint normalMLocation = glGetUniformLocation(myProgram->GetProgramID(), "NormalMatrix");
 	glUniformMatrix3fv(normalMLocation, 1, GL_FALSE, glm::value_ptr(normalMatrix));
 
