@@ -113,10 +113,13 @@ int main(){
 	ps1->SetManager(new ColoredParticle(false, true, false));
 	ps2->SetManager(new ColoredParticle(false, false, true));
 	
-	
-	// TIO-TOE LOGO
-	TFSprite* sprite = toe::AddSprite("",toe::core::TOEvector2df(VDriv->GetScreenResolution().X - 534/3.5f, 0), toe::core::TOEvector2df(534/3.5f,624/3.5f));
-	sprite->SetTexture("./../assets/textures/default_sprite.png");
+	// TOE MANUAL
+	TFSprite* manual = toe::AddSprite("",toe::core::TOEvector2df(0, 0), toe::core::TOEvector2df(220,95));
+	manual->SetTexture("./../assets/textures/toe_manual.png");
+
+	// TIO LOGO
+	TFSprite* logo = toe::AddSprite("",toe::core::TOEvector2df(VDriv->GetScreenResolution().X - 534/3.5f, 0), toe::core::TOEvector2df(534/3.5f,624/3.5f));
+	logo->SetTexture("./../assets/textures/default_sprite.png");
 
 	// SUZANNE
 	TFMesh* mesh = sm->AddMesh(toe::core::TOEvector3df(0.0f, 6.0f, 5.0f), toe::core::TOEvector3df(0.0f, 0.0f, 0.0f), toe::core::TOEvector3df(2.0f, 2.0f, 2.0f), "./../assets/models/suzanne.obj");
