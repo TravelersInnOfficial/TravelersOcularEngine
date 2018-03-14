@@ -58,16 +58,17 @@ void CreateTree(TFMesh*& m1, TFMesh*& m2, TFMesh*& m3){
 
 	// LUCES ###################################################
 	scale = toe::core::TOEvector3df(0.5f, 0.5f, 0.5f);
-	
+	rot = toe::core::TOEvector3df(0, 0, 0);
+
 	// R
 	pos = toe::core::TOEvector3df(0.0f, 0.0f, 0.0f);
 	color = toe::core::TOEvector4df(1.0f, 0.0f, 0.0f, 1.0f);
 	l = sm->AddLight(pos, rot, color, attenuation);
 
 	m1 = sm->AddMesh();
-	mesh->CreateSphere();
+	m1->CreateSphere();
 	pos = toe::core::TOEvector3df(0.0f, 1.0f, 0.0f);
-	mesh->AddBillboard(pos, "RED LIGHT SOURCE", 0.35f);
+	m1->AddBillboard(pos, "RED LIGHT SOURCE", 0.35f);
 	m1->AddChild(l);
 
 	// G
@@ -76,9 +77,9 @@ void CreateTree(TFMesh*& m1, TFMesh*& m2, TFMesh*& m3){
 	l = sm->AddLight(pos, rot, color, attenuation);
 	
 	m2 = sm->AddMesh();
-	mesh->CreateSphere();
+	m2->CreateSphere();
 	pos = toe::core::TOEvector3df(0.0f, 1.0f, 0.0f);
-	mesh->AddBillboard(pos, "GREEN LIGHT SOURCE", 0.35f);
+	m2->AddBillboard(pos, "GREEN LIGHT SOURCE", 0.35f);
 	m2->AddChild(l);
 	
 	// B
@@ -87,9 +88,9 @@ void CreateTree(TFMesh*& m1, TFMesh*& m2, TFMesh*& m3){
 	l = sm->AddLight(pos, rot, color, attenuation);
 	
 	m3 = sm->AddMesh();
-	mesh->CreateSphere();
+	m3->CreateSphere();
 	pos = toe::core::TOEvector3df(0.0f, 1.0f, 0.0f);
-	mesh->AddBillboard(pos, "BLUE LIGHT SOURCE", 0.35f);
+	m3->AddBillboard(pos, "BLUE LIGHT SOURCE", 0.35f);
 	m3->AddChild(l);
 	
 	// DOME ###################################################
@@ -108,7 +109,7 @@ int main(){
 	VDriv->SetMouseVisibility(false);
 
 	TFMesh* lr = nullptr;
-	TFMesh* lg = nullptr; 
+	TFMesh* lg = nullptr;
 	TFMesh* lb = nullptr;
 
 	CreateTree(lr, lg, lb);
