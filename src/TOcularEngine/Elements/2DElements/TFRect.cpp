@@ -44,20 +44,23 @@ void TFRect::Draw() const{
 
     Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(m_program);
 
+    glEnable (GL_BLEND); 
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
     //https://open.gl/media/img/c2_dc.png Screen coordinates
     float vertices[] =
     {
         //first triangle
         //POSITION                          COLOR
-        m_position->X, m_position->Y, 0.0f,   m_color->GetR(), m_color->GetG(), m_color->GetB(),
-        m_size->X, m_position->Y, 0.0f,       m_color->GetR(), m_color->GetG(), m_color->GetB(),
-        m_position->X, m_size->Y, 0.0f,       m_color->GetR(), m_color->GetG(), m_color->GetB(),
+        m_position->X, m_position->Y,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
+        m_size->X, m_position->Y,       m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
+        m_position->X, m_size->Y,       m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
 
         //second triangle
         //POSITION                          COLOR
-        m_size->X, m_position->Y, 0.0f,       m_color->GetR(), m_color->GetG(), m_color->GetB(),
-        m_size->X, m_size->Y, 0.0f,           m_color->GetR(), m_color->GetG(), m_color->GetB(),
-        m_position->X, m_size->Y, 0.0f,       m_color->GetR(), m_color->GetG(), m_color->GetB()
+        m_size->X, m_position->Y,       m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
+        m_size->X, m_size->Y,           m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
+        m_position->X, m_size->Y,       m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA()
     };
 
     // Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
@@ -67,12 +70,12 @@ void TFRect::Draw() const{
     glBufferData( GL_ARRAY_BUFFER, sizeof( vertices ), vertices, GL_STATIC_DRAW );
     
     GLint posAttrib = glGetAttribLocation(myProgram->GetProgramID(), "position");
-    glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 6 * sizeof( float ), ( GLvoid * ) 0 );
+    glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 6 * sizeof( float ), ( GLvoid * ) 0 );
     glEnableVertexAttribArray(posAttrib);
 
     GLint colAttrib = glGetAttribLocation(myProgram->GetProgramID(), "color");
     glEnableVertexAttribArray(colAttrib);
-    glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3*sizeof(float)));
+    glVertexAttribPointer(colAttrib, 4, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(2*sizeof(float)));
 
     glBindBuffer( GL_ARRAY_BUFFER, 0 ); // Note that this is allowed, the call to glVertexAttribPointer registered m_VBO as the currently bound vertex buffer object so afterwards we can safely unbind
     

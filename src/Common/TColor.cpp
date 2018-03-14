@@ -44,6 +44,9 @@ void TColor::SetA(float newVal){
 	m_rgba.w = newVal;
 }
 
+void TColor::SetRGBA(float r, float g, float b, float a){
+	m_rgba = glm::vec4(r, g, b, a);
+}
 glm::vec4 TColor::GetRGBA(){
 	return(m_rgba);
 }
