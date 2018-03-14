@@ -26,6 +26,9 @@ TFSprite::TFSprite( std::string texture, toe::core::TOEvector2df position, toe::
 
     m_VBO = 0;
     glGenBuffers(1, &m_VBO);
+
+    m_color = new TColor();
+    m_color->SetRGBA(1,1,1,1);
 }
 
 TFSprite::~TFSprite(){
@@ -41,15 +44,18 @@ void TFSprite::Erase(){
 void TFSprite::Draw() const{
     Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(m_program);
 
+    glEnable (GL_BLEND); 
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     float vertices[] = {
-        //  X     Y     Z                        U     V
-         m_position->X, m_position->Y, 0.0f,    -1.0f,  0.0f,//-1.0f, -1.0f,
-         m_size->X, m_position->Y, 0.0f,         0.0f,  0.0f,
-         m_position->X, m_size->Y, 0.0f,        -1.0f, -1.0f,//-1.0f, 0.0f,
+        //  X     Y     Z                        U     V        COLOR(RGBA)
+         m_position->X, m_position->Y,          -1.0f,  0.0f,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
+         m_size->X, m_position->Y,               0.0f,  0.0f,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
+         m_position->X, m_size->Y,              -1.0f, -1.0f,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
          
-         m_size->X, m_position->Y, 0.0f,         0.0f,  0.0f,//0.0f, -1.0f,
-         m_size->X, m_size->Y, 0.0f,             0.0f, -1.0f, //0.0f, 0.0f,
-         m_position->X, m_size->Y, 0.0f,        -1.0f, -1.0f
+         m_size->X, m_position->Y,               0.0f,  0.0f,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
+         m_size->X, m_size->Y,                   0.0f, -1.0f,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
+         m_position->X, m_size->Y,              -1.0f, -1.0f,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA()
     };
 
     glBindVertexArray( m_VAO );
@@ -60,21 +66,26 @@ void TFSprite::Draw() const{
     //posicion
     GLint posAttrib = glGetAttribLocation(myProgram->GetProgramID(), "VertexPosition");
     glEnableVertexAttribArray(posAttrib);
-    glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 5*sizeof(float),  0);
+    glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 8*sizeof(float),  0);
 
     //textura
     GLuint uvAttrib = glGetAttribLocation(myProgram->GetProgramID(), "TextureCoords");
     glEnableVertexAttribArray(uvAttrib);
-    glVertexAttribPointer(uvAttrib, 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), (const GLvoid*)(3 * sizeof(float)));
+    glVertexAttribPointer(uvAttrib, 2, GL_FLOAT, GL_FALSE, 8*sizeof(float), (const GLvoid*)(2 * sizeof(float)));
 
     // Enviamos la textura del sprite
 	GLuint TextureID = glGetUniformLocation(myProgram->GetProgramID(), "myTextureSampler");
 	glUniform1i(TextureID, 0);
-
+    
     glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_texture->GetTextureId());
 
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    //color
+    GLuint colAttrib = glGetAttribLocation(myProgram->GetProgramID(), "overColor");
+    glEnableVertexAttribArray(colAttrib);
+    glVertexAttribPointer(colAttrib, 4, GL_FLOAT, GL_FALSE, 8*sizeof(float), (const GLvoid*)(4 * sizeof(float)));
+
+    glDrawArrays(GL_TRIANGLES, 0, 8);
 }
 
 void TFSprite::p_recalculate_size(){

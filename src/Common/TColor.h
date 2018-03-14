@@ -15,6 +15,7 @@ public:
 	void SetG(float newVal);
 	void SetB(float newVal);
 	void SetA(float newVal);
+	void SetRGBA(float, float, float, float);
 
 	glm::vec4 GetRGBA();
 	glm::vec3 GetRGB();
