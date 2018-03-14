@@ -50,14 +50,14 @@ bool EventHandler::OnEvent(const TEvent& event){
 void EventHandler::Update(){
 
 	if (Key_A_Pressed || Key_D_Pressed || Key_S_Pressed || Key_W_Pressed){
-		float max = 0.5f;
+		float max = 0.25f;
 		float giroY = ydistGiro;
 		float giroX = xdistGiro;
 		
-		if (Key_S_Pressed) max = -0.5f;
-		if (Key_W_Pressed) max = 0.5f;
-		if (Key_D_Pressed){ giroY += 90.0f; giroX = 0.0f; max = 0.5f;}
-		if (Key_A_Pressed){ giroY -= 90.0f; giroX = 0.0f; max = 0.5f;}
+		if (Key_S_Pressed) max = -0.25f;
+		if (Key_W_Pressed) max = 0.25f;
+		if (Key_D_Pressed){ giroY += 90.0f; giroX = 0.0f; max = 0.25f;}
+		if (Key_A_Pressed){ giroY -= 90.0f; giroX = 0.0f; max = 0.25f;}
 
 		xdist += sin(glm::radians(giroY))*cos(glm::radians(giroX))*max;
 		ydist -= sin(glm::radians(giroX))*max;

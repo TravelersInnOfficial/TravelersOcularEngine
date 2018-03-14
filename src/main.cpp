@@ -37,6 +37,22 @@ void CreateTree(){
 	scale = toe::core::TOEvector3df(50.0f, 20.0f, 0.25f);
 	mesh = sm->AddMesh(pos, rot, scale, "");
 
+	// TEAPOTS ###################################################
+	pos = toe::core::TOEvector3df(-7.0f, -1.8f, 10.0f);
+	scale = toe::core::TOEvector3df(0.7f, 0.7f, 0.7f);
+	mesh = sm->AddMesh(pos, rot, scale, "./../assets/models/teapot.obj");
+	mesh->SetTexture("./../assets/textures/checkerboard_texture.jpg");
+
+	pos = toe::core::TOEvector3df(0.0f, -1.8f, 10.0f);
+	scale = toe::core::TOEvector3df(0.55f, 0.55f, 0.55f);
+	mesh = sm->AddMesh(pos, rot, scale, "./../assets/models/teapot.obj");
+	mesh->SetTexture("./../assets/textures/teapot_texture1.jpg");
+
+	pos = toe::core::TOEvector3df(7.0f, -1.8f, 10.0f);
+	scale = toe::core::TOEvector3df(0.4f, 0.4f, 0.4f);
+	mesh = sm->AddMesh(pos, rot, scale, "./../assets/models/teapot.obj");
+	mesh->SetTexture("./../assets/textures/teapot_texture2.jpg");
+
 	// LUCES ###################################################
 	scale = toe::core::TOEvector3df(0.5f, 0.5f, 0.5f);
 	
@@ -100,7 +116,7 @@ int main(){
 	
 	// TIO-TOE LOGO
 	TFSprite* sprite = toe::AddSprite("",toe::core::TOEvector2df(VDriv->GetScreenResolution().X - 534/3.5f, 0), toe::core::TOEvector2df(534/3.5f,624/3.5f));
-	sprite->SetTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_sprite.png");
+	sprite->SetTexture("./../assets/textures/default_sprite.png");
 
 	// SUZANNE
 	TFMesh* mesh = sm->AddMesh(toe::core::TOEvector3df(0.0f, 6.0f, 5.0f), toe::core::TOEvector3df(0.0f, 0.0f, 0.0f), toe::core::TOEvector3df(2.0f, 2.0f, 2.0f), "./../assets/models/suzanne.obj");
