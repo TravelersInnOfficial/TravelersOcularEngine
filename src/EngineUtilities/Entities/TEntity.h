@@ -11,6 +11,7 @@ public:
 	virtual ~TEntity();
 	virtual void EndDraw() = 0;
 	virtual void BeginDraw() = 0;
+	virtual bool CheckClipping();
 	void SetProgram(SHADERTYPE program);
 
 	static void SetViewMatrixPtr(glm::mat4 view);
