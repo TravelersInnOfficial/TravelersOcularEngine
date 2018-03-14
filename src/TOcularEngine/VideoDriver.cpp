@@ -13,12 +13,16 @@ SceneManager* VideoDriver::privateSceneManager = nullptr;
 IODriver* VideoDriver::privateIODriver = nullptr;
 
 VideoDriver::VideoDriver(){
+	// Init variables
 	m_name = "";
 	m_lastShaderUsed = NONE_SHADER;
 	m_window = nullptr;
+	m_clearSceenColor = toe::core::TOEvector4df(0,0,0,0);
+	m_usingBB = false;
+
+	// Init engine stuff
 	privateSceneManager = new SceneManager();
 	privateIODriver = nullptr;
-	m_clearSceenColor = toe::core::TOEvector4df(0,0,0,0);
 	
 	// Iinitialize GLFW
 	glfwSetErrorCallback(VideoDriver::glwf_error_callback);
@@ -29,23 +33,7 @@ VideoDriver::~VideoDriver(){
 	Drop();
 }
 
-void VideoDriver::Drop(){
-	std::map<SHADERTYPE, Program*>::iterator it = m_programs.begin();
-	for(;it!=m_programs.end();++it) delete it->second;
-	m_programs.clear();
-
-	if(privateIODriver != nullptr) delete privateIODriver;
-	if(privateSceneManager != nullptr) delete privateSceneManager;
-
-	glfwDestroyWindow(m_window);
-	glfwTerminate();
-	//delete m_window; // Ya la elimina GLFW con el DestroyWindow
-}
-
-void VideoDriver::glwf_error_callback(int error, const char* description){
-    fprintf(stderr, "Error %d: %s\n", error, description);
-}
-
+// Main functions
 bool VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2di dimensions, bool fullscreen){
 	m_name = window_name;
 
@@ -88,33 +76,6 @@ bool VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2di
 	return true;
 }
 
-void VideoDriver::SetReceiver(){
-	glfwSetKeyCallback(m_window, VideoDriver::keyboard_callback);
-	glfwSetCursorPosCallback(m_window, VideoDriver::mouse_position_callback);
-	glfwSetMouseButtonCallback(m_window, VideoDriver::mouse_button_callback);
-	glfwSetScrollCallback(m_window, VideoDriver::mouse_scroll_callback);
-	glfwSetWindowCloseCallback(m_window, VideoDriver::window_close_callback);
-}
-
-void VideoDriver::keyboard_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
-    if(privateIODriver!=nullptr) privateIODriver->UpdateKeyboard(key,action);
-}
-
-void VideoDriver::mouse_position_callback(GLFWwindow* window, double xpos, double ypos){
-	if(privateIODriver!=nullptr) privateIODriver->UpdateMousePosition(xpos,ypos);
-}
-void VideoDriver::window_close_callback(GLFWwindow* window){
-	if(privateIODriver!=nullptr) privateIODriver->UpdateShouldClose();
-}
-
-void VideoDriver::mouse_button_callback(GLFWwindow* window, int button, int action, int mods){
-	if(privateIODriver!=nullptr) privateIODriver->UpdateMouseButtons(button,action);
-}
-
-void VideoDriver::mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset){
-	if(privateIODriver!=nullptr) privateIODriver->UpdateMouseWheel(xoffset, yoffset);
-}
-
 bool VideoDriver::Update(){
 	//UPDATE IO
 	glfwPollEvents();
@@ -137,12 +98,46 @@ void VideoDriver::Draw(){
 	glfwSwapBuffers(m_window);
 }
 
-
 void VideoDriver::ClearScreen(){
 	glClearColor(m_clearSceenColor.X, m_clearSceenColor.Y, m_clearSceenColor.X2, m_clearSceenColor.Y2);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+void VideoDriver::Drop(){
+	std::map<SHADERTYPE, Program*>::iterator it = m_programs.begin();
+	for(;it!=m_programs.end();++it) delete it->second;
+	m_programs.clear();
+
+	if(privateIODriver != nullptr) delete privateIODriver;
+	if(privateSceneManager != nullptr) delete privateSceneManager;
+
+	glfwDestroyWindow(m_window);
+	glfwTerminate();
+	//delete m_window; // Ya la elimina GLFW con el DestroyWindow
+}
+
+void VideoDriver::CloseWindow(){
+	if(m_window != nullptr) glfwSetWindowShouldClose(m_window, GLFW_TRUE);
+}
+
+void VideoDriver::SetReceiver(){
+	glfwSetKeyCallback(m_window, VideoDriver::keyboard_callback);
+	glfwSetCursorPosCallback(m_window, VideoDriver::mouse_position_callback);
+	glfwSetMouseButtonCallback(m_window, VideoDriver::mouse_button_callback);
+	glfwSetScrollCallback(m_window, VideoDriver::mouse_scroll_callback);
+	glfwSetWindowCloseCallback(m_window, VideoDriver::window_close_callback);
+}
+
+void VideoDriver::SetAssetsPath(std::string newPath){
+	 m_assetsPath = newPath;
+}
+
+void VideoDriver::ToggleBoundingBox(){
+	m_usingBB = !m_usingBB;
+	// Iterate all meshes
+}
+
+// Getters
 VideoDriver* VideoDriver::GetInstance(){
 	static VideoDriver instance;
 	return &instance;
@@ -177,6 +172,26 @@ std::map<SHADERTYPE,Program*> VideoDriver::GetProgramVector(){
 	return m_programs;
 }
 
+toe::core::TOEvector2di VideoDriver::GetCursorPosition(){
+	double x, y;
+	glfwGetCursorPos(m_window, &x, &y);
+	return toe::core::TOEvector2di((int)x, (int)y);
+}
+
+GLFWwindow* VideoDriver::GetWindow(){
+	return m_window;
+}
+
+std::string VideoDriver::GetAssetsPath(){
+	return m_assetsPath;
+}
+
+toe::core::TOEvector2di VideoDriver::GetScreenResolution(){
+    const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+    return toe::core::TOEvector2di(mode->width, mode->height);
+}
+
+// Setters
 void VideoDriver::SetClearScreenColor(toe::core::TOEvector4df color){
 	m_clearSceenColor = color;
 }
@@ -200,6 +215,33 @@ void VideoDriver::SetIODriver(IODriver* driver){
 	privateIODriver = driver;
 }
 
+void VideoDriver::SetMouseVisibility(bool visible){
+	//if(visible == 0) glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	//else glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	if(visible == 0){
+		int w = 1;
+		int h = 1;
+		unsigned char pixels[w * h * 4];
+		memset(pixels, 0x00, sizeof(pixels));
+		GLFWimage image;
+		image.width = w;
+		image.height = h;
+		image.pixels = pixels;
+		GLFWcursor* newCursor = glfwCreateCursor(&image, 0, 0);
+		glfwSetCursor(m_window, newCursor);
+	}
+
+	else{
+		GLFWcursor* newCursor = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+		glfwSetCursor(m_window, newCursor);
+	}
+}
+
+void VideoDriver::SetCursorPosition(int x, int y){
+	glfwSetCursorPos (m_window, (double) x, (double) y);
+}
+
+// Private Functions
 void VideoDriver::initShaders(){
 	// CARGAMOS EL PROGRAMA STANDAR
 		// LOAD IN RESOURCE MANAGER
@@ -321,55 +363,25 @@ void VideoDriver::end2DDrawState(){
 	glPopMatrix();					//recuperamos el estado anterior de la pila y se lo asignamos
 }
 
-void VideoDriver::SetMouseVisibility(bool visible){
-	//if(visible == 0) glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-	//else glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-	if(visible == 0){
-		int w = 1;
-		int h = 1;
-		unsigned char pixels[w * h * 4];
-		memset(pixels, 0x00, sizeof(pixels));
-		GLFWimage image;
-		image.width = w;
-		image.height = h;
-		image.pixels = pixels;
-		GLFWcursor* newCursor = glfwCreateCursor(&image, 0, 0);
-		glfwSetCursor(m_window, newCursor);
-	}
-
-	else{
-		GLFWcursor* newCursor = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
-		glfwSetCursor(m_window, newCursor);
-	}
+void VideoDriver::keyboard_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
+    if(privateIODriver!=nullptr) privateIODriver->UpdateKeyboard(key,action);
 }
 
-void VideoDriver::SetCursorPosition(int x, int y){
-	glfwSetCursorPos (m_window, (double) x, (double) y);
+void VideoDriver::mouse_position_callback(GLFWwindow* window, double xpos, double ypos){
+	if(privateIODriver!=nullptr) privateIODriver->UpdateMousePosition(xpos,ypos);
+}
+void VideoDriver::window_close_callback(GLFWwindow* window){
+	if(privateIODriver!=nullptr) privateIODriver->UpdateShouldClose();
 }
 
-toe::core::TOEvector2di VideoDriver::GetCursorPosition(){
-	double x, y;
-	glfwGetCursorPos(m_window, &x, &y);
-	return toe::core::TOEvector2di((int)x, (int)y);
+void VideoDriver::mouse_button_callback(GLFWwindow* window, int button, int action, int mods){
+	if(privateIODriver!=nullptr) privateIODriver->UpdateMouseButtons(button,action);
 }
 
-GLFWwindow* VideoDriver::GetWindow(){
-	return m_window;
+void VideoDriver::mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset){
+	if(privateIODriver!=nullptr) privateIODriver->UpdateMouseWheel(xoffset, yoffset);
 }
 
-void VideoDriver::SetAssetsPath(std::string newPath){
-	 m_assetsPath = newPath;
-}
-
-std::string VideoDriver::GetAssetsPath(){
-	return m_assetsPath;
-}
-
-void VideoDriver::CloseWindow(){
-	if(m_window != nullptr) glfwSetWindowShouldClose(m_window, GLFW_TRUE);
-}
-
-toe::core::TOEvector2di VideoDriver::GetScreenResolution(){
-    const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-    return toe::core::TOEvector2di(mode->width, mode->height);
+void VideoDriver::glwf_error_callback(int error, const char* description){
+    fprintf(stderr, "Error %d: %s\n", error, description);
 }
