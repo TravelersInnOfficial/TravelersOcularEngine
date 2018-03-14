@@ -4,7 +4,7 @@
 #include <glm/vec3.hpp>
 #include "./TEntity.h"
 #include "./../Resources/TResourceTexture.h"
-#include "./../../Common/ParticleManager.h"
+#include "./../TOcularEngine/Elements/Particles/ParticleManager.h"
 
 class TParticleSystem: public TEntity{
 public:

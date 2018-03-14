@@ -85,24 +85,26 @@ int main(){
 	TFCamera* myCamera = sceneManager->AddCamera();
 
 	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
-	
 	handler->screenCenterX = VDriv->GetScreenResolution().X/2;
 	handler->screenCenterY = VDriv->GetScreenResolution().Y/2;
 
 	// PARTICLES
-	TFParticleSystem* ps = sm->AddParticleSystem(toe::core::TOEvector3df(-10,0,0), toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df(1,1,1));
-	TFParticleSystem* ps1 = sm->AddParticleSystem(toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df(1,1,1));
-	TFParticleSystem* ps2 = sm->AddParticleSystem(toe::core::TOEvector3df(10,0,0), toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df(1,1,1));
+	TFParticleSystem* ps = sm->AddParticleSystem(toe::core::TOEvector3df(-17,0,20), toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df(1,1,1));
+	TFParticleSystem* ps1 = sm->AddParticleSystem(toe::core::TOEvector3df(0,0,20), toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df(1,1,1));
+	TFParticleSystem* ps2 = sm->AddParticleSystem(toe::core::TOEvector3df(17,0,20), toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df(1,1,1));
 	
 	// TIO-TOE LOGO
 	TFSprite* sprite = toe::AddSprite("",toe::core::TOEvector2df(VDriv->GetScreenResolution().X - 534/3.5f, 0), toe::core::TOEvector2df(534/3.5f,624/3.5f));
 	sprite->SetTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_sprite.png");
 
 	// SUZANNE
-	TFMesh* mesh = sm->AddMesh(toe::core::TOEvector3df(0.0f, 6.0f, 5.0f), toe::core::TOEvector3df(0.0f, 180.0f, 0.0f), toe::core::TOEvector3df(2.0f, 2.0f, 2.0f), "./../assets/models/suzanne.obj");
+	TFMesh* mesh = sm->AddMesh(toe::core::TOEvector3df(0.0f, 6.0f, 5.0f), toe::core::TOEvector3df(0.0f, 0.0f, 0.0f), toe::core::TOEvector3df(2.0f, 2.0f, 2.0f), "./../assets/models/suzanne.obj");
 	mesh->AddBillboard(toe::core::TOEvector3df(0.0f, 3.0f, 0.0f), "SUZANNE", 0.5f);
 
 	while(!EventHandler::m_close){
+		// EVENT HANDLER UPDATE
+		handler->Update();
+
 		// ROTATE MESH
 		toe::core::TOEvector3df rot = mesh->GetRotation();
 		rot.Y += 0.5;
@@ -118,7 +120,6 @@ int main(){
 		myCamera->SetTranslate(toe::core::TOEvector3df(EventHandler::xdist, EventHandler::ydist, EventHandler::zdist));
 		
 		// UPDATE VDRIVE & PAINT
-		VDriv->SetMouseVisibility(true);
 		VDriv->Update();
 		VDriv->Draw();
 		VDriv->SetCursorPosition(VDriv->GetScreenResolution().X/2,VDriv->GetScreenResolution().Y/2);

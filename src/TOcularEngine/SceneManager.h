@@ -1,7 +1,7 @@
 #ifndef SCENEMANAGER_H
 #define SCENEMANAGER_H
 
-#include "./Elements/TFParticleSystem.h"
+#include "./Elements/Particles/TFParticleSystem.h"
 #include "./Elements/TFCamera.h"
 #include "./Elements/TFLight.h"
 #include "./Elements/TFMesh.h"

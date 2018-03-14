@@ -1,8 +1,8 @@
 #ifndef TFPARTICLESYSTEM_H
 #define TFPARTICLESYSTEM_H
 
-#include "TFNode.h"
-#include "./../../Common/ParticleManager.h"
+#include "./../TFNode.h"
+#include "ParticleManager.h"
 
 class TFParticleSystem: public TFNode{
 	friend class SceneManager;

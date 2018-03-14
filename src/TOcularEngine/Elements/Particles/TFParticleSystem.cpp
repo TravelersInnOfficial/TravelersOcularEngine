@@ -1,8 +1,8 @@
 #include "./TFParticleSystem.h"
-#include "./../../EngineUtilities/Entities/TTransform.h"
-#include "./../../EngineUtilities/Entities/TParticleSystem.h"
-#include "./../../EngineUtilities/TNode.h"
-#include "./../VideoDriver.h"
+#include "./../../../EngineUtilities/Entities/TTransform.h"
+#include "./../../../EngineUtilities/Entities/TParticleSystem.h"
+#include "./../../../EngineUtilities/TNode.h"
+#include "./../../VideoDriver.h"
 
 TFParticleSystem::TFParticleSystem(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale) : TFNode(){	
 	TTransform*  t = (TTransform*) m_scaleNode->GetEntity();
