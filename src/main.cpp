@@ -14,43 +14,59 @@ void CreateTree(){
 	std::string path = "";
 	TFMesh* mesh = nullptr;
 
-	// MAGO ###################################################
-	//pos = toe::core::TOEvector3df(2.00f, 0.0f, 0.0f);
-	//path = "./../assets/models/Wizard.obj";
-	//mesh = sm->AddMesh(pos, rot, scale, path);
-	//pos = toe::core::TOEvector3df(0.0f, 1.4f, 0.0f);
-	//mesh->AddBillboard(pos, "Wizard", 0.2f);
-
 	// PAREDES ###################################################
-	pos = toe::core::TOEvector3df(0.0f, 0.0f, 7.0f);
-	scale = toe::core::TOEvector3df(2.0f, 2.0f, 2.0f);
-	path = "";
-	//mesh = sm->AddMesh(pos, rot, scale, path);
-	//pos = toe::core::TOEvector3df(0.0f, 1.4f, 0.0f);
-	//mesh->AddBillboard(pos, "Wizard", 0.2f);
-	//mesh->CreateSphere();
+
+	// FLOOR
+	pos = toe::core::TOEvector3df(0.0f, -2.0f, 0.0f);
+	scale = toe::core::TOEvector3df(50.0f, 0.25f, 50.0f);
+	mesh = sm->AddMesh(pos, rot, scale, "");
+
+	// IZDA
+	pos = toe::core::TOEvector3df(-25.0f, 8.0f, 0.0f);
+	scale = toe::core::TOEvector3df(0.25f, 20.0f, 50.0f);
+	mesh = sm->AddMesh(pos, rot, scale, "");
+
+	// DCHA
+	pos = toe::core::TOEvector3df(25.0f, 8.0f, 0.0f);
+	scale = toe::core::TOEvector3df(0.25f, 20.0f, 50.0f);
+	mesh = sm->AddMesh(pos, rot, scale, "");
+
+	// BACK
+	pos = toe::core::TOEvector3df(0.0f, 8.0f, 25.0f);
+	scale = toe::core::TOEvector3df(50.0f, 20.0f, 0.25f);
+	mesh = sm->AddMesh(pos, rot, scale, "");
 
 	// LUCES ###################################################
 	scale = toe::core::TOEvector3df(0.5f, 0.5f, 0.5f);
-	pos = toe::core::TOEvector3df(-3.0f, 0, 0);
+	
+	// R
+	pos = toe::core::TOEvector3df(-6.0f, 6.0f, 0.0f);
 	color = toe::core::TOEvector4df(1.0f, 0.0f, 0.0f, 1.0f);
 	sm->AddLight(pos, rot, color, attenuation);
 	mesh = sm->AddMesh(pos, rot, scale);
 	mesh->CreateSphere();
+	pos = toe::core::TOEvector3df(0.0f, 1.0f, 0.0f);
+	mesh->AddBillboard(pos, "RED LIGHT SOURCE", 0.35f);
 
-	pos = toe::core::TOEvector3df(0, 0, 0.0f);
+	// G
+	pos = toe::core::TOEvector3df(0.0f, 6.0f, 12.0f);
 	color = toe::core::TOEvector4df(0.0f, 1.0f, 0.0f, 1.0f);
 	sm->AddLight(pos, rot, color, attenuation);
 	mesh = sm->AddMesh(pos, rot, scale);
 	mesh->CreateSphere();
+	pos = toe::core::TOEvector3df(0.0f, 1.0f, 0.0f);
+	mesh->AddBillboard(pos, "GREEN LIGHT SOURCE", 0.35f);
 
-	pos = toe::core::TOEvector3df(3.0f, 0, 0);
+	// B
+	pos = toe::core::TOEvector3df(6.0f, 6.0f, 0.0f);
 	color = toe::core::TOEvector4df(0.0f, 0.0f, 1.0f, 1.0f);
 	sm->AddLight(pos, rot, color, attenuation);
 	mesh = sm->AddMesh(pos, rot, scale);
 	mesh->CreateSphere();
-
-	// OTROS ###################################################
+	pos = toe::core::TOEvector3df(0.0f, 1.0f, 0.0f);
+	mesh->AddBillboard(pos, "BLUE LIGHT SOURCE", 0.35f);
+	
+	// DOME ###################################################
 	sm->AddDome();
 }
 
@@ -69,28 +85,43 @@ int main(){
 	TFCamera* myCamera = sceneManager->AddCamera();
 
 	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
-	TFParticleSystem* ps = sm->AddParticleSystem(toe::core::TOEvector3df(1.25f,-0.5,0), toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df(1,1,1));
 	
 	handler->screenCenterX = VDriv->GetScreenResolution().X/2;
 	handler->screenCenterY = VDriv->GetScreenResolution().Y/2;
 
+	// PARTICLES
+	TFParticleSystem* ps = sm->AddParticleSystem(toe::core::TOEvector3df(-10,0,0), toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df(1,1,1));
+	TFParticleSystem* ps1 = sm->AddParticleSystem(toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df(1,1,1));
+	TFParticleSystem* ps2 = sm->AddParticleSystem(toe::core::TOEvector3df(10,0,0), toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df(1,1,1));
+	
+	// TIO-TOE LOGO
 	TFSprite* sprite = toe::AddSprite("",toe::core::TOEvector2df(VDriv->GetScreenResolution().X - 534/3.5f, 0), toe::core::TOEvector2df(534/3.5f,624/3.5f));
 	sprite->SetTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_sprite.png");
 
-	TFMesh* mesh = sm->AddMesh(toe::core::TOEvector3df(0.0f, 0.0f, 7.0f), toe::core::TOEvector3df(0.0f, 180.0f, 0.0f), toe::core::TOEvector3df(2.0f, 2.0f, 2.0f), "");
-	mesh->CreateSphere();
+	// SUZANNE
+	TFMesh* mesh = sm->AddMesh(toe::core::TOEvector3df(0.0f, 6.0f, 5.0f), toe::core::TOEvector3df(0.0f, 180.0f, 0.0f), toe::core::TOEvector3df(2.0f, 2.0f, 2.0f), "./../assets/models/suzanne.obj");
+	mesh->AddBillboard(toe::core::TOEvector3df(0.0f, 3.0f, 0.0f), "SUZANNE", 0.5f);
 
 	while(!EventHandler::m_close){
+		// ROTATE MESH
 		toe::core::TOEvector3df rot = mesh->GetRotation();
 		rot.Y += 0.5;
 		mesh->SetRotation(rot);
+
+		// UPDATE PARTICLES
+		ps->Update(0.16f);
+		ps1->Update(0.16f);
+		ps2->Update(0.16f);
+		
+		// UPDATE CAMERA
+		myCamera->SetRotation(toe::core::TOEvector3df(EventHandler::xdistGiro, EventHandler::ydistGiro, EventHandler::zdistGiro));
+		myCamera->SetTranslate(toe::core::TOEvector3df(EventHandler::xdist, EventHandler::ydist, EventHandler::zdist));
+		
+		// UPDATE VDRIVE & PAINT
 		VDriv->SetMouseVisibility(true);
 		VDriv->Update();
 		VDriv->Draw();
 		VDriv->SetCursorPosition(VDriv->GetScreenResolution().X/2,VDriv->GetScreenResolution().Y/2);
-		//ps->Update(0.16f);
-		myCamera->SetTranslate(toe::core::TOEvector3df(EventHandler::xdist, EventHandler::ydist, EventHandler::zdist));
-		myCamera->SetRotation(toe::core::TOEvector3df(EventHandler::xdistGiro, EventHandler::ydistGiro, EventHandler::zdistGiro));
 	}
 
 	VDriv->CloseWindow();
