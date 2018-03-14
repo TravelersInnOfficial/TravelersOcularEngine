@@ -42,8 +42,7 @@ void TMesh::BeginDraw(){
 		glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
 
 		// Draw bounding box
-		if(m_visibleBB) ;
-			DrawBoundingBox();
+		if(m_visibleBB)DrawBoundingBox();
 	}
 }
 
