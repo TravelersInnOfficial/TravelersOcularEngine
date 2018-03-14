@@ -37,7 +37,7 @@ void TMesh::BeginDraw(){
 		glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
 
 		// Draw bounding box
-		// DrawBoundingBox();
+		DrawBoundingBox();
 	}
 }
 
@@ -172,29 +172,7 @@ void TMesh::DrawBoundingBox() {
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	
-	GLfloat
-	min_x, max_x,
-	min_y, max_y,
-	min_z, max_z;
-	
-	// All vertices from mesh
-	std::vector<glm::vec3> vertvec = m_mesh->GetVerticesArray();
-	min_x = max_x = vertvec[0].x;	
-	min_y = max_y = vertvec[0].y;
-	min_z = max_z = vertvec[0].z;
-	
-	for (int i = 0; i < vertvec.size(); i++) {
-		if (vertvec[i].x < min_x) min_x = vertvec[i].x;
-		if (vertvec[i].x > max_x) max_x = vertvec[i].x;
-		if (vertvec[i].y < min_y) min_y = vertvec[i].y;
-		if (vertvec[i].y > max_y) max_y = vertvec[i].y;
-		if (vertvec[i].z < min_z) min_z = vertvec[i].z;
-		if (vertvec[i].z > max_z) max_z = vertvec[i].z;
-	}
-
-	glm::vec3 size = glm::vec3(max_x-min_x, max_y-min_y, max_z-min_z);
-	glm::vec3 center = glm::vec3((min_x+max_x)/2, (min_y+max_y)/2, (min_z+max_z)/2);
-	glm::mat4 transform = glm::translate(glm::mat4(1), center) * glm::scale(glm::mat4(1), size);
+	glm::mat4 transform = glm::translate(glm::mat4(1), m_mesh->GetCenter()) * glm::scale(glm::mat4(1), m_mesh->GetSize());
 
 	// Apply object's transformation matrix 
 	glm::mat4 m = ProjMatrix * ViewMatrix * m_stack.top() * transform;

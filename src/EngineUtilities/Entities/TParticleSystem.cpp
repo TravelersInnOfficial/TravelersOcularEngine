@@ -55,11 +55,11 @@ TParticleSystem::TParticleSystem(std::string path){
 }
 
 void TParticleSystem::BeginDraw(){
-	SendShaderData();
-
-	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, m_particleCount);
-
-	ResetShaderData();
+	if(CheckClipping()){
+		SendShaderData();
+		glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, m_particleCount);
+		ResetShaderData();
+	}
 }
 
 void TParticleSystem::EndDraw(){

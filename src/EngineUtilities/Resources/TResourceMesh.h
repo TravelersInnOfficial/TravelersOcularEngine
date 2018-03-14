@@ -59,9 +59,24 @@ public:
     int GetElementSize();
 
     /**************************************************************************
-     * @brief Devuelve el array de Vertices que tiene el modelo
+     * @brief Guarda el size del modelo
      **************************************************************************/  
-    std::vector<glm::vec3> GetVerticesArray();
+    void SetSize(glm::vec3 size);
+
+    /**************************************************************************
+     * @brief Guarda el centro del modelo
+     **************************************************************************/  
+    void SetCenter(glm::vec3 center);
+
+    /**************************************************************************
+     * @brief Devuelve el size del modelo
+     **************************************************************************/  
+    glm::vec3 GetSize();
+
+    /**************************************************************************
+     * @brief Devuelve el centro del modelo
+     **************************************************************************/  
+    glm::vec3 GetCenter();
 
 private:
     int m_elementSize;
@@ -73,7 +88,8 @@ private:
     GLuint m_ebo;
     GLuint m_nbo;
 
-    std::vector<glm::vec3> m_vertices;
+    glm::vec3 m_size;
+    glm::vec3 m_center;
 };
 
 #endif

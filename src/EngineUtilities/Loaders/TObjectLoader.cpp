@@ -68,9 +68,34 @@ void TObjectLoader::IndexVBO(TResourceMesh* mesh, std::vector<glm::vec3>* vertex
 	}
 }
 
+bool TObjectLoader::LoadBoundingBox(TResourceMesh* mesh, std::vector<glm::vec3>* vertexVec){
+	float min_x, max_x, min_y, max_y, min_z, max_z; 
 
-bool TObjectLoader::LoadObj(TResourceMesh* mesh, std::vector<glm::vec3>* vertex, int option){
-	//std::vector<glm::vec3> vertex;
+	min_x = max_x = vertexVec->at(0).x;	
+	min_y = max_y = vertexVec->at(0).y;
+	min_z = max_z = vertexVec->at(0).z;
+	
+	int size = vertexVec->size();
+	for (int i = 0; i < size; i++) {
+		if (vertexVec->at(i).x < min_x) min_x = vertexVec->at(i).x;
+		if (vertexVec->at(i).x > max_x) max_x = vertexVec->at(i).x;
+		if (vertexVec->at(i).y < min_y) min_y = vertexVec->at(i).y;
+		if (vertexVec->at(i).y > max_y) max_y = vertexVec->at(i).y;
+		if (vertexVec->at(i).z < min_z) min_z = vertexVec->at(i).z;
+		if (vertexVec->at(i).z > max_z) max_z = vertexVec->at(i).z;
+	}
+
+	glm::vec3 sizeV = glm::vec3(max_x-min_x, max_y-min_y, max_z-min_z);
+	glm::vec3 center = glm::vec3((min_x+max_x)/2, (min_y+max_y)/2, (min_z+max_z)/2);
+
+	mesh->SetSize(sizeV);
+	mesh->SetCenter(center);
+
+	return true;
+}
+
+bool TObjectLoader::LoadObj(TResourceMesh* mesh, int option){
+	std::vector<glm::vec3> vertex;
 	std::vector<glm::vec2> uv;
 	std::vector<glm::vec3> normal;
 	std::vector<unsigned int> index;
@@ -78,10 +103,10 @@ bool TObjectLoader::LoadObj(TResourceMesh* mesh, std::vector<glm::vec3>* vertex,
 	bool loaded = false;
 	switch(option){
 		case 0:
-			loaded = LoadObjFromFileAssimp(mesh, vertex, &uv, &normal);
+			loaded = LoadObjFromFileAssimp(mesh, &vertex, &uv, &normal);
 			break;
 		case 1:
-			loaded = LoadObjFromFileCustom(mesh, vertex, &uv, &normal);
+			loaded = LoadObjFromFileCustom(mesh, &vertex, &uv, &normal);
 			break;
 		default:
 			std::cout<<"La opcion a la que intenta acceder no existe. Opcion: "<<option<<std::endl;
@@ -92,12 +117,12 @@ bool TObjectLoader::LoadObj(TResourceMesh* mesh, std::vector<glm::vec3>* vertex,
 	}
 
 
-	IndexVBO(mesh, vertex, &uv, &normal, &index);
+	IndexVBO(mesh, &vertex, &uv, &normal, &index);
 
 	// Cargamos el buffer de vertices
 	GLuint currentBuffer = mesh->GetVertexBuffer();
 	glBindBuffer(GL_ARRAY_BUFFER, currentBuffer);
-	glBufferData(GL_ARRAY_BUFFER, vertex->size()*sizeof(glm::vec3), &(*vertex)[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertex.size()*sizeof(glm::vec3), &vertex[0], GL_STATIC_DRAW);
 	//glBufferStorage(GL_ARRAY_BUFFER, vertex.size()*sizeof(glm::vec3), &vertex[0], GL_STATIC_DRAW);
 
 	// Cargamos el buffer de uvs
@@ -116,6 +141,7 @@ bool TObjectLoader::LoadObj(TResourceMesh* mesh, std::vector<glm::vec3>* vertex,
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, currentBuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index.size()*sizeof(unsigned int), &index[0], GL_STATIC_DRAW);
 
+	LoadBoundingBox(mesh, &vertex);
 
 	return true;
 }
@@ -126,8 +152,8 @@ bool TObjectLoader::LoadObj(TResourceMesh* mesh, std::vector<glm::vec3>* vertex,
 //
 // ============================================================================================================================================
 
-bool TObjectLoader::LoadObjAssimp(TResourceMesh* mesh, std::vector<glm::vec3>* vertex){
-	return LoadObj(mesh, vertex, 0);
+bool TObjectLoader::LoadObjAssimp(TResourceMesh* mesh){
+	return LoadObj(mesh, 0);
 }
 
 bool TObjectLoader::LoadObjFromFileAssimp(TResourceMesh* mesh, std::vector<glm::vec3>* vertexVec, std::vector<glm::vec2>* uvVec, std::vector<glm::vec3>* normalVec){
@@ -207,8 +233,8 @@ bool TObjectLoader::LoadObjFromFileAssimp(TResourceMesh* mesh, std::vector<glm::
 //
 // ============================================================================================================================================
 
-bool TObjectLoader::LoadObjCustom(TResourceMesh* mesh, std::vector<glm::vec3>* vertex){
-	return LoadObj(mesh, vertex, 1);
+bool TObjectLoader::LoadObjCustom(TResourceMesh* mesh){
+	return LoadObj(mesh, 1);
 }
 
 bool TObjectLoader::LoadObjFromFileCustom(TResourceMesh* mesh, std::vector<glm::vec3>* vertexVec, std::vector<glm::vec2>* uvVec, std::vector<glm::vec3>* normalVec){
