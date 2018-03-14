@@ -10,6 +10,8 @@ public:
 
 	bool OnEvent(const TEvent& event);
 
+    void Update();
+
     float screenCenterX;
     float screenCenterY;
 
@@ -21,6 +23,11 @@ public:
     static float xdistGiro;
     static float ydistGiro;
     static float zdistGiro;
+
+    bool Key_A_Pressed;
+    bool Key_D_Pressed;
+    bool Key_S_Pressed;
+    bool Key_W_Pressed;
 };
 
 #endif

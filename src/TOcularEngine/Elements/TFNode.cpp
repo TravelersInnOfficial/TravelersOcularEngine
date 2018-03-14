@@ -231,3 +231,5 @@ int TFNode::AddBillboard(toe::core::TOEvector3df position, std::string text, flo
 	m_billboards.push_back(myText);
 	return size;
 }
+
+void TFNode::SetBoundBox(bool visible){ }

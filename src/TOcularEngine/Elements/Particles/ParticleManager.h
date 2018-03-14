@@ -13,10 +13,10 @@ struct Particle{
 class ParticleManager{
 public:	
 	ParticleManager();
-	~ParticleManager();
+	virtual ~ParticleManager();
 
-	void InitParticle(Particle& p);
-	void UpdateParticle(Particle& p, float deltaTime);
+	virtual void InitParticle(Particle& p);
+	virtual void UpdateParticle(Particle& p, float deltaTime);
 private:
 };
 

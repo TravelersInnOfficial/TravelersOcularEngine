@@ -216,6 +216,13 @@ void SceneManager::Draw2DElements(){
 	}
 }
 
+void SceneManager::DrawBoundingBoxes(bool draw){
+	int size = m_objects.size();
+	for(int i = size - 1; i>=0 ; i--){
+		m_objects[i]->SetBoundBox(draw);
+	}
+}
+
 void SceneManager::InitScene(){
 	glGenVertexArrays(1, &m_vao); // CREAMOS EL ARRAY DE VERTICES PARA LOS OBJETOS
 	glBindVertexArray(m_vao);

@@ -256,7 +256,7 @@ void TParticleSystem::Translate(glm::vec3 position){
 }
 
 void TParticleSystem::SetTexture(std::string path){
-	if(path.compare("") == 0) m_texture = TResourceManager::GetInstance()->GetResourceTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/PerfectCookie.png");
+	if(path.compare("") == 0) m_texture = TResourceManager::GetInstance()->GetResourceTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_particle.png");
 	else m_texture = TResourceManager::GetInstance()->GetResourceTexture(path);
 }
 
