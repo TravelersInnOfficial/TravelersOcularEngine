@@ -89,9 +89,9 @@ void TParticleSystem::SendShaderData(){
 		glm::mat4 m_matrix = m_stack.top();
 
 		glm::mat4 translation(1.0f);
-		translation[0][3] = m_matrix[0][3];
-		translation[1][3] = m_matrix[1][3];
-		translation[2][3] = m_matrix[2][3];
+		translation[3][0] = m_matrix[3][0];
+		translation[3][1] = m_matrix[3][1];
+		translation[3][2] = m_matrix[3][2];
 
 		glm::mat4 modelView = ViewMatrix * translation;
 		glm::mat4 mvpMatrix = ProjMatrix * modelView;
