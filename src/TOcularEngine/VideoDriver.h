@@ -28,7 +28,10 @@ public:
     void Draw();
     void ClearScreen();
     void Drop();
+	void CloseWindow();
     void SetReceiver();
+	void SetAssetsPath(std::string newPath);
+	void ToggleBoundingBox();
 
 //GETTERS
 	/**
@@ -74,11 +77,11 @@ public:
 
 	std::map<SHADERTYPE,Program*> GetProgramVector();
 
-	void SetMouseVisibility(bool visible);
-
 	GLFWwindow* GetWindow();
 
 	std::string GetAssetsPath();
+
+	toe::core::TOEvector2di GetCursorPosition();
 
 //SETTERS
 	/**
@@ -101,11 +104,7 @@ public:
 	
 	void SetCursorPosition(int x, int y);
 
-	toe::core::TOEvector2di GetCursorPosition();
-
-	void SetAssetsPath(std::string newPath);
-
-	void CloseWindow();
+	void SetMouseVisibility(bool visible);
 
 private:
 	/**
@@ -114,18 +113,21 @@ private:
 	 */
 	VideoDriver();
 
-	// Private SFML stuff
+	// Private GLFW window stuff
 	GLFWwindow* m_window;
 	std::string m_name;
-	SHADERTYPE m_lastShaderUsed;
+	toe::core::TOEvector4df m_clearSceenColor;
 
 	// Private Graphic Engine stuff
 	static SceneManager* privateSceneManager;
 	static IODriver* privateIODriver;
 
-	toe::core::TOEvector4df m_clearSceenColor;
-
+	// Private shaders stuff
 	std::map<SHADERTYPE, Program*> m_programs;
+	SHADERTYPE m_lastShaderUsed;
+
+	// Bounding box function
+	bool m_usingBB;
 
 	/**
 	 * @brief Loads the shaders in the Resource Manager
