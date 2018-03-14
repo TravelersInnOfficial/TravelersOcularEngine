@@ -85,6 +85,8 @@ void TFRect::Draw() const{
 
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    glDisable(GL_BLEND);
 }
 
 void TFRect::p_recalculate_size(){

@@ -86,6 +86,8 @@ void TFSprite::Draw() const{
     glVertexAttribPointer(colAttrib, 4, GL_FLOAT, GL_FALSE, 8*sizeof(float), (const GLvoid*)(4 * sizeof(float)));
 
     glDrawArrays(GL_TRIANGLES, 0, 8);
+
+    glDisable(GL_BLEND);
 }
 
 void TFSprite::p_recalculate_size(){

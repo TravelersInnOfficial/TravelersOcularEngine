@@ -45,7 +45,7 @@ public:
     virtual void SetRed(float r) {m_color->SetR(r);}
     virtual void SetGreen(float g) {m_color->SetG(g);}
     virtual void SetBlue(float b) {m_color->SetB(b);}
-    virtual void SetAplha(float a) {m_color->SetA(a);}
+    virtual void SetAlpha(float a) {m_color->SetA(a);}
 
     virtual void Erase() = 0;
 
