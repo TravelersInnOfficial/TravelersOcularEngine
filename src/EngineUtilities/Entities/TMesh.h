@@ -17,19 +17,26 @@ public:
 
 	void LoadMesh(std::string meshPath = "");
 	void ChangeTexture(std::string texturePath = "");
-	void DrawBoundingBox();
+	void SetBBVisibility(bool visible);
 
 protected:
 
 	TResourceMesh* 		m_mesh;
 	TResourceTexture* 	m_texture;
 	TResourceMaterial* 	m_material;
-	
+	bool m_visibleBB;
+
 	/**
 	 * @brief Sends shader all needed information
 	 * 
 	*/
 	void SendShaderData();
+
+	/**
+	 * @brief Draws bounding box of the mesh
+	 * 
+	 */
+	void DrawBoundingBox();	
 };
 
 #endif

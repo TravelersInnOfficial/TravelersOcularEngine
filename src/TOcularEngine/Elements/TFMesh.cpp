@@ -40,7 +40,11 @@ void TFMesh::CreateSphere(){
 	myMesh->LoadMesh(VideoDriver::GetInstance()->GetAssetsPath() + "/models/sphere.obj");
 }
 
-
 void TFMesh::SetInvisible(){
 	SetTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/invisible_texture.png");
+}
+
+void TFMesh::SetBoundBox(bool visible){
+	TMesh* myMesh = (TMesh*) m_entityNode->GetEntity();
+	myMesh->SetBBVisibility(visible);
 }
