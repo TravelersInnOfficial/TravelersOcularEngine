@@ -28,7 +28,6 @@ struct TLight {
 	vec3 Specular;
 	float Attenuation;
 };
-
 uniform TLight Light[20];
 uniform int nlights;
 
@@ -40,8 +39,8 @@ uniform mat4 ViewMatrix;
 
 // FUNCION QUE CALCULA EL MODELO DE REFLEXION DE PHONG
 vec3  Phong (int num) {
-	vec3 eyeDir = -Position;
 	// CALCULAR LOS DIFERENTES VECTORES	 
+	vec3 eyeDir = -Position;
 	vec3 cameraPos = vec3(ViewMatrix[3][0], ViewMatrix[3][1], ViewMatrix[3][2]);
 	vec3 n = normalize(Normal); 
 	vec3 lightPos = (ViewMatrix * vec4(Light[num].Position, 1)).xyz;
@@ -50,7 +49,6 @@ vec3  Phong (int num) {
 	vec3 v = normalize(cameraPos - WorldPosition);
 	vec3 r = reflect(-s, n);
   	
-
 	// COMPONENTE DIFUSA
 	vec3 Diffuse = vec3(0);
 	Diffuse = Light[num].Diffuse * clamp(dot(n,s), 0, 1) * vec3(texture(myTextureSampler, TexCoords)) * Material.Diffuse;
@@ -59,7 +57,7 @@ vec3  Phong (int num) {
 	vec3 Specular = vec3(0);
 	vec3 R = reflect(-s, n);
 	vec3 E = normalize(eyeDir);
-	if(dot(s, n) > 0) Specular = Light[num].Specular * pow(clamp(dot(E,R),0,1), 100) * 1;
+	if(dot(s, n) > 0) Specular = Light[num].Specular * pow(clamp(dot(E,R),0,1), Material.Shininess) * Material.Specular;
 
 	// CALCULAMOS ATENUACION
 	float Attenuation = 1.0 / (1.0 + Light[num].Attenuation * pow(length(objToToLight), 2));
@@ -72,9 +70,8 @@ void main() {
 	vec4 texValue = texture(myTextureSampler, TexCoords);
 	if(texValue.a < 0.5) discard;
 
-	vec4 result = vec4(0.0f);
-	
 	// CALCULAMOS DIFFUSE + SPECULAR
+	vec4 result = vec4(0.0f);
 	for(int i = 0; i < nlights; i++) result += vec4(Phong(i), 0.0);
 
 	// SUMAMOS AMBIENTAL
