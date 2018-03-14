@@ -18,7 +18,6 @@ VideoDriver::VideoDriver(){
 	m_lastShaderUsed = NONE_SHADER;
 	m_window = nullptr;
 	m_clearSceenColor = toe::core::TOEvector4df(0,0,0,0);
-	m_usingBB = false;
 
 	// Init engine stuff
 	privateSceneManager = new SceneManager();
@@ -132,9 +131,9 @@ void VideoDriver::SetAssetsPath(std::string newPath){
 	 m_assetsPath = newPath;
 }
 
-void VideoDriver::ToggleBoundingBox(){
-	m_usingBB = !m_usingBB;
+void VideoDriver::SetGlobalBoundingBoxes(bool enable){
 	// Iterate all meshes
+	privateSceneManager->DrawBoundingBoxes(enable);
 }
 
 // Getters

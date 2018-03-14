@@ -9,6 +9,7 @@ TMesh::TMesh(std::string meshPath, std::string texturePath){
 	m_mesh = nullptr;
 	m_texture = nullptr;
 	m_material = nullptr;
+	m_visibleBB = false;
 
 	LoadMesh(meshPath);
 	ChangeTexture(texturePath);
@@ -27,6 +28,10 @@ void TMesh::ChangeTexture(std::string texturePath){
 	else m_texture = nullptr;
 }
 
+void TMesh::SetBBVisibility(bool visible){
+	m_visibleBB = visible;
+}
+
 void TMesh::BeginDraw(){
 	if(m_mesh != nullptr){
 		// Bind and send the data to the VERTEX SHADER
@@ -37,7 +42,7 @@ void TMesh::BeginDraw(){
 		glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
 
 		// Draw bounding box
-		// DrawBoundingBox();
+		if(m_visibleBB) DrawBoundingBox();
 	}
 }
 

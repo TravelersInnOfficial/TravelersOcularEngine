@@ -31,7 +31,7 @@ public:
 	void CloseWindow();
     void SetReceiver();
 	void SetAssetsPath(std::string newPath);
-	void ToggleBoundingBox();
+	void SetGlobalBoundingBoxes(bool enable);
 
 //GETTERS
 	/**
@@ -69,18 +69,53 @@ public:
 	 */
 	std::string GetWindowName();
 
+	/**
+	 * @brief Get the Screen Resolution
+	 * 
+	 * @return toe::core::TOEvector2di 
+	 */
 	toe::core::TOEvector2di GetScreenResolution();
 
+	/**
+	 * @brief Get the Window Dimensions
+	 * 
+	 * @return toe::core::TOEvector2di 
+	 */
 	toe::core::TOEvector2di GetWindowDimensions();
 
+	/**
+	 * @brief Get the Program object
+	 * 
+	 * @return Program* 
+	 */
 	Program* GetProgram(SHADERTYPE);
 
+	/**
+	 * @brief Get the Program Vector object
+	 * 
+	 * @return std::map<SHADERTYPE,Program*> 
+	 */
 	std::map<SHADERTYPE,Program*> GetProgramVector();
 
+	/**
+	 * @brief Get the Window object
+	 * 
+	 * @return GLFWwindow* 
+	 */
 	GLFWwindow* GetWindow();
 
+	/**
+	 * @brief Get the Assets Path
+	 * 
+	 * @return std::string 
+	 */
 	std::string GetAssetsPath();
 
+	/**
+	 * @brief Get the Cursor Position
+	 * 
+	 * @return toe::core::TOEvector2di 
+	 */
 	toe::core::TOEvector2di GetCursorPosition();
 
 //SETTERS
@@ -98,12 +133,33 @@ public:
 	 */
 	void SetWindowName(std::string name);
 
+	/**
+	 * @brief Set the Shader Program object
+	 * 
+	 * @return Program* 
+	 */
 	Program* SetShaderProgram(SHADERTYPE);
 
+	/**
+	 * @brief 
+	 * 
+	 * @param driver 
+	 */
 	void SetIODriver(IODriver* driver);
 	
+	/**
+	 * @brief Set the Cursor Position object
+	 * 
+	 * @param x 
+	 * @param y 
+	 */
 	void SetCursorPosition(int x, int y);
 
+	/**
+	 * @brief Set the Mouse Visibility object
+	 * 
+	 * @param visible 
+	 */
 	void SetMouseVisibility(bool visible);
 
 private:
@@ -125,9 +181,6 @@ private:
 	// Private shaders stuff
 	std::map<SHADERTYPE, Program*> m_programs;
 	SHADERTYPE m_lastShaderUsed;
-
-	// Bounding box function
-	bool m_usingBB;
 
 	/**
 	 * @brief Loads the shaders in the Resource Manager

@@ -12,6 +12,7 @@ public:
 	void CreateCube();									// Replaces the Mesh with a Cube
 	void CreateSphere();								// Replaces the Mesh with a Sphere
 	void SetInvisible();								// Assigns and invisible texture (0,0,0,0)
+	void SetBoundBox(bool visible) override;							// Shows or hide tmesh bounding box
 
 protected:
 	TFMesh(
