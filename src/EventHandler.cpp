@@ -4,7 +4,7 @@
 
 float EventHandler::xdist = 0.0f;
 float EventHandler::ydist = 6.0f;
-float EventHandler::zdist = -7.0f;
+float EventHandler::zdist = -10.0f;
 float EventHandler::xdistGiro = 0.0f;
 float EventHandler::ydistGiro = 0.0f;
 float EventHandler::zdistGiro = 0.0f;
