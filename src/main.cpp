@@ -3,6 +3,7 @@
 #include "TOcularEngine/SceneManager.h"
 
 #include "EventHandler.h"
+#include "ColoredParticle.h"
 
 void CreateTree(){
 	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
@@ -92,6 +93,10 @@ int main(){
 	TFParticleSystem* ps = sm->AddParticleSystem(toe::core::TOEvector3df(-17,0,20), toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df(1,1,1));
 	TFParticleSystem* ps1 = sm->AddParticleSystem(toe::core::TOEvector3df(0,0,20), toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df(1,1,1));
 	TFParticleSystem* ps2 = sm->AddParticleSystem(toe::core::TOEvector3df(17,0,20), toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df(1,1,1));
+	ps->SetManager(new ColoredParticle(true, false, false)); 
+	ps1->SetManager(new ColoredParticle(false, true, false));
+	ps2->SetManager(new ColoredParticle(false, false, true));
+	
 	
 	// TIO-TOE LOGO
 	TFSprite* sprite = toe::AddSprite("",toe::core::TOEvector2df(VDriv->GetScreenResolution().X - 534/3.5f, 0), toe::core::TOEvector2df(534/3.5f,624/3.5f));
