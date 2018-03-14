@@ -55,7 +55,7 @@ TParticleSystem::TParticleSystem(std::string path){
 }
 
 void TParticleSystem::BeginDraw(){
-	if(CheckClipping()){
+	if(true || CheckClipping()){
 		SendShaderData();
 		glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, m_particleCount);
 		ResetShaderData();

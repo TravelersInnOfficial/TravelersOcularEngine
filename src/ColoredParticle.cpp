@@ -32,8 +32,8 @@ void ColoredParticle::InitParticle(Particle& p){
 	
 	if(b) p.b = 255;
 	else p.b = (unsigned char)(rand() % 255);
-
-	p.size = (rand() % 20)/10.0f;
+	
+	p.size = (rand() % 50)/10.0f;
 	p.rotation = (rand() % 360);
 	p.life = 20.0f;
 }
