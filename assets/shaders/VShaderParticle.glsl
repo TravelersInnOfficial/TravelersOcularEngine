@@ -19,10 +19,11 @@ void main(){
 	A[1] = vec3(-sine	, cosine	, 0.0);
 	A[2] = vec3(0.0 	, 0.0 		, 0.0);
 
-	vec4 Vertex = vec4(VertexPosition * A, 1);	// Lo Rotamos en Z
-	Vertex = Vertex * ParticleExtra.x;			// Escalamos
+	vec3 Position = VertexPosition * ParticleExtra.x;
+	vec4 Vertex = vec4(Position * A, 1);	// Lo Rotamos en Z
 	Vertex = (Vertex * MRot);					// Rotamos
 	Vertex = Vertex + vec4(ParticleCenter, 1);	// Transladamos
+	//Vertex = Vertex * ParticleExtra.x;			// Escalamos
 
     gl_Position = MVP * Vertex;
 

@@ -128,7 +128,7 @@ int main(){
 
 		// ROTATE MESH
 		toe::core::TOEvector3df rot = mesh->GetRotation();
-		rot.Z += 0.5;
+		rot.Y += 0.5;
 		mesh->SetRotation(rot);
 
 		// UPDATE PARTICLES
