@@ -11,7 +11,7 @@ TFSprite::TFSprite( std::string texture, toe::core::TOEvector2df position, toe::
     m_position = new toe::core::TOEvector2df((position.X*2 - w_dims.X) / w_dims.X , (position.Y*2 - w_dims.Y) / w_dims.Y);
     m_size = new toe::core::TOEvector2df(m_position->X + (std::abs(size.X *2) / w_dims.X), m_position->Y + (std::abs(size.Y *2) / w_dims.Y));
 
-    if(texture.compare("")==0) texture = VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_sprite.png";
+    if(texture.compare("")==0) texture = VideoDriver::GetInstance()->GetAssetsPath() + "/textures/invisible_texture.png";
 	m_texture = TResourceManager::GetInstance()->GetResourceTexture(texture);
 
     m_program = SPRITE_SHADER;
@@ -19,6 +19,7 @@ TFSprite::TFSprite( std::string texture, toe::core::TOEvector2df position, toe::
     m_InData.position = position;
     m_InData.size = size;
     m_InData.rotation = 0.0f;
+    m_InData.texture = texture;
 
     m_VAO = 0;
 	glGenBuffers(1, &m_VAO);
@@ -126,6 +127,7 @@ void TFSprite::SetRotation(float deg){
 }
 
 void TFSprite::SetTexture(std::string texture){
-    if(texture.compare("")==0) texture = VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_sprite.png";
+    if(texture.compare("")==0) texture = VideoDriver::GetInstance()->GetAssetsPath() + "/textures/invisible_texture.png";
 	m_texture = TResourceManager::GetInstance()->GetResourceTexture(texture);
+    m_InData.texture = texture;
 }
