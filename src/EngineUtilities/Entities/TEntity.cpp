@@ -27,7 +27,11 @@ void TEntity::SetProjMatrixPtr(glm::mat4 proj){
 }
 
 bool TEntity::CheckClipping(){
-	glm::mat4 mvpMatrix = ProjMatrix * ViewMatrix * m_stack.top();;
-	glm::vec4 Pclip = mvpMatrix * glm::vec4(0,0,0,1);
+	glm::mat4 mvpMatrix = ProjMatrix * ViewMatrix * m_stack.top();
+	glm::vec4 point = mvpMatrix * glm::vec4(0,0,0,1);
+	return CheckClippingPoint(point);
+}
+
+bool TEntity::CheckClippingPoint(glm::vec4 Pclip){
 	return abs(Pclip.x) < Pclip.w && abs(Pclip.y) < Pclip.w && 0 < Pclip.z && Pclip.z < Pclip.w;
 }

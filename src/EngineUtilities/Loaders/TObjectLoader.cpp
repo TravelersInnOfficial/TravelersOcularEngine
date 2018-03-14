@@ -86,7 +86,7 @@ bool TObjectLoader::LoadBoundingBox(TResourceMesh* mesh, std::vector<glm::vec3>*
 	}
 
 	glm::vec3 sizeV = glm::vec3(max_x-min_x, max_y-min_y, max_z-min_z);
-	glm::vec3 center = glm::vec3((min_x+max_x)/2, (min_y+max_y)/2, (min_z+max_z)/2);
+	glm::vec3 center = glm::vec3((min_x+max_x)/2.0f, (min_y+max_y)/2.0f, (min_z+max_z)/2.0f);
 
 	mesh->SetSize(sizeV);
 	mesh->SetCenter(center);

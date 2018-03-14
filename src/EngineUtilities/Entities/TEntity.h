@@ -17,7 +17,6 @@ public:
 	static void SetViewMatrixPtr(glm::mat4 view);
 	static void SetProjMatrixPtr(glm::mat4 proj);
 
-//protected:
 	static std::stack<glm::mat4> InitializeStack();
 	static std::stack<glm::mat4> m_stack;
 	static glm::mat4 ViewMatrix;
@@ -25,6 +24,8 @@ public:
 	
 	SHADERTYPE m_program;
 
+protected:
+	bool CheckClippingPoint(glm::vec4 point);
 };
 
 #endif

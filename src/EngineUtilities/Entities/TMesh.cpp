@@ -33,7 +33,7 @@ void TMesh::SetBBVisibility(bool visible){
 }
 
 void TMesh::BeginDraw(){
-	if(m_mesh != nullptr){
+	if(m_mesh != nullptr && CheckClipping()){
 		// Bind and send the data to the VERTEX SHADER
 		SendShaderData();
 		// Bind and draw elements depending of how many vbos
@@ -42,7 +42,8 @@ void TMesh::BeginDraw(){
 		glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
 
 		// Draw bounding box
-		if(m_visibleBB) DrawBoundingBox();
+		if(m_visibleBB) ;
+			DrawBoundingBox();
 	}
 }
 
@@ -177,7 +178,7 @@ void TMesh::DrawBoundingBox() {
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	
-	glm::mat4 transform = glm::translate(glm::mat4(1), m_mesh->GetCenter()) * glm::scale(glm::mat4(1), m_mesh->GetSize());
+	glm::mat4 transform = glm::scale(glm::mat4(1), m_mesh->GetSize());
 
 	// Apply object's transformation matrix 
 	glm::mat4 m = ProjMatrix * ViewMatrix * m_stack.top() * transform;
@@ -213,4 +214,35 @@ void TMesh::DrawBoundingBox() {
 
 	glDeleteBuffers(1, &vbo_vertices);
 	glDeleteBuffers(1, &ibo_elements);
+}
+
+bool TMesh::CheckClipping(){
+	bool output = false;
+	glm::vec3 center = m_mesh->GetCenter();
+	glm::vec3 size = m_mesh->GetSize();
+
+	glm::mat4 mvpMatrix = ProjMatrix * ViewMatrix * m_stack.top();
+	// Comprobamos el cliping con los 8 puntos 
+
+	for(int i=-1; i<=0 && !output; i++){
+		// +X -X
+		for(int j=-1; j<=0 && !output; j++){
+			// +Y -Y
+			for(int k=-1; k<=0 && !output; k++){
+				// +Z -Z
+				glm::vec3 point = center + glm::vec3(size.x/2.0f * Sign(i), size.y/2.0f * Sign(j), size.z/2.0f * Sign(k));
+				glm::vec4 mvpPoint = mvpMatrix * glm::vec4(point.x, point.y, point.z, 1.0f);
+
+				output = CheckClippingPoint(mvpPoint);
+			}
+		}
+	}
+
+
+	return output;
+}
+
+int TMesh::Sign(float v){
+	if(v>=0) return 1;
+	else return -1;
 }
