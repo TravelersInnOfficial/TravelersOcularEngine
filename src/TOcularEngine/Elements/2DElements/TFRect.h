@@ -20,6 +20,8 @@ public:
 
     void Rotate(float deg) override;
     void SetRotation(float deg) override;
+
+    void SetTexture(std::string texture) override;
     
     void Erase() override;
 

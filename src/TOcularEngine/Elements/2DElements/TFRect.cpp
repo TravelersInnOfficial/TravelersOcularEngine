@@ -21,6 +21,7 @@ TFRect::TFRect(toe::core::TOEvector2df position, toe::core::TOEvector2df size, f
     m_InData.position = position;
     m_InData.size = size;
     m_InData.rotation = rotation;
+    m_InData.texture = "";
 
     m_VAO = 0;
     glGenVertexArrays( 1, &m_VAO );
@@ -130,4 +131,8 @@ void TFRect::Rotate(float deg){
 void TFRect::SetRotation(float deg){
     m_rotation = deg;
     m_InData.rotation = deg;
+}
+
+void TFRect::SetTexture(std::string texture){
+    m_InData.texture = "";
 }

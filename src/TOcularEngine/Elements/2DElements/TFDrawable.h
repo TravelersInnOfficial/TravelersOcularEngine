@@ -10,6 +10,7 @@ struct RectData{
     toe::core::TOEvector2df position;
     toe::core::TOEvector2df size;
     float rotation;
+    std::string texture = "";
 };
 
 class TFDrawable{
@@ -42,6 +43,9 @@ public:
                                                                         m_color->SetA(a);}
 
     virtual void Erase() = 0;
+
+    virtual void SetTexture(std::string texture_path) = 0;
+    virtual std::string GetTexture() const {return m_InData.texture;}
 
 protected:
     toe::core::TOEvector2df* m_position = nullptr;
