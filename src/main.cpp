@@ -5,7 +5,9 @@
 #include "EventHandler.h"
 #include "ColoredParticle.h"
 
-void CreateTree(){
+#include <glm/gtc/matrix_transform.hpp>
+
+void CreateTree(TFMesh*& m1, TFMesh*& m2, TFMesh*& m3){
 	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
 	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0, 0, 0);
 	toe::core::TOEvector3df rot = toe::core::TOEvector3df(0, 180, 0);
@@ -14,6 +16,7 @@ void CreateTree(){
 	float attenuation = 0.0001f;
 	std::string path = "";
 	TFMesh* mesh = nullptr;
+	TFLight* l = nullptr;
 
 	// PAREDES ###################################################
 
@@ -57,31 +60,37 @@ void CreateTree(){
 	scale = toe::core::TOEvector3df(0.5f, 0.5f, 0.5f);
 	
 	// R
-	pos = toe::core::TOEvector3df(-6.0f, 6.0f, 0.0f);
+	pos = toe::core::TOEvector3df(0.0f, 0.0f, 0.0f);
 	color = toe::core::TOEvector4df(1.0f, 0.0f, 0.0f, 1.0f);
-	sm->AddLight(pos, rot, color, attenuation);
-	mesh = sm->AddMesh(pos, rot, scale);
+	l = sm->AddLight(pos, rot, color, attenuation);
+
+	m1 = sm->AddMesh();
 	mesh->CreateSphere();
 	pos = toe::core::TOEvector3df(0.0f, 1.0f, 0.0f);
 	mesh->AddBillboard(pos, "RED LIGHT SOURCE", 0.35f);
+	m1->AddChild(l);
 
 	// G
-	pos = toe::core::TOEvector3df(0.0f, 6.0f, 12.0f);
+	pos = toe::core::TOEvector3df(0.0f, 0.0f, 0.0f);
 	color = toe::core::TOEvector4df(0.0f, 1.0f, 0.0f, 1.0f);
-	sm->AddLight(pos, rot, color, attenuation);
-	mesh = sm->AddMesh(pos, rot, scale);
+	l = sm->AddLight(pos, rot, color, attenuation);
+	
+	m2 = sm->AddMesh();
 	mesh->CreateSphere();
 	pos = toe::core::TOEvector3df(0.0f, 1.0f, 0.0f);
 	mesh->AddBillboard(pos, "GREEN LIGHT SOURCE", 0.35f);
-
+	m2->AddChild(l);
+	
 	// B
-	pos = toe::core::TOEvector3df(6.0f, 6.0f, 0.0f);
+	pos = toe::core::TOEvector3df(0.0f, 0.0f, 0.0f);
 	color = toe::core::TOEvector4df(0.0f, 0.0f, 1.0f, 1.0f);
-	sm->AddLight(pos, rot, color, attenuation);
-	mesh = sm->AddMesh(pos, rot, scale);
+	l = sm->AddLight(pos, rot, color, attenuation);
+	
+	m3 = sm->AddMesh();
 	mesh->CreateSphere();
 	pos = toe::core::TOEvector3df(0.0f, 1.0f, 0.0f);
 	mesh->AddBillboard(pos, "BLUE LIGHT SOURCE", 0.35f);
+	m3->AddChild(l);
 	
 	// DOME ###################################################
 	sm->AddDome();
@@ -98,7 +107,11 @@ int main(){
 	VDriv->SetIODriver(handler);
 	VDriv->SetMouseVisibility(false);
 
-	CreateTree();
+	TFMesh* lr = nullptr;
+	TFMesh* lg = nullptr; 
+	TFMesh* lb = nullptr;
+
+	CreateTree(lr, lg, lb);
 	TFCamera* myCamera = sceneManager->AddCamera();
 
 	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
@@ -122,7 +135,7 @@ int main(){
 	logo->SetTexture("./../assets/textures/default_sprite.png");
 
 	// SUZANNE
-	TFMesh* mesh = sm->AddMesh(toe::core::TOEvector3df(0.0f, 6.0f, 5.0f), toe::core::TOEvector3df(0.0f, 0.0f, 0.0f), toe::core::TOEvector3df(2.0f, 2.0f, 2.0f), "./../assets/models/suzanne.obj");
+	TFMesh* mesh = sm->AddMesh(toe::core::TOEvector3df(0.0f, 6.0f, 0.0f), toe::core::TOEvector3df(0.0f, 0.0f, 0.0f), toe::core::TOEvector3df(2.0f, 2.0f, 2.0f), "./../assets/models/suzanne.obj");
 	mesh->AddBillboard(toe::core::TOEvector3df(0.0f, 3.0f, 0.0f), "SUZANNE", 0.5f);
 
 	while(!EventHandler::m_close){
@@ -133,6 +146,19 @@ int main(){
 		toe::core::TOEvector3df rot = mesh->GetRotation();
 		rot.Y += 0.5;
 		mesh->SetRotation(rot);
+
+		// ROTATE LIGHTS
+		float x = sin(glm::radians(-rot.Y)) * 6.0f;
+		float z = cos(glm::radians(-rot.Y)) * 6.0f;
+		lr->SetTranslate(toe::core::TOEvector3df(x, 6.0f, z));
+
+		x = sin(glm::radians(-rot.Y + 360.0f / 3.0f)) * 6.0f;
+		z = cos(glm::radians(-rot.Y + 360.0f / 3.0f)) * 6.0f;
+		lg->SetTranslate(toe::core::TOEvector3df(x, 6.0f, z));
+
+		x = sin(glm::radians(-rot.Y + 360.0f / 1.5f)) * 6.0f;
+		z = cos(glm::radians(-rot.Y + 360.0f / 1.5f)) * 6.0f;
+		lb->SetTranslate(toe::core::TOEvector3df(x, 6.0f, z));
 
 		// UPDATE PARTICLES
 		ps->Update(0.16f);
