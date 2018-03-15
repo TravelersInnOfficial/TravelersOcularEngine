@@ -103,7 +103,7 @@ int main(){
 	VideoDriver::m_assetsPath = "./../assets";
 	EventHandler* handler = new EventHandler();	
 	VideoDriver* VDriv = toe::GetVideoDriver();
-	SceneManager* sceneManager = VDriv->GetSceneManager();
+	SceneManager* sm = VDriv->GetSceneManager();
 	
 	VDriv->CreateWindows("TOE Demonstrative Application", VDriv->GetScreenResolution(), true);
 	VDriv->SetClearScreenColor(toe::core::TOEvector4df(0.7, 0.7, 1, 1));
@@ -115,9 +115,10 @@ int main(){
 	TFMesh* lb = nullptr;
 
 	CreateTree(lr, lg, lb);
-	TFCamera* myCamera = sceneManager->AddCamera();
 
-	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
+	TFCamera* secondCamera = sm->AddCamera(toe::core::TOEvector3df(0,3,-20));
+	TFCamera* myCamera = sm->AddCamera();
+
 	handler->screenCenterX = VDriv->GetScreenResolution().X/2;
 	handler->screenCenterY = VDriv->GetScreenResolution().Y/2;
 
@@ -174,7 +175,8 @@ int main(){
 		
 		// UPDATE VDRIVE & PAINT
 		VDriv->Update();
-		VDriv->Draw();
+		VDriv->BeginDraw();
+		VDriv->EndDraw();
 		VDriv->SetCursorPosition(VDriv->GetScreenResolution().X/2,VDriv->GetScreenResolution().Y/2);
 	}
 

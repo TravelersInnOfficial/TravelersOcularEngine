@@ -42,7 +42,7 @@ void TMesh::BeginDraw(){
 		glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
 
 		// Draw bounding box
-		if(m_visibleBB) DrawBoundingBox();
+		if(m_visibleBB) ;DrawBoundingBox();
 	}
 }
 
@@ -225,7 +225,12 @@ void TMesh::DrawBoundingBox() {
 	glDeleteBuffers(1, &ibo_elements);
 }
 
+// http://www.lighthouse3d.com/tutorials/view-frustum-culling/geometric-approach-testing-boxes-ii/
+// Posible mejora para el clipping
 bool TMesh::CheckClipping(){
+	//VideoDriver::GetInstance()->GetSceneManager()->ChangeMainCamera();
+	//VideoDriver::GetInstance()->GetSceneManager()->SetMainCameraData();
+
 	bool output = true;
 	glm::vec3 center = m_mesh->GetCenter();
 	glm::vec3 size = m_mesh->GetSize();
@@ -245,14 +250,21 @@ bool TMesh::CheckClipping(){
 				glm::vec3 point = center + glm::vec3(size.x/2.0f * Sign(i), size.y/2.0f * Sign(j), size.z/2.0f * Sign(k));
 				glm::vec4 mvpPoint = mvpMatrix * glm::vec4(point.x, point.y, point.z, 1.0f);
 
+
+
 				CheckClippingAreas(mvpPoint, &upDown, &leftRight, &nearFar);
 			}
 		}
 	}
 
-	if(upDown == 8 || upDown == -8 || leftRight == 8 || leftRight == -8 || nearFar == 8 || nearFar == -8){
+
+	int sides = 8;
+	if(upDown == sides || upDown == -sides || leftRight == sides || leftRight == -sides || nearFar == sides){
 		output = false;
 	}
+
+	//VideoDriver::GetInstance()->GetSceneManager()->ChangeMainCamera();
+	//VideoDriver::GetInstance()->GetSceneManager()->SetMainCameraData();
 
 	return output;
 }

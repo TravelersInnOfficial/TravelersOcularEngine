@@ -186,10 +186,7 @@ toe::core::TOEvector3df SceneManager::GetAmbientLight(){
 
 void SceneManager::Draw(){
 	// Select active camera and set view and projection matrix
-	if(m_main_camera!=nullptr){
-		TEntity::SetViewMatrixPtr( m_main_camera->m_entityNode->GetTransformMatrix() );
-		TEntity::SetViewMatrixPtr(glm::inverse(TEntity::ViewMatrix));
-	}
+	SetMainCameraData();
 
 	RecalculateLightPosition();
 	SendLights();
@@ -243,6 +240,43 @@ TNode* SceneManager::GetRootNode(){
 	return m_SceneTreeRoot;
 }
 
+void SceneManager::SetMainCameraData(){
+	if(m_main_camera!=nullptr){
+		TEntity::SetViewMatrixPtr( m_main_camera->m_entityNode->GetTransformMatrix() );
+		TEntity::SetViewMatrixPtr(glm::inverse(TEntity::ViewMatrix));
+	}
+}
+
 TFCamera* SceneManager::GetMainCamera(){
 	return m_main_camera;
 }
+
+ void SceneManager::ChangeMainCamera(TFCamera* camera){
+ 	// En el caso de que se pase un nullptr vamos a querer poner la siguiente camara
+ 	// es por eso que vamos tanto a buscar si esta la camera pasada como la main camera
+ 	int cameraPos = -1;
+ 	int mainCameraPos = -1;
+ 	int size = m_cameras.size();
+ 	for(int i=0; i<size; i++){
+ 		TFCamera* current = m_cameras[i];
+ 		// Buscamos la main Camera
+ 		if(current == m_main_camera){
+ 			mainCameraPos = i;
+ 			// En el caso de que no haya camara pasada podemos salir del bucle
+ 			if(camera == nullptr) break;
+ 		}
+ 		// Buscamos la Camara pasada, si es nullptr nunca se encontrara
+ 		if(current == camera){
+ 			cameraPos = -1;
+ 			break;	// Como ya hemos encontrado la camara podemos salir
+ 		}
+ 	}
+
+ 	// En el caso de que no se haya encontrado la camara o era nullptr
+ 	if(cameraPos == -1){
+ 		cameraPos = mainCameraPos + 1;
+ 		// En el caso de que nos pasemos volvemos al principio
+ 		if(cameraPos == size) cameraPos = 0;
+ 	}
+ 	m_main_camera = m_cameras[cameraPos];
+ }

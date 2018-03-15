@@ -8,6 +8,7 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h> //SIEMPRE DESPUES DE INCLUIR GLEW
+
 std::string	VideoDriver::m_assetsPath = "";
 SceneManager* VideoDriver::privateSceneManager = nullptr;
 IODriver* VideoDriver::privateIODriver = nullptr;
@@ -84,7 +85,7 @@ bool VideoDriver::Update(){
 	return true;
 }
 
-void VideoDriver::Draw(){
+void VideoDriver::BeginDraw(){
 	//DRAW 3D SCENE
 	privateSceneManager->Draw();
 
@@ -93,6 +94,9 @@ void VideoDriver::Draw(){
 	privateSceneManager->Draw2DElements();
 	end2DDrawState();
 
+}
+
+void VideoDriver::EndDraw(){
 	SetShaderProgram(STANDARD_SHADER);
 	glfwSwapBuffers(m_window);
 }
