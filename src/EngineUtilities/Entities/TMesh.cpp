@@ -42,7 +42,7 @@ void TMesh::BeginDraw(){
 		glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
 
 		// Draw bounding box
-		if(m_visibleBB)DrawBoundingBox();
+		if(m_visibleBB) DrawBoundingBox();
 	}
 }
 
@@ -229,27 +229,33 @@ void TMesh::DrawBoundingBox() {
 }
 
 bool TMesh::CheckClipping(){
-	bool output = false;
+	bool output = true;
 	glm::vec3 center = m_mesh->GetCenter();
 	glm::vec3 size = m_mesh->GetSize();
 
 	glm::mat4 mvpMatrix = ProjMatrix * ViewMatrix * m_stack.top();
 	// Comprobamos el cliping con los 8 puntos 
 
-	for(int i=-1; i<=0 && !output; i++){
+	int upDown, leftRight, nearFar;
+	upDown = leftRight = nearFar = 0;
+
+	for(int i=-1; i<=0; i++){
 		// +X -X
-		for(int j=-1; j<=0 && !output; j++){
+		for(int j=-1; j<=0; j++){
 			// +Y -Y
-			for(int k=-1; k<=0 && !output; k++){
+			for(int k=-1; k<=0; k++){
 				// +Z -Z
 				glm::vec3 point = center + glm::vec3(size.x/2.0f * Sign(i), size.y/2.0f * Sign(j), size.z/2.0f * Sign(k));
 				glm::vec4 mvpPoint = mvpMatrix * glm::vec4(point.x, point.y, point.z, 1.0f);
 
-				output = CheckClippingPoint(mvpPoint);
+				CheckClippingAreas(mvpPoint, &upDown, &leftRight, &nearFar);
 			}
 		}
 	}
 
+	if(upDown == 8 || upDown == -8 || leftRight == 8 || leftRight == -8 || nearFar == 8 || nearFar == -8){
+		output = false;
+	}
 
 	return output;
 }
