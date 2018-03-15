@@ -191,8 +191,21 @@ void SceneManager::Draw(){
 		TEntity::SetViewMatrixPtr(glm::inverse(TEntity::ViewMatrix));
 	}
 
+	RecalculateLightPosition();
+	SendLights();
+
+    m_SceneTreeRoot->Draw();
+}
+
+void SceneManager::RecalculateLightPosition(){
+	GLint size = m_lights.size();
+	for(int i = 0; i < size; i++) m_lights[i]->CalculateLocation();
+}
+
+void SceneManager::SendLights(){
 	// Gets the Program
-	Program* myProgram = VideoDriver::GetInstance()->GetProgram(STANDARD_SHADER);
+	VideoDriver* vd = VideoDriver::GetInstance();
+	Program* myProgram = vd->GetProgram(vd->GetCurrentProgram());
 
 	// Sends the Ambient Light
 	GLint ambLocation = glGetUniformLocation(myProgram->GetProgramID(), "SpecialLight.AmbientLight");
@@ -205,8 +218,6 @@ void SceneManager::Draw(){
 
 	// Draw all lights
     for(int i = 0; i < size; i++) m_lights[i]->DrawLight(i);
-
-    m_SceneTreeRoot->Draw();
 }
 
 void SceneManager::Draw2DElements(){

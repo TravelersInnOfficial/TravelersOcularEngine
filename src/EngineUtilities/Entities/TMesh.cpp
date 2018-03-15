@@ -55,7 +55,7 @@ void TMesh::SendShaderData(){
 	// -------------------------------------------------------- ENVIAMOS EL TIME
 	float time = VideoDriver::GetInstance()->GetTime();
 	GLint timeLocation = glGetUniformLocation(myProgram->GetProgramID(), "uTime");
-	glUniform1f(timeLocation, time/1000);
+	glUniform1f(timeLocation, time/1000); // EN SEGUNDOS
 
     // -------------------------------------------------------- ENVIAMOS LOS VERTICES
     // BIND VERTEX
@@ -95,9 +95,6 @@ void TMesh::SendShaderData(){
 	// SEND THE VIEW MATRIX
 	GLint vLocation = glGetUniformLocation(myProgram->GetProgramID(), "ViewMatrix");
 	glUniformMatrix4fv(vLocation, 1, GL_FALSE, glm::value_ptr(ViewMatrix));
-
-	GLint v2Location = glGetUniformLocation(myProgram->GetProgramID(), "ViewMatrix2");
-	glUniformMatrix4fv(v2Location, 1, GL_FALSE, glm::value_ptr(ViewMatrix));
 
 	// SEND THE MODELVIEW MATRIX
 	glm::mat4 modelView = ViewMatrix * m_stack.top();

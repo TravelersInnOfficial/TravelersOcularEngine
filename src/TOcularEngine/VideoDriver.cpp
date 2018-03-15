@@ -15,7 +15,7 @@ IODriver* VideoDriver::privateIODriver = nullptr;
 VideoDriver::VideoDriver(){
 	// Init variables
 	m_name = "";
-	m_lastShaderUsed = NONE_SHADER;
+	m_lastShaderUsed = STANDARD_SHADER;
 	m_window = nullptr;
 	m_clearSceenColor = toe::core::TOEvector4df(0,0,0,0);
 
@@ -203,20 +203,25 @@ void VideoDriver::SetWindowName(std::string name){
 Program* VideoDriver::SetShaderProgram(SHADERTYPE p){
 	Program* toRet = m_programs.find(p)->second;
 	if(m_lastShaderUsed != p){
+		m_lastShaderUsed = p;
 		glUseProgram(toRet->GetProgramID());
+		privateSceneManager->SendLights();
 	}
-	m_lastShaderUsed = p;
 
 	return toRet;
 }
+
+SHADERTYPE VideoDriver::GetCurrentProgram(){
+	if(m_lastShaderUsed == NONE_SHADER) m_lastShaderUsed = STANDARD_SHADER;
+	return m_lastShaderUsed;
+}
+
 
 void VideoDriver::SetIODriver(IODriver* driver){
 	privateIODriver = driver;
 }
 
 void VideoDriver::SetMouseVisibility(bool visible){
-	//if(visible == 0) glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-	//else glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	if(visible == 0){
 		int w = 1;
 		int h = 1;

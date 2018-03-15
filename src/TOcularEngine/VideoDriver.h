@@ -104,6 +104,8 @@ public:
 	 */
 	GLFWwindow* GetWindow();
 
+	SHADERTYPE GetCurrentProgram();
+
 	/**
 	 * @brief Get the Assets Path
 	 * 
