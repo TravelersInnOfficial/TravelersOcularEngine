@@ -36,13 +36,14 @@ void TMesh::BeginDraw(){
 	if(m_mesh != nullptr && CheckClipping()){
 		// Bind and send the data to the VERTEX SHADER
 		SendShaderData();
+		
 		// Bind and draw elements depending of how many vbos
 		GLuint elementsBuffer = m_mesh->GetElementBuffer();
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBuffer);
 		glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
 
 		// Draw bounding box
-		if(m_visibleBB) ;DrawBoundingBox();
+		if(m_visibleBB) DrawBoundingBox();
 	}
 }
 
@@ -54,7 +55,7 @@ void TMesh::SendShaderData(){
 
 	// -------------------------------------------------------- ENVIAMOS EL TIME
 	float time = VideoDriver::GetInstance()->GetTime();
-	GLint timeLocation = glGetUniformLocation(myProgram->GetProgramID(), "uTime");
+	GLint timeLocation = glGetUniformLocation(myProgram->GetProgramID(), "frameTime");
 	glUniform1f(timeLocation, time/1000); // EN SEGUNDOS
 
     // -------------------------------------------------------- ENVIAMOS LOS VERTICES

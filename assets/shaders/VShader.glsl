@@ -9,15 +9,9 @@ out vec3 Normal;      // NORMAL EN COORDENADAS DE VISTA
 out vec2 TexCoords;   // COORDENADAS DE TEXTURA
 out mat4 FragViewMatrix;
 
-uniform float uTime;	// Time from start
-
 uniform mat4 ModelViewMatrix;
-uniform mat3 NormalMatrix;
-
-uniform mat4 MVP;				//|
-uniform mat4 ModelMatrix;		//|
-uniform mat4 ViewMatrix;		//|
-uniform mat4 ProjectionMatrix;	//| MVP -- Model * View * Projection
+uniform mat4 MVP;
+uniform mat4 ViewMatrix;
 
 void main() {
 	// TRANSFORMAR VERTICE Y NORMAL A COORDENADAS DE VISTA

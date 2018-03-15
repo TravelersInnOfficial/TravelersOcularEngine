@@ -9,28 +9,24 @@ out vec3 Normal;      // NORMAL EN COORDENADAS DE VISTA
 out vec2 TexCoords;   // COORDENADAS DE TEXTURA
 out mat4 FragViewMatrix;
 
-uniform float uTime;	// Time from start
-
+uniform float frameTime;	// Time from start
 uniform mat4 ModelViewMatrix;
-uniform mat3 NormalMatrix;
-
-uniform mat4 MVP;				//|
 uniform mat4 ModelMatrix;		//|
 uniform mat4 ViewMatrix;		//|
 uniform mat4 ProjectionMatrix;	//| MVP -- Model * View * Projection
 
 void main() {
-    vec4 worldPos = ModelMatrix * vec4(VertexPosition, 1.0);
+    vec4 finalPosition = ModelMatrix * vec4(VertexPosition, 1.0);
 	
-    float wobbleOffset = (worldPos.x + worldPos.z) * 0.5;
-    float wobbleScale  = 0.7;
-    worldPos.x += cos(uTime + wobbleOffset) * wobbleScale;
-    worldPos.z += sin(uTime + wobbleOffset) * wobbleScale;
+    float offset = (finalPosition.x + finalPosition.z) * 0.5;
+    float scale  = 0.7;
+    finalPosition.x += cos(frameTime + offset) * scale;
+    finalPosition.z += sin(frameTime + offset) * scale;
 
-	Position = vec3 (ViewMatrix * worldPos);
+	Position = vec3 (ViewMatrix * finalPosition);
 	Normal = normalize (ModelViewMatrix * vec4(VertexNormal,0)).xyz;
 
-    gl_Position = ProjectionMatrix * ViewMatrix  * worldPos;
+    gl_Position = ProjectionMatrix * ViewMatrix  * finalPosition;
     TexCoords = TextureCoords;
 	FragViewMatrix = ViewMatrix;
 } 
