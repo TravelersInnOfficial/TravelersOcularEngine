@@ -14,7 +14,6 @@ public:
 
 	virtual void BeginDraw();
 	virtual void EndDraw();
-	virtual	bool CheckClipping();
 
 	void LoadMesh(std::string meshPath = "");
 	void ChangeTexture(std::string texturePath = "");
@@ -39,7 +38,22 @@ protected:
 	 */
 	void DrawBoundingBox();	
 
-	int Sign(float n);
+	/**
+	 * @brief 
+	 * 
+	 * @return true 
+	 * @return false 
+	 */
+	virtual	bool CheckClipping();
+	
+	/**
+	 * @brief 
+	 * 
+	 * @return true 
+	 * @return false 
+	 */
+	virtual	bool CheckOclusion();
+
 };
 
 #endif

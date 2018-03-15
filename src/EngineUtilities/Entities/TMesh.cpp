@@ -187,7 +187,7 @@ void TMesh::DrawBoundingBox() {
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	
-	glm::mat4 transform = glm::scale(glm::mat4(1), m_mesh->GetSize());
+	glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_mesh->GetCenter()) * glm::scale(glm::mat4(1), m_mesh->GetSize());
 
 	// Apply object's transformation matrix 
 	glm::mat4 m = ProjMatrix * ViewMatrix * m_stack.top() * transform;
@@ -241,6 +241,12 @@ bool TMesh::CheckClipping(){
 	int upDown, leftRight, nearFar;
 	upDown = leftRight = nearFar = 0;
 
+	// sign lambda
+	auto Sign = [](int v){
+		if(v>=0) return 1;
+		else return -1;
+	};
+
 	for(int i=-1; i<=0; i++){
 		// +X -X
 		for(int j=-1; j<=0; j++){
@@ -269,7 +275,6 @@ bool TMesh::CheckClipping(){
 	return output;
 }
 
-int TMesh::Sign(float v){
-	if(v>=0) return 1;
-	else return -1;
+bool TMesh::CheckOclusion(){
+
 }
