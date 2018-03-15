@@ -25,7 +25,8 @@ public:
 
     bool CreateWindows(std::string window_name, toe::core::TOEvector2di dimensions, bool fullscreeen = false);
     bool Update();
-    void Draw();
+    void BeginDraw();
+	void EndDraw();
     void ClearScreen();
     void Drop();
 	void CloseWindow();

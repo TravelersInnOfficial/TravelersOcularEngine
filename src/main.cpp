@@ -173,7 +173,8 @@ int main(){
 		
 		// UPDATE VDRIVE & PAINT
 		VDriv->Update();
-		VDriv->Draw();
+		VDriv->BeginDraw();
+		VDriv->EndDraw();
 		VDriv->SetCursorPosition(VDriv->GetScreenResolution().X/2,VDriv->GetScreenResolution().Y/2);
 	}
 
