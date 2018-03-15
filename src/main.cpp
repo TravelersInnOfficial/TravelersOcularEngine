@@ -6,6 +6,7 @@
 #include "ColoredParticle.h"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <ShaderTypes.h>
 
 void CreateTree(TFMesh*& m1, TFMesh*& m2, TFMesh*& m3){
 	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
@@ -50,6 +51,7 @@ void CreateTree(TFMesh*& m1, TFMesh*& m2, TFMesh*& m3){
 	scale = toe::core::TOEvector3df(0.55f, 0.55f, 0.55f);
 	mesh = sm->AddMesh(pos, rot, scale, "./../assets/models/teapot.obj");
 	mesh->SetTexture("./../assets/textures/teapot_texture1.jpg");
+	mesh->SetProgram(DISTORSION_SHADER);
 
 	pos = toe::core::TOEvector3df(7.0f, -1.8f, 10.0f);
 	scale = toe::core::TOEvector3df(0.4f, 0.4f, 0.4f);

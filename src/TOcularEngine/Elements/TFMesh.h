@@ -2,6 +2,7 @@
 #define TFMESH_H
 
 #include "TFNode.h"
+#include <ShaderTypes.h>
 
 class TFMesh: public TFNode{
 	friend class SceneManager;
@@ -12,7 +13,8 @@ public:
 	void CreateCube();									// Replaces the Mesh with a Cube
 	void CreateSphere();								// Replaces the Mesh with a Sphere
 	void SetInvisible();								// Assigns and invisible texture (0,0,0,0)
-	void SetBoundBox(bool visible) override;							// Shows or hide tmesh bounding box
+	void SetBoundBox(bool visible) override;			// Shows or hide tmesh bounding box
+	void SetProgram(SHADERTYPE m_program);				// Sets the program to use on render time
 
 protected:
 	TFMesh(

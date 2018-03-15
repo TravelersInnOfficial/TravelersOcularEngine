@@ -20,14 +20,17 @@ uniform mat4 ViewMatrix;		//|
 uniform mat4 ProjectionMatrix;	//| MVP -- Model * View * Projection
 
 void main() {
-	// TRANSFORMAR VERTICE Y NORMAL A COORDENADAS DE VISTA
-	Position = vec3 (ModelViewMatrix * vec4(VertexPosition, 1.0f));		// VIEW * MODEL * VERTEXPOS
+    vec4 worldPos = ModelMatrix * vec4(VertexPosition, 1.0);
+	
+    float wobbleOffset = (worldPos.x + worldPos.z) * 0.5;
+    float wobbleScale  = 0.7;
+    worldPos.x += cos(uTime + wobbleOffset) * wobbleScale;
+    worldPos.z += sin(uTime + wobbleOffset) * wobbleScale;
+
+	Position = vec3 (ViewMatrix * worldPos);
 	Normal = normalize (ModelViewMatrix * vec4(VertexNormal,0)).xyz;
 
-	// LAS COORDENADAS DE TEXTURA NO SUFREN TRANSFORMACION
-	TexCoords = TextureCoords;
+    gl_Position = ProjectionMatrix * ViewMatrix  * worldPos;
+    TexCoords = TextureCoords;
 	FragViewMatrix = ViewMatrix;
-
-	// TRANSFORMAR Y PROYECTAR EL VERTICE (POSICION DEL FRAGMENTO)
-	gl_Position = MVP * vec4(VertexPosition, 1.0f);
 } 

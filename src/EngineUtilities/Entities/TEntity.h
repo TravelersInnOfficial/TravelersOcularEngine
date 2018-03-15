@@ -1,7 +1,7 @@
 #ifndef TENTITY_H
 #define TENTITY_H
 
-#include "../Common/ShaderTypes.h"
+#include <ShaderTypes.h>
 #include "../Resources/Program.h"
 #include <stack>
 #include <glm/mat4x4.hpp>

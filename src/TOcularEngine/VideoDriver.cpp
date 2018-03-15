@@ -318,7 +318,20 @@ void VideoDriver::initShaders(){
 		shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShaderBB.glsl", GL_FRAGMENT_SHADER));
 
 		p = new Program(shaders);
-		m_programs.insert(std::pair<SHADERTYPE, Program*>(BB_SHADER, p));	
+		m_programs.insert(std::pair<SHADERTYPE, Program*>(BB_SHADER, p));
+
+	// CARGAMOS EL PROGRAMA DE BOUNDIN BOXES
+		// LOAD IN RESOURCE MANAGER
+		TResourceManager::GetInstance()->GetResourceShader(m_assetsPath + "/shaders/VShaderDistorsion.glsl");
+		TResourceManager::GetInstance()->GetResourceShader(m_assetsPath + "/shaders/FShaderDistorsion.glsl");
+
+		// CARGAMOS LOS SHADERS
+		shaders = std::map<std::string, GLenum>();
+		shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderDistorsion.glsl", GL_VERTEX_SHADER));
+		shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShaderDistorsion.glsl", GL_FRAGMENT_SHADER));
+
+		p = new Program(shaders);
+		m_programs.insert(std::pair<SHADERTYPE, Program*>(DISTORSION_SHADER, p));
 }
 
 void VideoDriver::start2DDrawState(){
