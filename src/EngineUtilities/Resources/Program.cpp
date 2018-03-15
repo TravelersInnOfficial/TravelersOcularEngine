@@ -1,4 +1,5 @@
 #include "Program.h"
+#include "./../TResourceManager.h"
 // All needed except iostream for debugging
 #include <iostream>
 #include <fstream>
@@ -19,28 +20,28 @@ Program::Program(std::map<std::string, GLenum> shaderData){
     }
 
     // Creamos el programa y le añadimos los shaders
-	m_programID = glCreateProgram();
+    m_programID = glCreateProgram();
 
     // Fijar todos los shaders
     for(i = 0; i < m_shaders.size(); i++){
         glAttachShader(m_programID, m_shaders[i]);
     }
 
-	// No es necesario porque no se escribe en mas de un buffer
-	//glBindFragDataLocation(m_programID, 0, "outColor");
-	// insert location binding code here
-	//glBindAttribLocation(m_programID, 0, "position");
-	//glBindAttribLocation(m_programID, 1, "vertexColor");
+    // No es necesario porque no se escribe en mas de un buffer
+    //glBindFragDataLocation(m_programID, 0, "outColor");
+    // insert location binding code here
+    //glBindAttribLocation(m_programID, 0, "position");
+    //glBindAttribLocation(m_programID, 1, "vertexColor");
 
-	// Se linkea el programa a los shaders
-	glLinkProgram(m_programID);
+    // Se linkea el programa a los shaders
+    glLinkProgram(m_programID);
 
-	// Defijar los shaders una vez unidos
-	for(i = 0; i < m_shaders.size(); i++){
+    // Defijar los shaders una vez unidos
+    for(i = 0; i < m_shaders.size(); i++){
         glDetachShader(m_programID, m_shaders[i]);
     }
 
-	// SE COMPRUEBA SI LINKEA BIEN
+    // SE COMPRUEBA SI LINKEA BIEN
     GLint status;
     glGetProgramiv(m_programID, GL_LINK_STATUS, &status);
     if (status == GL_FALSE) {
@@ -60,54 +61,19 @@ Program::Program(std::map<std::string, GLenum> shaderData){
     }
 }
 
+// Delete all shaders
 Program::~Program(){
-    // Delete all shaders
-    for(int i = 0; i < m_shaders.size(); i++){
-        glDeleteShader(m_shaders[i]);
-    }
+    for(int i = 0; i < m_shaders.size(); i++) glDeleteShader(m_shaders[i]);
     glDeleteProgram(m_programID);
 }
 
 
 GLuint Program::LoadShader(std::string shaderPath, GLenum shaderType){
-    // Read shader from file
-    std::ifstream in(shaderPath);
-    std::string src = "";
-    std::string line = "";
-    while(std::getline(in,line)) src += line + "\n";
-    //std::cout << src;
-    
-    const char* source = src.c_str();
-
-	//GLint compiled;
-    GLuint shaderID = glCreateShader(shaderType);
-    glShaderSource(shaderID,1,&source,nullptr);
-    glCompileShader(shaderID);
-    
-	if(!shaderID){
-        std::cerr << "Could not compile the shader";
-        return 0;
-    }
-
-    // Check compile status
-    GLint status;
-	glGetShaderiv(shaderID, GL_COMPILE_STATUS, &status);
-	if (status == GL_FALSE){
-		std::string msg("Compile failure in shader:\n");
-
-        GLint infoLogLength;
-        glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
-        char* strInfoLog = new char[infoLogLength + 1];
-        glGetShaderInfoLog(shaderID, infoLogLength, nullptr, strInfoLog);
-        msg += strInfoLog;
-        delete[] strInfoLog;
-
-        glDeleteShader(shaderID); shaderID = 0;
-        //throw std::runtime_error(msg);
-        std::cout << msg << std::endl;        
-	}
-
-    return shaderID;
+    TResourceManager* rm = TResourceManager::GetInstance();
+    TResourceShader* rs = rm->GetResourceShader(shaderPath, shaderType);
+    GLuint toRet = 0;
+    if(rs != nullptr) toRet = rs->GetShaderGluint();
+    return toRet;
 }
 
 GLuint Program::GetProgramID(){
