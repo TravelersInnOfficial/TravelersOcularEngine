@@ -162,6 +162,19 @@ public:
     TFCamera* GetMainCamera();
 
     /**
+     * @brief Change the main camera
+     * @details If no camera is passed, change to the next available camera
+     * 
+     * @param camera 
+     */
+    void ChangeMainCamera(TFCamera* camera = nullptr);
+
+    /**
+     * @brief Set the View matrix and the Projection matrix
+     */
+    void SetMainCameraData();
+
+    /**
      * @brief TODO: finish comment
      * 
      */
@@ -204,6 +217,7 @@ public:
      * 
      */
     void DrawBoundingBoxes(bool draw);
+
 
 private:
     GLuint m_vao;

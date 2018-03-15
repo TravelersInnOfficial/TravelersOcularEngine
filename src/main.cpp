@@ -41,10 +41,10 @@ void CreateTree(TFMesh*& m1, TFMesh*& m2, TFMesh*& m3){
 	mesh = sm->AddMesh(pos, rot, scale, "");
 
 	// TEAPOTS ###################################################
-	pos = toe::core::TOEvector3df(-7.0f, -1.8f, 10.0f);
-	scale = toe::core::TOEvector3df(0.7f, 0.7f, 0.7f);
-	mesh = sm->AddMesh(pos, rot, scale, "./../assets/models/teapot.obj");
-	mesh->SetTexture("./../assets/textures/checkerboard_texture.jpg");
+	//pos = toe::core::TOEvector3df(-7.0f, -1.8f, 10.0f);
+	//scale = toe::core::TOEvector3df(0.7f, 0.7f, 0.7f);
+	//mesh = sm->AddMesh(pos, rot, scale, "./../assets/models/teapot.obj");
+	//mesh->SetTexture("./../assets/textures/checkerboard_texture.jpg");
 
 	pos = toe::core::TOEvector3df(0.0f, -1.8f, 10.0f);
 	scale = toe::core::TOEvector3df(0.55f, 0.55f, 0.55f);
@@ -101,7 +101,7 @@ int main(){
 	VideoDriver::m_assetsPath = "./../assets";
 	EventHandler* handler = new EventHandler();	
 	VideoDriver* VDriv = toe::GetVideoDriver();
-	SceneManager* sceneManager = VDriv->GetSceneManager();
+	SceneManager* sm = VDriv->GetSceneManager();
 	
 	VDriv->CreateWindows("TOE Demonstrative Application", VDriv->GetScreenResolution(), true);
 	VDriv->SetClearScreenColor(toe::core::TOEvector4df(0.7, 0.7, 1, 1));
@@ -113,9 +113,10 @@ int main(){
 	TFMesh* lb = nullptr;
 
 	CreateTree(lr, lg, lb);
-	TFCamera* myCamera = sceneManager->AddCamera();
 
-	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
+	TFCamera* secondCamera = sm->AddCamera(toe::core::TOEvector3df(0,3,-20));
+	TFCamera* myCamera = sm->AddCamera();
+
 	handler->screenCenterX = VDriv->GetScreenResolution().X/2;
 	handler->screenCenterY = VDriv->GetScreenResolution().Y/2;
 
