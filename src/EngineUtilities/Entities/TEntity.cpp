@@ -35,3 +35,14 @@ bool TEntity::CheckClipping(){
 bool TEntity::CheckClippingPoint(glm::vec4 Pclip){
 	return abs(Pclip.x) < Pclip.w && abs(Pclip.y) < Pclip.w && 0 < Pclip.z && Pclip.z < Pclip.w;
 }
+
+void TEntity::CheckClippingAreas(glm::vec4 point, int* upDown, int* leftRight, int* nearFar){
+    if(point.x > point.w) (*leftRight)++;
+    else if(point.x < -point.w) (*leftRight)--;
+
+    if(point.y > point.w) (*upDown)++;
+    else if(point.y < -point.w) (*upDown)--;
+
+    if(point.z > point.w) (*nearFar)++;
+    else if(point.z < 0) (*nearFar)--;
+}

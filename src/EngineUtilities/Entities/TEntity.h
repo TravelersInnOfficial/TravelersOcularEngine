@@ -26,6 +26,7 @@ public:
 
 protected:
 	bool CheckClippingPoint(glm::vec4 point);
+	void CheckClippingAreas(glm::vec4 point, int* upDown, int* leftRight, int* nearFar);
 };
 
 #endif
