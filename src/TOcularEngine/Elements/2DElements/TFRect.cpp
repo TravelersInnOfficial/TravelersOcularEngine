@@ -17,6 +17,7 @@ TFRect::TFRect(toe::core::TOEvector2df position, toe::core::TOEvector2df size, f
     m_rotation = rotation;
 
     m_color = new TColor();
+    m_color->SetRGBA(0,0,0,1);
 
     m_InData.position = position;
     m_InData.size = size;
