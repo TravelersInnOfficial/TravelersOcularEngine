@@ -57,6 +57,7 @@ void CreateTree(TFMesh*& m1, TFMesh*& m2, TFMesh*& m3){
 	scale = toe::core::TOEvector3df(0.4f, 0.4f, 0.4f);
 	mesh = sm->AddMesh(pos, rot, scale, "./../assets/models/teapot.obj");
 	mesh->SetTexture("./../assets/textures/teapot_texture2.jpg");
+	mesh->SetProgram(FISHEYE_SHADER);
 
 	// LUCES ###################################################
 	scale = toe::core::TOEvector3df(0.5f, 0.5f, 0.5f);

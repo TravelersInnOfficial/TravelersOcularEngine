@@ -1,5 +1,4 @@
 #version 130
-
 in vec3 VertexPosition;  // VERTICE EN COORDENADAS LOCALES
 in vec3 VertexNormal;    // NORMAL EL COORDENADAS LOCALES
 in vec2 TextureCoords;   // COORDENADAS DE TEXTURA
@@ -29,4 +28,4 @@ void main() {
     gl_Position = ProjectionMatrix * ViewMatrix  * finalPosition;
     TexCoords = TextureCoords;
 	FragViewMatrix = ViewMatrix;
-} 
+}

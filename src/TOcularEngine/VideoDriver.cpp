@@ -299,13 +299,21 @@ void VideoDriver::initShaders(){
 	p = new Program(shaders);
 	m_programs.insert(std::pair<SHADERTYPE, Program*>(BB_SHADER, p));
 
-	// CARGAMOS EL PROGRAMA DE BOUNDIN BOXES
+	// CARGAMOS EL PROGRAMA DE DISTORSION
 	shaders = std::map<std::string, GLenum>();
 	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderDistorsion.glsl", GL_VERTEX_SHADER));
 	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShader.glsl", GL_FRAGMENT_SHADER));
 
 	p = new Program(shaders);
 	m_programs.insert(std::pair<SHADERTYPE, Program*>(DISTORSION_SHADER, p));
+
+	// CARGAMOS EL PROGRAMA DE FISHEYE
+	shaders = std::map<std::string, GLenum>();
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderFisheye.glsl", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShader.glsl", GL_FRAGMENT_SHADER));
+
+	p = new Program(shaders);
+	m_programs.insert(std::pair<SHADERTYPE, Program*>(FISHEYE_SHADER, p));
 }
 
 void VideoDriver::start2DDrawState(){
