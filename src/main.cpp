@@ -7,6 +7,22 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <ShaderTypes.h>
+#include <vector>
+
+std::vector<TFMesh*> sceneObjects;
+int currentShader = 0;
+
+void ChangeShader(int newShader){
+	if(newShader != currentShader){
+		currentShader = newShader;
+		for(int i = 0; i < sceneObjects.size(); i++){
+			if(currentShader == 0) sceneObjects.at(i)->SetProgram(STANDARD_SHADER);
+			if(currentShader == 1) sceneObjects.at(i)->SetProgram(BARREL_SHADER);
+			if(currentShader == 2) sceneObjects.at(i)->SetProgram(DISTORSION_SHADER);
+			if(currentShader == 3) sceneObjects.at(i)->SetProgram(FISHEYE_SHADER);
+		}
+	}
+}
 
 void CreateTree(TFMesh*& m1, TFMesh*& m2, TFMesh*& m3){
 	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
@@ -25,40 +41,44 @@ void CreateTree(TFMesh*& m1, TFMesh*& m2, TFMesh*& m3){
 	pos = toe::core::TOEvector3df(0.0f, -2.0f, 0.0f);
 	scale = toe::core::TOEvector3df(50.0f, 0.25f, 50.0f);
 	mesh = sm->AddMesh(pos, rot, scale, "");
+	sceneObjects.push_back(mesh);
 
 	// IZDA
 	pos = toe::core::TOEvector3df(-25.0f, 8.0f, 0.0f);
 	scale = toe::core::TOEvector3df(0.25f, 20.0f, 50.0f);
 	mesh = sm->AddMesh(pos, rot, scale, "");
+	sceneObjects.push_back(mesh);
 
 	// DCHA
 	pos = toe::core::TOEvector3df(25.0f, 8.0f, 0.0f);
 	scale = toe::core::TOEvector3df(0.25f, 20.0f, 50.0f);
 	mesh = sm->AddMesh(pos, rot, scale, "");
+	sceneObjects.push_back(mesh);
 
 	// BACK
 	pos = toe::core::TOEvector3df(0.0f, 8.0f, 25.0f);
 	scale = toe::core::TOEvector3df(50.0f, 20.0f, 0.25f);
 	mesh = sm->AddMesh(pos, rot, scale, "");
+	sceneObjects.push_back(mesh);
 
 	// TEAPOTS ###################################################
 	pos = toe::core::TOEvector3df(-7.0f, -1.8f, 10.0f);
 	scale = toe::core::TOEvector3df(0.7f, 0.7f, 0.7f);
 	mesh = sm->AddMesh(pos, rot, scale, "./../assets/models/teapot.obj");
 	mesh->SetTexture("./../assets/textures/checkerboard_texture.jpg");
-	mesh->SetProgram(BARREL_SHADER);
+	sceneObjects.push_back(mesh);
 
 	pos = toe::core::TOEvector3df(0.0f, -1.8f, 10.0f);
 	scale = toe::core::TOEvector3df(0.55f, 0.55f, 0.55f);
 	mesh = sm->AddMesh(pos, rot, scale, "./../assets/models/teapot.obj");
 	mesh->SetTexture("./../assets/textures/teapot_texture1.jpg");
-	mesh->SetProgram(DISTORSION_SHADER);
+	sceneObjects.push_back(mesh);
 
 	pos = toe::core::TOEvector3df(7.0f, -1.8f, 10.0f);
 	scale = toe::core::TOEvector3df(0.4f, 0.4f, 0.4f);
 	mesh = sm->AddMesh(pos, rot, scale, "./../assets/models/teapot.obj");
 	mesh->SetTexture("./../assets/textures/teapot_texture2.jpg");
-	mesh->SetProgram(FISHEYE_SHADER);
+	sceneObjects.push_back(mesh);
 
 	// LUCES ###################################################
 	scale = toe::core::TOEvector3df(0.5f, 0.5f, 0.5f);
@@ -74,6 +94,7 @@ void CreateTree(TFMesh*& m1, TFMesh*& m2, TFMesh*& m3){
 	pos = toe::core::TOEvector3df(0.0f, 1.0f, 0.0f);
 	m1->AddBillboard(pos, "RED LIGHT SOURCE", 0.35f);
 	m1->AddChild(l);
+	sceneObjects.push_back(m1);
 
 	// G
 	pos = toe::core::TOEvector3df(0.0f, 0.0f, 0.0f);
@@ -85,7 +106,8 @@ void CreateTree(TFMesh*& m1, TFMesh*& m2, TFMesh*& m3){
 	pos = toe::core::TOEvector3df(0.0f, 1.0f, 0.0f);
 	m2->AddBillboard(pos, "GREEN LIGHT SOURCE", 0.35f);
 	m2->AddChild(l);
-	
+	sceneObjects.push_back(m2);
+
 	// B
 	pos = toe::core::TOEvector3df(0.0f, 0.0f, 0.0f);
 	color = toe::core::TOEvector4df(0.0f, 0.0f, 1.0f, 1.0f);
@@ -96,6 +118,7 @@ void CreateTree(TFMesh*& m1, TFMesh*& m2, TFMesh*& m3){
 	pos = toe::core::TOEvector3df(0.0f, 1.0f, 0.0f);
 	m3->AddBillboard(pos, "BLUE LIGHT SOURCE", 0.35f);
 	m3->AddChild(l);
+	sceneObjects.push_back(m3);
 	
 	// DOME ###################################################
 	sm->AddDome();
@@ -133,7 +156,7 @@ int main(){
 	ps2->SetManager(new ColoredParticle(false, false, true));
 	
 	// TOE MANUAL
-	TFSprite* manual = toe::AddSprite("",toe::core::TOEvector2df(0, 0), toe::core::TOEvector2df(220,95));
+	TFSprite* manual = toe::AddSprite("",toe::core::TOEvector2df(0, 0), toe::core::TOEvector2df(305,96));
 	manual->SetTexture("./../assets/textures/toe_manual.png");
 
 	// TIO LOGO
@@ -143,6 +166,7 @@ int main(){
 	// SUZANNE
 	TFMesh* mesh = sm->AddMesh(toe::core::TOEvector3df(0.0f, 6.0f, 0.0f), toe::core::TOEvector3df(0.0f, 0.0f, 0.0f), toe::core::TOEvector3df(2.0f, 2.0f, 2.0f), "./../assets/models/suzanne.obj");
 	mesh->AddBillboard(toe::core::TOEvector3df(0.0f, 3.0f, 0.0f), "SUZANNE", 0.5f);
+	sceneObjects.push_back(mesh);
 
 	while(!EventHandler::m_close){
 		// EVENT HANDLER UPDATE
@@ -180,6 +204,8 @@ int main(){
 		VDriv->BeginDraw();
 		VDriv->EndDraw();
 		VDriv->SetCursorPosition(VDriv->GetScreenResolution().X/2,VDriv->GetScreenResolution().Y/2);
+
+		ChangeShader(EventHandler::shaderType);
 	}
 
 	VDriv->CloseWindow();
