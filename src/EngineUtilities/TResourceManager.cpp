@@ -1,5 +1,4 @@
 #include "TResourceManager.h"
-
 #include <iostream>
 
 TResourceManager* TResourceManager::GetInstance() {
@@ -71,17 +70,16 @@ TResourceMaterial* TResourceManager::GetResourceMaterial(std::string name){
 	return toRet;
 }
 
-TResourceShader* TResourceManager::GetResourceShader(std::string name){ 
+TResourceShader* TResourceManager::GetResourceShader(std::string name, GLenum shaderType){ 
 	TResourceShader* toRet = nullptr;
 	std::string path = TreatName(name);
 	toRet = (TResourceShader*)FindResource(path);
 	if(toRet == nullptr) {
-		toRet = new TResourceShader(path);
+		toRet = new TResourceShader(path, shaderType);
 		m_resources[path] = toRet;
 	}
 	return toRet;
 }
-
 
 std::string TResourceManager::TreatName(std::string newName) {
 

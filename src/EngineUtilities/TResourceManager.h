@@ -10,6 +10,7 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <GL/glew.h>
 
 class TResourceManager{
 public:
@@ -28,7 +29,7 @@ public:
 	TResourceTexture*	GetResourceTexture	(std::string name);
 	TResourceMesh*		GetResourceMesh		(std::string name);
 	TResourceMaterial*	GetResourceMaterial	(std::string name);
-	TResourceShader*	GetResourceShader	(std::string name);
+	TResourceShader* 	GetResourceShader	(std::string name, GLenum shaderType);
 	//*********************************************
 
 private:

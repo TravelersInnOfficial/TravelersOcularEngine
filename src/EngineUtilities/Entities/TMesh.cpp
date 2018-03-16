@@ -36,13 +36,14 @@ void TMesh::BeginDraw(){
 	if(m_mesh != nullptr && CheckClipping()){
 		// Bind and send the data to the VERTEX SHADER
 		SendShaderData();
+		
 		// Bind and draw elements depending of how many vbos
 		GLuint elementsBuffer = m_mesh->GetElementBuffer();
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBuffer);
 		glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
 
 		// Draw bounding box
-		if(m_visibleBB) ;DrawBoundingBox();
+		if(m_visibleBB) DrawBoundingBox();
 	}
 }
 
@@ -51,6 +52,11 @@ void TMesh::EndDraw(){
 
 void TMesh::SendShaderData(){
 	Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(m_program);
+
+	// -------------------------------------------------------- ENVIAMOS EL TIME
+	float time = VideoDriver::GetInstance()->GetTime();
+	GLint timeLocation = glGetUniformLocation(myProgram->GetProgramID(), "frameTime");
+	glUniform1f(timeLocation, time/1000); // EN SEGUNDOS
 
     // -------------------------------------------------------- ENVIAMOS LOS VERTICES
     // BIND VERTEX
@@ -87,14 +93,19 @@ void TMesh::SendShaderData(){
 	GLint mmLocation = glGetUniformLocation(myProgram->GetProgramID(), "ModelMatrix");
 	glUniformMatrix4fv(mmLocation, 1, GL_FALSE, glm::value_ptr(m_stack.top()));
 
+	// SEND THE VIEW MATRIX
+	GLint vLocation = glGetUniformLocation(myProgram->GetProgramID(), "ViewMatrix");
+	glUniformMatrix4fv(vLocation, 1, GL_FALSE, glm::value_ptr(ViewMatrix));
+
 	// SEND THE MODELVIEW MATRIX
 	glm::mat4 modelView = ViewMatrix * m_stack.top();
 	GLint mvLocation = glGetUniformLocation(myProgram->GetProgramID(), "ModelViewMatrix");
 	glUniformMatrix4fv(mvLocation, 1, GL_FALSE, glm::value_ptr(modelView));
 
-	// SEND THE VIEW MATRIX
-	GLint vLocation = glGetUniformLocation(myProgram->GetProgramID(), "ViewMatrix");
-	glUniformMatrix4fv(vLocation, 1, GL_FALSE, glm::value_ptr(ViewMatrix));
+	// SEND THE PROJECTION MATRIX
+	glm::mat4 pMatrix = ProjMatrix;
+	GLint pLocation = glGetUniformLocation(myProgram->GetProgramID(), "ProjectionMatrix");
+	glUniformMatrix4fv(pLocation, 1, GL_FALSE, glm::value_ptr(pMatrix));
 
 	// SEND THE MODELVIEWPROJECTION MATRIX
 	glm::mat4 mvpMatrix = ProjMatrix * modelView;
@@ -177,7 +188,7 @@ void TMesh::DrawBoundingBox() {
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	
-	glm::mat4 transform = glm::scale(glm::mat4(1), m_mesh->GetSize());
+	glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_mesh->GetCenter()) * glm::scale(glm::mat4(1), m_mesh->GetSize());
 
 	// Apply object's transformation matrix 
 	glm::mat4 m = ProjMatrix * ViewMatrix * m_stack.top() * transform;
@@ -231,6 +242,12 @@ bool TMesh::CheckClipping(){
 	int upDown, leftRight, nearFar;
 	upDown = leftRight = nearFar = 0;
 
+	// sign lambda
+	auto Sign = [](int v){
+		if(v>=0) return 1;
+		else return -1;
+	};
+
 	for(int i=-1; i<=0; i++){
 		// +X -X
 		for(int j=-1; j<=0; j++){
@@ -259,7 +276,6 @@ bool TMesh::CheckClipping(){
 	return output;
 }
 
-int TMesh::Sign(float v){
-	if(v>=0) return 1;
-	else return -1;
+bool TMesh::CheckOclusion(){
+
 }

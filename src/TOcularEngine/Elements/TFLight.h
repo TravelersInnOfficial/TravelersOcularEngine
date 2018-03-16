@@ -15,6 +15,7 @@ public:
 	toe::core::TOEvector4df GetColor();				// Returns the light color
 	float GetAttenuation();							// Returns the light attenuation
 	bool GetActive();								// Returns the light active state
+	glm::vec3 CalculateLocation();
 
 private:
 	TFLight(
@@ -25,6 +26,7 @@ private:
 	);
 	~TFLight();
 	void DrawLight(int num);
+	glm::vec3 m_LastLocation;
 
 };
 

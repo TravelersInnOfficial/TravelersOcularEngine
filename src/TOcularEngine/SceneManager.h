@@ -218,6 +218,8 @@ public:
      */
     void DrawBoundingBoxes(bool draw);
 
+    void RecalculateLightPosition();
+    void SendLights();
 
 private:
     GLuint m_vao;

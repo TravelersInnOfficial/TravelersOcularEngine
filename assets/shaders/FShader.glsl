@@ -7,8 +7,8 @@ uniform sampler2D myTextureSampler;
 in vec3 Position;  		// VERTICES EN COORDENADAS DE VISTA
 in vec3 Normal;  		// NORMAL EN COORDENADAS DE VISTA
 in vec2 TexCoords;      // UV COORDENADAS DE TEXTURA
-in vec3 WorldPosition;  // VERTICES EN COORDENADAS DE MUNDO
-  
+in mat4 FragViewMatrix;
+
 // SALIDA PARA COMUNICAR CON EL RESTO DEL PIPELINE
 out vec4 FragColor;	// COLOR FINAL DEL FRAGMENTO
 
@@ -35,18 +35,14 @@ uniform int nlights;
 struct SLight{ vec3 AmbientLight; };
 uniform SLight SpecialLight;
 
-uniform mat4 ViewMatrix;
-
 // FUNCION QUE CALCULA EL MODELO DE REFLEXION DE PHONG
 vec3  Phong (int num) {
 	// CALCULAR LOS DIFERENTES VECTORES	 
 	vec3 eyeDir = -Position;
-	vec3 cameraPos = vec3(ViewMatrix[3][0], ViewMatrix[3][1], ViewMatrix[3][2]);
 	vec3 n = normalize(Normal); 
-	vec3 lightPos = (ViewMatrix * vec4(Light[num].Position, 1)).xyz;
+	vec3 lightPos = (FragViewMatrix * vec4(Light[num].Position, 1)).xyz;
 	vec3 objToToLight = lightPos + eyeDir;
 	vec3 s = normalize(objToToLight);
-	vec3 v = normalize(cameraPos - WorldPosition);
 	vec3 r = reflect(-s, n);
   	
 	// COMPONENTE DIFUSA

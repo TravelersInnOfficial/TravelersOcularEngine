@@ -8,6 +8,7 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h> //SIEMPRE DESPUES DE INCLUIR GLEW
+
 std::string	VideoDriver::m_assetsPath = "";
 SceneManager* VideoDriver::privateSceneManager = nullptr;
 IODriver* VideoDriver::privateIODriver = nullptr;
@@ -15,7 +16,7 @@ IODriver* VideoDriver::privateIODriver = nullptr;
 VideoDriver::VideoDriver(){
 	// Init variables
 	m_name = "";
-	m_lastShaderUsed = NONE_SHADER;
+	m_lastShaderUsed = STANDARD_SHADER;
 	m_window = nullptr;
 	m_clearSceenColor = toe::core::TOEvector4df(0,0,0,0);
 
@@ -84,7 +85,7 @@ bool VideoDriver::Update(){
 	return true;
 }
 
-void VideoDriver::Draw(){
+void VideoDriver::BeginDraw(){
 	//DRAW 3D SCENE
 	privateSceneManager->Draw();
 
@@ -93,6 +94,9 @@ void VideoDriver::Draw(){
 	privateSceneManager->Draw2DElements();
 	end2DDrawState();
 
+}
+
+void VideoDriver::EndDraw(){
 	SetShaderProgram(STANDARD_SHADER);
 	glfwSwapBuffers(m_window);
 }
@@ -210,20 +214,25 @@ void VideoDriver::SetWindowName(std::string name){
 Program* VideoDriver::SetShaderProgram(SHADERTYPE p){
 	Program* toRet = m_programs.find(p)->second;
 	if(m_lastShaderUsed != p){
+		m_lastShaderUsed = p;
 		glUseProgram(toRet->GetProgramID());
+		privateSceneManager->SendLights();
 	}
-	m_lastShaderUsed = p;
 
 	return toRet;
 }
+
+SHADERTYPE VideoDriver::GetCurrentProgram(){
+	if(m_lastShaderUsed == NONE_SHADER) m_lastShaderUsed = STANDARD_SHADER;
+	return m_lastShaderUsed;
+}
+
 
 void VideoDriver::SetIODriver(IODriver* driver){
 	privateIODriver = driver;
 }
 
 void VideoDriver::SetMouseVisibility(bool visible){
-	//if(visible == 0) glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-	//else glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	if(visible == 0){
 		int w = 1;
 		int h = 1;
@@ -250,82 +259,60 @@ void VideoDriver::SetCursorPosition(int x, int y){
 // Private Functions
 void VideoDriver::initShaders(){
 	// CARGAMOS EL PROGRAMA STANDAR
-		// LOAD IN RESOURCE MANAGER
-		TResourceManager::GetInstance()->GetResourceShader(m_assetsPath + "/shaders/FShader.glsl");
-		TResourceManager::GetInstance()->GetResourceShader(m_assetsPath + "/shaders/VShader.glsl");
+	std::map<std::string, GLenum> shaders = std::map<std::string, GLenum>();	
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShader.glsl", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShader.glsl", GL_FRAGMENT_SHADER));
 
-		// CARGAMOS LOS SHADERS
-		std::map<std::string, GLenum> shaders = std::map<std::string, GLenum>();	
-		shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShader.glsl", GL_VERTEX_SHADER));
-		shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShader.glsl", GL_FRAGMENT_SHADER));
-		
-		Program* p = new Program(shaders);
-		m_programs.insert(std::pair<SHADERTYPE, Program*>(STANDARD_SHADER,p));
+	Program* p = new Program(shaders);
+	m_programs.insert(std::pair<SHADERTYPE, Program*>(STANDARD_SHADER,p));
 
 	// CARGAMOS EL PROGRAMA DE TEXTO
-		// LOAD IN RESOURCE MANAGER
-		TResourceManager::GetInstance()->GetResourceShader(m_assetsPath + "/shaders/VShaderText.glsl");
-		TResourceManager::GetInstance()->GetResourceShader(m_assetsPath + "/shaders/FShaderText.glsl");
+	shaders = std::map<std::string, GLenum>();
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderText.glsl", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShaderText.glsl", GL_FRAGMENT_SHADER));
 
-		// CARGAMOS LOS SHADERS
-		shaders = std::map<std::string, GLenum>();
-		shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderText.glsl", GL_VERTEX_SHADER));
-		shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShaderText.glsl", GL_FRAGMENT_SHADER));
-
-		p = new Program(shaders);
-		m_programs.insert(std::pair<SHADERTYPE, Program*>(TEXT_SHADER, p));
+	p = new Program(shaders);
+	m_programs.insert(std::pair<SHADERTYPE, Program*>(TEXT_SHADER, p));
 
 	// CARGAMOS EL PROGRAMA DE PARTICULAS
-		// LOAD IN RESOURCE MANAGER
-		TResourceManager::GetInstance()->GetResourceShader(m_assetsPath + "/shaders/VShaderParticle.glsl");
-		TResourceManager::GetInstance()->GetResourceShader(m_assetsPath + "/shaders/FShaderParticle.glsl");
+	shaders = std::map<std::string, GLenum>();
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderParticle.glsl", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShaderParticle.glsl", GL_FRAGMENT_SHADER));
 
-		// CARGAMOS LOS SHADERS
-		shaders = std::map<std::string, GLenum>();
-		shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderParticle.glsl", GL_VERTEX_SHADER));
-		shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShaderParticle.glsl", GL_FRAGMENT_SHADER));
+	p = new Program(shaders);
+	m_programs.insert(std::pair<SHADERTYPE, Program*>(PARTICLE_SHADER, p));
 
-		p = new Program(shaders);
-		m_programs.insert(std::pair<SHADERTYPE, Program*>(PARTICLE_SHADER, p));
-	
 	// CARGAMOS EL PROGRAMA DE POLIGONOS 2D 
-		// LOAD IN RESOURCE MANAGER
-		TResourceManager::GetInstance()->GetResourceShader(m_assetsPath + "/shaders/VShader2D.glsl");
-		TResourceManager::GetInstance()->GetResourceShader(m_assetsPath + "/shaders/FShader2D.glsl");
+	shaders = std::map<std::string, GLenum>();
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShader2D.glsl", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShader2D.glsl", GL_FRAGMENT_SHADER));
 
-		// CARGAMOS LOS SHADERS
-		shaders = std::map<std::string, GLenum>();
-		shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShader2D.glsl", GL_VERTEX_SHADER));
-		shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShader2D.glsl", GL_FRAGMENT_SHADER));
-
-		p = new Program(shaders);
-		m_programs.insert(std::pair<SHADERTYPE, Program*>(TWOD_SHADER, p));
+	p = new Program(shaders);
+	m_programs.insert(std::pair<SHADERTYPE, Program*>(TWOD_SHADER, p));
 
 	// CARGAMOS EL PROGRAMA DE SPRITES
-		// LOAD IN RESOURCE MANAGER
-		TResourceManager::GetInstance()->GetResourceShader(m_assetsPath + "/shaders/VShaderSprites.glsl");
-		TResourceManager::GetInstance()->GetResourceShader(m_assetsPath + "/shaders/FShaderSprites.glsl");
+	shaders = std::map<std::string, GLenum>();
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderSprites.glsl", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShaderSprites.glsl", GL_FRAGMENT_SHADER));
 
-		// CARGAMOS LOS SHADERS
-		shaders = std::map<std::string, GLenum>();
-		shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderSprites.glsl", GL_VERTEX_SHADER));
-		shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShaderSprites.glsl", GL_FRAGMENT_SHADER));
-
-		p = new Program(shaders);
-		m_programs.insert(std::pair<SHADERTYPE, Program*>(SPRITE_SHADER, p));	
+	p = new Program(shaders);
+	m_programs.insert(std::pair<SHADERTYPE, Program*>(SPRITE_SHADER, p));	
 
 	// CARGAMOS EL PROGRAMA DE BOUNDIN BOXES
-		// LOAD IN RESOURCE MANAGER
-		TResourceManager::GetInstance()->GetResourceShader(m_assetsPath + "/shaders/VShaderBB.glsl");
-		TResourceManager::GetInstance()->GetResourceShader(m_assetsPath + "/shaders/FShaderBB.glsl");
+	shaders = std::map<std::string, GLenum>();
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderBB.glsl", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShaderBB.glsl", GL_FRAGMENT_SHADER));
 
-		// CARGAMOS LOS SHADERS
-		shaders = std::map<std::string, GLenum>();
-		shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderBB.glsl", GL_VERTEX_SHADER));
-		shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShaderBB.glsl", GL_FRAGMENT_SHADER));
+	p = new Program(shaders);
+	m_programs.insert(std::pair<SHADERTYPE, Program*>(BB_SHADER, p));
 
-		p = new Program(shaders);
-		m_programs.insert(std::pair<SHADERTYPE, Program*>(BB_SHADER, p));	
+	// CARGAMOS EL PROGRAMA DE BOUNDIN BOXES
+	shaders = std::map<std::string, GLenum>();
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderDistorsion.glsl", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShader.glsl", GL_FRAGMENT_SHADER));
+
+	p = new Program(shaders);
+	m_programs.insert(std::pair<SHADERTYPE, Program*>(DISTORSION_SHADER, p));
 }
 
 void VideoDriver::start2DDrawState(){

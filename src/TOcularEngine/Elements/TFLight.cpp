@@ -21,6 +21,8 @@ TFLight::TFLight(toe::core::TOEvector3df position, toe::core::TOEvector3df rotat
 	glm::vec4 glmColor = glm::vec4(color.X, color.Y, color.X2, color.Y2);
 	TColor myColor = TColor(glmColor);
 	m_entityNode->SetEntity(new TLight(myColor, attenuation));
+
+	m_LastLocation = glm::vec3(0);
 }
 
 TFLight::~TFLight(){
@@ -64,11 +66,13 @@ void TFLight::DrawLight(int num){
 	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
 
 	if(myEntity->GetActive()){
-		Program* myProgram = VideoDriver::GetInstance()->GetProgram(STANDARD_SHADER);
+		VideoDriver* vd = VideoDriver::GetInstance();
+		Program* myProgram = vd->GetProgram(vd->GetCurrentProgram());
+
 		std::string str = "Light["+std::to_string(num)+"].";
 		std::string aux = "";
 
-		glm::vec3 location = m_entityNode->GetTranslation();
+		glm::vec3 location = m_LastLocation;
 		aux = str +"Position";
 		GLint lightPLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
 		glUniform3fv(lightPLocation, 1, glm::value_ptr(location));
@@ -89,4 +93,9 @@ void TFLight::DrawLight(int num){
 		float att = GetAttenuation();
 		glUniform1f(AttenuationLocation, att);
 	}
+}
+
+glm::vec3 TFLight::CalculateLocation(){
+	m_LastLocation = m_entityNode->GetTranslation();
+	return m_LastLocation;
 }
