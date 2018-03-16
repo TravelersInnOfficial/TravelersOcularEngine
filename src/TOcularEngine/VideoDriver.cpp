@@ -194,6 +194,13 @@ toe::core::TOEvector2di VideoDriver::GetScreenResolution(){
     return toe::core::TOEvector2di(mode->width, mode->height);
 }
 
+toe::core::TOEvector2di VideoDriver::GetWindowResolution(){
+	int x = 0;
+	int y = 0;
+	if(m_window != nullptr) glfwGetWindowSize(m_window, &x, &y); 	
+	return toe::core::TOEvector2di(x, y);
+}
+
 // Setters
 void VideoDriver::SetClearScreenColor(toe::core::TOEvector4df color){
 	m_clearSceenColor = color;

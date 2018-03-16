@@ -78,6 +78,12 @@ public:
 	toe::core::TOEvector2di GetScreenResolution();
 
 	/**
+	 * @brief Get the Window Resolution
+	 * @return toe::core::TOEvector2di 
+	 */
+	toe::core::TOEvector2di GetWindowResolution();
+
+	/**
 	 * @brief Get the Window Dimensions
 	 * 
 	 * @return toe::core::TOEvector2di 
