@@ -1,5 +1,5 @@
 #version 130
-#define fisheyeEffect 0.75 // fisheyeEffect < 0
+#define barrelEffect 1.25 // barrelEffect < 0
 
 in vec3 VertexPosition;  // VERTICE EN COORDENADAS LOCALES
 in vec3 VertexNormal;    // NORMAL EL COORDENADAS LOCALES
@@ -19,7 +19,7 @@ vec4 ApplyFishEye(vec4 p){
     float radius = length(v);
     if (radius > 0){
         float theta = atan(v.y,v.x);
-        radius = pow(radius, fisheyeEffect);
+        radius = pow(radius, barrelEffect);
         v.x = radius * cos(theta);
         v.y = radius * sin(theta);
         p.xy = v.xy * p.w;

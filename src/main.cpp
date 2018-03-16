@@ -46,6 +46,7 @@ void CreateTree(TFMesh*& m1, TFMesh*& m2, TFMesh*& m3){
 	scale = toe::core::TOEvector3df(0.7f, 0.7f, 0.7f);
 	mesh = sm->AddMesh(pos, rot, scale, "./../assets/models/teapot.obj");
 	mesh->SetTexture("./../assets/textures/checkerboard_texture.jpg");
+	mesh->SetProgram(BARREL_SHADER);
 
 	pos = toe::core::TOEvector3df(0.0f, -1.8f, 10.0f);
 	scale = toe::core::TOEvector3df(0.55f, 0.55f, 0.55f);

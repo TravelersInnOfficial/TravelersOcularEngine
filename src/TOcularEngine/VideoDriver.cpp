@@ -23,7 +23,7 @@ VideoDriver::VideoDriver(){
 	// Init engine stuff
 	privateSceneManager = new SceneManager();
 	privateIODriver = nullptr;
-	
+
 	// Iinitialize GLFW
 	glfwSetErrorCallback(VideoDriver::glwf_error_callback);
     glfwInit();
@@ -43,7 +43,7 @@ bool VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2di
     glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
     glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE );
     glfwWindowHint( GLFW_RESIZABLE, GL_FALSE );
-	glHint(GL_POLYGON_SMOOTH_HINT, GL_FASTEST); 
+	glHint(GL_POLYGON_SMOOTH_HINT, GL_FASTEST);
 
 	//create glfwindow and make it the current window
 	GLFWmonitor* monitor = nullptr;
@@ -52,7 +52,7 @@ bool VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2di
 		monitor = glfwGetPrimaryMonitor();
 	}
 	m_window = glfwCreateWindow(dimensions.X,dimensions.Y, m_name.c_str(), monitor, NULL);
-    
+
 	glfwMakeContextCurrent(m_window);
 	SetReceiver();
 
@@ -69,7 +69,7 @@ bool VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2di
 	glCullFace(GL_BACK);			//| Habilitar el backface culing
 	glFrontFace(GL_CW);
 
-	glShadeModel(GL_SMOOTH); 
+	glShadeModel(GL_SMOOTH);
 
 	initShaders();
 	privateSceneManager->InitScene();
@@ -151,7 +151,7 @@ SceneManager* VideoDriver::GetSceneManager(){
 }
 
 IODriver* VideoDriver::GetIOManager(){
-	return privateIODriver;    
+	return privateIODriver;
 }
 
 float VideoDriver::GetTime(){
@@ -252,68 +252,58 @@ void VideoDriver::SetCursorPosition(int x, int y){
 // Private Functions
 void VideoDriver::initShaders(){
 	// CARGAMOS EL PROGRAMA STANDAR
-	std::map<std::string, GLenum> shaders = std::map<std::string, GLenum>();	
+	std::map<std::string, GLenum> shaders = std::map<std::string, GLenum>();
 	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShader.glsl", GL_VERTEX_SHADER));
 	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShader.glsl", GL_FRAGMENT_SHADER));
-
-	Program* p = new Program(shaders);
-	m_programs.insert(std::pair<SHADERTYPE, Program*>(STANDARD_SHADER,p));
+	m_programs.insert(std::pair<SHADERTYPE, Program*>(STANDARD_SHADER, new Program(shaders)));
 
 	// CARGAMOS EL PROGRAMA DE TEXTO
 	shaders = std::map<std::string, GLenum>();
 	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderText.glsl", GL_VERTEX_SHADER));
 	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShaderText.glsl", GL_FRAGMENT_SHADER));
-
-	p = new Program(shaders);
-	m_programs.insert(std::pair<SHADERTYPE, Program*>(TEXT_SHADER, p));
+	m_programs.insert(std::pair<SHADERTYPE, Program*>(TEXT_SHADER, new Program(shaders)));
 
 	// CARGAMOS EL PROGRAMA DE PARTICULAS
 	shaders = std::map<std::string, GLenum>();
 	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderParticle.glsl", GL_VERTEX_SHADER));
 	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShaderParticle.glsl", GL_FRAGMENT_SHADER));
+	m_programs.insert(std::pair<SHADERTYPE, Program*>(PARTICLE_SHADER, new Program(shaders)));
 
-	p = new Program(shaders);
-	m_programs.insert(std::pair<SHADERTYPE, Program*>(PARTICLE_SHADER, p));
-
-	// CARGAMOS EL PROGRAMA DE POLIGONOS 2D 
+	// CARGAMOS EL PROGRAMA DE POLIGONOS 2D
 	shaders = std::map<std::string, GLenum>();
 	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShader2D.glsl", GL_VERTEX_SHADER));
 	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShader2D.glsl", GL_FRAGMENT_SHADER));
-
-	p = new Program(shaders);
-	m_programs.insert(std::pair<SHADERTYPE, Program*>(TWOD_SHADER, p));
+	m_programs.insert(std::pair<SHADERTYPE, Program*>(TWOD_SHADER, new Program(shaders)));
 
 	// CARGAMOS EL PROGRAMA DE SPRITES
 	shaders = std::map<std::string, GLenum>();
 	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderSprites.glsl", GL_VERTEX_SHADER));
 	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShaderSprites.glsl", GL_FRAGMENT_SHADER));
-
-	p = new Program(shaders);
-	m_programs.insert(std::pair<SHADERTYPE, Program*>(SPRITE_SHADER, p));	
+	m_programs.insert(std::pair<SHADERTYPE, Program*>(SPRITE_SHADER, new Program(shaders)));
 
 	// CARGAMOS EL PROGRAMA DE BOUNDIN BOXES
 	shaders = std::map<std::string, GLenum>();
 	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderBB.glsl", GL_VERTEX_SHADER));
 	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShaderBB.glsl", GL_FRAGMENT_SHADER));
-
-	p = new Program(shaders);
-	m_programs.insert(std::pair<SHADERTYPE, Program*>(BB_SHADER, p));
+	m_programs.insert(std::pair<SHADERTYPE, Program*>(BB_SHADER, new Program(shaders)));
 
 	// CARGAMOS EL PROGRAMA DE DISTORSION
 	shaders = std::map<std::string, GLenum>();
 	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderDistorsion.glsl", GL_VERTEX_SHADER));
 	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShader.glsl", GL_FRAGMENT_SHADER));
-
-	p = new Program(shaders);
-	m_programs.insert(std::pair<SHADERTYPE, Program*>(DISTORSION_SHADER, p));
+	m_programs.insert(std::pair<SHADERTYPE, Program*>(DISTORSION_SHADER, new Program(shaders)));
 
 	// CARGAMOS EL PROGRAMA DE FISHEYE
 	shaders = std::map<std::string, GLenum>();
 	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderFisheye.glsl", GL_VERTEX_SHADER));
 	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShader.glsl", GL_FRAGMENT_SHADER));
+	m_programs.insert(std::pair<SHADERTYPE, Program*>(FISHEYE_SHADER, new Program(shaders)));
 
-	p = new Program(shaders);
-	m_programs.insert(std::pair<SHADERTYPE, Program*>(FISHEYE_SHADER, p));
+	// CARGAMOS EL PROGRAMA DE BARREL
+	shaders = std::map<std::string, GLenum>();
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderBarrel.glsl", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShader.glsl", GL_FRAGMENT_SHADER));
+	m_programs.insert(std::pair<SHADERTYPE, Program*>(BARREL_SHADER, new Program(shaders)));
 }
 
 void VideoDriver::start2DDrawState(){
@@ -330,7 +320,7 @@ void VideoDriver::start2DDrawState(){
 	glMatrixMode(GL_MODELVIEW);		//activamos la matriz ModelView
 	glPushMatrix(); 				//guardamos en la pila el estado actual de la matriz ModelView
 	glLoadIdentity(); 				//cargamos la matriz identidad en la matriz ModelView
-	
+
 	glPushAttrib(GL_DEPTH_TEST);	//guardamos en la pila el estado actual del test de profundidad
 	glDepthMask(GL_FALSE);			//desactivamos la escritura en el buffer de profundidad
 	glDisable(GL_DEPTH_TEST);		//desactivamos el test de profundidad
