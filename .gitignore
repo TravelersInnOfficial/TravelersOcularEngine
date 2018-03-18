@@ -1,3 +1,5 @@
 # Compiled Object files
 obj/*
-bin/*
+
+# Executable
+bin/EngineTest*
