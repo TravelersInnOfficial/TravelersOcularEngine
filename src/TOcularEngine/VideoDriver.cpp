@@ -223,7 +223,6 @@ SHADERTYPE VideoDriver::GetCurrentProgram(){
 	return m_lastShaderUsed;
 }
 
-
 void VideoDriver::SetIODriver(IODriver* driver){
 	privateIODriver = driver;
 }
