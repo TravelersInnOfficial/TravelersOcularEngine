@@ -41,8 +41,8 @@ bool TResourceTexture::LoadFile(){
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_imageData);	// Cargamos nuestros datos en la textura de OpenGL
 
 		// Algunos Parametros de Textura --> https://www.khronos.org/registry/OpenGL-Refpages/es2.0/xhtml/glTexParameter.xml
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
 		// Algunos Filtros de Textura --> https://www.khronos.org/registry/OpenGL-Refpages/es2.0/xhtml/glTexParameter.xml
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
