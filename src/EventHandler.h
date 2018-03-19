@@ -16,6 +16,7 @@ public:
     float screenCenterY;
 
     static bool m_close;
+    static int shaderType;
     
     static float xdist;
     static float ydist;

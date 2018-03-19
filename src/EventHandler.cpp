@@ -2,6 +2,7 @@
 #include "TOcularEngine/VideoDriver.h"
 #include <glm/gtc/matrix_transform.hpp>
 
+int EventHandler::shaderType = 0;
 float EventHandler::xdist = 0.0f;
 float EventHandler::ydist = 6.0f;
 float EventHandler::zdist = -10.0f;
@@ -28,6 +29,11 @@ bool EventHandler::OnEvent(const TEvent& event){
 		if(event.m_key.code == Key_D) Key_D_Pressed = true;
 		if(event.m_key.code == Key_S) Key_S_Pressed = true;
 		if(event.m_key.code == Key_W) Key_W_Pressed = true;
+		
+		if(event.m_key.code == Key_ENTER){
+			shaderType++;
+			if(shaderType > 3) shaderType = 0;
+		}
 	}
 
 	if(event.m_type == Type_KeyReleased){

@@ -15,7 +15,7 @@ uniform mat4 ViewMatrix;
 
 void main() {
 	// TRANSFORMAR VERTICE Y NORMAL A COORDENADAS DE VISTA
-	Position = vec3 (ModelViewMatrix * vec4(VertexPosition, 1.0f));		// VIEW * MODEL * VERTEXPOS
+	Position = vec3 (ModelViewMatrix * vec4(VertexPosition, 1.0f));
 	Normal = normalize (ModelViewMatrix * vec4(VertexNormal,0)).xyz;
 
 	// LAS COORDENADAS DE TEXTURA NO SUFREN TRANSFORMACION
@@ -24,4 +24,4 @@ void main() {
 
 	// TRANSFORMAR Y PROYECTAR EL VERTICE (POSICION DEL FRAGMENTO)
 	gl_Position = MVP * vec4(VertexPosition, 1.0f);
-} 
+}

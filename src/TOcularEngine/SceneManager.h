@@ -141,6 +141,19 @@ public:
     void SetAmbientLight(toe::core::TOEvector3df ambientLight);
 
     /**
+     * @brief Change the main camera
+     * @details If no camera is passed, change to the next available camera
+     * 
+     * @param camera 
+     */
+    void ChangeMainCamera(TFCamera* camera = nullptr);
+
+    /**
+     * @brief Set the View matrix and the Projection matrix
+     */
+    void SetMainCameraData();
+
+    /**
      * @brief Get the Ambient Light object
      * 
      * @return toe::core::TOEvector3df 
@@ -162,35 +175,22 @@ public:
     TFCamera* GetMainCamera();
 
     /**
-     * @brief Change the main camera
-     * @details If no camera is passed, change to the next available camera
+     * @brief TODO: finish comment
      * 
-     * @param camera 
      */
-    void ChangeMainCamera(TFCamera* camera = nullptr);
-
-    /**
-     * @brief Set the View matrix and the Projection matrix
-     */
-    void SetMainCameraData();
+    void InitScene();
 
     /**
      * @brief TODO: finish comment
      * 
      */
     void Update();
-
-    /**
-     * @brief TODO: finish comment
-     * 
-     */
-    void InitScene();
     
     /**
      * @brief TODO: finish comment
      * 
      */
-    void ResetManager();
+    void Draw();
 
     /**
      * @brief TODO: finish comment
@@ -199,12 +199,6 @@ public:
      * @param num 
      */
     void DrawLight(TFLight* light, int num);
-    
-    /**
-     * @brief TODO: finish comment
-     * 
-     */
-    void Draw();
 
     /**
      * @brief TODO: finish comment
@@ -217,6 +211,12 @@ public:
      * 
      */
     void DrawBoundingBoxes(bool draw);
+    
+    /**
+     * @brief TODO: finish comment
+     * 
+     */
+    void ResetManager();
 
     void RecalculateLightPosition();
     void SendLights();
@@ -224,6 +224,8 @@ public:
 
 private:
     GLuint m_vao;
+    GLuint m_frameBuffer;
+    GLuint m_depthText;
     TNode* m_SceneTreeRoot;
 
     std::vector<TFCamera*>   m_cameras;  // Pointers to the cameras created
@@ -235,7 +237,6 @@ private:
     TFCamera* m_main_camera;
     TFDome* m_dome;
 
-    glm::mat4 GetTransformInTree(TNode* node);
     void ClearElements();
 };
 #endif

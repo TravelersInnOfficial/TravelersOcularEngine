@@ -14,51 +14,15 @@ SceneManager::SceneManager(){
 	m_ambientLight = glm::vec3(0.25f);
 	m_main_camera = nullptr;
 	m_dome = nullptr;
+
+	m_vao = 0;
+	m_frameBuffer = 0;
+	m_depthText = 0;
 }
 
 SceneManager::~SceneManager(){
 	ClearElements();
 	glDeleteVertexArrays(1, &m_vao);
-}
-
-void SceneManager::ClearElements(){
-	int size = m_cameras.size();
-	for(int i = size - 1; i >= 0; i--){
-		delete m_cameras[i];
-	}
-	m_cameras.clear();
-	
-	size = m_lights.size();
-	for(int i = size - 1; i >= 0; i--){
-		delete m_lights[i];
-	}
-	m_lights.clear();
-
-	size = m_objects.size();
-	for(int i = size - 1; i>=0; i--){
-		delete m_objects[i];
-	}
-	m_objects.clear();
-
-
-	size = m_2Delems.size();
-	for(int i = size - 1; i>=0; i--){
-		delete m_2Delems[i];
-	}
-	m_2Delems.clear();
-
-	delete m_SceneTreeRoot;
-	m_SceneTreeRoot = nullptr;
-	m_dome = nullptr;
-}
-
-void SceneManager::ResetManager(){
-	ClearElements();
-	TTransform* myTransform = new TTransform();
-	m_SceneTreeRoot = new TNode(myTransform);
-	m_ambientLight = glm::vec3(0.25f);
-	m_main_camera = nullptr;
-	m_dome = nullptr;
 }
 
 TFCamera* SceneManager::AddCamera(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, bool perspective){
@@ -169,13 +133,6 @@ bool SceneManager::DeleteMesh(TFNode* node){
 	return toRet;
 }
 
-void SceneManager::Update(){
-	if(m_main_camera != nullptr && m_dome != nullptr){
-		toe::core::TOEvector3df position = m_main_camera->GetTranslation();
-		m_dome->SetTranslate(position);
-	}
-}
-
 void SceneManager::SetAmbientLight(toe::core::TOEvector3df ambientLight){
 	m_ambientLight = glm::vec3(ambientLight.X, ambientLight.Y, ambientLight.Z);
 }
@@ -184,14 +141,48 @@ toe::core::TOEvector3df SceneManager::GetAmbientLight(){
 	return toe::core::TOEvector3df(m_ambientLight.x, m_ambientLight.y, m_ambientLight.z);
 }
 
-void SceneManager::Draw(){
-	// Select active camera and set view and projection matrix
-	SetMainCameraData();
+void SceneManager::SetMainCameraData(){
+	if(m_main_camera!=nullptr){
+		TEntity::SetViewMatrixPtr( glm::inverse(m_main_camera->m_entityNode->GetTransformMatrix()) );
+	}
+}
 
-	RecalculateLightPosition();
-	SendLights();
+TNode* SceneManager::GetRootNode(){
+	return m_SceneTreeRoot;
+}
 
-    m_SceneTreeRoot->Draw();
+TFCamera* SceneManager::GetMainCamera(){
+	return m_main_camera;
+}
+
+void SceneManager::ChangeMainCamera(TFCamera* camera){
+	// En el caso de que se pase un nullptr vamos a querer poner la siguiente camara
+	// es por eso que vamos tanto a buscar si esta la camera pasada como la main camera
+	int cameraPos = -1;
+	int mainCameraPos = -1;
+	int size = m_cameras.size();
+	for(int i=0; i<size; i++){
+		TFCamera* current = m_cameras[i];
+		// Buscamos la main Camera
+		if(current == m_main_camera){
+			mainCameraPos = i;
+			// En el caso de que no haya camara pasada podemos salir del bucle
+			if(camera == nullptr) break;
+		}
+		// Buscamos la Camara pasada, si es nullptr nunca se encontrara
+		if(current == camera){
+			cameraPos = -1;
+			break;	// Como ya hemos encontrado la camara podemos salir
+		}
+	}
+
+	// En el caso de que no se haya encontrado la camara o era nullptr
+	if(cameraPos == -1){
+		cameraPos = mainCameraPos + 1;
+		// En el caso de que nos pasemos volvemos al principio
+		if(cameraPos == size) cameraPos = 0;
+	}
+	m_main_camera = m_cameras[cameraPos];
 }
 
 void SceneManager::RecalculateLightPosition(){
@@ -217,6 +208,32 @@ void SceneManager::SendLights(){
     for(int i = 0; i < size; i++) m_lights[i]->DrawLight(i);
 }
 
+void SceneManager::InitScene(){
+	glGenVertexArrays(1, &m_vao); // CREAMOS EL ARRAY DE VERTICES PARA LOS OBJETOS
+	glBindVertexArray(m_vao);
+}
+
+
+void SceneManager::Update(){
+	if(m_main_camera != nullptr && m_dome != nullptr){
+		toe::core::TOEvector3df position = m_main_camera->GetTranslation();
+		m_dome->SetTranslate(position);
+	}
+}
+
+void SceneManager::Draw(){
+	// Create frame for shadows
+
+	// Select active camera and set view and projection matrix
+	SetMainCameraData();
+
+	// Send lights position to shader
+	RecalculateLightPosition();
+	SendLights();
+
+    m_SceneTreeRoot->Draw();
+}
+
 void SceneManager::Draw2DElements(){
 	//DRAW 2D ELEMENTS AFTER THE 3D SCENE
 	for(int i = 0; i< m_2Delems.size(); i++){
@@ -231,56 +248,46 @@ void SceneManager::DrawBoundingBoxes(bool draw){
 	}
 }
 
-void SceneManager::InitScene(){
-	glGenVertexArrays(1, &m_vao); // CREAMOS EL ARRAY DE VERTICES PARA LOS OBJETOS
-	glBindVertexArray(m_vao);
-}
-
-TNode* SceneManager::GetRootNode(){
-	return m_SceneTreeRoot;
+void SceneManager::ResetManager(){
+	ClearElements();
+	TTransform* myTransform = new TTransform();
+	m_SceneTreeRoot = new TNode(myTransform);
+	m_ambientLight = glm::vec3(0.25f);
+	m_main_camera = nullptr;
+	m_dome = nullptr;
 }
 
 void SceneManager::SetClipping(bool value){
 	TEntity::m_checkClipping = value;
 }
 
-void SceneManager::SetMainCameraData(){
-	if(m_main_camera!=nullptr){
-		TEntity::SetViewMatrixPtr( m_main_camera->m_entityNode->GetTransformMatrix() );
-		TEntity::SetViewMatrixPtr(glm::inverse(TEntity::ViewMatrix));
+void SceneManager::ClearElements(){
+	int size = m_cameras.size();
+	for(int i = size - 1; i >= 0; i--){
+		delete m_cameras[i];
 	}
+	m_cameras.clear();
+	
+	size = m_lights.size();
+	for(int i = size - 1; i >= 0; i--){
+		delete m_lights[i];
+	}
+	m_lights.clear();
+
+	size = m_objects.size();
+	for(int i = size - 1; i>=0; i--){
+		delete m_objects[i];
+	}
+	m_objects.clear();
+
+
+	size = m_2Delems.size();
+	for(int i = size - 1; i>=0; i--){
+		delete m_2Delems[i];
+	}
+	m_2Delems.clear();
+
+	delete m_SceneTreeRoot;
+	m_SceneTreeRoot = nullptr;
+	m_dome = nullptr;
 }
-
-TFCamera* SceneManager::GetMainCamera(){
-	return m_main_camera;
-}
-
- void SceneManager::ChangeMainCamera(TFCamera* camera){
- 	// En el caso de que se pase un nullptr vamos a querer poner la siguiente camara
- 	// es por eso que vamos tanto a buscar si esta la camera pasada como la main camera
- 	int cameraPos = -1;
- 	int mainCameraPos = -1;
- 	int size = m_cameras.size();
- 	for(int i=0; i<size; i++){
- 		TFCamera* current = m_cameras[i];
- 		// Buscamos la main Camera
- 		if(current == m_main_camera){
- 			mainCameraPos = i;
- 			// En el caso de que no haya camara pasada podemos salir del bucle
- 			if(camera == nullptr) break;
- 		}
- 		// Buscamos la Camara pasada, si es nullptr nunca se encontrara
- 		if(current == camera){
- 			cameraPos = -1;
- 			break;	// Como ya hemos encontrado la camara podemos salir
- 		}
- 	}
-
- 	// En el caso de que no se haya encontrado la camara o era nullptr
- 	if(cameraPos == -1){
- 		cameraPos = mainCameraPos + 1;
- 		// En el caso de que nos pasemos volvemos al principio
- 		if(cameraPos == size) cameraPos = 0;
- 	}
- 	m_main_camera = m_cameras[cameraPos];
- }
