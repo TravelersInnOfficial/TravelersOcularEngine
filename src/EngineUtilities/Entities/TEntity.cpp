@@ -2,6 +2,8 @@
 
 TEntity::~TEntity(){}
 
+bool TEntity::m_checkClipping = false;
+
 std::stack<glm::mat4> TEntity::InitializeStack(){
     static std::stack<glm::mat4> aux;
     aux.push(glm::mat4(1.0f));

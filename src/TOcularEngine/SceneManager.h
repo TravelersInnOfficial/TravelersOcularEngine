@@ -220,6 +220,7 @@ public:
 
     void RecalculateLightPosition();
     void SendLights();
+    void SetClipping(bool value);
 
 private:
     GLuint m_vao;

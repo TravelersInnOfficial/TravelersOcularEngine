@@ -21,6 +21,7 @@ public:
 	static std::stack<glm::mat4> m_stack;
 	static glm::mat4 ViewMatrix;
 	static glm::mat4 ProjMatrix;
+	static bool m_checkClipping;
 	
 	SHADERTYPE m_program;
 

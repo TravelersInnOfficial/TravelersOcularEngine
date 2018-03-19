@@ -240,6 +240,10 @@ TNode* SceneManager::GetRootNode(){
 	return m_SceneTreeRoot;
 }
 
+void SceneManager::SetClipping(bool value){
+	TEntity::m_checkClipping = value;
+}
+
 void SceneManager::SetMainCameraData(){
 	if(m_main_camera!=nullptr){
 		TEntity::SetViewMatrixPtr( m_main_camera->m_entityNode->GetTransformMatrix() );

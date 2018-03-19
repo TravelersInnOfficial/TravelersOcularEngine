@@ -34,6 +34,9 @@ public:
 	void SetAssetsPath(std::string newPath);
 	void SetGlobalBoundingBoxes(bool enable);
 
+	void EnableClipping();
+	void DisableClipping();
+
 //GETTERS
 	/**
 	 * @brief Returns an instance of the Video Driver

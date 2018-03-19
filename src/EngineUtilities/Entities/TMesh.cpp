@@ -33,7 +33,45 @@ void TMesh::SetBBVisibility(bool visible){
 }
 
 void TMesh::BeginDraw(){
+	VideoDriver::GetInstance()->GetSceneManager()->ChangeMainCamera();
+	VideoDriver::GetInstance()->GetSceneManager()->SetMainCameraData();
+
 	if(m_mesh != nullptr && CheckClipping()){
+		/*glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+		glEnable(GL_DEPTH_TEST);
+
+		// PRIMERO DE TODO PINTAMOS EN EL Z BUFFER DE LA CAMARA DE PRUEBAS
+			{
+			// Bind and send the data to the VERTEX SHADER
+			SendShaderData();
+			
+			// Bind and draw elements depending of how many vbos
+			GLuint elementsBuffer = m_mesh->GetElementBuffer();
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBuffer);
+			glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
+			}
+		// VOLVEMOS A PINTAR EN EL LUGAR BUENO
+		VideoDriver::GetInstance()->GetSceneManager()->ChangeMainCamera();
+		VideoDriver::GetInstance()->GetSceneManager()->SetMainCameraData();
+		glDisable(GL_DEPTH_TEST);
+		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+
+			// Bind and send the data to the VERTEX SHADER
+			SendShaderData();
+			
+			// Bind and draw elements depending of how many vbos
+			GLuint elementsBuffer = m_mesh->GetElementBuffer();
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBuffer);
+			glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
+
+
+
+		// Draw bounding box
+		glEnable(GL_DEPTH_TEST);*/
+
+		VideoDriver::GetInstance()->GetSceneManager()->ChangeMainCamera();
+		VideoDriver::GetInstance()->GetSceneManager()->SetMainCameraData();
+
 		// Bind and send the data to the VERTEX SHADER
 		SendShaderData();
 		
@@ -42,8 +80,13 @@ void TMesh::BeginDraw(){
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBuffer);
 		glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
 
-		// Draw bounding box
 		if(m_visibleBB) DrawBoundingBox();
+
+
+
+	}else{
+		VideoDriver::GetInstance()->GetSceneManager()->ChangeMainCamera();
+		VideoDriver::GetInstance()->GetSceneManager()->SetMainCameraData();
 	}
 }
 
@@ -226,11 +269,15 @@ void TMesh::DrawBoundingBox() {
 	glDeleteBuffers(1, &ibo_elements);
 }
 
+int Sign(int v){
+	if(v>=0) return 1;
+	else return -1;
+}
+
 // http://www.lighthouse3d.com/tutorials/view-frustum-culling/geometric-approach-testing-boxes-ii/
 // Posible mejora para el clipping
 bool TMesh::CheckClipping(){
-	//VideoDriver::GetInstance()->GetSceneManager()->ChangeMainCamera();
-	//VideoDriver::GetInstance()->GetSceneManager()->SetMainCameraData();
+	if(!m_checkClipping) return true;
 
 	bool output = true;
 	glm::vec3 center = m_mesh->GetCenter();
@@ -239,14 +286,8 @@ bool TMesh::CheckClipping(){
 	glm::mat4 mvpMatrix = ProjMatrix * ViewMatrix * m_stack.top();
 	// Comprobamos el cliping con los 8 puntos 
 
-	int upDown, leftRight, nearFar;
-	upDown = leftRight = nearFar = 0;
-
-	// sign lambda
-	auto Sign = [](int v){
-		if(v>=0) return 1;
-		else return -1;
-	};
+	int upDown, leftRight, nearFar, raster, visible;
+	upDown = leftRight = nearFar = raster = visible = 0;
 
 	for(int i=-1; i<=0; i++){
 		// +X -X
@@ -257,25 +298,66 @@ bool TMesh::CheckClipping(){
 				glm::vec3 point = center + glm::vec3(size.x/2.0f * Sign(i), size.y/2.0f * Sign(j), size.z/2.0f * Sign(k));
 				glm::vec4 mvpPoint = mvpMatrix * glm::vec4(point.x, point.y, point.z, 1.0f);
 
-
-
 				CheckClippingAreas(mvpPoint, &upDown, &leftRight, &nearFar);
 			}
 		}
 	}
 
-
+	// Comprobacion clipping
 	int sides = 8;
 	if(upDown == sides || upDown == -sides || leftRight == sides || leftRight == -sides || nearFar == sides){
 		output = false;
 	}
 
-	//VideoDriver::GetInstance()->GetSceneManager()->ChangeMainCamera();
-	//VideoDriver::GetInstance()->GetSceneManager()->SetMainCameraData();
-
 	return output;
 }
 
 bool TMesh::CheckOclusion(){
+	bool output = true;
+	glm::vec3 center = m_mesh->GetCenter();
+	glm::vec3 size = m_mesh->GetSize();
 
+	glm::mat4 mvpMatrix = ProjMatrix * ViewMatrix * m_stack.top();
+
+	toe::core::TOEvector2di sizeWindow = VideoDriver::GetInstance()->GetWindowResolution();
+	int width = sizeWindow.X;
+	int height = sizeWindow.Y;
+
+	int raster, visible;
+	raster = visible = 0;
+
+	for(int i=-1; i<=0; i++){
+		// +X -X
+		for(int j=-1; j<=0; j++){
+			// +Y -Y
+			for(int k=-1; k<=0; k++){
+				// +Z -Z
+				glm::vec3 point = center + glm::vec3(size.x/2.0f * Sign(i), size.y/2.0f * Sign(j), size.z/2.0f * Sign(k));
+				glm::vec4 mvpPoint = mvpMatrix * glm::vec4(point.x, point.y, point.z, 1.0f);
+
+				glm::vec3 pixelRead(mvpPoint.x, mvpPoint.y, mvpPoint.z);
+				pixelRead = pixelRead / mvpPoint.w;
+				pixelRead.x = ((pixelRead.x + 1)/2) * width;
+				pixelRead.y = ((pixelRead.y + 1)/2) * height;
+				pixelRead.z = (pixelRead.z+1)/2;
+
+				float depthBuff = 0.0f;
+				glReadPixels(static_cast<GLint>(pixelRead.x), static_cast<GLint>(pixelRead.y), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depthBuff);
+
+				if(pixelRead.x >= 0.0f && pixelRead.x <= width && pixelRead.y >= 0.0f && pixelRead.y <= height && mvpPoint.z > 0){
+				
+					if(depthBuff < pixelRead.z) raster++;
+				}else{
+					visible++;
+				}
+			}
+		}
+	}
+
+	int sides = 8;
+	if(raster!=0 && raster == sides - visible){
+		output = false;
+	}
+
+	return output;
 }

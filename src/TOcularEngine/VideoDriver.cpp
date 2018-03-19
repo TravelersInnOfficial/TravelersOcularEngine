@@ -378,3 +378,11 @@ void VideoDriver::mouse_scroll_callback(GLFWwindow* window, double xoffset, doub
 void VideoDriver::glwf_error_callback(int error, const char* description){
     fprintf(stderr, "Error %d: %s\n", error, description);
 }
+
+void VideoDriver::EnableClipping(){
+	privateSceneManager->SetClipping(true);
+}
+
+void VideoDriver::DisableClipping(){
+	privateSceneManager->SetClipping(false);
+}
