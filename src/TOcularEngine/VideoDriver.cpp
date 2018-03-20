@@ -348,6 +348,7 @@ void VideoDriver::end2DDrawState(){
 	glPopAttrib();					//recuperamos de la pila el estado del test de profundidad
 	glDepthMask(GL_TRUE); 			//activamos la escritura en el buffer de profundidad
 	glEnable(GL_DEPTH_TEST);		//activamos el test de profundidad
+	glEnable(GL_DEPTH_CLAMP);
 	glEnable(GL_CULL_FACE);			//activamos el backface culling
 
 	glMatrixMode(GL_MODELVIEW);		//activamos la matriz ModelView
