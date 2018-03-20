@@ -10,7 +10,7 @@ TResourceMesh::TResourceMesh(std::string name){
 	m_basicTexture = nullptr;
 	m_basicMaterial = nullptr;
 	m_center = glm::vec3(0,0,0);
-	m_size = glm::vec3(0,0,0);
+	m_size = glm::vec3(1,1,1);
 
 	// Inicializamos los buffer
 	m_vbo = 0;

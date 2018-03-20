@@ -15,9 +15,9 @@ public:
 	bool 		SetEntity(TEntity* entity);		// Le asigna la entidad al nodo
 	bool 		SetParent(TNode* parent);		// Le asigna la entidad al nodo
 	int 		AddChild(TNode* child);			// Anyade un hijo al vector de hijos del nodo
-	int 		AddFirstChild(TNode* child);			// Anyade un hijo al vector de hijos del nodo
+	int 		AddFirstChild(TNode* child);	// Anyade un hijo al vector de hijos del nodo
 	int 		RemoveChild(TNode* child);		// Quita un hijo del vector de hijos del nodo
-	void		Draw();							// Pinta el nodo
+	virtual 	void Draw();					// Pinta el nodo
 
 	TEntity*	GetEntity();					// Devuelve la entidad al nodo
 	TNode*		GetParent();					// Devuelve el padre del nodo
@@ -28,7 +28,7 @@ public:
 	glm::vec3  	GetRotation();					// Returns vec3 Rotation
 	glm::vec3  	GetScale();						// Returns vec3 Scale
 
-private:
+protected:
 	TEntity*			m_entity;				// Entidad que marca el tipo de nodo, con sus propias funciones
 	std::vector<TNode*>	m_children;				// Vector de nodos hijos
 	TNode*				m_parent;				// Nodo padre al actual
