@@ -66,18 +66,21 @@ void CreateTree(TFMesh*& m1, TFMesh*& m2, TFMesh*& m3){
 	scale = toe::core::TOEvector3df(0.7f, 0.7f, 0.7f);
 	mesh = sm->AddMesh(pos, rot, scale, "./../assets/models/teapot.obj");
 	mesh->SetTexture("./../assets/textures/checkerboard_texture.jpg");
+	mesh->SetBoundBox(true);
 	sceneObjects.push_back(mesh);
 
 	pos = toe::core::TOEvector3df(0.0f, -1.8f, 10.0f);
 	scale = toe::core::TOEvector3df(0.55f, 0.55f, 0.55f);
 	mesh = sm->AddMesh(pos, rot, scale, "./../assets/models/teapot.obj");
 	mesh->SetTexture("./../assets/textures/teapot_texture1.jpg");
+	mesh->SetBoundBox(true);
 	sceneObjects.push_back(mesh);
 
 	pos = toe::core::TOEvector3df(7.0f, -1.8f, 10.0f);
 	scale = toe::core::TOEvector3df(0.4f, 0.4f, 0.4f);
 	mesh = sm->AddMesh(pos, rot, scale, "./../assets/models/teapot.obj");
 	mesh->SetTexture("./../assets/textures/teapot_texture2.jpg");
+	mesh->SetBoundBox(true);
 	sceneObjects.push_back(mesh);
 
 	// LUCES ###################################################
