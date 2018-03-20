@@ -167,7 +167,8 @@ toe::core::TOEvector2di VideoDriver::GetWindowDimensions(){
 Program* VideoDriver::GetProgram(SHADERTYPE p){
 	return m_programs[p];
 }
-std::map<SHADERTYPE,Program*> VideoDriver::GetProgramVector(){
+
+std::map<SHADERTYPE,Program*>& VideoDriver::GetProgramVector(){
 	return m_programs;
 }
 
@@ -306,6 +307,12 @@ void VideoDriver::initShaders(){
 	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderBarrel.glsl", GL_VERTEX_SHADER));
 	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShader.glsl", GL_FRAGMENT_SHADER));
 	m_programs.insert(std::pair<SHADERTYPE, Program*>(BARREL_SHADER, new Program(shaders)));
+
+	// CARGAMOS EL PROGRAMA DE SOMBRAS
+	shaders = std::map<std::string, GLenum>();
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShadows.glsl", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShadows.glsl", GL_FRAGMENT_SHADER));
+	m_programs.insert(std::pair<SHADERTYPE, Program*>(SHADOW_SHADER, new Program(shaders)));
 }
 
 void VideoDriver::start2DDrawState(){

@@ -105,7 +105,7 @@ public:
 	 * 
 	 * @return std::map<SHADERTYPE,Program*> 
 	 */
-	std::map<SHADERTYPE,Program*> GetProgramVector();
+	std::map<SHADERTYPE,Program*>& GetProgramVector();
 
 	/**
 	 * @brief Get the Window object
