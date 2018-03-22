@@ -45,9 +45,7 @@ public:
 
 	glm::mat4 GetProjectionMatrix();
 
-	glm::mat4 RecalculateProjectionMatrix();
-
-	glm::mat4 GetTransform();
+	void RecalculateProjectionMatrix();
 	
 	SHADERTYPE m_program;
 

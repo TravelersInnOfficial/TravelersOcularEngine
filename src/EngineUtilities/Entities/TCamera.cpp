@@ -106,14 +106,13 @@ glm::mat4 TCamera::GetProjectionMatrix(){
 # OTHERS #####################################################################################
 ############################################################################################*/
 
-glm::mat4 TCamera::RecalculateProjectionMatrix(){
+void TCamera::RecalculateProjectionMatrix(){
 	if(m_perspective) m_projectionMatrix = CalculatePerspectiveMatrix();
 	else m_projectionMatrix = CalculateOrthogonalMatrix();
 
 	// Set Entity ProjectionMatrix
 	m_projectionMatrix = glm::scale(m_projectionMatrix, glm::vec3(1, 1, -1));
 	ProjMatrix = m_projectionMatrix;
-	return(m_projectionMatrix);
 }
 
 glm::mat4 TCamera::CalculatePerspectiveMatrix(){

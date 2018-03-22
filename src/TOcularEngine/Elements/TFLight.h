@@ -1,6 +1,17 @@
 #ifndef TFLIGHT_H
 #define TFLIGHT_H
 
+/**
+ * @brief 
+ * 
+ * @file TFLight.h
+ * @author Travelers INN
+ * @date 2018-03-20
+ * 
+ *  Shadows bassed in #16 opengl tutorial 
+ * 	http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-16-shadow-mapping/#rendering-the-shadow-map
+ */
+
 #include <TOEvector4d.h>
 #include "TFNode.h"
 
