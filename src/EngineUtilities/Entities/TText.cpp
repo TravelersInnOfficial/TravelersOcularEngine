@@ -77,7 +77,7 @@ void TText::SendShaderData(){
 
 		// SEND THE MATRIX
 		GLint mvpLocation = glGetUniformLocation(myProgram->GetProgramID(), "MVP");
-		glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(mvpMatrix));
+		glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, &mvpMatrix[0][0]);
 
 	// Enviamos los vertices del texto
 		// BIND VERTEX

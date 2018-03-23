@@ -1,5 +1,4 @@
 #include "TDome.h"
-#include <glm/gtc/type_ptr.hpp>
 #include <GL/glew.h>
 #include "../TOcularEngine/VideoDriver.h"
 
@@ -69,7 +68,7 @@ void TDome::SendShaderData(){
 	// SEND THE MODELVIEWPROJECTION MATRIX
 	glm::mat4 mvpMatrix = ProjMatrix * ViewMatrix * m_stack.top();
 	GLint mvpLocation = glGetUniformLocation(myProgram->GetProgramID(), "MVP");
-	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(mvpMatrix));
+	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, &mvpMatrix[0][0]);
 
 	// -------------------------------------------------------- ENVIAMOS LA TEXTURA
 	TResourceTexture* currentTexture = nullptr;

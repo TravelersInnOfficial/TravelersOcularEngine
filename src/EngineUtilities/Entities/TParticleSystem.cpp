@@ -98,7 +98,7 @@ void TParticleSystem::SendShaderData(){
 
 		// SEND THE MATRIX
 		GLint indexAttrib = glGetUniformLocation(idProgram, "MVP");
-		glUniformMatrix4fv(indexAttrib, 1, GL_FALSE, glm::value_ptr(mvpMatrix));
+		glUniformMatrix4fv(indexAttrib, 1, GL_FALSE, &mvpMatrix[0][0]);
 
 		glm::mat3 m_view = ViewMatrix;
 		//m_view = glm::inverse(m_view);
@@ -111,7 +111,7 @@ void TParticleSystem::SendShaderData(){
 
 
 		indexAttrib = glGetUniformLocation(idProgram, "MRot");
-		glUniformMatrix4fv(indexAttrib, 1, GL_FALSE, glm::value_ptr(rotation));
+		glUniformMatrix4fv(indexAttrib, 1, GL_FALSE, &rotation[0][0]);
 
 	// Enviamos los vertex basicos
 		// Le decimos al shader que el atributo solamente se va a pasar una vez

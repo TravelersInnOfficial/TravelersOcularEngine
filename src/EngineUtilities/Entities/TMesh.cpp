@@ -134,32 +134,32 @@ void TMesh::SendShaderData(){
 	// -------------------------------------------------------- ENVIAMOS LAS MATRICES
 	// SEND THE MODEL MATRIX
 	GLint mmLocation = glGetUniformLocation(myProgram->GetProgramID(), "ModelMatrix");
-	glUniformMatrix4fv(mmLocation, 1, GL_FALSE, glm::value_ptr(m_stack.top()));
+	glUniformMatrix4fv(mmLocation, 1, GL_FALSE, &m_stack.top()[0][0]);
 
 	// SEND THE VIEW MATRIX
 	GLint vLocation = glGetUniformLocation(myProgram->GetProgramID(), "ViewMatrix");
-	glUniformMatrix4fv(vLocation, 1, GL_FALSE, glm::value_ptr(ViewMatrix));
+	glUniformMatrix4fv(vLocation, 1, GL_FALSE, &ViewMatrix[0][0]);
 
 	// SEND THE MODELVIEW MATRIX
 	glm::mat4 modelView = ViewMatrix * m_stack.top();
 	GLint mvLocation = glGetUniformLocation(myProgram->GetProgramID(), "ModelViewMatrix");
-	glUniformMatrix4fv(mvLocation, 1, GL_FALSE, glm::value_ptr(modelView));
+	glUniformMatrix4fv(mvLocation, 1, GL_FALSE, &modelView[0][0]);
 
 	// SEND THE PROJECTION MATRIX
 	glm::mat4 pMatrix = ProjMatrix;
 	GLint pLocation = glGetUniformLocation(myProgram->GetProgramID(), "ProjectionMatrix");
-	glUniformMatrix4fv(pLocation, 1, GL_FALSE, glm::value_ptr(pMatrix));
+	glUniformMatrix4fv(pLocation, 1, GL_FALSE, &pMatrix[0][0]);
 
 	// SEND THE MODELVIEWPROJECTION MATRIX
 	glm::mat4 mvpMatrix = ProjMatrix * modelView;
 	GLint mvpLocation = glGetUniformLocation(myProgram->GetProgramID(), "MVP");
-	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(mvpMatrix));
+	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, &mvpMatrix[0][0]);
 
 	// SEND THE NORMAL MATRIX (ROTAMOS LAS NORMALES)
 	glm::mat3 normalMatrix = m_stack.top();
 	normalMatrix = glm::transpose(glm::inverse(normalMatrix));
 	GLint normalMLocation = glGetUniformLocation(myProgram->GetProgramID(), "NormalMatrix");
-	glUniformMatrix3fv(normalMLocation, 1, GL_FALSE, glm::value_ptr(normalMatrix));
+	glUniformMatrix3fv(normalMLocation, 1, GL_FALSE, &normalMatrix[0][0]);
 
 	// -------------------------------------------------------- ENVIAMOS LA TEXTURA
 	TResourceTexture* currentTexture = nullptr;
@@ -184,13 +184,13 @@ void TMesh::SendShaderData(){
 		glUniform1f(shininess, currentMaterial->GetShininess());
 
 		GLuint diffuse = glGetUniformLocation(myProgram->GetProgramID(), "Material.Diffuse");
-		glUniform3fv(diffuse, 1, glm::value_ptr(currentMaterial->GetColorDifuse()));
+		glUniform3fv(diffuse, 1, &currentMaterial->GetColorDifuse()[0]);
 
 		GLuint specular = glGetUniformLocation(myProgram->GetProgramID(), "Material.Specular");
-		glUniform3fv(specular, 1, glm::value_ptr(currentMaterial->GetColorSpecular()));
+		glUniform3fv(specular, 1, &currentMaterial->GetColorSpecular()[0]);
 
 		GLuint ambient = glGetUniformLocation(myProgram->GetProgramID(), "Material.Ambient");
-		glUniform3fv(ambient, 1, glm::value_ptr(currentMaterial->GetColorAmbient()));
+		glUniform3fv(ambient, 1, &currentMaterial->GetColorAmbient()[0]);
 	}
 
 }
@@ -236,7 +236,7 @@ void TMesh::DrawBoundingBox() {
 	// Apply object's transformation matrix 
 	glm::mat4 m = ProjMatrix * ViewMatrix * m_stack.top() * transform;
 	GLuint uniform_m = glGetUniformLocation(myProgram->GetProgramID(), "MVP");
-	glUniformMatrix4fv(uniform_m, 1, GL_FALSE, glm::value_ptr(m));
+	glUniformMatrix4fv(uniform_m, 1, GL_FALSE, &m[0][0]);
 
 	// Send light color
 	GLuint linecolor = glGetUniformLocation(myProgram->GetProgramID(), "LineColor");

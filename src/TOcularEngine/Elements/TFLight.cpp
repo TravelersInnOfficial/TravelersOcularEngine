@@ -75,18 +75,18 @@ void TFLight::DrawLight(int num){
 		glm::vec3 location = m_LastLocation;
 		aux = str +"Position";
 		GLint lightPLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
-		glUniform3fv(lightPLocation, 1, glm::value_ptr(location));
+		glUniform3fv(lightPLocation, 1, &location[0]);
 
 		toe::core::TOEvector4df color = GetColor();
 		glm::vec3 diffuse = glm::vec3(color.X, color.Y, color.X2);
 		aux = str +"Diffuse";
 		GLint diffLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
-		glUniform3fv(diffLocation, 1, glm::value_ptr(diffuse));
+		glUniform3fv(diffLocation, 1, &diffuse[0]);
 
 		glm::vec3 specular = glm::vec3(color.X, color.Y, color.X2);
 		aux = str +"Specular";
 		GLint specLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
-		glUniform3fv(specLocation, 1, glm::value_ptr(specular));
+		glUniform3fv(specLocation, 1, &specular[0]);
 
 		aux = str +"Attenuation";
 		GLint AttenuationLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
