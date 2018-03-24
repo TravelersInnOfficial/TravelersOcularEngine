@@ -2,8 +2,6 @@
 
 TEntity::~TEntity(){}
 
-bool TEntity::m_checkClipping = false;
-
 std::stack<glm::mat4> TEntity::InitializeStack(){
     static std::stack<glm::mat4> aux;
     aux.push(glm::mat4(1.0f));
@@ -19,13 +17,10 @@ void TEntity::SetProgram(SHADERTYPE program){
 // Initialize static variables
 glm::mat4 TEntity::ViewMatrix;
 glm::mat4 TEntity::ProjMatrix;
+bool TEntity::m_checkClipping = false;
 
 void TEntity::SetViewMatrixPtr(glm::mat4 view){
     ViewMatrix = view;
-}
-
-void TEntity::SetProjMatrixPtr(glm::mat4 proj){
-    ProjMatrix = proj;
 }
 
 bool TEntity::CheckClipping(){
@@ -37,6 +32,8 @@ bool TEntity::CheckClipping(){
 bool TEntity::CheckClippingPoint(glm::vec4 Pclip){
 	return abs(Pclip.x) < Pclip.w && abs(Pclip.y) < Pclip.w && 0 < Pclip.z && Pclip.z < Pclip.w;
 }
+
+void TEntity::DrawShadow(){}
 
 void TEntity::CheckClippingAreas(glm::vec4 point, int* upDown, int* leftRight, int* nearFar){
     if(point.x > point.w) (*leftRight)++;

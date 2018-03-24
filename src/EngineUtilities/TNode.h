@@ -10,7 +10,7 @@ public:
 	TNode();
 	TNode(TEntity* entity);
 	TNode(TNode* parent, TEntity* entity);
-	~TNode();
+	virtual ~TNode();
 
 	bool 		SetEntity(TEntity* entity);		// Le asigna la entidad al nodo
 	bool 		SetParent(TNode* parent);		// Le asigna la entidad al nodo
@@ -18,6 +18,7 @@ public:
 	int 		AddFirstChild(TNode* child);	// Anyade un hijo al vector de hijos del nodo
 	int 		RemoveChild(TNode* child);		// Quita un hijo del vector de hijos del nodo
 	virtual 	void Draw();					// Pinta el nodo
+	void DrawShadows();							// Pinta las sombras
 
 	TEntity*	GetEntity();					// Devuelve la entidad al nodo
 	TNode*		GetParent();					// Devuelve el padre del nodo

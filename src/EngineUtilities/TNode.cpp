@@ -115,6 +115,16 @@ void TNode::Draw(){
 	if(m_entity != nullptr) m_entity->EndDraw();
 }
 
+void TNode::DrawShadows(){
+	if(m_entity != nullptr) m_entity->DrawShadow();
+	
+	int size = m_children.size();
+	for(int i=0; i<size; i++){
+		TNode* child = m_children[i];	// Pintamos cada uno de los hijos del nodo
+		child->DrawShadows();
+	}
+}
+
 glm::mat4 TNode::GetTransformMatrix(){
 	TNode* auxParent;
 	glm::mat4 toReturn;

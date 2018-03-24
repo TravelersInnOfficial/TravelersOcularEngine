@@ -11,11 +11,11 @@ public:
 	virtual ~TEntity();
 	virtual void EndDraw() = 0;
 	virtual void BeginDraw() = 0;
+	virtual void DrawShadow();
 	virtual bool CheckClipping();
 	void SetProgram(SHADERTYPE program);
 
 	static void SetViewMatrixPtr(glm::mat4 view);
-	static void SetProjMatrixPtr(glm::mat4 proj);
 
 	static std::stack<glm::mat4> InitializeStack();
 	static std::stack<glm::mat4> m_stack;

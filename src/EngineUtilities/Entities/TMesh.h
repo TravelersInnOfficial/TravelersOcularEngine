@@ -12,8 +12,9 @@ public:
 	TMesh(std::string meshPath = "", std::string texturePath = "");
 	virtual ~TMesh();
 
-	virtual void BeginDraw();
-	virtual void EndDraw();
+	virtual void BeginDraw() override;
+	virtual void EndDraw() override;
+	void DrawShadow() override;
 
 	void LoadMesh(std::string meshPath = "");
 	void ChangeTexture(std::string texturePath = "");
@@ -44,7 +45,7 @@ protected:
 	 * @return true 
 	 * @return false 
 	 */
-	virtual	bool CheckClipping();
+	virtual	bool CheckClipping() override;
 	
 	/**
 	 * @brief 

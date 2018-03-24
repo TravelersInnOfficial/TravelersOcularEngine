@@ -93,6 +93,8 @@ void TMesh::BeginDraw(){
 void TMesh::EndDraw(){
 }
 
+void TMesh::DrawShadow(){ }
+
 void TMesh::SendShaderData(){
 	Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(m_program);
 
