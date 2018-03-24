@@ -10,5 +10,5 @@ out vec4 FragOverColor;
 void main(){
     FragTexCoords = TextureCoords;
     FragOverColor = overColor;
-    gl_Position = vec4(VertexPosition, 0.0f,1);
+    gl_Position = vec4(VertexPosition, 0.0,1);
 }

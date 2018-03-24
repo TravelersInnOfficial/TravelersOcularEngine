@@ -262,62 +262,62 @@ void VideoDriver::SetCursorPosition(int x, int y){
 void VideoDriver::initShaders(){
 	// CARGAMOS EL PROGRAMA STANDAR
 	std::map<std::string, GLenum> shaders = std::map<std::string, GLenum>();
-	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShader.glsl", GL_VERTEX_SHADER));
-	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShader.glsl", GL_FRAGMENT_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/ShaderStand.vs", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/ShaderStand.frag", GL_FRAGMENT_SHADER));
 	m_programs.insert(std::pair<SHADERTYPE, Program*>(STANDARD_SHADER, new Program(shaders)));
 
 	// CARGAMOS EL PROGRAMA DE TEXTO
 	shaders = std::map<std::string, GLenum>();
-	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderText.glsl", GL_VERTEX_SHADER));
-	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShaderText.glsl", GL_FRAGMENT_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/ShaderText.vs", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/ShaderText.frag", GL_FRAGMENT_SHADER));
 	m_programs.insert(std::pair<SHADERTYPE, Program*>(TEXT_SHADER, new Program(shaders)));
 
 	// CARGAMOS EL PROGRAMA DE PARTICULAS
 	shaders = std::map<std::string, GLenum>();
-	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderParticle.glsl", GL_VERTEX_SHADER));
-	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShaderParticle.glsl", GL_FRAGMENT_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/ShaderParticle.vs", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/ShaderParticle.frag", GL_FRAGMENT_SHADER));
 	m_programs.insert(std::pair<SHADERTYPE, Program*>(PARTICLE_SHADER, new Program(shaders)));
 
 	// CARGAMOS EL PROGRAMA DE POLIGONOS 2D
 	shaders = std::map<std::string, GLenum>();
-	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShader2D.glsl", GL_VERTEX_SHADER));
-	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShader2D.glsl", GL_FRAGMENT_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/Shader2D.vs", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/Shader2D.frag", GL_FRAGMENT_SHADER));
 	m_programs.insert(std::pair<SHADERTYPE, Program*>(TWOD_SHADER, new Program(shaders)));
 
 	// CARGAMOS EL PROGRAMA DE SPRITES
 	shaders = std::map<std::string, GLenum>();
-	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderSprites.glsl", GL_VERTEX_SHADER));
-	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShaderSprites.glsl", GL_FRAGMENT_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/ShaderSprites.vs", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/ShaderSprites.frag", GL_FRAGMENT_SHADER));
 	m_programs.insert(std::pair<SHADERTYPE, Program*>(SPRITE_SHADER, new Program(shaders)));
 
 	// CARGAMOS EL PROGRAMA DE BOUNDIN BOXES
 	shaders = std::map<std::string, GLenum>();
-	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderBB.glsl", GL_VERTEX_SHADER));
-	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShaderBB.glsl", GL_FRAGMENT_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/ShaderBB.vs", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/ShaderBB.frag", GL_FRAGMENT_SHADER));
 	m_programs.insert(std::pair<SHADERTYPE, Program*>(BB_SHADER, new Program(shaders)));
 
 	// CARGAMOS EL PROGRAMA DE DISTORSION
 	shaders = std::map<std::string, GLenum>();
-	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderDistorsion.glsl", GL_VERTEX_SHADER));
-	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShader.glsl", GL_FRAGMENT_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/ShaderDistorsion.vs", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/ShaderStand.frag", GL_FRAGMENT_SHADER));
 	m_programs.insert(std::pair<SHADERTYPE, Program*>(DISTORSION_SHADER, new Program(shaders)));
 
 	// CARGAMOS EL PROGRAMA DE FISHEYE
 	shaders = std::map<std::string, GLenum>();
-	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderFisheye.glsl", GL_VERTEX_SHADER));
-	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShader.glsl", GL_FRAGMENT_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/ShaderFisheye.vs", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/ShaderStand.frag", GL_FRAGMENT_SHADER));
 	m_programs.insert(std::pair<SHADERTYPE, Program*>(FISHEYE_SHADER, new Program(shaders)));
 
 	// CARGAMOS EL PROGRAMA DE BARREL
 	shaders = std::map<std::string, GLenum>();
-	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShaderBarrel.glsl", GL_VERTEX_SHADER));
-	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShader.glsl", GL_FRAGMENT_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/ShaderBarrel.vs", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/ShaderStand.frag", GL_FRAGMENT_SHADER));
 	m_programs.insert(std::pair<SHADERTYPE, Program*>(BARREL_SHADER, new Program(shaders)));
 
 	// CARGAMOS EL PROGRAMA DE SOMBRAS
 	shaders = std::map<std::string, GLenum>();
-	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/VShadows.glsl", GL_VERTEX_SHADER));
-	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/FShadows.glsl", GL_FRAGMENT_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/Shadows.vs", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/Shadows.frag", GL_FRAGMENT_SHADER));
 	m_programs.insert(std::pair<SHADERTYPE, Program*>(SHADOW_SHADER, new Program(shaders)));
 }
 

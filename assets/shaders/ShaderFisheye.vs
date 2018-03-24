@@ -1,5 +1,5 @@
 #version 130
-#define barrelEffect 1.25 // barrelEffect < 0
+#define fisheyeEffect 0.75 // fisheyeEffect < 0
 
 in vec3 VertexPosition;  // VERTICE EN COORDENADAS LOCALES
 in vec3 VertexNormal;    // NORMAL EL COORDENADAS LOCALES
@@ -19,7 +19,7 @@ vec4 ApplyFishEye(vec4 p){
     float radius = length(v);
     if (radius > 0){
         float theta = atan(v.y,v.x);
-        radius = pow(radius, barrelEffect);
+        radius = pow(radius, fisheyeEffect);
         v.x = radius * cos(theta);
         v.y = radius * sin(theta);
         p.xy = v.xy * p.w;
@@ -29,14 +29,14 @@ vec4 ApplyFishEye(vec4 p){
 
 void main() {
 	// TRANSFORMAR VERTICE Y NORMAL A COORDENADAS DE VISTA
-	Position = vec3 (ModelViewMatrix * vec4(VertexPosition, 1.0f));
+	Position = vec3 (ModelViewMatrix * vec4(VertexPosition, 1.0));
 	Normal = normalize (ModelViewMatrix * vec4(VertexNormal,0)).xyz;
 
 	// LAS COORDENADAS DE TEXTURA NO SUFREN TRANSFORMACION
 	TexCoords = TextureCoords;
 	FragViewMatrix = ViewMatrix;
-    
+ 
     // FISH EYE DISTORTION
-	vec4 P = MVP * vec4(VertexPosition, 1.0f);
+	vec4 P = MVP * vec4(VertexPosition, 1.0);
 	gl_Position = ApplyFishEye(P);
 } 

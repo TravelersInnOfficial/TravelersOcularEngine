@@ -7,5 +7,5 @@ out vec4 FragmentColor;
 
 void main(){
     FragmentColor = color;
-    gl_Position = vec4(position.x, position.y, 0.0f, 1.0);
+    gl_Position = vec4(position.x, position.y, 0.0, 1.0);
 }

@@ -67,7 +67,7 @@ void main() {
 	if(texValue.a < 0.5) discard;
 
 	// CALCULAMOS DIFFUSE + SPECULAR
-	vec4 result = vec4(0.0f);
+	vec4 result = vec4(0.0);
 	for(int i = 0; i < nlights; i++) result += vec4(Phong(i), 0.0);
 
 	// SUMAMOS AMBIENTAL
