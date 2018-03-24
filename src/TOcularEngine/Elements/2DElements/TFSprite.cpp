@@ -41,6 +41,14 @@ void TFSprite::Erase(){
     TFSprite::~TFSprite();
 }
 
+void TFSprite::ToBkg(){
+    VideoDriver::GetInstance()->GetSceneManager()->PushToBkg(this);
+}
+
+void TFSprite::ToFront(){
+     VideoDriver::GetInstance()->GetSceneManager()->PushToFront(this);
+}
+
 void TFSprite::Draw() const{
     Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(m_program);
 

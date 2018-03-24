@@ -25,6 +25,9 @@ public:
     
     void Erase() override;
 
+    void ToBkg() override;
+    void ToFront() override;
+
 private:
     TFRect(toe::core::TOEvector2df position, toe::core::TOEvector2df size, float rotation);
     ~TFRect();

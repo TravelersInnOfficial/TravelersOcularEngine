@@ -72,14 +72,46 @@ TFSprite* SceneManager::AddSprite(std::string texture, toe::core::TOEvector2df p
 	return toRet;
 }
 
-void SceneManager::Delete2Delement(TFDrawable* elem){
+void SceneManager::PushToBkg(TFDrawable* obj){
 	std::vector<TFDrawable*>::iterator it = m_2Delems.begin();
-	for(; it != m_2Delems.end(); ++it){
+	for(; it!=m_2Delems.end(); ++it){
+		if(*it == obj){
+			m_bkg2Delems.push_back(*it);
+			m_2Delems.erase(it);
+			break;
+		}
+	}
+}
 
+void SceneManager::PushToFront(TFDrawable* obj){
+	std::vector<TFDrawable*>::iterator it = m_bkg2Delems.begin();
+	for(; it!=m_bkg2Delems.end(); ++it){
+		if(*it == obj){
+			m_2Delems.push_back(*it);
+			m_bkg2Delems.erase(it);
+			break;
+		}
+	}
+}
+
+void SceneManager::Delete2Delement(TFDrawable* elem){
+	bool find = false;
+	std::vector<TFDrawable*>::iterator it = m_2Delems.begin();
+
+	for(; it != m_2Delems.end(); ++it){
 		if(*it == elem){ 
 			m_2Delems.erase(it);
-	
+			find = true;
 			break;
+		}
+	}
+	if(!find){
+		it = m_bkg2Delems.begin();
+		for(; it != m_bkg2Delems.end(); ++it){
+			if(*it == elem){ 
+				m_bkg2Delems.erase(it);
+				break;
+			}
 		}
 	}
 }
@@ -234,11 +266,14 @@ void SceneManager::Draw(){
     m_SceneTreeRoot->Draw();
 }
 
-void SceneManager::Draw2DElements(){
+void SceneManager::DrawBkg2DElements(){
 	//DRAW 2D ELEMENTS AFTER THE 3D SCENE
-	for(int i = 0; i< m_2Delems.size(); i++){
-		m_2Delems[i]->Draw();
-	}
+	for(int i = 0; i<m_bkg2Delems.size(); i++) m_bkg2Delems[i]->Draw();
+}
+
+void SceneManager::Draw2DElements(){
+	//DRAW 2D ELEMENTS AT THE END OF DRAWING
+	for(int i = 0; i< m_2Delems.size(); i++) m_2Delems[i]->Draw();
 }
 
 void SceneManager::DrawBoundingBoxes(bool draw){
@@ -280,11 +315,12 @@ void SceneManager::ClearElements(){
 	}
 	m_objects.clear();
 
+	size = m_bkg2Delems.size();
+	for (int i = size -1; i>=0; i--) delete m_bkg2Delems[i];
+	m_bkg2Delems.clear();
 
 	size = m_2Delems.size();
-	for(int i = size - 1; i>=0; i--){
-		delete m_2Delems[i];
-	}
+	for(int i = size - 1; i>=0; i--) delete m_2Delems[i];
 	m_2Delems.clear();
 
 	delete m_SceneTreeRoot;

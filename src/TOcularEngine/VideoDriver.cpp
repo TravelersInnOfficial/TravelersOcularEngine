@@ -84,15 +84,21 @@ bool VideoDriver::Update(){
 void VideoDriver::BeginDraw(){
 	//DRAW 3D SCENE
 	privateSceneManager->Draw();
+	
+	//DRAW BKG 2D ELEMENTS
+	start2DDrawState();
+	privateSceneManager->DrawBkg2DElements();
+	end2DDrawState();
+
+}
+
+void VideoDriver::EndDraw(){
 
 	//DRAW 2D ELEMENTS
 	start2DDrawState();
 	privateSceneManager->Draw2DElements();
 	end2DDrawState();
 
-}
-
-void VideoDriver::EndDraw(){
 	SetShaderProgram(STANDARD_SHADER);
 	glfwSwapBuffers(m_window);
 }

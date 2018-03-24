@@ -206,6 +206,8 @@ public:
      */
     void Draw2DElements();
 
+    void DrawBkg2DElements();
+
     /**
      * @brief TODO: finish comment
      * 
@@ -221,6 +223,8 @@ public:
     void RecalculateLightPosition();
     void SendLights();
     void SetClipping(bool value);
+    void PushToBkg(TFDrawable*);
+    void PushToFront(TFDrawable*);
 
 private:
     GLuint m_vao;
@@ -232,6 +236,7 @@ private:
     std::vector<TFLight*>    m_lights;   // Pointers to the lights created
     std::vector<TFNode*>     m_objects;  // Pointers to the nodes created
     std::vector<TFDrawable*> m_2Delems;
+    std::vector<TFDrawable*> m_bkg2Delems;
 
     glm::vec3 m_ambientLight;
     TFCamera* m_main_camera;

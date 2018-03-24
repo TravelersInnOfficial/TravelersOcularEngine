@@ -49,6 +49,9 @@ public:
 
     virtual void Erase() = 0;
 
+    virtual void ToBkg() = 0;
+    virtual void ToFront() = 0;
+
     virtual void SetTexture(std::string texture_path) = 0;
     virtual std::string GetTexture() const {return m_InData.texture;}
 

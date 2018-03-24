@@ -41,6 +41,14 @@ void TFRect::Erase(){
     TFRect::~TFRect();
 }
 
+void TFRect::ToBkg(){
+    VideoDriver::GetInstance()->GetSceneManager()->PushToBkg(this);
+}
+
+void TFRect::ToFront(){
+     VideoDriver::GetInstance()->GetSceneManager()->PushToFront(this);
+}
+
 void TFRect::Draw() const{
 
     Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(m_program);
