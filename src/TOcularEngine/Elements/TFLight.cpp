@@ -6,7 +6,7 @@
 
 // GLEW AND GLM
 #include <GL/glew.h>
-#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 TFLight::TFLight(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector4df color, float attenuation) : TFNode(){
 	TTransform* t = (TTransform*) m_scaleNode->GetEntity();
@@ -93,6 +93,34 @@ void TFLight::DrawLight(int num){
 		float att = GetAttenuation();
 		glUniform1f(AttenuationLocation, att);
 	}
+}
+
+void TFLight::DrawLightShadow(int num){
+	VideoDriver* vd = VideoDriver::GetInstance();
+	Program* prog = vd->GetProgram(SHADOW_SHADER);
+
+	//std::string str = "Shadows["+std::to_string(num)+"].";
+	std::string aux = "";
+
+	// Compute the MVP matrix from the light's point of view
+	//glm::vec3 lightInvDir = glm::vec3(0.0f,15.0f,10.0f);
+	glm::vec3 lightInvDir = m_LastLocation;
+	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10,10,-10,10,-10,20);
+	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0.0f,0.0f,0.0f), glm::vec3(0.0f,1.0f,0.0f));
+	glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix;
+
+	// Send our transformation to the currently bound shader,
+	// in the "MVP" uniform
+	aux = "DepthMVP";
+	GLuint depthMatrixID = glGetUniformLocation(prog->GetProgramID(), "DepthMVP");
+	glUniformMatrix4fv(depthMatrixID, 1, GL_FALSE, &depthMVP[0][0]);
+
+	TEntity::DepthWVP = depthMVP;
+}
+
+void TFLight::SetBoundBox(bool box){
+	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
+	myEntity->drawBB = box;
 }
 
 glm::vec3 TFLight::CalculateLocation(){

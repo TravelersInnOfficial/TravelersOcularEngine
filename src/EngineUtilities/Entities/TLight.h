@@ -20,6 +20,9 @@ public:
 
 	void 	BeginDraw();				// Empezar a pintar la luz
 	void 	EndDraw();					// Acabar de pintar la luz
+	
+	void 	DrawBB();
+	bool 	drawBB;
 
 private:
 	TColor m_color;

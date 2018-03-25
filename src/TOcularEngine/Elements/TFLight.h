@@ -28,6 +28,8 @@ public:
 	bool GetActive();								// Returns the light active state
 	glm::vec3 CalculateLocation();
 
+	void SetBoundBox(bool);
+	
 private:
 	TFLight(
 		toe::core::TOEvector3df position = toe::core::TOEvector3df(0, 0, 0),
@@ -37,6 +39,7 @@ private:
 	);
 	~TFLight();
 	void DrawLight(int num);
+	void DrawLightShadow(int num);
 	glm::vec3 m_LastLocation;
 
 };
