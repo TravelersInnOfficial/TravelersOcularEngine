@@ -14,6 +14,7 @@ TFNode::TFNode(){
 	m_positionNode->AddChild(m_entityNode);
 
 	m_parent = nullptr;
+	m_entity = NONE_ENTITY;
 }
 
 TFNode::~TFNode(){
@@ -233,3 +234,10 @@ int TFNode::AddBillboard(toe::core::TOEvector3df position, std::string text, flo
 }
 
 void TFNode::SetBoundBox(bool visible){ }
+
+void TFNode::SetProgram(SHADERTYPE shader, ENTITYTYPE entity){ 
+	if(m_entity == entity || entity == NONE_ENTITY){
+		TEntity* myEntity = m_entityNode->GetEntity();
+		myEntity->SetProgram(shader);
+	}
+}

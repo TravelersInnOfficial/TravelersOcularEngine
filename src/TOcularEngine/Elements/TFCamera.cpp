@@ -15,6 +15,8 @@ TFCamera::TFCamera(toe::core::TOEvector3df position, toe::core::TOEvector3df rot
 	t->Translate(position.X, position.Y, position.Z);
 
 	m_entityNode->SetEntity(new TCamera(perspective));
+
+	m_entity = TCAMERA_ENTITY;
 }
 
 TFCamera::~TFCamera(){

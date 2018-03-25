@@ -3,7 +3,9 @@
 
 #include <TOEvector3d.h>
 #include <TColor.h>
+#include <EntityTypes.h>
 #include <vector>
+#include <ShaderTypes.h>
 
 // Forward declaration
 class TFText;
@@ -50,6 +52,15 @@ public:
 	 */
 	virtual void SetBoundBox(bool visible);
 
+
+	/**
+	 * @brief Change the shader of the Entity
+	 * 
+	 * @param Shader to change
+	 * @param Type of entity to change the shader
+	 */
+	virtual void SetProgram(SHADERTYPE shader, ENTITYTYPE entity = NONE_ENTITY);
+
 protected:
 	TNode* m_rotationNode;
 	TNode* m_scaleNode;
@@ -59,6 +70,7 @@ protected:
 	std::vector<TFText*> m_billboards;	// Vector of billboards of the TFNode
 	std::vector<TFNode*> m_children;	// Vector of children of the TFNode
 	TFNode* m_parent;					// If Parent is null, this TFNode is attatched to the ROOT NODE
+	ENTITYTYPE m_entity; 
 
 	TFNode();
 	virtual ~TFNode();

@@ -174,6 +174,8 @@ public:
 	 */
 	void SetMouseVisibility(bool visible);
 
+	void ChangeShader(SHADERTYPE shader, ENTITYTYPE entity);
+
 private:
 	/**
 	 * @brief Video Driver constructor

@@ -393,3 +393,8 @@ void VideoDriver::EnableClipping(){
 void VideoDriver::DisableClipping(){
 	privateSceneManager->SetClipping(false);
 }
+
+void VideoDriver::ChangeShader(SHADERTYPE shader, ENTITYTYPE entity){
+	privateSceneManager->ChangeShader(shader, entity);
+}
+

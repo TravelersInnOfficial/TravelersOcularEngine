@@ -283,6 +283,14 @@ void SceneManager::DrawBoundingBoxes(bool draw){
 	}
 }
 
+void SceneManager::ChangeShader(SHADERTYPE shader, ENTITYTYPE entity){
+	int size = m_objects.size();
+	for(int i=0; i<size; i++){
+		TFNode* currentNode = m_objects[i];
+		currentNode->SetProgram(shader, entity);
+	}
+}
+
 void SceneManager::ResetManager(){
 	ClearElements();
 	TTransform* myTransform = new TTransform();

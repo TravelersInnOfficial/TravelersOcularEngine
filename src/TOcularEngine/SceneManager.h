@@ -226,6 +226,8 @@ public:
     void PushToBkg(TFDrawable*);
     void PushToFront(TFDrawable*);
 
+    void ChangeShader(SHADERTYPE shader, ENTITYTYPE entity);
+
 private:
     GLuint m_vao;
     GLuint m_frameBuffer;

@@ -14,6 +14,8 @@ TFText::TFText(	toe::core::TOEvector3df position, toe::core::TOEvector3df rotati
 	t->Translate(position.X, position.Y, position.Z);
 
 	m_entityNode->SetEntity(new TText(text, charSize, texture));
+
+	m_entity = TTEXT_ENTITY;
 }
 
 TFText::~TFText(){}

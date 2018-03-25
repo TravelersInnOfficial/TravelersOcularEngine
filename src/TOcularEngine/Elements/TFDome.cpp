@@ -19,6 +19,8 @@ TFDome::TFDome( toe::core::TOEvector3df position,
 	t->Translate(position.X, position.Y, position.Z);
 
 	m_entityNode->SetEntity(new TDome(texturePath));
+
+	m_entity = TDOME_ENTITY;
 }
 TFDome::~TFDome(){
     

@@ -23,6 +23,8 @@ TFLight::TFLight(toe::core::TOEvector3df position, toe::core::TOEvector3df rotat
 	m_entityNode->SetEntity(new TLight(myColor, attenuation));
 
 	m_LastLocation = glm::vec3(0);
+
+	m_entity = TLIGHT_ENTITY;
 }
 
 TFLight::~TFLight(){

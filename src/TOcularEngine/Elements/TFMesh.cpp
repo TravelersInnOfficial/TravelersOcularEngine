@@ -15,6 +15,8 @@ TFMesh::TFMesh(toe::core::TOEvector3df position, toe::core::TOEvector3df rotatio
 	t->Translate(position.X, position.Y, position.Z);
 
 	m_entityNode->SetEntity(new TMesh(meshPath));
+
+	m_entity = TMESH_ENTITY;
 }
 
 TFMesh::~TFMesh(){
@@ -23,11 +25,6 @@ TFMesh::~TFMesh(){
 void TFMesh::SetTexture(std::string texturePath){
 	TMesh* myMesh = (TMesh*) m_entityNode->GetEntity();
 	myMesh->ChangeTexture(texturePath);
-}
-
-void TFMesh::SetProgram(SHADERTYPE m_program){
-	TMesh* myMesh = (TMesh*) m_entityNode->GetEntity();
-	myMesh->SetProgram(m_program);
 }
 
 void TFMesh::SetMesh(std::string meshPath){
