@@ -38,8 +38,6 @@ void TTransform::Rotate(float X, float Y, float Z, float W){
 
 void TTransform::Rotate(float X, float Y, float Z){
 	glm::quat axisX = glm::angleAxis(glm::radians(X), glm::vec3(1,0,0));
-
-
 	glm::quat axisY = glm::angleAxis(glm::radians(Y), glm::vec3(0,1,0));
 	glm::quat axisZ = glm::angleAxis(glm::radians(Z), glm::vec3(0,0,1));
 
