@@ -117,7 +117,7 @@ void TFLight::DrawLightShadow(int num){
 	GLuint depthMatrixID = glGetUniformLocation(prog->GetProgramID(), "DepthMVP");
 	glUniformMatrix4fv(depthMatrixID, 1, GL_FALSE, &depthMVP[0][0]);
 
-	TEntity::DepthWVP = depthMVP;
+	//TEntity::DepthWVP = depthMVP;
 }
 
 void TFLight::SetBoundBox(bool box){
