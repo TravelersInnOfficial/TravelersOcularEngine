@@ -167,7 +167,7 @@ bool TObjectLoader::LoadObjFromFileAssimp(TResourceMesh* mesh, std::vector<glm::
 
 	const struct aiScene* scene = nullptr;
 	Assimp::Importer importer;
-	scene = importer.ReadFile(path.c_str(),  aiProcessPreset_TargetRealtime_Fast);
+	scene = importer.ReadFile(path.c_str(),  aiProcessPreset_TargetRealtime_Fast | aiProcess_ConvertToLeftHanded);
 	
 	if(!scene){													// |
 		std::cout<<"Could not open file " + path<<std::endl;	// |
@@ -187,7 +187,7 @@ bool TObjectLoader::LoadObjFromFileAssimp(TResourceMesh* mesh, std::vector<glm::
 					aiVector3D uv = meshCustom->mTextureCoords[0][face.mIndices[k]];	// COORDENADA DE TEXTURA
 					
 					vertexVec->push_back(glm::vec3(pos.x, pos.y, pos.z));				// |		
-					uvVec->push_back(glm::vec2(uv.x, 1.0f-uv.y));						// |
+					uvVec->push_back(glm::vec2(uv.x, uv.y));						// |
 					normalVec->push_back(glm::vec3(normal.x, normal.y, normal.z));		// | Lo guardamos para DEVOLVER
 				}
 			}

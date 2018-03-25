@@ -295,7 +295,7 @@ void SceneManager::ResetManager(){
 	ClearElements();
 	TTransform* myTransform = new TTransform();
 	m_SceneTreeRoot = new TNode(myTransform);
-	m_ambientLight = glm::vec3(0.25f);
+	//m_ambientLight = glm::vec3(0.25f);
 	m_main_camera = nullptr;
 	m_dome = nullptr;
 }
