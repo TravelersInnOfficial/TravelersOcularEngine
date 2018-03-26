@@ -33,6 +33,7 @@ public:
     void SetReceiver();
 	void SetAssetsPath(std::string newPath);
 	void SetGlobalBoundingBoxes(bool enable);
+	void Minimize();
 
 	void EnableClipping();
 	void DisableClipping();

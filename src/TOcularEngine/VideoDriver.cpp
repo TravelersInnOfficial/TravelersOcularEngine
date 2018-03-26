@@ -43,6 +43,7 @@ bool VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2di
     glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
     glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE );
     glfwWindowHint( GLFW_RESIZABLE, GL_FALSE );
+	if(fullscreen) glfwWindowHint( GLFW_AUTO_ICONIFY, GL_FALSE );
 
 	//create glfwindow and make it the current window
 	GLFWmonitor* monitor = nullptr;
@@ -100,6 +101,10 @@ void VideoDriver::EndDraw(){
 	end2DDrawState();
 
 	glfwSwapBuffers(m_window);
+}
+
+void VideoDriver::Minimize(){
+	if(m_window != nullptr) glfwIconifyWindow(m_window);
 }
 
 void VideoDriver::ClearScreen(){
