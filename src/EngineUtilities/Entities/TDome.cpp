@@ -41,6 +41,8 @@ void TDome::BeginDraw(){
 
 void TDome::EndDraw(){ }
 
+void TDome::DrawShadow(){ }
+
 void TDome::SendShaderData(){
 	Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(m_program);
 

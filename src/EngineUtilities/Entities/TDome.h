@@ -8,8 +8,9 @@ public:
 	TDome(std::string texturePath = "");
 	~TDome();
 
-	void BeginDraw();
-	void EndDraw();
+	void BeginDraw() override;
+	void DrawShadow() override;
+	void EndDraw() override;
 
 private:
 	void SendShaderData();

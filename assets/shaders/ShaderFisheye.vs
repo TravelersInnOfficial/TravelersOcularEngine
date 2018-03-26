@@ -9,6 +9,8 @@ out vec3 Position;    	// VERTICES EN COORDENADAS DE VISTA
 out vec3 Normal;      	// NORMAL EN COORDENADAS DE VISTA
 out vec2 TexCoords;   	// COORDENADAS DE TEXTURA
 out mat4 FragViewMatrix;
+// NEEDED FOR SHADOWS
+out vec4 ShadowCoord;
 
 uniform mat4 ModelViewMatrix;
 uniform mat4 MVP;
