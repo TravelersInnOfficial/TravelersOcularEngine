@@ -195,6 +195,13 @@ public:
     /**
      * @brief TODO: finish comment
      * 
+     */
+    void DrawSceneShadows();
+
+
+    /**
+     * @brief TODO: finish comment
+     * 
      * @param light 
      * @param num 
      */
@@ -222,6 +229,8 @@ public:
 
     void RecalculateLightPosition();
     void SendLights();
+    bool AddDynamicLight(TFLight*);
+    
     void SetClipping(bool value);
     void PushToBkg(TFDrawable*);
     void PushToFront(TFDrawable*);
@@ -230,13 +239,15 @@ public:
 
 private:
     GLuint m_vao;
-    GLuint m_frameBuffer;
-    GLuint m_depthText;
+    GLuint m_fbo;
+    GLuint m_shadowMap;
+    
     TNode* m_SceneTreeRoot;
 
-    std::vector<TFCamera*>   m_cameras;  // Pointers to the cameras created
-    std::vector<TFLight*>    m_lights;   // Pointers to the lights created
-    std::vector<TFNode*>     m_objects;  // Pointers to the nodes created
+    std::vector<TFCamera*>   m_cameras;         // Pointers to the cameras created
+    std::vector<TFLight*>    m_lights;          // Pointers to the lights created
+    std::vector<TFLight*>    m_dynamicLights;   // Lights that emit shadows
+    std::vector<TFNode*>     m_objects;         // Pointers to the nodes created
     std::vector<TFDrawable*> m_2Delems;
     std::vector<TFDrawable*> m_bkg2Delems;
 

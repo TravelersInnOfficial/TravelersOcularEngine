@@ -19,11 +19,15 @@ public:
 
 	static std::stack<glm::mat4> InitializeStack();
 	static std::stack<glm::mat4> m_stack;
-	static glm::mat4 ViewMatrix;
-	static glm::mat4 ProjMatrix;
 	static bool m_checkClipping;
 	
-	SHADERTYPE m_program;
+	// PROVISIONAL STATIC VARIABLES
+	static glm::mat4 ViewMatrix;
+	static glm::mat4 ProjMatrix;
+	static glm::mat4 DepthWVP;
+	static unsigned int ShadowMap;
+	
+    SHADERTYPE m_program = NONE_SHADER;
 
 protected:
 	bool CheckClippingPoint(glm::vec4 point);

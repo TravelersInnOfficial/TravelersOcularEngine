@@ -4,9 +4,12 @@
 #include "./../EngineUtilities/Entities/TTransform.h"
 #include "./../EngineUtilities/TNode.h"
 
+#include <algorithm>    // std::find
+
 // GLEW AND GLM
 #include <GL/glew.h>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 SceneManager::SceneManager(){
 	TTransform* myTransform = new TTransform();
@@ -16,13 +19,16 @@ SceneManager::SceneManager(){
 	m_dome = nullptr;
 
 	m_vao = 0;
-	m_frameBuffer = 0;
-	m_depthText = 0;
+	m_fbo = 0;
+	m_shadowMap = 0;
 }
 
 SceneManager::~SceneManager(){
 	ClearElements();
 	glDeleteVertexArrays(1, &m_vao);
+
+	glDeleteFramebuffers(1, &m_fbo);
+	glDeleteTextures(1, &m_shadowMap);
 }
 
 TFCamera* SceneManager::AddCamera(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, bool perspective){
@@ -217,36 +223,40 @@ void SceneManager::ChangeMainCamera(TFCamera* camera){
 	m_main_camera = m_cameras[cameraPos];
 }
 
-void SceneManager::RecalculateLightPosition(){
-	GLint size = m_lights.size();
-	for(int i = 0; i < size; i++) m_lights[i]->CalculateLocation();
-}
-
-void SceneManager::SendLights(){
-	// Gets the Program
-	VideoDriver* vd = VideoDriver::GetInstance();
-	Program* myProgram = vd->GetProgram(vd->GetCurrentProgram());
-
-	// Sends the Ambient Light
-	GLint ambLocation = glGetUniformLocation(myProgram->GetProgramID(), "SpecialLight.AmbientLight");
-	glUniform3fv(ambLocation, 1, glm::value_ptr(m_ambientLight));
-
-	// Send size of lights
-	GLint size = m_lights.size();
-	GLuint nlightspos = glGetUniformLocation(myProgram->GetProgramID(), "nlights");
-	glUniform1i(nlightspos, size);
-
-	// Draw all lights
-    for(int i = 0; i < size; i++) m_lights[i]->DrawLight(i);
-}
-
 void SceneManager::InitScene(){
 	glGenVertexArrays(1, &m_vao); // CREAMOS EL ARRAY DE VERTICES PARA LOS OBJETOS
 	glBindVertexArray(m_vao);
+
+	glGenFramebuffers(1, &m_fbo); 
+
+	glGenTextures(1, &m_shadowMap);
+	TEntity::ShadowMap = m_shadowMap;
+	glBindTexture(GL_TEXTURE_2D, m_shadowMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, 1024, 1024, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_shadowMap, 0);
+
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+
+	GLenum Status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+	if (Status != GL_FRAMEBUFFER_COMPLETE) {
+		printf("FB error, status: 0x%x\n", Status);
+		//return false;
+	} 
 }
 
-
 void SceneManager::Update(){
+	// MOVE DOME WITH CAMERA
 	if(m_main_camera != nullptr && m_dome != nullptr){
 		toe::core::TOEvector3df position = m_main_camera->GetTranslation();
 		m_dome->SetTranslate(position);
@@ -254,13 +264,28 @@ void SceneManager::Update(){
 }
 
 void SceneManager::Draw(){
-	// Create frame for shadows
+	// Draw into frame for shadows
+	DrawSceneShadows();
+
+	// Draw frame into window
+	int width = VideoDriver::GetInstance()->GetWindowDimensions().X;
+	int height = VideoDriver::GetInstance()->GetWindowDimensions().Y;
+
+	// Draw into window
+	glViewport(0,0,width,height);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	// IMPORTANT CLEAR COLOR
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	// ENABLE BACK FACE CULLING
+	glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK); // Cull back-facing triangles -> draw only front-facing triangles
 
 	// Select active camera and set view and projection matrix
 	SetMainCameraData();
 
 	// Send lights position to shader
-	RecalculateLightPosition();
 	SendLights();
 
     m_SceneTreeRoot->Draw();
@@ -291,6 +316,75 @@ void SceneManager::ChangeShader(SHADERTYPE shader, ENTITYTYPE entity){
 	}
 }
 
+void SceneManager::RecalculateLightPosition(){
+	GLint size = m_lights.size();
+	for(int i = 0; i < size; i++) m_lights[i]->CalculateLocation();
+}
+
+void SceneManager::SendLights(){
+	// Change light last position
+	RecalculateLightPosition();
+	
+	// Gets the Program
+	VideoDriver* vd = VideoDriver::GetInstance();
+	Program* myProgram = vd->SetShaderProgram(STANDARD_SHADER);
+
+	// Sends the Ambient Light
+	GLint ambLocation = glGetUniformLocation(myProgram->GetProgramID(), "SpecialLight.AmbientLight");
+	glUniform3fv(ambLocation, 1, &m_ambientLight[0]);
+
+	// Send size of lights
+	GLint size = m_lights.size();
+	GLuint nlightspos = glGetUniformLocation(myProgram->GetProgramID(), "nlights");
+	glUniform1i(nlightspos, size);
+
+	// Draw all lights
+    for(int i = 0; i < size; i++) m_lights[i]->DrawLight(i);
+
+}
+
+void SceneManager::DrawSceneShadows()
+{
+	// Set shadow program
+	VideoDriver::GetInstance()->SetShaderProgram(SHADOW_SHADER);
+	RecalculateLightPosition();
+
+	int size = m_dynamicLights.size();
+	for(int i = 0; i < size; i++){
+		
+		// BIND FRAME BUFFER FOR WRITING
+		glViewport(0,0,1024,1024); // Render on the whole framebuffer, complete from the lower left corner to the upper right
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
+
+		// Clear the screen
+		glClear(GL_DEPTH_BUFFER_BIT);
+
+		// DISABLE BACKFACE CULLING FOR PETER PLANNING
+		glDisable(GL_CULL_FACE);
+
+		// ENABLE ZBUFFER
+		glEnable(GL_DEPTH_TEST);
+	
+		// Compute the MVP matrix from the light's point of view
+		m_dynamicLights[i]->DrawLightShadow(i);
+	} 
+
+	m_SceneTreeRoot->DrawShadows();
+}
+
+bool SceneManager::AddDynamicLight(TFLight* light){
+	bool ret = true;
+	// Find light then add at the back
+	if ( std::find(m_dynamicLights.begin(), m_dynamicLights.end(), light) != m_dynamicLights.end() ){
+		ret = false;
+	}
+	else{
+		m_dynamicLights.push_back(light);		
+	}
+
+	return ret;
+}
+
 void SceneManager::ResetManager(){
 	ClearElements();
 	TTransform* myTransform = new TTransform();
@@ -304,6 +398,7 @@ void SceneManager::SetClipping(bool value){
 	TEntity::m_checkClipping = value;
 }
 
+// PRIVATE FUNCTIONS
 void SceneManager::ClearElements(){
 	int size = m_cameras.size();
 	for(int i = size - 1; i >= 0; i--){

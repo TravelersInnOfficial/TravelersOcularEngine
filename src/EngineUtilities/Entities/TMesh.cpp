@@ -10,6 +10,7 @@ TMesh::TMesh(std::string meshPath, std::string texturePath){
 	m_texture = nullptr;
 	m_material = nullptr;
 	m_visibleBB = false;
+	m_drawingShadows = false;
 
 	LoadMesh(meshPath);
 	ChangeTexture(texturePath);
@@ -33,44 +34,7 @@ void TMesh::SetBBVisibility(bool visible){
 }
 
 void TMesh::BeginDraw(){
-	VideoDriver::GetInstance()->GetSceneManager()->ChangeMainCamera();
-	VideoDriver::GetInstance()->GetSceneManager()->SetMainCameraData();
-
-	if(m_mesh != nullptr && CheckClipping()){
-		/*glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-		glEnable(GL_DEPTH_TEST);
-
-		// PRIMERO DE TODO PINTAMOS EN EL Z BUFFER DE LA CAMARA DE PRUEBAS
-			{
-			// Bind and send the data to the VERTEX SHADER
-			SendShaderData();
-			
-			// Bind and draw elements depending of how many vbos
-			GLuint elementsBuffer = m_mesh->GetElementBuffer();
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBuffer);
-			glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
-			}
-		// VOLVEMOS A PINTAR EN EL LUGAR BUENO
-		VideoDriver::GetInstance()->GetSceneManager()->ChangeMainCamera();
-		VideoDriver::GetInstance()->GetSceneManager()->SetMainCameraData();
-		glDisable(GL_DEPTH_TEST);
-		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-
-			// Bind and send the data to the VERTEX SHADER
-			SendShaderData();
-			
-			// Bind and draw elements depending of how many vbos
-			GLuint elementsBuffer = m_mesh->GetElementBuffer();
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBuffer);
-			glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
-
-
-
-		// Draw bounding box
-		glEnable(GL_DEPTH_TEST);*/
-
-		VideoDriver::GetInstance()->GetSceneManager()->ChangeMainCamera();
-		VideoDriver::GetInstance()->GetSceneManager()->SetMainCameraData();
+	if(m_mesh != nullptr && !m_drawingShadows && CheckClipping()){
 
 		// Bind and send the data to the VERTEX SHADER
 		SendShaderData();
@@ -81,19 +45,36 @@ void TMesh::BeginDraw(){
 		glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
 
 		if(m_visibleBB) DrawBoundingBox();
-
-
-
-	}else{
-		VideoDriver::GetInstance()->GetSceneManager()->ChangeMainCamera();
-		VideoDriver::GetInstance()->GetSceneManager()->SetMainCameraData();
 	}
 }
 
 void TMesh::EndDraw(){
+	m_drawingShadows = false;	
 }
 
-void TMesh::DrawShadow(){ }
+void TMesh::DrawShadow(){
+	m_drawingShadows = true;
+	/// ACTIVE SHADOW PROGRAM
+	Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(SHADOW_SHADER);
+
+	/// SEND THE VERTEX (1-Bind, 2-VertexAttribPointer)
+    GLuint vertexBuffer = m_mesh->GetVertexBuffer();
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);									// Bind vertex buffer
+	
+	GLint posAttrib = glGetAttribLocation(myProgram->GetProgramID(), "Position");	// Get atrib location
+	glEnableVertexAttribArray(posAttrib);											// Enable pass
+	glVertexAttribPointer(posAttrib,3, GL_FLOAT, GL_FALSE, 0, (void*)0);  			// Pour buffer data to shader
+
+	/// SEND DEPTHMVP UNIFORM (UniformMatrix4)
+	glm::mat4 depthMVP = TEntity::DepthWVP * m_stack.top();
+	GLuint dMVPID = glGetUniformLocation(myProgram->GetProgramID(), "DepthMVP");	// Get uniform location
+	glUniformMatrix4fv(dMVPID, 1, GL_FALSE, &depthMVP[0][0]);						// Send uniform
+
+	// Bind and draw elements depending
+	GLuint elementsBuffer = m_mesh->GetElementBuffer();
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBuffer);							// Bind elements buffer
+	glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);		// Draw the elements (triangles)
+}
 
 void TMesh::SendShaderData(){
 	Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(m_program);
@@ -108,60 +89,71 @@ void TMesh::SendShaderData(){
     GLuint vertexBuffer = m_mesh->GetVertexBuffer();
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 
-	// SEND THE VERTEX
+	// SEND VERTEX
 	GLint posAttrib = glGetAttribLocation(myProgram->GetProgramID(), "VertexPosition");
-	glVertexAttribPointer(posAttrib,3, GL_FLOAT, GL_FALSE, 0*sizeof(float), 0);
 	glEnableVertexAttribArray(posAttrib);
-
-	// -------------------------------------------------------- ENVIAMOS LAS NORMALS
-	// BIND THE NORMALS
-    GLuint normalBuffer = m_mesh->GetNormalBuffer();
-	glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
-
-	// SEND THE NORMALS
-	GLuint normAttrib = glGetAttribLocation(myProgram->GetProgramID(), "VertexNormal");
-	glVertexAttribPointer(normAttrib, 3, GL_FLOAT, GL_FALSE, 0*sizeof(float), 0);
-	glEnableVertexAttribArray(normAttrib);
+	glVertexAttribPointer(posAttrib,3, GL_FLOAT, GL_FALSE, 0*sizeof(float), 0);
 
 	// -------------------------------------------------------- ENVIAMOS LAS UV
-	// BIND THE UV
+	// BIND UV
     GLuint uvBuffer = m_mesh->GetUvBuffer();
 	glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
 
-	// SEND THE UV
+	// SEND UV
 	GLuint uvAttrib = glGetAttribLocation(myProgram->GetProgramID(), "TextureCoords");
-	glVertexAttribPointer(uvAttrib, 2, GL_FLOAT, GL_FALSE, 0*sizeof(float), 0);
 	glEnableVertexAttribArray(uvAttrib);
+	glVertexAttribPointer(uvAttrib, 2, GL_FLOAT, GL_FALSE, 0*sizeof(float), 0);
+
+	// -------------------------------------------------------- ENVIAMOS LAS NORMALS
+	// BIND NORMALS
+    GLuint normalBuffer = m_mesh->GetNormalBuffer();
+	glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
+
+	// SEND NORMALS
+	GLuint normAttrib = glGetAttribLocation(myProgram->GetProgramID(), "VertexNormal");
+	glEnableVertexAttribArray(normAttrib);
+	glVertexAttribPointer(normAttrib, 3, GL_FLOAT, GL_FALSE, 0*sizeof(float), 0);
 
 	// -------------------------------------------------------- ENVIAMOS LAS MATRICES
-	// SEND THE MODEL MATRIX
+	// SEND MODEL MATRIX
 	GLint mmLocation = glGetUniformLocation(myProgram->GetProgramID(), "ModelMatrix");
 	glUniformMatrix4fv(mmLocation, 1, GL_FALSE, &m_stack.top()[0][0]);
 
-	// SEND THE VIEW MATRIX
-	GLint vLocation = glGetUniformLocation(myProgram->GetProgramID(), "ViewMatrix");
-	glUniformMatrix4fv(vLocation, 1, GL_FALSE, &ViewMatrix[0][0]);
-
-	// SEND THE MODELVIEW MATRIX
-	glm::mat4 modelView = ViewMatrix * m_stack.top();
-	GLint mvLocation = glGetUniformLocation(myProgram->GetProgramID(), "ModelViewMatrix");
-	glUniformMatrix4fv(mvLocation, 1, GL_FALSE, &modelView[0][0]);
-
-	// SEND THE PROJECTION MATRIX
-	glm::mat4 pMatrix = ProjMatrix;
-	GLint pLocation = glGetUniformLocation(myProgram->GetProgramID(), "ProjectionMatrix");
-	glUniformMatrix4fv(pLocation, 1, GL_FALSE, &pMatrix[0][0]);
-
-	// SEND THE MODELVIEWPROJECTION MATRIX
-	glm::mat4 mvpMatrix = ProjMatrix * modelView;
-	GLint mvpLocation = glGetUniformLocation(myProgram->GetProgramID(), "MVP");
-	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, &mvpMatrix[0][0]);
-
-	// SEND THE NORMAL MATRIX (ROTAMOS LAS NORMALES)
+	// SEND NORMAL MATRIX (ROTAMOS LAS NORMALES)
 	glm::mat3 normalMatrix = m_stack.top();
 	normalMatrix = glm::transpose(glm::inverse(normalMatrix));
 	GLint normalMLocation = glGetUniformLocation(myProgram->GetProgramID(), "NormalMatrix");
 	glUniformMatrix3fv(normalMLocation, 1, GL_FALSE, &normalMatrix[0][0]);
+
+	// SEND VIEW MATRIX
+	GLint vLocation = glGetUniformLocation(myProgram->GetProgramID(), "ViewMatrix");
+	glUniformMatrix4fv(vLocation, 1, GL_FALSE, &ViewMatrix[0][0]);
+
+	// SEND MODELVIEW MATRIX
+	glm::mat4 modelView = ViewMatrix * m_stack.top();
+	GLint mvLocation = glGetUniformLocation(myProgram->GetProgramID(), "ModelViewMatrix");
+	glUniformMatrix4fv(mvLocation, 1, GL_FALSE, &modelView[0][0]);
+
+	// SEND PROJECTION MATRIX
+	glm::mat4 pMatrix = ProjMatrix;
+	GLint pLocation = glGetUniformLocation(myProgram->GetProgramID(), "ProjectionMatrix");
+	glUniformMatrix4fv(pLocation, 1, GL_FALSE, &pMatrix[0][0]);
+
+	// SEND MODELVIEWPROJECTION MATRIX
+	glm::mat4 mvpMatrix = ProjMatrix * modelView;
+	GLint mvpLocation = glGetUniformLocation(myProgram->GetProgramID(), "MVP");
+	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, &mvpMatrix[0][0]);
+
+	// SEND DepthBiasMVP MATRIX
+	glm::mat4 biasMatrix(
+			0.5, 0.0, 0.0, 0.0,
+			0.0, 0.5, 0.0, 0.0,
+			0.0, 0.0, 0.5, 0.0,
+			0.5, 0.5, 0.5, 1.0
+	);
+	glm::mat4 depthBIASMVP = biasMatrix * TEntity::DepthWVP * m_stack.top();
+	GLint depthMID = glGetUniformLocation(myProgram->GetProgramID(), "DepthBiasMVP");
+	glUniformMatrix4fv(depthMID, 1, GL_FALSE, &depthBIASMVP[0][0]);
 
 	// -------------------------------------------------------- ENVIAMOS LA TEXTURA
 	TResourceTexture* currentTexture = nullptr;
@@ -170,10 +162,15 @@ void TMesh::SendShaderData(){
 
 	if(currentTexture != nullptr){
 		GLuint TextureID = glGetUniformLocation(myProgram->GetProgramID(), "myTextureSampler");
-		glUniform1i(TextureID, 0); 
+		GLuint ShadowMapID = glGetUniformLocation(myProgram->GetProgramID(), "shadowMap");
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, currentTexture->GetTextureId());
+		glUniform1i(TextureID, 0); 
+
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, TEntity::ShadowMap);
+		glUniform1i(ShadowMapID, 1);
 	}
 
 	// -------------------------------------------------------- ENVIAMOS EL MATERIAL

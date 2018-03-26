@@ -102,22 +102,26 @@ void TFLight::DrawLightShadow(int num){
 	Program* prog = vd->GetProgram(SHADOW_SHADER);
 
 	//std::string str = "Shadows["+std::to_string(num)+"].";
-	std::string aux = "";
+	//std::string aux = "";
 
 	// Compute the MVP matrix from the light's point of view
-	//glm::vec3 lightInvDir = glm::vec3(0.0f,15.0f,10.0f);
+	// SPOTLIGHT
+	//glm::vec3 lightPos = m_LastLocation;
+	//glm::mat4 depthProjectionMatrix = glm::perspective(glm::radians(45.0f), 1.0f, 2.0f, 50.0f);
+	//glm::mat4 depthViewMatrix = glm::lookAt(lightPos, glm::vec3(0.0f,0.0f,0.0f), glm::vec3(0,1,0));
+
 	glm::vec3 lightInvDir = m_LastLocation;
-	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10,10,-10,10,-10,20);
+	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10,10,-10,10,-10,40);
 	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0.0f,0.0f,0.0f), glm::vec3(0.0f,1.0f,0.0f));
-	glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix;
+	glm::mat4 depthVP = depthProjectionMatrix * depthViewMatrix;
 
 	// Send our transformation to the currently bound shader,
 	// in the "MVP" uniform
-	aux = "DepthMVP";
+	//aux = "DepthMVP";
 	GLuint depthMatrixID = glGetUniformLocation(prog->GetProgramID(), "DepthMVP");
-	glUniformMatrix4fv(depthMatrixID, 1, GL_FALSE, &depthMVP[0][0]);
+	glUniformMatrix4fv(depthMatrixID, 1, GL_FALSE, &depthVP[0][0]);
 
-	//TEntity::DepthWVP = depthMVP;
+	TEntity::DepthWVP = depthVP;
 }
 
 void TFLight::SetBoundBox(bool box){

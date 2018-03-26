@@ -2,10 +2,12 @@
 
 // TEMPORAL TEXTURE WITHOUT MATERIALS
 uniform sampler2D myTextureSampler;
+uniform sampler2DShadow shadowMap;
 
 // ENTRADA, PROVENIENTE DEL VERTEX SHADER
 in vec3 Position;  		// VERTICES EN COORDENADAS DE VISTA
 in vec3 Normal;  		// NORMAL EN COORDENADAS DE VISTA
+in vec4 ShadowCoord;
 in vec2 TexCoords;      // UV COORDENADAS DE TEXTURA
 in mat4 FragViewMatrix;
 
@@ -62,7 +64,16 @@ vec3  Phong (int num) {
 	return Attenuation * (Diffuse + Specular);
 } 
 
+// POISSON SAMPLING
+vec2 poissonDisk[4] = vec2[]( 
+   vec2( -0.94201624, -0.39906216 ), 
+   vec2( 0.94558609, -0.76890725 ), 
+   vec2( -0.094184101, -0.92938870 ), 
+   vec2( 0.34495938, 0.29387760 )
+);
+
 void main() {
+	// Check alpha and discard fragments
 	vec4 texValue = texture(myTextureSampler, TexCoords);
 	if(texValue.a < 0.5) discard;
 
@@ -70,9 +81,26 @@ void main() {
 	vec4 result = vec4(0.0);
 	for(int i = 0; i < nlights; i++) result += vec4(Phong(i), 0.0);
 
+	/// CHECK SHADOWS
+	float bias = 0.005;
+	float visibility = 1.0;
+	
+	// Sample the shadow map 4 times
+	for (int i=0;i<4;i++){
+		int index = i;
+		// being fully in the shadow will eat up 4*0.2 = 0.8
+		// 0.2 potentially remain, which is quite dark.
+		visibility -= 0.2*(1.0-texture( shadowMap, vec3(ShadowCoord.xy + poissonDisk[index]/700.0,  (ShadowCoord.z-bias)/ShadowCoord.w) ));
+	}
+	// ADD shadow
+	result *= visibility;	
+
 	// SUMAMOS AMBIENTAL
 	vec3 Ambient = SpecialLight.AmbientLight * vec3(texValue) * Material.Ambient;
 	result += vec4(Ambient, 1.0);
 
+	// SPOTLIGHT
+	///if ( textureProj( shadowMap, ShadowCoord.xyw ).z  <  (ShadowCoord.z-bias)/ShadowCoord.w )
+	///if ( texture( shadowMap, (ShadowCoord.xy/ShadowCoord.w) ).z  <  (ShadowCoord.z-bias)/ShadowCoord.w )
 	FragColor = result;
 }

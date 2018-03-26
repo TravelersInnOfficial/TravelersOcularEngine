@@ -84,7 +84,7 @@ bool VideoDriver::Update(){
 void VideoDriver::BeginDraw(){
 	//DRAW 3D SCENE
 	privateSceneManager->Draw();
-	
+
 	//DRAW BKG 2D ELEMENTS
 	start2DDrawState();
 	privateSceneManager->DrawBkg2DElements();
@@ -99,7 +99,6 @@ void VideoDriver::EndDraw(){
 	privateSceneManager->Draw2DElements();
 	end2DDrawState();
 
-	SetShaderProgram(STANDARD_SHADER);
 	glfwSwapBuffers(m_window);
 }
 
@@ -219,7 +218,7 @@ Program* VideoDriver::SetShaderProgram(SHADERTYPE p){
 	if(m_lastShaderUsed != p){
 		m_lastShaderUsed = p;
 		glUseProgram(toRet->GetProgramID());
-		privateSceneManager->SendLights();
+		//privateSceneManager->SendLights();
 	}
 
 	return toRet;
@@ -315,10 +314,10 @@ void VideoDriver::initShaders(){
 	m_programs.insert(std::pair<SHADERTYPE, Program*>(BARREL_SHADER, new Program(shaders)));
 
 	// CARGAMOS EL PROGRAMA DE SOMBRAS
-	//shaders = std::map<std::string, GLenum>();
-	//shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/Shadows.vs", GL_VERTEX_SHADER));
-	//shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/Shadows.frag", GL_FRAGMENT_SHADER));
-	//m_programs.insert(std::pair<SHADERTYPE, Program*>(SHADOW_SHADER, new Program(shaders)));
+	shaders = std::map<std::string, GLenum>();
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/Shadows.vs", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/Shadows.frag", GL_FRAGMENT_SHADER));
+	m_programs.insert(std::pair<SHADERTYPE, Program*>(SHADOW_SHADER, new Program(shaders)));
 }
 
 void VideoDriver::start2DDrawState(){
@@ -353,9 +352,7 @@ void VideoDriver::end2DDrawState(){
 	//VOLVER AL ESTADO ANTERIOR
 	glPopAttrib();					//recuperamos de la pila el estado del test de profundidad
 	glDepthMask(GL_TRUE); 			//activamos la escritura en el buffer de profundidad
-	glEnable(GL_DEPTH_TEST);		//activamos el test de profundidad
 	glEnable(GL_DEPTH_CLAMP);
-	glEnable(GL_CULL_FACE);			//activamos el backface culling
 
 	glMatrixMode(GL_MODELVIEW);		//activamos la matriz ModelView
 	glPopMatrix();					//recuperamos el estado anterior de la pila y se lo asignamos

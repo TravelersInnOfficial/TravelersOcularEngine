@@ -14,7 +14,7 @@ public:
 
 	virtual void BeginDraw() override;
 	virtual void EndDraw() override;
-	void DrawShadow() override;
+	virtual void DrawShadow() override;
 
 	void LoadMesh(std::string meshPath = "");
 	void ChangeTexture(std::string texturePath = "");
@@ -26,6 +26,7 @@ protected:
 	TResourceTexture* 	m_texture;
 	TResourceMaterial* 	m_material;
 	bool m_visibleBB;
+	bool m_drawingShadows;
 
 	/**
 	 * @brief Sends shader all needed information

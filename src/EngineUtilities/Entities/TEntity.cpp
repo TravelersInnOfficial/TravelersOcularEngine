@@ -18,6 +18,9 @@ void TEntity::SetProgram(SHADERTYPE program){
 glm::mat4 TEntity::ViewMatrix;
 glm::mat4 TEntity::ProjMatrix;
 bool TEntity::m_checkClipping = false;
+glm::mat4 TEntity::DepthWVP;
+unsigned int TEntity::ShadowMap = 0;
+
 
 void TEntity::SetViewMatrixPtr(glm::mat4 view){
     ViewMatrix = view;
