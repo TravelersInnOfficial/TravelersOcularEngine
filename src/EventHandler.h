@@ -25,22 +25,11 @@ public:
     static float xlight;
     static float ylight;
     static float zlight;
+    static bool  ChangeMain;
     
     static float xdistGiro;
     static float ydistGiro;
     static float zdistGiro;
-
-    bool Key_A_Pressed;
-    bool Key_D_Pressed;
-    bool Key_S_Pressed;
-    bool Key_W_Pressed;
-
-    bool Key_Y_Pressed;
-    bool Key_U_Pressed;
-    bool Key_I_Pressed;
-    bool Key_K_Pressed;
-    bool Key_O_Pressed;
-    bool Key_L_Pressed;
 };
 
 #endif

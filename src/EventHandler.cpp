@@ -11,6 +11,7 @@ float EventHandler::zdist = -10.0f;
 float EventHandler::xlight = 0.0f;
 float EventHandler::ylight = 15.0f;
 float EventHandler::zlight = 10.0f;
+bool EventHandler::ChangeMain = false;
 
 float EventHandler::xdistGiro = 0.0f;
 float EventHandler::ydistGiro = 0.0f;
@@ -18,56 +19,31 @@ float EventHandler::zdistGiro = 0.0f;
 bool EventHandler::m_close = false;
 
 EventHandler::EventHandler(){
-	Key_A_Pressed = false;
-	Key_D_Pressed = false;
-	Key_S_Pressed = false;
-	Key_W_Pressed = false;
-
-	Key_Y_Pressed = false;
-    Key_U_Pressed = false;
-    Key_I_Pressed = false;
-    Key_K_Pressed = false;
-    Key_O_Pressed = false;
-    Key_L_Pressed = false;
 }
 
 EventHandler::~EventHandler(){}
+
+static bool Keys[256];
 
 bool EventHandler::OnEvent(const TEvent& event){
 	if (event.m_type == Type_Closed) m_close = true;
 
 	if(event.m_type == Type_KeyPressed){
-		if(event.m_key.code == Key_Escape) m_close = true;
-		if(event.m_key.code == Key_A) Key_A_Pressed = true;
-		if(event.m_key.code == Key_D) Key_D_Pressed = true;
-		if(event.m_key.code == Key_S) Key_S_Pressed = true;
-		if(event.m_key.code == Key_W) Key_W_Pressed = true;
+		Keys[event.m_key.code] = true;
 
-		if(event.m_key.code == Key_Y) Key_Y_Pressed = true;
-		if(event.m_key.code == Key_U) Key_U_Pressed = true;
-		if(event.m_key.code == Key_I) Key_I_Pressed = true;
-		if(event.m_key.code == Key_K) Key_K_Pressed = true;
-		if(event.m_key.code == Key_O) Key_O_Pressed = true;
-		if(event.m_key.code == Key_L) Key_L_Pressed = true;
+		// ONLY WHEN DOWN
+		if(Keys[Key_Escape])m_close = true;
 		
-		if(event.m_key.code == Key_ENTER){
+		if(Keys[Key_ENTER]){
 			shaderType++;
 			if(shaderType > 3) shaderType = 0;
 		}
+		
+		if (Keys[Key_Space]) ChangeMain = !ChangeMain;
 	}
 
 	if(event.m_type == Type_KeyReleased){
-		if(event.m_key.code == Key_A) Key_A_Pressed = false;
-		if(event.m_key.code == Key_D) Key_D_Pressed = false;
-		if(event.m_key.code == Key_S) Key_S_Pressed = false;
-		if(event.m_key.code == Key_W) Key_W_Pressed = false;
-
-		if(event.m_key.code == Key_Y) Key_Y_Pressed = false;
-		if(event.m_key.code == Key_U) Key_U_Pressed = false;
-		if(event.m_key.code == Key_I) Key_I_Pressed = false;
-		if(event.m_key.code == Key_K) Key_K_Pressed = false;
-		if(event.m_key.code == Key_O) Key_O_Pressed = false;
-		if(event.m_key.code == Key_L) Key_L_Pressed = false;
+		Keys[event.m_key.code] = false;
 	}
 
 	if(event.m_type == Type_MouseMoved){
@@ -80,31 +56,31 @@ bool EventHandler::OnEvent(const TEvent& event){
 	return m_close;
 }
 
-void EventHandler::Update(){
-
-	if (Key_A_Pressed || Key_D_Pressed || Key_S_Pressed || Key_W_Pressed){
+void EventHandler::Update()
+{
+	if(Keys[Key_A] || Keys[Key_D] || Keys[Key_S] || Keys[Key_W])
+	{
 		float max = 0.25f;
 		float giroY = ydistGiro;
 		float giroX = xdistGiro;
 		
-		if (Key_S_Pressed) max = -0.25f;
-		if (Key_W_Pressed) max = 0.25f;
-		if (Key_D_Pressed){ giroY += 90.0f; giroX = 0.0f; max = 0.25f;}
-		if (Key_A_Pressed){ giroY -= 90.0f; giroX = 0.0f; max = 0.25f;}
-
+		if (Keys[Key_S]) max = -0.25f;
+		if (Keys[Key_W]) max = 0.25f;
+		if (Keys[Key_D]){ giroY += 90.0f; giroX = 0.0f; max = 0.25f;}
+		if (Keys[Key_A]){ giroY -= 90.0f; giroX = 0.0f; max = 0.25f;}
+	
 		xdist += sin(glm::radians(giroY))*cos(glm::radians(giroX))*max;
 		ydist -= sin(glm::radians(giroX))*max;
 		zdist += cos(glm::radians(giroY))*cos(glm::radians(giroX))*max;
 	}
-	else if(Key_Y_Pressed || Key_U_Pressed || Key_I_Pressed || Key_K_Pressed || Key_O_Pressed || Key_L_Pressed){
-		
-		if (Key_Y_Pressed) xlight -= 0.25f;
-		if (Key_U_Pressed) xlight += 0.25f;
-		if (Key_I_Pressed) ylight += 0.25f;
-		if (Key_K_Pressed) ylight -= 0.25f;
-		if (Key_O_Pressed) zlight += 0.25f;
-		if (Key_L_Pressed) zlight -= 0.25f;
-
+	else
+	{
+		if (Keys[Key_Y]) xlight -= 0.25f;
+		if (Keys[Key_U]) xlight += 0.25f;
+		if (Keys[Key_I]) ylight += 0.25f;
+		if (Keys[Key_K]) ylight -= 0.25f;
+		if (Keys[Key_O]) zlight += 0.25f;
+		if (Keys[Key_L]) zlight -= 0.25f;
 	}
 
 }
