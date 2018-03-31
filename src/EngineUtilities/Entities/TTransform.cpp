@@ -41,7 +41,6 @@ void TTransform::Rotate(float X, float Y, float Z){
 	glm::quat axisY = glm::angleAxis(glm::radians(Y), glm::vec3(0,1,0));
 	glm::quat axisZ = glm::angleAxis(glm::radians(Z), glm::vec3(0,0,1));
 
-
 	glm::quat crossed = glm::cross(axisZ, axisY);
 
  	glm::mat4 final1 = glm::toMat4(crossed);

@@ -56,6 +56,8 @@ protected:
 	 */
 	virtual	bool CheckOclusion();
 
+private:
+	int Sign(int v);
 };
 
 #endif

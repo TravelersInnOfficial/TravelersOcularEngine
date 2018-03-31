@@ -144,7 +144,6 @@ int main(){
 
 	CreateTree(lr, lg, lb);
 
-	TFCamera* secondCamera = sm->AddCamera(toe::core::TOEvector3df(0,3,-20));
 	TFCamera* myCamera = sm->AddCamera();
 
 	handler->screenCenterX = VDriv->GetScreenResolution().X/2;

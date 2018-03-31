@@ -268,7 +268,7 @@ void TMesh::DrawBoundingBox() {
 	glDeleteBuffers(1, &ibo_elements);
 }
 
-int Sign(int v){
+int TMesh::Sign(int v){
 	if(v>=0) return 1;
 	else return -1;
 }
@@ -285,8 +285,8 @@ bool TMesh::CheckClipping(){
 	glm::mat4 mvpMatrix = ProjMatrix * ViewMatrix * m_stack.top();
 	// Comprobamos el cliping con los 8 puntos 
 
-	int upDown, leftRight, nearFar, raster, visible;
-	upDown = leftRight = nearFar = raster = visible = 0;
+	int upDown, leftRight, nearFar;
+	upDown = leftRight = nearFar  = 0;
 
 	for(int i=-1; i<=0; i++){
 		// +X -X
