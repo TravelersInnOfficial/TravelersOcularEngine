@@ -20,6 +20,7 @@ public:
 	static std::stack<glm::mat4> InitializeStack();
 	static std::stack<glm::mat4> m_stack;
 	static bool m_checkClipping;
+	static float m_clippingLimits[4];	// 0 (+X) / 1 (-X) / 2 (+Y) / 3 (-Y)
 	
 	// PROVISIONAL STATIC VARIABLES
 	static glm::mat4 ViewMatrix;

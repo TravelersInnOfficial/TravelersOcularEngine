@@ -34,6 +34,7 @@ public:
 private:
 	float NearestPoint(float pointA, float pointB, float target);
 	void CalculateTransform();
+	void ResetClippingLimits();
 	bool drawed;	// Esta habitacion ha sido ya dibujada? Si/No
 
 	std::vector<TPortal*> m_portals;

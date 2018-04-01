@@ -32,6 +32,14 @@ private:
 	glm::vec3 m_size;
 	glm::vec3 m_center;
 	glm::vec3 m_rotation;
+
+	// Los limites de clipping del portal
+	float m_limits[4]; // MaxX MinX MaxY MinY
+	void PrepareLimits();
+	void ChangeEntityClipping();
+
+	// DEBUG
+	void DrawDebug();
 };
 
 #endif

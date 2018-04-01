@@ -18,6 +18,7 @@ void TEntity::SetProgram(SHADERTYPE program){
 glm::mat4 TEntity::ViewMatrix;
 glm::mat4 TEntity::ProjMatrix;
 bool TEntity::m_checkClipping = false;
+float TEntity::m_clippingLimits[4] = {+1.0f, -1.0f, +1.0f, -1.0f};
 glm::mat4 TEntity::DepthWVP;
 unsigned int TEntity::ShadowMap = 0;
 
@@ -38,13 +39,29 @@ bool TEntity::CheckClippingPoint(glm::vec4 Pclip){
 
 void TEntity::DrawShadow(){}
 
+#include <iostream>
+
 void TEntity::CheckClippingAreas(glm::vec4 point, int* upDown, int* leftRight, int* nearFar){
-    if(point.x > point.w) (*leftRight)++;
+   float valueX = point.x / abs(point.w);
+   float valueY = point.y / abs(point.w);
+   float valueZ = point.z / abs(point.w);
+
+    if(valueX > m_clippingLimits[0]) (*leftRight)++;
+    else if(valueX < m_clippingLimits[1]) (*leftRight)--;
+
+    if(valueY > m_clippingLimits[2]) (*upDown)++;
+    else if(valueY < m_clippingLimits[3]) (*upDown)--;
+
+    if(valueZ > 1.0f) (*nearFar)++;
+    else if(valueZ < 0.0f) (*nearFar)--;
+
+
+   /* if(point.x > point.w) (*leftRight)++;
     else if(point.x < -point.w) (*leftRight)--;
 
     if(point.y > point.w) (*upDown)++;
     else if(point.y < -point.w) (*upDown)--;
 
     if(point.z > point.w) (*nearFar)++;
-    else if(point.z < 0) (*nearFar)--;
+    else if(point.z < 0) (*nearFar)--;*/
 }

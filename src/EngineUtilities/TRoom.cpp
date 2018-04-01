@@ -29,14 +29,18 @@ void TRoom::Draw(){
 	for(int i=0; i<size; i++){
 		TPortal* currentPortal = m_portals[i];
 		currentPortal->CheckVisibility();
+		ResetClippingLimits();
 	}
 
 	drawed = false;
 }
 
 TPortal* TRoom::AddPortal(TRoom* connection, glm::vec3 size, glm::vec3 center, glm::vec3 rotation){
-	TPortal* portal = new TPortal(this, connection, size, center, rotation);
-	m_portals.push_back(portal);
+	TPortal* portal = nullptr;
+	if(connection != this){
+		portal = new TPortal(this, connection, size, center, rotation);
+		m_portals.push_back(portal);
+	}
 	return portal;
 }
 
@@ -224,6 +228,13 @@ void TRoom::DrawDebug(){
 
 	glDeleteBuffers(1, &vbo_vertices);
 	glDeleteBuffers(1, &ibo_elements);
+}
+
+void TRoom::ResetClippingLimits(){
+	TEntity::m_clippingLimits[0] = +1.0f;
+	TEntity::m_clippingLimits[1] = -1.0f;
+	TEntity::m_clippingLimits[2] = +1.0f;
+	TEntity::m_clippingLimits[3] = -1.0f;
 }
 
 
