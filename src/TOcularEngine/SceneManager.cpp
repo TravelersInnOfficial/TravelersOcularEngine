@@ -298,11 +298,11 @@ void SceneManager::Draw(){
 	// Send lights position to shader
 	SendLights();
 
-	// Pintar aqui las habitaciones
-	DrawRooms();
-
 	// Luego pintar el resto de elementos
     m_SceneTreeRoot->Draw();
+    
+	// Pintar aqui las habitaciones
+	DrawRooms();
 }
 
 void SceneManager::DrawRooms(){
@@ -458,6 +458,12 @@ void SceneManager::ClearElements(){
 		delete m_objects[i];
 	}
 	m_objects.clear();
+
+	size = m_rooms.size();
+	for(int i = size -1; i>=0; i--){
+		delete m_rooms[i];
+	}
+	m_rooms.clear();
 
 	size = m_bkg2Delems.size();
 	for (int i = size -1; i>=0; i--) delete m_bkg2Delems[i];

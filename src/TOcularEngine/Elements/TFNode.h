@@ -28,7 +28,7 @@ public:
 	virtual toe::core::TOEvector3df GetRotation();		// Returns the position of the Node
 	virtual toe::core::TOEvector3df GetScale();			// Returns the scale of the Node
 
-	void AddChild(TFNode* children);			// Adds a Children to the TFNode
+	void AddChild(TFNode* children);	// Adds a Children to the TFNode
 	void RemoveChild(TFNode* children);			// Removes Children from the TFNode
 	void RemoveAllChildren();					// Remove ALL Children from the TFNode
 
@@ -80,6 +80,7 @@ protected:
 	void Attach(TNode* root);		// TNode to be attached to (Rotation will be children to the new TNode)	
 	void AttachFirst(TNode* root);	// TNode to be attached to (Rotation will be children to the new TNode)	
 	TNode* GetEntityNode();			// Return the entity node
+	virtual TNode* GetConnectionNode();		// Return the node to connect
 };
 
 #endif

@@ -43,6 +43,9 @@ private:
 	glm::vec3 m_size;
 	glm::vec3 m_center;
 	glm::vec3 m_rotation;
+
+	// DEBUG
+	void DrawDebug();
 };
 
 

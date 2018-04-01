@@ -1,6 +1,6 @@
 #include "TMesh.h"
 
-#include "../TOcularEngine/VideoDriver.h"
+#include "./../../TOcularEngine/VideoDriver.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <GL/glew.h>
@@ -197,10 +197,6 @@ void TMesh::SendShaderData(){
 // Funcion basada en https://en.wikibooks.org/wiki/OpenGL_Programming/Bounding_box
 void TMesh::DrawBoundingBox() {
 	Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(BB_SHADER);
-	/*
-	if (mesh->vertices.size() == 0)
-		return;
-	*/
 
 	// Cube 1x1x1, centered on origin
 	GLfloat vertices[] = {

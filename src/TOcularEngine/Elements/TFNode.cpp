@@ -135,7 +135,7 @@ void TFNode::SetParent(TFNode* parent){
 			m_parent->RemoveChild(this);
 		}
 		m_parent = parent;
-		Attach(m_parent->m_positionNode);
+		Attach(m_parent->GetConnectionNode());
 		m_parent->AddChild(this);
 	}
 }
@@ -244,4 +244,8 @@ void TFNode::SetProgram(SHADERTYPE shader, ENTITYTYPE entity){
 
 TNode* TFNode::GetEntityNode(){
 	return m_entityNode;
+}
+
+TNode* TFNode::GetConnectionNode(){
+	return m_positionNode;
 }

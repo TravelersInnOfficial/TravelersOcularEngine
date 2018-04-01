@@ -11,9 +11,6 @@ public:
 						toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,0,0),
 						toe::core::TOEvector3df scale = toe::core::TOEvector3df(1,1,1));
 
-
-
-
 	void SetTranslate(toe::core::TOEvector3df translation) override;	
 	void SetRotation(toe::core::TOEvector3df rotation) override;		
 	void SetScale(toe::core::TOEvector3df scale) override;			
@@ -27,6 +24,7 @@ public:
 	toe::core::TOEvector3df GetScale() override;
 
 	float GetDistance(toe::core::TOEvector3df position);
+	TNode* GetConnectionNode() override;
 
 private:
 	TFRoom(toe::core::TOEvector3df position = toe::core::TOEvector3df(0, 0, 0),

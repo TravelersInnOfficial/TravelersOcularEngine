@@ -88,4 +88,6 @@ float TFRoom::GetDistance(toe::core::TOEvector3df position){
 	return currentRoom->GetDistance(glm::vec3(position.X, position.Y, position.Z));
 }
 
-
+TNode* TFRoom::GetConnectionNode(){
+	return m_entityNode;
+}
