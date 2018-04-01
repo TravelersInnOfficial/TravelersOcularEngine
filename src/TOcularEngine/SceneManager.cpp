@@ -3,8 +3,10 @@
 #include "./../EngineUtilities/Entities/TEntity.h"
 #include "./../EngineUtilities/Entities/TTransform.h"
 #include "./../EngineUtilities/TNode.h"
+#include "./../EngineUtilities/TRoom.h"
 
 #include <algorithm>    // std::find
+#include <limits>		// std::numeric_limits<T>::max
 
 // GLEW AND GLM
 #include <GL/glew.h>
@@ -78,6 +80,22 @@ TFSprite* SceneManager::AddSprite(std::string texture, toe::core::TOEvector2df p
 	return toRet;
 }
 
+TFParticleSystem* SceneManager::AddParticleSystem(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale){
+	TFParticleSystem* toRet = nullptr;
+	toRet = new TFParticleSystem(position, rotation, scale);
+	m_objects.push_back(toRet);
+	toRet->Attach(m_SceneTreeRoot);
+	return toRet;
+}
+
+TFRoom* SceneManager::AddRoom(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale){
+	TFRoom* toRet = nullptr;
+	toRet = new TFRoom(position, rotation, scale);
+	m_rooms.push_back(toRet);
+	return toRet;
+}
+
+
 void SceneManager::PushToBkg(TFDrawable* obj){
 	std::vector<TFDrawable*>::iterator it = m_2Delems.begin();
 	for(; it!=m_2Delems.end(); ++it){
@@ -120,14 +138,6 @@ void SceneManager::Delete2Delement(TFDrawable* elem){
 			}
 		}
 	}
-}
-
-TFParticleSystem* SceneManager::AddParticleSystem(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale){
-	TFParticleSystem* toRet = nullptr;
-	toRet = new TFParticleSystem(position, rotation, scale);
-	m_objects.push_back(toRet);
-	toRet->Attach(m_SceneTreeRoot);
-	return toRet;
 }
 
 bool SceneManager::DeleteCamera(TFCamera* cam){
@@ -288,7 +298,38 @@ void SceneManager::Draw(){
 	// Send lights position to shader
 	SendLights();
 
+	// Pintar aqui las habitaciones
+	DrawRooms();
+
+	// Luego pintar el resto de elementos
     m_SceneTreeRoot->Draw();
+}
+
+void SceneManager::DrawRooms(){
+	if(m_main_camera != nullptr){
+
+		// Lo primero es saber cual de todas las habitaciones esta mas cerca de la mainCamera
+		toe::core::TOEvector3df camPos = m_main_camera->GetTranslation();
+		float minDistance =  std::numeric_limits<float>::max();
+		int value = -1;
+
+		int size = m_rooms.size();
+		for(int i=0; i<size; i++){
+			TFRoom* currentRoom = m_rooms[i];
+			float currentDistance = currentRoom->GetDistance(camPos);
+			if(currentDistance < minDistance){
+				minDistance = currentDistance;
+				value = i;
+			}
+		}
+
+		// Una vez aqui ya se habra visto cual es la habitacion mas cercana a la camara
+		if(value != -1){
+			// Procedemos a pintar la habitacion mas cercana
+			TRoom* nearestRoom = (TRoom*)(m_rooms[value]->GetEntityNode());
+			nearestRoom->Draw();
+		} 
+	}
 }
 
 void SceneManager::DrawBkg2DElements(){

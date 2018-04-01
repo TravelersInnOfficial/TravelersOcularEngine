@@ -2,16 +2,18 @@
 #define SCENEMANAGER_H
 
 #include "./Elements/Particles/TFParticleSystem.h"
+#include "./Elements/2DElements/TFSprite.h"
+#include "./Elements/2DElements/TFRect.h"
 #include "./Elements/TFCamera.h"
 #include "./Elements/TFLight.h"
+#include "./Elements/TFRoom.h"
 #include "./Elements/TFMesh.h"
 #include "./Elements/TFDome.h"
-#include "./Elements/2DElements/TFRect.h"
-#include "./Elements/2DElements/TFSprite.h"
-#include <TOEvector2d.h>
-#include <vector>
-#include <glm/vec3.hpp>
+
 #include <glm/mat4x4.hpp>
+#include <TOEvector2d.h>
+#include <glm/vec3.hpp>
+#include <vector>
 
 // Forward declaration
 typedef unsigned int GLuint;
@@ -108,6 +110,17 @@ public:
      * @return TFParticleSystem* 
      */
     TFParticleSystem* AddParticleSystem(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale);
+
+    /**
+     * @brief Adds a Room in the Scene
+     * 
+     * @param position  (toe::core::TOEvector3df)   Position of the Room
+     * @param rotation  (toe::core::TOEvector3df)   Rotation of the Room
+     * @param scale     (toe::core::TOEvector3df)   Size of the Room
+     * 
+     * @return          (TFRoom*)                   The Room Created
+     */
+    TFRoom* AddRoom(toe::core::TOEvector3df position = toe::core::TOEvector3df(0.0f, 0.0f, 0.0f), toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0.0f, 0.0f, 0.0f), toe::core::TOEvector3df scale = toe::core::TOEvector3df(1.0f, 1.0f, 1.0f));
 
     /**
      * @brief Deletes the Camera given
@@ -236,20 +249,22 @@ public:
     void PushToFront(TFDrawable*);
 
     void ChangeShader(SHADERTYPE shader, ENTITYTYPE entity);
+    void DrawRooms();
 
 private:
     GLuint m_vao;
     GLuint m_fbo;
     GLuint m_shadowMap;
     
-    TNode* m_SceneTreeRoot;
+    TNode* m_SceneTreeRoot;                         // Root of the scene
+    std::vector<TFRoom*>        m_rooms;            // Rooms in the scene  
 
-    std::vector<TFCamera*>   m_cameras;         // Pointers to the cameras created
-    std::vector<TFLight*>    m_lights;          // Pointers to the lights created
-    std::vector<TFLight*>    m_dynamicLights;   // Lights that emit shadows
-    std::vector<TFNode*>     m_objects;         // Pointers to the nodes created
-    std::vector<TFDrawable*> m_2Delems;
-    std::vector<TFDrawable*> m_bkg2Delems;
+    std::vector<TFCamera*>      m_cameras;          // Pointers to the cameras created
+    std::vector<TFLight*>       m_lights;           // Pointers to the lights created
+    std::vector<TFLight*>       m_dynamicLights;    // Lights that emit shadows
+    std::vector<TFNode*>        m_objects;          // Pointers to the nodes created
+    std::vector<TFDrawable*>    m_2Delems;
+    std::vector<TFDrawable*>    m_bkg2Delems;
 
     glm::vec3 m_ambientLight;
     TFCamera* m_main_camera;

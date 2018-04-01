@@ -241,3 +241,7 @@ void TFNode::SetProgram(SHADERTYPE shader, ENTITYTYPE entity){
 		myEntity->SetProgram(shader);
 	}
 }
+
+TNode* TFNode::GetEntityNode(){
+	return m_entityNode;
+}
