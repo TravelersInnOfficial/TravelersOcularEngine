@@ -65,36 +65,40 @@ bool TFLight::GetActive(){
 }
 
 void TFLight::DrawLight(int num){
-	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
+	TLight* ent = (TLight*) m_entityNode->GetEntity();
 
-	if(myEntity->GetActive()){
-		VideoDriver* vd = VideoDriver::GetInstance();
-		Program* myProgram = vd->GetProgram(vd->GetCurrentProgram());
+	// Initialize vectors to 0 if light is turned off
+	glm::vec3 position = glm::vec3(0.0f);
+	glm::vec3 diffuse = glm::vec3(0.0f);
+	glm::vec3 specular = glm::vec3(0.0f);
+	float att = 0;
 
-		std::string str = "Light["+std::to_string(num)+"].";
-		std::string aux = "";
-
-		glm::vec3 location = m_LastLocation;
-		aux = str +"Position";
-		GLint lightPLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
-		glUniform3fv(lightPLocation, 1, &location[0]);
-
+	if(ent->GetActive()){
 		toe::core::TOEvector4df color = GetColor();
-		glm::vec3 diffuse = glm::vec3(color.X, color.Y, color.X2);
-		aux = str +"Diffuse";
-		GLint diffLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
-		glUniform3fv(diffLocation, 1, &diffuse[0]);
-
-		glm::vec3 specular = glm::vec3(color.X, color.Y, color.X2);
-		aux = str +"Specular";
-		GLint specLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
-		glUniform3fv(specLocation, 1, &specular[0]);
-
-		aux = str +"Attenuation";
-		GLint AttenuationLocation = glGetUniformLocation(myProgram->GetProgramID(), aux.c_str());
-		float att = GetAttenuation();
-		glUniform1f(AttenuationLocation, att);
+		
+		position = m_LastLocation;
+		diffuse = glm::vec3(color.X, color.Y, color.X2);
+		specular = glm::vec3(color.X, color.Y, color.X2);
+		att = GetAttenuation();
 	}
+
+	VideoDriver* vd = VideoDriver::GetInstance();
+	GLuint progID = vd->GetProgram(vd->GetCurrentProgram())->GetProgramID();
+
+	std::string str = "Light["+std::to_string(num)+"].";
+	std::string aux = "";
+
+	aux = str +"Position";
+	glUniform3fv(glGetUniformLocation(progID, aux.c_str()), 1, &position[0]);
+
+	aux = str +"Diffuse";
+	glUniform3fv(glGetUniformLocation(progID, aux.c_str()), 1, &diffuse[0]);
+
+	aux = str +"Specular";
+	glUniform3fv(glGetUniformLocation(progID, aux.c_str()), 1, &specular[0]);
+
+	aux = str +"Attenuation";
+	glUniform1f(glGetUniformLocation(progID, aux.c_str()), att);
 }
 
 void TFLight::DrawLightShadow(int num){
@@ -102,7 +106,7 @@ void TFLight::DrawLightShadow(int num){
 
 	if(myEntity->GetActive()){
 		VideoDriver* vd = VideoDriver::GetInstance();
-		Program* prog = vd->GetProgram(SHADOW_SHADER);
+		GLuint progID = vd->GetProgram(SHADOW_SHADER)->GetProgramID();
 
 		//std::string str = "Shadows["+std::to_string(num)+"].";
 		//std::string aux = "";
@@ -121,7 +125,7 @@ void TFLight::DrawLightShadow(int num){
 		// Send our transformation to the currently bound shader,
 		// in the "MVP" uniform
 		//aux = "DepthMVP";
-		GLuint depthMatrixID = glGetUniformLocation(prog->GetProgramID(), "DepthMVP");
+		GLuint depthMatrixID = glGetUniformLocation(progID, "DepthMVP");
 		glUniformMatrix4fv(depthMatrixID, 1, GL_FALSE, &depthVP[0][0]);
 
 		TEntity::DepthWVP = depthVP;

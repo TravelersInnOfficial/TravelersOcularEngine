@@ -24,13 +24,13 @@ void ChangeShader(int newShader){
 	}
 }
 
-void CreateTree(TFMesh*& m1, TFMesh*& m2, TFMesh*& m3){
+void CreateTree(TFMesh* ms[], TFLight* ls[], TFLight*& shL){
 	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
 	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0, 0, 0);
 	toe::core::TOEvector3df rot = toe::core::TOEvector3df(0, 180, 0);
 	toe::core::TOEvector3df scale = toe::core::TOEvector3df(1.0f, 1.0f, 1.0f);
 	toe::core::TOEvector4df color = toe::core::TOEvector4df(1.0f, 1.0f, 1.0f, 1.0f);
-	float attenuation = 0.0001f;
+	float attenuation = 0.005f;
 	std::string path = "";
 	TFMesh* mesh = nullptr;
 	TFLight* l = nullptr;
@@ -62,6 +62,7 @@ void CreateTree(TFMesh*& m1, TFMesh*& m2, TFMesh*& m3){
 	sceneObjects.push_back(mesh);
 
 	// TEAPOTS ###################################################
+
 	pos = toe::core::TOEvector3df(-7.0f, -1.8f, 10.0f);
 	scale = toe::core::TOEvector3df(0.7f, 0.7f, 0.7f);
 	mesh = sm->AddMesh(pos, rot, scale, "./../assets/models/teapot.obj");
@@ -80,7 +81,13 @@ void CreateTree(TFMesh*& m1, TFMesh*& m2, TFMesh*& m3){
 	scale = toe::core::TOEvector3df(0.4f, 0.4f, 0.4f);
 	mesh = sm->AddMesh(pos, rot, scale, "./../assets/models/teapot.obj");
 	mesh->SetTexture("./../assets/textures/teapot_texture2.jpg");
-	mesh->SetBoundBox(true);
+
+	// Room model 
+	pos = toe::core::TOEvector3df(-2,-1,0);
+	scale = toe::core::TOEvector3df(1,1,1);
+	mesh = sm->AddMesh(pos, toe::core::TOEvector3df(0,180,0), scale, "./../assets/models/room_thickwalls.obj");
+	mesh->SetTexture("./../assets/textures/room.png");
+	//mesh->SetBoundBox(true);
 	sceneObjects.push_back(mesh);
 
 	// LUCES ###################################################
@@ -90,41 +97,65 @@ void CreateTree(TFMesh*& m1, TFMesh*& m2, TFMesh*& m3){
 	// R
 	pos = toe::core::TOEvector3df(0.0f, 0.0f, 0.0f);
 	color = toe::core::TOEvector4df(1.0f, 0.0f, 0.0f, 1.0f);
-	l = sm->AddLight(pos, rot, color, attenuation);
+	ls[0] = l = sm->AddLight(pos, rot, color, attenuation);
 
-	m1 = sm->AddMesh();
-	m1->CreateSphere();
+	ms[0] = sm->AddMesh();
+	ms[0]->CreateSphere();
 	pos = toe::core::TOEvector3df(0.0f, 1.0f, 0.0f);
-	m1->AddBillboard(pos, "RED LIGHT SOURCE", 0.35f);
-	m1->AddChild(l);
-	sceneObjects.push_back(m1);
+	ms[0]->AddBillboard(pos, "LIGHT SOURCE", 0.35f);
+	ms[0]->SetTexture("./../assets/textures/red.png");
+	ms[0]->AddChild(l);
+	sceneObjects.push_back(ms[0]);
 
 	// G
 	pos = toe::core::TOEvector3df(0.0f, 0.0f, 0.0f);
 	color = toe::core::TOEvector4df(0.0f, 1.0f, 0.0f, 1.0f);
-	l = sm->AddLight(pos, rot, color, attenuation);
+	ls[1] = l = sm->AddLight(pos, rot, color, attenuation);
 	
-	m2 = sm->AddMesh();
-	m2->CreateSphere();
+	ms[1] = sm->AddMesh();
+	ms[1]->CreateSphere();
 	pos = toe::core::TOEvector3df(0.0f, 1.0f, 0.0f);
-	m2->AddBillboard(pos, "GREEN LIGHT SOURCE", 0.35f);
-	m2->AddChild(l);
-	sceneObjects.push_back(m2);
+	ms[1]->AddBillboard(pos, "SPHERE2", 0.35f);
+	ms[1]->AddChild(l);
+	sceneObjects.push_back(ms[1]);
 
 	// B
 	pos = toe::core::TOEvector3df(0.0f, 0.0f, 0.0f);
 	color = toe::core::TOEvector4df(0.0f, 0.0f, 1.0f, 1.0f);
-	l = sm->AddLight(pos, rot, color, attenuation);
+	ls[2] = l = sm->AddLight(pos, rot, color, attenuation);
 	
-	m3 = sm->AddMesh();
-	m3->CreateSphere();
+	ms[2] = sm->AddMesh();
+	ms[2]->CreateSphere();
 	pos = toe::core::TOEvector3df(0.0f, 1.0f, 0.0f);
-	m3->AddBillboard(pos, "BLUE LIGHT SOURCE", 0.35f);
-	m3->AddChild(l);
-	sceneObjects.push_back(m3);
+	ms[2]->AddBillboard(pos, "SPHERE3", 0.35f);
+	ms[2]->AddChild(l);
+	sceneObjects.push_back(ms[2]);
 	
+	// STATIC BUT DYNAMIC LIGHT
+	pos = toe::core::TOEvector3df(0.0f,5.0f,0.0f);
+	color = toe::core::TOEvector4df(1.0f, 0.6f, 0.0f, 1.0f);
+	shL = sm->AddLight(pos, rot, color, attenuation);
+	shL->SetBoundBox(true);	
+
 	// DOME ###################################################
 	sm->AddDome();
+	sm->AddDynamicLight(shL);
+}
+
+void RotateLights(const toe::core::TOEvector3df& rot, TFMesh* l1, TFMesh* l2, TFMesh* l3){
+	float radius = 12.0f;
+	float height = 8.0f;
+	float x = sin(glm::radians(-rot.Y)) * radius;
+	float z = cos(glm::radians(-rot.Y)) * radius;
+	l1->SetTranslate(toe::core::TOEvector3df(x, height, z));
+
+	x = sin(glm::radians(-rot.Y + 360.0f / 3.0f)) * radius;
+	z = cos(glm::radians(-rot.Y + 360.0f / 3.0f)) * radius;
+	l2->SetTranslate(toe::core::TOEvector3df(x, height, z));
+
+	x = sin(glm::radians(-rot.Y + 360.0f / 1.5f)) * radius;
+	z = cos(glm::radians(-rot.Y + 360.0f / 1.5f)) * radius;
+	l3->SetTranslate(toe::core::TOEvector3df(x, height, z));
 }
 
 int main(){
@@ -133,16 +164,19 @@ int main(){
 	VideoDriver* VDriv = toe::GetVideoDriver();
 	SceneManager* sm = VDriv->GetSceneManager();
 	
-	VDriv->CreateWindows("TOE Demonstrative Application", VDriv->GetScreenResolution(), true);
-	VDriv->SetClearScreenColor(toe::core::TOEvector4df(0.7, 0.7, 1, 1));
+	VDriv->CreateWindows("TOE Demonstrative Application", VDriv->GetScreenResolution(), false);
+	VDriv->SetClearScreenColor(toe::core::TOEvector4df(0.1, 0.1, 0.3, 1));
 	VDriv->SetIODriver(handler);
 	VDriv->SetMouseVisibility(false);
 
+	TFMesh* meshes[] = {nullptr, nullptr, nullptr};
+	TFLight* lights[] = {nullptr, nullptr, nullptr};
 	TFMesh* lr = nullptr;
 	TFMesh* lg = nullptr;
 	TFMesh* lb = nullptr;
-
-	CreateTree(lr, lg, lb);
+	TFLight* shadowLight = nullptr;
+	
+	CreateTree(meshes, lights, shadowLight);
 
 	TFCamera* myCamera = sm->AddCamera();
 
@@ -156,7 +190,7 @@ int main(){
 	ps->SetManager(new ColoredParticle(true, false, false)); 
 	ps1->SetManager(new ColoredParticle(false, true, false));
 	ps2->SetManager(new ColoredParticle(false, false, true));
-	
+
 	// TOE MANUAL
 	TFSprite* manual = toe::AddSprite("",toe::core::TOEvector2df(0, 0), toe::core::TOEvector2df(305,96));
 	manual->SetTexture("./../assets/textures/toe_manual.png");
@@ -166,36 +200,45 @@ int main(){
 	logo->SetTexture("./../assets/textures/default_sprite.png");
 
 	// SUZANNE
-	TFMesh* mesh = sm->AddMesh(toe::core::TOEvector3df(0.0f, 6.0f, 0.0f), toe::core::TOEvector3df(0.0f, 0.0f, 0.0f), toe::core::TOEvector3df(2.0f, 2.0f, 2.0f), "./../assets/models/suzanne.obj");
+	TFMesh* mesh = sm->AddMesh(toe::core::TOEvector3df(6.0f, 6.0f, 0.0f), toe::core::TOEvector3df(0.0f, 0.0f, 0.0f), toe::core::TOEvector3df(2.0f, 2.0f, 2.0f), "./../assets/models/suzanne.obj");
 	mesh->AddBillboard(toe::core::TOEvector3df(0.0f, 3.0f, 0.0f), "SUZANNE", 0.5f);
 	sceneObjects.push_back(mesh);
+
+	// INIT MODELS
+	shadowLight->SetTranslate(toe::core::TOEvector3df(EventHandler::xlight, EventHandler::ylight, EventHandler::zlight));
+	RotateLights(mesh->GetRotation(), meshes[0], meshes[1], meshes[2]);
+	shadowLight->SetActive(true);
 
 	while(!EventHandler::m_close){
 		// EVENT HANDLER UPDATE
 		handler->Update();
 
-		// ROTATE MESH
-		toe::core::TOEvector3df rot = mesh->GetRotation();
-		rot.Y += 0.5;
-		mesh->SetRotation(rot);
+		if(EventHandler::ChangeMain){
+			// ROTATE MESH
+			toe::core::TOEvector3df rot = mesh->GetRotation();
+			rot.Y += 0.5;
+			mesh->SetRotation(rot);
 
-		// ROTATE LIGHTS
-		float x = sin(glm::radians(-rot.Y)) * 6.0f;
-		float z = cos(glm::radians(-rot.Y)) * 6.0f;
-		lr->SetTranslate(toe::core::TOEvector3df(x, 6.0f, z));
+			// ROTATE LIGHTS
+			RotateLights(rot, meshes[0], meshes[1], meshes[2]);
 
-		x = sin(glm::radians(-rot.Y + 360.0f / 3.0f)) * 6.0f;
-		z = cos(glm::radians(-rot.Y + 360.0f / 3.0f)) * 6.0f;
-		lg->SetTranslate(toe::core::TOEvector3df(x, 6.0f, z));
+			// UPDATE PARTICLES
+			ps->Update(0.16f);
+			ps1->Update(0.16f);
+			ps2->Update(0.16f);
 
-		x = sin(glm::radians(-rot.Y + 360.0f / 1.5f)) * 6.0f;
-		z = cos(glm::radians(-rot.Y + 360.0f / 1.5f)) * 6.0f;
-		lb->SetTranslate(toe::core::TOEvector3df(x, 6.0f, z));
-
-		// UPDATE PARTICLES
-		ps->Update(0.16f);
-		ps1->Update(0.16f);
-		ps2->Update(0.16f);
+			////
+			shadowLight->SetActive(false);
+			lights[0]->SetActive(true);
+			lights[1]->SetActive(true);
+			lights[2]->SetActive(true);
+		}else{
+			shadowLight->SetActive(true);
+			lights[0]->SetActive(false);
+			lights[1]->SetActive(false);
+			lights[2]->SetActive(false);
+		}
+		shadowLight->SetTranslate(toe::core::TOEvector3df(EventHandler::xlight, EventHandler::ylight, EventHandler::zlight));
 		
 		// UPDATE CAMERA
 		myCamera->SetRotation(toe::core::TOEvector3df(EventHandler::xdistGiro, EventHandler::ydistGiro, EventHandler::zdistGiro));

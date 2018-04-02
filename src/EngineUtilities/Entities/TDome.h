@@ -9,8 +9,9 @@ public:
 	~TDome();
 
 	void BeginDraw() override;
-	void DrawShadow() override;
 	void EndDraw() override;
+	// Declare as empty method overriding mesh one for not drawing dome shadows
+	void DrawShadow() override;
 
 private:
 	void SendShaderData();

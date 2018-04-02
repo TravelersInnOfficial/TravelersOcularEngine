@@ -371,7 +371,7 @@ void SceneManager::SendLights(){
 	Program* myProgram = vd->SetShaderProgram(STANDARD_SHADER);
 
 	// Sends the Ambient Light
-	GLint ambLocation = glGetUniformLocation(myProgram->GetProgramID(), "SpecialLight.AmbientLight");
+	GLint ambLocation = glGetUniformLocation(myProgram->GetProgramID(), "AmbientLight");
 	glUniform3fv(ambLocation, 1, &m_ambientLight[0]);
 
 	// Send size of lights
@@ -388,30 +388,34 @@ void SceneManager::DrawSceneShadows()
 {
 	// Set shadow program
 	VideoDriver::GetInstance()->SetShaderProgram(SHADOW_SHADER);
+	// Update lights position
 	RecalculateLightPosition();
 
 	int size = m_dynamicLights.size();
 	for(int i = 0; i < size; i++){
+		if(m_dynamicLights[i]->GetActive()){
+			// Change renger target
+			glViewport(0,0,1024,1024);						// Change viewport resolution for rendering in frame buffer 
+			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);	// BIND FRAME BUFFER FOR WRITING
+
+			// Clear the screen
+			glClear(GL_DEPTH_BUFFER_BIT);
+
+			// Options
+			glDisable(GL_CULL_FACE);	// DISABLE BACKFACE CULLING FOR PETER PLANNING (corners sometimes doesn't produce shadows)
+			glEnable(GL_DEPTH_TEST);	// ENABLE ZBUFFER
 		
-		// BIND FRAME BUFFER FOR WRITING
-		glViewport(0,0,1024,1024); // Render on the whole framebuffer, complete from the lower left corner to the upper right
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
-
-		// Clear the screen
-		glClear(GL_DEPTH_BUFFER_BIT);
-
-		// DISABLE BACKFACE CULLING FOR PETER PLANNING
-		glDisable(GL_CULL_FACE);
-
-		// ENABLE ZBUFFER
-		glEnable(GL_DEPTH_TEST);
-	
-		// Compute the MVP matrix from the light's point of view
-		m_dynamicLights[i]->DrawLightShadow(i);
-	} 
-
-	m_SceneTreeRoot->DrawShadows();
+			// Compute the MVP matrix from the light's point of view
+			m_dynamicLights[i]->DrawLightShadow(i);
+			
+			m_SceneTreeRoot->DrawShadows();
+		}
+		else{
+			TEntity::DepthWVP = glm::mat4(0.0f);
+		}
+	}
 }
+
 
 bool SceneManager::AddDynamicLight(TFLight* light){
 	bool ret = true;
