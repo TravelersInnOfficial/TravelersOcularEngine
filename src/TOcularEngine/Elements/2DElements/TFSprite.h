@@ -30,6 +30,12 @@ public:
     void ToBkg() override;
     void ToFront() override;
 
+    void LoopH(float vel);
+    void LoopV(float vel);
+
+    float rotH;
+    float rotV;
+
 private:
     TFSprite(std::string texture, toe::core::TOEvector2df position, toe::core::TOEvector2df size);
     ~TFSprite();
