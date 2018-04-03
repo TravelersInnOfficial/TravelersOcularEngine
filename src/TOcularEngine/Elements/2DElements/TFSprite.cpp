@@ -105,11 +105,11 @@ void TFSprite::p_recalculate_size(){
 }
 
 void TFSprite::LoopH(float vel){
-    rotH+=vel;
+    rotH = rotH > 1 ? vel : rotH + vel;
 }
 
 void TFSprite::LoopV(float vel){
-    rotV+=vel;
+    rotV = rotV > 1 ? vel : rotV + vel;
 }
 
 void TFSprite::SetPosition(float x, float y){
