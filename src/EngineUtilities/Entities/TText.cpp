@@ -98,7 +98,7 @@ void TText::SendShaderData(){
 		glEnableVertexAttribArray(uvAttrib);
 
 	// Enviamos la textura del texto
-		GLuint TextureID = glGetUniformLocation(myProgram->GetProgramID(), "myTextureSampler");
+		GLuint TextureID = glGetUniformLocation(myProgram->GetProgramID(), "uvMap");
 		glUniform1i(TextureID, 0);
 
 		glActiveTexture(GL_TEXTURE0);

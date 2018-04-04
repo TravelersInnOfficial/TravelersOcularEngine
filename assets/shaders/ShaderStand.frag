@@ -1,9 +1,5 @@
 #version 130
 
-// TEMPORAL TEXTURE WITHOUT MATERIALS
-uniform sampler2D myTextureSampler;
-uniform sampler2DShadow shadowMap;
-
 // ENTRADA, PROVENIENTE DEL VERTEX SHADER
 in vec3 Position;  		// VERTICES EN COORDENADAS DE VISTA
 in vec3 Normal;  		// NORMAL EN COORDENADAS DE VISTA
@@ -21,7 +17,6 @@ struct TMaterial {
 	vec3  Ambient;
 	float Shininess;
 };
-uniform TMaterial Material;
 
 // ESTRUCTURA PARA GUARDAR LAS LUCES (POSICION, Y PROPIEDADES AMBIENTAL, DIFUSA Y ESPECULAR DE LA LUZ)
 struct TLight {
@@ -30,12 +25,16 @@ struct TLight {
 	vec3 Specular;
 	float Attenuation;
 };
-uniform TLight Light[20];
-uniform int nlights;
 
-// LUZ AMBIENTE
-struct SLight{ vec3 AmbientLight; };
-uniform SLight SpecialLight;
+// IN UNIFORMS
+uniform TMaterial Material;		// MODEL MATERIAL
+uniform TLight Light[20];		// LIGHTS
+uniform int nlights;			// NUMBER OF CURRENT LIGHTS
+uniform vec3 AmbientLight;		// AMBIENT LIGHT
+
+// TEMPORAL TEXTURE WITHOUT MATERIALS
+uniform sampler2D uvMap;
+uniform sampler2DShadow shadowMap;
 
 // FUNCION QUE CALCULA EL MODELO DE REFLEXION DE PHONG
 vec3  Phong (int num) {
@@ -49,7 +48,7 @@ vec3  Phong (int num) {
   	
 	// COMPONENTE DIFUSA
 	vec3 Diffuse = vec3(0);
-	Diffuse = Light[num].Diffuse * clamp(dot(n,s), 0, 1) * vec3(texture(myTextureSampler, TexCoords)) * Material.Diffuse;
+	Diffuse = Light[num].Diffuse * clamp(dot(n,s), 0, 1) * vec3(texture(uvMap, TexCoords)) * Material.Diffuse;
 
 	// COMPONENTE ESPECULAR  
 	vec3 Specular = vec3(0);
@@ -74,7 +73,7 @@ vec2 poissonDisk[4] = vec2[](
 
 void main() {
 	// Check alpha and discard fragments
-	vec4 texValue = texture(myTextureSampler, TexCoords);
+	vec4 texValue = texture(uvMap, TexCoords);
 	if(texValue.a < 0.5) discard;
 
 	// CALCULAMOS DIFFUSE + SPECULAR
@@ -96,7 +95,7 @@ void main() {
 	result *= visibility;	
 
 	// SUMAMOS AMBIENTAL
-	vec3 Ambient = SpecialLight.AmbientLight * vec3(texValue) * Material.Ambient;
+	vec3 Ambient = AmbientLight * vec3(texValue) * Material.Ambient;
 	result += vec4(Ambient, 1.0);
 
 	// SPOTLIGHT

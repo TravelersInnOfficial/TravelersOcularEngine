@@ -84,7 +84,7 @@ void TFSprite::Draw() const{
     glVertexAttribPointer(uvAttrib, 2, GL_FLOAT, GL_FALSE, 8*sizeof(float), (const GLvoid*)(2 * sizeof(float)));
 
     // Enviamos la textura del sprite
-	GLuint TextureID = glGetUniformLocation(myProgram->GetProgramID(), "myTextureSampler");
+	GLuint TextureID = glGetUniformLocation(myProgram->GetProgramID(), "uvMap");
 	glUniform1i(TextureID, 0);
     
     glActiveTexture(GL_TEXTURE0);
