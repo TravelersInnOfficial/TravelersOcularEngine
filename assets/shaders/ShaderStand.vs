@@ -1,19 +1,23 @@
 #version 130
 
-in vec3 VertexPosition;  // VERTICE EN COORDENADAS LOCALES
-in vec3 VertexNormal;    // NORMAL EL COORDENADAS LOCALES
-in vec2 TextureCoords;   // COORDENADAS DE TEXTURA
-
-out vec3 Position;    // VERTICES EN COORDENADAS DE VISTA
-out vec3 Normal;      // NORMAL EN COORDENADAS DE VISTA
-out vec4 ShadowCoord;
-out vec2 TexCoords;   // COORDENADAS DE TEXTURA
-out mat4 FragViewMatrix;
-
+// ##################################################################################################
+// IN VARIABLES
+in vec3 VertexPosition;     // VERTICE EN COORDENADAS LOCALES
+in vec3 VertexNormal;       // NORMAL EL COORDENADAS LOCALES
+in vec2 TextureCoords;      // COORDENADAS DE TEXTURA
+// OUT VARIABLES TO FRAGMENT
+out vec3 Position;    	    // VERTICES EN COORDENADAS DE VISTA
+out vec3 Normal;      	    // NORMAL EN COORDENADAS DE VISTA
+out vec2 TexCoords;   	    // COORDENADAS DE TEXTURA
+out mat4 FragViewMatrix;    // VIEW MATRIX
+out vec4 ShadowCoord;       // VERTICES DESDE LA LUZ
+// IN UNIFORMS
 uniform mat4 ModelViewMatrix;
 uniform mat4 MVP;
 uniform mat4 ViewMatrix;
+// ############  DON'T CHANGE ABOVE THIS LINE  ######################################################
 uniform mat4 DepthBiasMVP;
+
 
 void main() {
 	// TRANSFORMAR VERTICE Y NORMAL A COORDENADAS DE VISTA

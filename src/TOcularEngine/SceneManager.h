@@ -242,6 +242,7 @@ public:
 
     void RecalculateLightPosition();
     void SendLights();
+    void SendLightsToShader();
     bool AddDynamicLight(TFLight*);
     
     void SetClipping(bool value);

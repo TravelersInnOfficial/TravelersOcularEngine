@@ -1,11 +1,11 @@
 #version 130
 
 // ENTRADA, PROVENIENTE DEL VERTEX SHADER
-in vec3 Position;  		// VERTICES EN COORDENADAS DE VISTA
-in vec3 Normal;  		// NORMAL EN COORDENADAS DE VISTA
-in vec4 ShadowCoord;
-in vec2 TexCoords;      // UV COORDENADAS DE TEXTURA
-in mat4 FragViewMatrix;
+in vec3 Position;    		// VERTICES EN COORDENADAS DE VISTA
+in vec3 Normal;      		// NORMAL EN COORDENADAS DE VISTA
+in vec2 TexCoords;   		// COORDENADAS DE TEXTURA
+in mat4 FragViewMatrix;   	// VIEW MATRIX
+in vec4 ShadowCoord;      	// VERTICES DESDE LA LUZ
 
 // SALIDA PARA COMUNICAR CON EL RESTO DEL PIPELINE
 out vec4 FragColor;	// COLOR FINAL DEL FRAGMENTO

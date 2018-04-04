@@ -1,22 +1,38 @@
 #version 130
-in vec3 VertexPosition;  // VERTICE EN COORDENADAS LOCALES
-in vec3 VertexNormal;    // NORMAL EL COORDENADAS LOCALES
-in vec2 TextureCoords;   // COORDENADAS DE TEXTURA
 
-out vec3 Position;    // VERTICES EN COORDENADAS DE VISTA
-out vec3 Normal;      // NORMAL EN COORDENADAS DE VISTA
-out vec2 TexCoords;   // COORDENADAS DE TEXTURA
-out mat4 FragViewMatrix;
-// NEEDED FOR SHADOWS
-out vec4 ShadowCoord;
+// ##################################################################################################
+// IN VARIABLES
+in vec3 VertexPosition;     // VERTICE EN COORDENADAS LOCALES
+in vec3 VertexNormal;       // NORMAL EL COORDENADAS LOCALES
+in vec2 TextureCoords;      // COORDENADAS DE TEXTURA
+// OUT VARIABLES TO FRAGMENT
+out vec3 Position;    	    // VERTICES EN COORDENADAS DE VISTA
+out vec3 Normal;      	    // NORMAL EN COORDENADAS DE VISTA
+out vec2 TexCoords;   	    // COORDENADAS DE TEXTURA
+out mat4 FragViewMatrix;    // VIEW MATRIX
+out vec4 ShadowCoord;       // VERTICES DESDE LA LUZ
+// IN UNIFORMS
+uniform mat4 ModelViewMatrix;
+uniform mat4 MVP;
+uniform mat4 ViewMatrix;
+// ############  DON'T CHANGE ABOVE THIS LINE  ######################################################
 
 uniform float frameTime;	// Time from start
-uniform mat4 ModelViewMatrix;
 uniform mat4 ModelMatrix;		//|
-uniform mat4 ViewMatrix;		//|
+//uniform mat4 ViewMatrix;		//|
 uniform mat4 ProjectionMatrix;	//| MVP -- Model * View * Projection
 
 void main() {
+    // ##################################################################################################
+	// TRANSFORM VERTEX AND NORMAL TO VIEW COORDINATES
+	Position = vec3 (ModelViewMatrix * vec4(VertexPosition, 1.0));
+	Normal = normalize (ModelViewMatrix * vec4(VertexNormal,0)).xyz;
+	// PASS COORDS AND VIEW MATRIX
+	TexCoords = TextureCoords;
+	FragViewMatrix = ViewMatrix;
+    ShadowCoord = vec4(0.0);
+    // ############  DON'T CHANGE ABOVE THIS LINE  ######################################################
+
     vec4 finalPosition = ModelMatrix * vec4(VertexPosition, 1.0);
 	
     float offset = (finalPosition.x + finalPosition.z) * 0.5;
@@ -24,10 +40,5 @@ void main() {
     finalPosition.x += cos(frameTime + offset) * scale;
     finalPosition.z += sin(frameTime + offset) * scale;
 
-	Position = vec3 (ViewMatrix * finalPosition);
-	Normal = normalize (ModelViewMatrix * vec4(VertexNormal,0)).xyz;
-
     gl_Position = ProjectionMatrix * ViewMatrix  * finalPosition;
-    TexCoords = TextureCoords;
-	FragViewMatrix = ViewMatrix;
 }
