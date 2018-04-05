@@ -30,11 +30,13 @@ public:
     void ToBkg() override;
     void ToFront() override;
 
-    void LoopH(float vel);
-    void LoopV(float vel);
+    void ScrollH(float vel);
+    void ScrollV(float vel);
 
-    float rotH;
-    float rotV;
+    void SetMask(std::string mask_path);
+
+    float scrollH;
+    float scrollV;
 
 private:
     TFSprite(std::string texture, toe::core::TOEvector2df position, toe::core::TOEvector2df size);
@@ -42,6 +44,7 @@ private:
 
     void p_recalculate_size();
     TResourceTexture* 	m_texture;
+    TResourceTexture* m_mask;
     GLuint m_VAO, m_VBO;
 };
 #endif

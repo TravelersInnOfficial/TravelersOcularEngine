@@ -29,8 +29,10 @@ TFSprite::TFSprite( std::string texture, toe::core::TOEvector2df position, toe::
 
     m_color = new TColor();
     m_color->SetRGBA(1,1,1,1);
-    rotH = 0;
-    rotV = 0;
+    scrollH = 0;
+    scrollV = 0;
+    std::string mask = VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_texture.png";
+    m_mask = TResourceManager::GetInstance()->GetResourceTexture(mask);;
 }
 
 TFSprite::~TFSprite(){
@@ -59,13 +61,13 @@ void TFSprite::Draw() const{
 
     float vertices[] = {
         //  X     Y     Z                        U     V        COLOR(RGBA)
-         m_position->X, m_position->Y,          0.0f+rotH,  1.0f+rotV,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
-         m_size->X, m_position->Y,              1.0f+rotH,  1.0f+rotV,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
-         m_position->X, m_size->Y,              0.0f+rotH,  0.0f+rotV,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
+         m_position->X, m_position->Y,          0.0f+scrollH,  1.0f+scrollV,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
+         m_size->X, m_position->Y,              1.0f+scrollH,  1.0f+scrollV,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
+         m_position->X, m_size->Y,              0.0f+scrollH,  0.0f+scrollV,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
          
-         m_size->X, m_position->Y,              1.0f+rotH,  1.0f+rotV,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
-         m_size->X, m_size->Y,                  1.0f+rotH,  0.0f+rotV,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
-         m_position->X, m_size->Y,              0.0f+rotH,  0.0f+rotV,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA()
+         m_size->X, m_position->Y,              1.0f+scrollH,  1.0f+scrollV,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
+         m_size->X, m_size->Y,                  1.0f+scrollH,  0.0f+scrollV,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
+         m_position->X, m_size->Y,              0.0f+scrollH,  0.0f+scrollV,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA()
     };
 
     glBindVertexArray( m_VAO );
@@ -88,7 +90,14 @@ void TFSprite::Draw() const{
 	glUniform1i(TextureID, 0);
     
     glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, m_texture->GetTextureId());
+    glBindTexture(GL_TEXTURE_2D, m_texture->GetTextureId());
+    
+    // Enviamos la mascara si tiene
+    GLuint MaskID = glGetUniformLocation(myProgram->GetProgramID(), "myMask");
+    glUniform1i(MaskID, 1);
+
+    glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, m_mask->GetTextureId());
 
     //color
     GLuint colAttrib = glGetAttribLocation(myProgram->GetProgramID(), "overColor");
@@ -104,12 +113,16 @@ void TFSprite::p_recalculate_size(){
     m_size = new toe::core::TOEvector2df(m_position->X + (std::abs(m_InData.size.X *2) / w_dims.X), m_position->Y + (std::abs(m_InData.size.Y *2) / w_dims.Y));
 }
 
-void TFSprite::LoopH(float vel){
-    rotH = rotH > 1 ? vel : rotH + vel;
+void TFSprite::ScrollH(float vel){
+    scrollH = scrollH > 1 ? vel : scrollH + vel;
 }
 
-void TFSprite::LoopV(float vel){
-    rotV = rotV > 1 ? vel : rotV + vel;
+void TFSprite::ScrollV(float vel){
+    scrollV = scrollV > 1 ? vel : scrollV + vel;
+}
+
+void TFSprite::SetMask(std::string mask_path){
+    if(mask_path.compare("")!=0) m_mask = TResourceManager::GetInstance()->GetResourceTexture(mask_path);
 }
 
 void TFSprite::SetPosition(float x, float y){
