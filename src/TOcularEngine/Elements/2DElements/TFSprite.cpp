@@ -60,14 +60,14 @@ void TFSprite::Draw() const{
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     float vertices[] = {
-        //  X     Y     Z                        U     V        COLOR(RGBA)
-         m_position->X, m_position->Y,          0.0f+scrollH,  1.0f+scrollV,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
-         m_size->X, m_position->Y,              1.0f+scrollH,  1.0f+scrollV,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
-         m_position->X, m_size->Y,              0.0f+scrollH,  0.0f+scrollV,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
+//       X              Y                       U              V             U-MASK V-MASK  COLOR(RGBA)
+         m_position->X, m_position->Y,          0.0f+scrollH,  1.0f+scrollV, 0.0f,  1.0f,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
+         m_size->X,     m_position->Y,          1.0f+scrollH,  1.0f+scrollV, 1.0f,  1.0f,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
+         m_position->X, m_size->Y,              0.0f+scrollH,  0.0f+scrollV, 0.0f,  0.0f,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
          
-         m_size->X, m_position->Y,              1.0f+scrollH,  1.0f+scrollV,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
-         m_size->X, m_size->Y,                  1.0f+scrollH,  0.0f+scrollV,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
-         m_position->X, m_size->Y,              0.0f+scrollH,  0.0f+scrollV,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA()
+         m_size->X,     m_position->Y,          1.0f+scrollH,  1.0f+scrollV, 1.0f,  1.0f,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
+         m_size->X,     m_size->Y,              1.0f+scrollH,  0.0f+scrollV, 1.0f,  0.0f,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
+         m_position->X, m_size->Y,              0.0f+scrollH,  0.0f+scrollV, 0.0f,  0.0f,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA()
     };
 
     glBindVertexArray( m_VAO );
@@ -78,12 +78,17 @@ void TFSprite::Draw() const{
     //posicion
     GLint posAttrib = glGetAttribLocation(myProgram->GetProgramID(), "VertexPosition");
     glEnableVertexAttribArray(posAttrib);
-    glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 8*sizeof(float),  0);
+    glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 10*sizeof(float),  0);
 
-    //textura
+    //textura coords
     GLuint uvAttrib = glGetAttribLocation(myProgram->GetProgramID(), "TextureCoords");
     glEnableVertexAttribArray(uvAttrib);
-    glVertexAttribPointer(uvAttrib, 2, GL_FLOAT, GL_FALSE, 8*sizeof(float), (const GLvoid*)(2 * sizeof(float)));
+    glVertexAttribPointer(uvAttrib, 2, GL_FLOAT, GL_FALSE, 10*sizeof(float), (const GLvoid*)(2 * sizeof(float)));
+
+    //mask coords
+    GLuint uvMaskAttrib = glGetAttribLocation(myProgram->GetProgramID(), "MaskCoords");
+    glEnableVertexAttribArray(uvMaskAttrib);
+    glVertexAttribPointer(uvMaskAttrib, 2, GL_FLOAT, GL_FALSE, 10*sizeof(float), (const GLvoid*)(4 * sizeof(float)));
 
     // Enviamos la textura del sprite
 	GLuint TextureID = glGetUniformLocation(myProgram->GetProgramID(), "uvMap");
@@ -102,9 +107,9 @@ void TFSprite::Draw() const{
     //color
     GLuint colAttrib = glGetAttribLocation(myProgram->GetProgramID(), "overColor");
     glEnableVertexAttribArray(colAttrib);
-    glVertexAttribPointer(colAttrib, 4, GL_FLOAT, GL_FALSE, 8*sizeof(float), (const GLvoid*)(4 * sizeof(float)));
+    glVertexAttribPointer(colAttrib, 4, GL_FLOAT, GL_FALSE, 10*sizeof(float), (const GLvoid*)(6 * sizeof(float)));
 
-    glDrawArrays(GL_TRIANGLES, 0, 8);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 
     glDisable(GL_BLEND);
 }
