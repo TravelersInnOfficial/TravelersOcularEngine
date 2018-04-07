@@ -161,7 +161,7 @@ void TMesh::SendShaderData(){
 	else if(m_mesh != nullptr) currentTexture = m_mesh->GetTexture();
 
 	if(currentTexture != nullptr){
-		GLuint TextureID = glGetUniformLocation(myProgram->GetProgramID(), "myTextureSampler");
+		GLuint TextureID = glGetUniformLocation(myProgram->GetProgramID(), "uvMap");
 		GLuint ShadowMapID = glGetUniformLocation(myProgram->GetProgramID(), "shadowMap");
 
 		glActiveTexture(GL_TEXTURE0);

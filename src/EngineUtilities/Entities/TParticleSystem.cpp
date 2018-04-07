@@ -154,7 +154,7 @@ void TParticleSystem::SendShaderData(){
 		glEnableVertexAttribArray(indexAttrib);
 
 	if(m_texture != nullptr){
-		GLuint TextureID = glGetUniformLocation(idProgram, "myTextureSampler");
+		GLuint TextureID = glGetUniformLocation(idProgram, "uvMap");
 		glUniform1i(TextureID, 0);
 
 		glActiveTexture(GL_TEXTURE0);

@@ -380,22 +380,38 @@ void SceneManager::SendLights(){
 	// Change light last position
 	RecalculateLightPosition();
 	
-	// Gets the Program
 	VideoDriver* vd = VideoDriver::GetInstance();
-	Program* myProgram = vd->SetShaderProgram(STANDARD_SHADER);
+
+	// SEND ALL LIGHTS TO ALL SHADERS
+	vd->SetShaderProgram(BARREL_SHADER);
+	SendLightsToShader();
+
+	vd->SetShaderProgram(FISHEYE_SHADER);
+	SendLightsToShader();
+
+	vd->SetShaderProgram(DISTORSION_SHADER);
+	SendLightsToShader();
+
+	vd->SetShaderProgram(STANDARD_SHADER);
+	SendLightsToShader();
+}
+
+void SceneManager::SendLightsToShader(){
+	// Gets the Programs
+	VideoDriver* vd = VideoDriver::GetInstance();
+	GLuint programID = vd->GetProgram(vd->GetCurrentProgram())->GetProgramID();
 
 	// Sends the Ambient Light
-	GLint ambLocation = glGetUniformLocation(myProgram->GetProgramID(), "AmbientLight");
+	GLint ambLocation = glGetUniformLocation(programID, "AmbientLight");
 	glUniform3fv(ambLocation, 1, &m_ambientLight[0]);
 
 	// Send size of lights
 	GLint size = m_lights.size();
-	GLuint nlightspos = glGetUniformLocation(myProgram->GetProgramID(), "nlights");
+	GLuint nlightspos = glGetUniformLocation(programID, "nlights");
 	glUniform1i(nlightspos, size);
 
 	// Draw all lights
     for(int i = 0; i < size; i++) m_lights[i]->DrawLight(i);
-
 }
 
 void SceneManager::DrawSceneShadows()

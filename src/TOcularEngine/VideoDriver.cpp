@@ -223,7 +223,6 @@ Program* VideoDriver::SetShaderProgram(SHADERTYPE p){
 	if(m_lastShaderUsed != p){
 		m_lastShaderUsed = p;
 		glUseProgram(toRet->GetProgramID());
-		//privateSceneManager->SendLights();
 	}
 
 	return toRet;

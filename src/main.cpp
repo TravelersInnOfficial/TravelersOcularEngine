@@ -171,9 +171,6 @@ int main(){
 
 	TFMesh* meshes[] = {nullptr, nullptr, nullptr};
 	TFLight* lights[] = {nullptr, nullptr, nullptr};
-	TFMesh* lr = nullptr;
-	TFMesh* lg = nullptr;
-	TFMesh* lb = nullptr;
 	TFLight* shadowLight = nullptr;
 	
 	CreateTree(meshes, lights, shadowLight);
