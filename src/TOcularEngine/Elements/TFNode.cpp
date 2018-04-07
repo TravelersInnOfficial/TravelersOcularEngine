@@ -95,7 +95,7 @@ toe::core::TOEvector3df TFNode::GetScale(){
 	return toRet;
 }
 
-void TFNode::AddChild(TFNode* children){
+bool TFNode::AddChild(TFNode* children){
 	bool exists = false;
 	
 	for(int i = 0; i < m_children.size() && !exists ; i++){
@@ -106,9 +106,10 @@ void TFNode::AddChild(TFNode* children){
 		m_children.push_back(children);
 		children->SetParent(this);
 	}
+	return exists;
 }
 
-void TFNode::RemoveChild(TFNode* children){
+bool TFNode::RemoveChild(TFNode* children){
 	bool exists = false;
 
 	for(int i = 0; i < m_children.size() && !exists; i++){
@@ -118,6 +119,7 @@ void TFNode::RemoveChild(TFNode* children){
 			exists = true;
 		}
 	}
+	return exists;
 }
 
 void TFNode::RemoveAllChildren(){

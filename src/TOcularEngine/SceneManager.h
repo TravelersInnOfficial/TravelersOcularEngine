@@ -147,6 +147,14 @@ public:
     bool DeleteMesh(TFNode*);
 
     /**
+     * @brief      Delete the Room given
+     *
+     * @return     true The mesh has been deleted
+     * @return     false The mesh couldn't be deleted
+     */
+    bool DeleteRoom(TFNode*);
+
+    /**
      * @brief Sets the Ambient Light
      * 
      * @param ambientLight 

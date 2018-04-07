@@ -24,9 +24,9 @@ public:
 	toe::core::TOEvector3df GetScale() override;
 
 	float GetDistance(toe::core::TOEvector3df position);
-	TNode* GetConnectionNode() override;
 
 private:
+	TNode* GetConnectionNode() override;
 	TFRoom(toe::core::TOEvector3df position = toe::core::TOEvector3df(0, 0, 0),
 		toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0, 0, 0),
 		toe::core::TOEvector3df scale = toe::core::TOEvector3df(1, 1, 1));

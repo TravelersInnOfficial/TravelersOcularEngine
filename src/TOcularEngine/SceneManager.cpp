@@ -181,6 +181,20 @@ bool SceneManager::DeleteMesh(TFNode* node){
 	return toRet;
 }
 
+bool SceneManager::DeleteRoom(TFNode* node){
+	bool toRet = false;
+
+	std::vector<TFRoom*>::iterator it = m_rooms.begin();
+	for(; it != m_rooms.end() && !toRet; ++it){
+		if(*it == node){
+			m_rooms.erase(it);
+			delete node;
+			toRet = true;
+		}
+	}
+	return toRet;
+}
+
 void SceneManager::SetAmbientLight(toe::core::TOEvector3df ambientLight){
 	m_ambientLight = glm::vec3(ambientLight.X, ambientLight.Y, ambientLight.Z);
 }
