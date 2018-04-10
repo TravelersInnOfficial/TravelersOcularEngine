@@ -188,9 +188,9 @@ void TParticleSystem::Update(float deltaTime){
 	        	m_manager->UpdateParticle(p, deltaTime);
 
 	            // Fill the GPU buffer
-	            m_particlePositionData[3*m_particleCount+0] = p.pos.x + p.translation.x;
-	            m_particlePositionData[3*m_particleCount+1] = p.pos.y + p.translation.y;
-	            m_particlePositionData[3*m_particleCount+2] = p.pos.z + p.translation.z;
+	            m_particlePositionData[3*m_particleCount+0] = p.pos.X + p.translation.X;
+	            m_particlePositionData[3*m_particleCount+1] = p.pos.Y + p.translation.Y;
+	            m_particlePositionData[3*m_particleCount+2] = p.pos.Z + p.translation.Z;
 	            
 	            m_particlesColorData[3*m_particleCount+0] = p.r;
 	            m_particlesColorData[3*m_particleCount+1] = p.g;
@@ -243,15 +243,17 @@ int TParticleSystem::FindUnusedParticle(){
 
 void TParticleSystem::SetTranslate(glm::vec3 position){
 	for(int i=0; i<m_maxParticles; i++){
-		m_particleContainer[i].translation.x += position.x;
-		m_particleContainer[i].translation.y += position.y;
-		m_particleContainer[i].translation.z += position.z;
+		m_particleContainer[i].translation.X += position.x;
+		m_particleContainer[i].translation.Y += position.y;
+		m_particleContainer[i].translation.Z += position.z;
 	}
 }
 
 void TParticleSystem::Translate(glm::vec3 position){
 	for(int i=0; i<m_maxParticles; i++){
-		m_particleContainer[i].translation -= position;
+		m_particleContainer[i].translation.X -= position.x;
+		m_particleContainer[i].translation.Y -= position.y;
+		m_particleContainer[i].translation.Z -= position.z;
 	}
 }
 

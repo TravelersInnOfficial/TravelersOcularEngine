@@ -10,19 +10,19 @@ ColoredParticle::~ColoredParticle(){
 }
 
 void ColoredParticle::InitParticle(Particle& p){
-	p.translation = glm::vec3(0,0,0);
+	p.translation = toe::core::TOEvector3df(0,0,0);
 
 	float X = (rand() % 10)/10.0f - 0.5f;
 	float Y = (rand() % 10)/10.0f - 0.5f;
 	float Z = (rand() % 10)/10.0f - 0.5f;
 
-	p.pos 	= glm::vec3(X, Y, Z);
+	p.pos 	= toe::core::TOEvector3df(X, Y, Z);
 
 	Y = (rand() % 4)/10.0f - 0.2f;
 	X = (rand() % 2)/10.0f - 0.1f;
 	Z = (rand() % 2)/10.0f - 0.1f;
 
-	p.speed = glm::vec3(X,Y,Z);
+	p.speed = toe::core::TOEvector3df(X,Y,Z);
 
 	if(r) p.r = 255;
 	else p.r = (unsigned char)(rand() % 255);
@@ -39,6 +39,12 @@ void ColoredParticle::InitParticle(Particle& p){
 }
 
 void ColoredParticle::UpdateParticle(Particle& p, float deltaTime){
-	p.speed += glm::vec3(0.0f,0.25f, 0.0f) * deltaTime * 0.5f;
-	p.pos += p.speed * deltaTime;
+	p.speed.X += 0.00f * deltaTime * 0.5f;
+	p.speed.Y += 0.25f * deltaTime * 0.5f;
+	p.speed.Z += 0.00f * deltaTime * 0.5f;
+
+
+	p.pos.X += p.speed.X * deltaTime;
+	p.pos.Y += p.speed.Y * deltaTime;
+	p.pos.Z += p.speed.Z * deltaTime;
 }

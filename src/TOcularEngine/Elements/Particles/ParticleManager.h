@@ -1,10 +1,10 @@
 #ifndef PARTICLEMANAGER_H
 #define PARTICLEMANAGER_H
 
-#include <glm/vec3.hpp>
+#include <TOEvector3d.h>
 
 struct Particle{
-	glm::vec3 pos, speed, translation;
+	toe::core::TOEvector3df pos, speed, translation;
 	unsigned char r, g, b;
 	float size, rotation;
 	float life = -1.0f;
