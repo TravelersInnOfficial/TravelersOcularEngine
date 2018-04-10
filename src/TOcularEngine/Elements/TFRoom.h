@@ -1,15 +1,18 @@
 #ifndef TFROOM_H
 #define TFROOM_H
 
- #include "./TFNode.h"
+#include "./TFNode.h"
+#include "./TFPortal.h"
 
 class TFRoom: public TFNode{
 	friend class SceneManager;
 public:
-	bool AddConnection(	TFRoom* room, 
-						toe::core::TOEvector3df position = toe::core::TOEvector3df(0,0,0), 
-						toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,0,0),
-						toe::core::TOEvector3df scale = toe::core::TOEvector3df(1,1,1));
+	TFPortal* AddConnection(TFRoom* room, 
+							toe::core::TOEvector3df position = toe::core::TOEvector3df(0,0,0), 
+							toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,0,0),
+							toe::core::TOEvector3df scale = toe::core::TOEvector3df(1,1,1));
+
+	bool DeletePortal(TFPortal* portal);
 
 	void SetTranslate(toe::core::TOEvector3df translation) override;	
 	void SetRotation(toe::core::TOEvector3df rotation) override;		
@@ -26,6 +29,8 @@ public:
 	float GetDistance(toe::core::TOEvector3df position);
 
 private:
+	std::vector<TFPortal*> m_portals;
+
 	TNode* GetConnectionNode() override;
 	TFRoom(toe::core::TOEvector3df position = toe::core::TOEvector3df(0, 0, 0),
 		toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0, 0, 0),

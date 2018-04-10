@@ -17,22 +17,38 @@ TFRoom::TFRoom(toe::core::TOEvector3df position, toe::core::TOEvector3df rotatio
 	m_entity = TROOM_ENTITY;
 }
 
-TFRoom::~TFRoom(){}
+TFRoom::~TFRoom(){
+	int size = m_portals.size();
+	for(int i=0; i<size; i++){
+		delete m_portals[i];
+	}
+	m_portals.clear();
+}
 
-bool TFRoom::AddConnection(TFRoom* room, toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale){
+TFPortal* TFRoom::AddConnection(TFRoom* room, toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale){
 	// Que hago con el TPortal que devuelve el AddPortal?
 	ENTITYTYPE type = room->m_entity;
 	if(type == TROOM_ENTITY){
 		TRoom* connectionRoom = (TRoom*)room->GetEntityNode();
 		TRoom* currentRoom = (TRoom*)m_entityNode;
 
-		currentRoom->AddPortal(connectionRoom,  glm::vec3(scale.X, scale.Y, scale.Z),
+		TPortal* portal = currentRoom->AddPortal(connectionRoom,  glm::vec3(scale.X, scale.Y, scale.Z),
 												glm::vec3(position.X, position.Y, position.Z),
 												glm::vec3(rotation.X, rotation.Y, rotation.Z));
 
-		return true;
+		TFPortal* fPortal = new TFPortal(portal);
+		m_portals.push_back(fPortal);
+
+		return fPortal;
 	}
-	return false;
+	return nullptr;
+}
+
+bool TFRoom::DeletePortal(TFPortal* portal){
+	TRoom* room =(TRoom*)m_entityNode;
+	bool output = room->DeletePortal(portal->GetPortal());
+	delete portal;
+	return output;
 }
 
 void TFRoom::SetTranslate(toe::core::TOEvector3df translation){

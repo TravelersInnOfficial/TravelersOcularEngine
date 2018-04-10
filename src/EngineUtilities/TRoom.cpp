@@ -13,10 +13,22 @@ TRoom::TRoom(glm::vec3 size, glm::vec3 center, glm::vec3 rotation):TNode(){
 	m_rotation = rotation;
 	m_transform = glm::mat4(1.0f);
 
+	m_stackClipping[0] = +1.0f;
+	m_stackClipping[1] = -1.0f;
+	m_stackClipping[2] = +1.0f;
+	m_stackClipping[3] = -1.0f;
+
 	CalculateTransform();
 }
 
-TRoom::~TRoom(){}
+TRoom::~TRoom(){
+	// Delete all portals
+	int size = m_portals.size();
+	for(int i=0; i<size; i++){
+		delete m_portals[i];
+	}
+	m_portals.clear();
+}
 
 void TRoom::Draw(){
 	drawed = true;
@@ -28,11 +40,26 @@ void TRoom::Draw(){
 	int size = m_portals.size();
 	for(int i=0; i<size; i++){
 		TPortal* currentPortal = m_portals[i];
+		PushClippingLimits();
 		currentPortal->CheckVisibility();
-		ResetClippingLimits();
+		PopClippingLimits();
 	}
 
 	drawed = false;
+}
+
+void TRoom::PushClippingLimits(){
+	m_stackClipping[0] = TEntity::m_clippingLimits[0];
+	m_stackClipping[1] = TEntity::m_clippingLimits[1];
+	m_stackClipping[2] = TEntity::m_clippingLimits[2];
+	m_stackClipping[3] = TEntity::m_clippingLimits[3];
+}
+
+void TRoom::PopClippingLimits(){
+	TEntity::m_clippingLimits[0] = m_stackClipping[0];
+	TEntity::m_clippingLimits[1] = m_stackClipping[1];
+	TEntity::m_clippingLimits[2] = m_stackClipping[2];
+	TEntity::m_clippingLimits[3] = m_stackClipping[3];
 }
 
 TPortal* TRoom::AddPortal(TRoom* connection, glm::vec3 size, glm::vec3 center, glm::vec3 rotation){
@@ -230,11 +257,5 @@ void TRoom::DrawDebug(){
 	glDeleteBuffers(1, &ibo_elements);
 }
 
-void TRoom::ResetClippingLimits(){
-	TEntity::m_clippingLimits[0] = +1.0f;
-	TEntity::m_clippingLimits[1] = -1.0f;
-	TEntity::m_clippingLimits[2] = +1.0f;
-	TEntity::m_clippingLimits[3] = -1.0f;
-}
 
 

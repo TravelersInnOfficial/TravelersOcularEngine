@@ -10,7 +10,8 @@
 ############################################################################################*/
 
 TCamera::TCamera(bool perspective, float left, float right, float bottom, float top, float near, float far){
-	if(perspective) SetPerspective(left, right, bottom, top, near, far);
+	if(perspective) SetPerspective(-0.1f, 0.1f, -0.075f, 0.075f, 0.1f, 50.0f);
+	//if(perspective) SetPerspective(left, right, bottom, top, near, far);
 	else SetParallel(left, right, bottom, top, near, far);
 	m_program = STANDARD_SHADER;
 }

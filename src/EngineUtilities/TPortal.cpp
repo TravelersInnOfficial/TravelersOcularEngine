@@ -20,6 +20,8 @@ TPortal::TPortal(TRoom* first, TRoom* second, glm::vec3 size, glm::vec3 center, 
 	m_rotation = rotation;
 	m_transform = glm::mat4(1.0f);
 
+	m_visible = true;
+
 	CalculateTransform();
 	PrepareLimits();
 }
@@ -50,49 +52,52 @@ void TPortal::CalculateTransform(){
 bool TPortal::CheckVisibility(){
 	bool output = true;
 	DrawDebug();
-	PrepareLimits();
+	if(m_secondConnection->GetDrawed() || !m_visible){
+		output = false;
+	}else{	
+		PrepareLimits();
 
-	// Se supone que el m_stack.top() debe estar como identidad, sin aplicar ninguna transformacion
-	glm::mat4 mvp = TEntity::ProjMatrix * TEntity::ViewMatrix * TEntity::m_stack.top() * m_transform;
+		// Se supone que el m_stack.top() debe estar como identidad, sin aplicar ninguna transformacion
+		glm::mat4 mvp = TEntity::ProjMatrix * TEntity::ViewMatrix * TEntity::m_stack.top() * m_transform;
 
-	int upDown, leftRight, nearFar;
-	upDown = leftRight = nearFar = 0;
+		int upDown, leftRight, nearFar;
+		upDown = leftRight = nearFar = 0;
 
-	for(int i= -1; i<=0; i++){
-		// +X -X
-		for(int j= -1; j<=0; j++){
-			// +Y -Y
-			for(int k= -1; k<=0; k++){
-				// +Z -Z
-				glm::vec3 point = glm::vec3(0.5f*Sign(i), 0.5f*Sign(j), 0.5f*Sign(k));
-				glm::vec4 mvpPoint = mvp * glm::vec4(point.x, point.y, point.z, 1.0f);
+		for(int i= -1; i<=0; i++){
+			// +X -X
+			for(int j= -1; j<=0; j++){
+				// +Y -Y
+				for(int k= -1; k<=0; k++){
+					// +Z -Z
+					glm::vec3 point = glm::vec3(0.5f*Sign(i), 0.5f*Sign(j), 0.5f*Sign(k));
+					glm::vec4 mvpPoint = mvp * glm::vec4(point.x, point.y, point.z, 1.0f);
 
-				CheckVisibility(mvpPoint, &upDown, &leftRight, &nearFar);
+					CheckVisibility(mvpPoint, &upDown, &leftRight, &nearFar);
+				}
 			}
 		}
-	}
 
-	// Comprobacion visibilidad
-	int sides = 8;
-	if(upDown == sides || upDown == -sides || leftRight == sides || leftRight == -sides || nearFar == sides){
-		output = false;
+		// Comprobacion visibilidad
+		int sides = 8;
+		if(upDown == sides || upDown == -sides || leftRight == sides || leftRight == -sides || nearFar == sides || nearFar == -sides){
+			output = false;
+		}
 	}
 
 	// PINTAR LA SEGUNA HABITACION DE LA CONEXION SIEMPRE QUE AUN NO SE HAYA PINTADO
 	if(output){
-		if(!m_secondConnection->GetDrawed()){
-			ChangeEntityClipping();
-			m_secondConnection->Draw();
-		}
+		ChangeEntityClipping();
+		m_secondConnection->Draw();
 	}
 
 	return output;
 }
 
 void TPortal::ChangeEntityClipping(){
-	for(int i=0; i<4; i++){
-		if(m_limits[i] > -1.0f && m_limits[i] < 1.0f) TEntity::m_clippingLimits[i] = m_limits[i];
-	}
+	if(m_limits[0] < TEntity::m_clippingLimits[0] && m_limits[0] > TEntity::m_clippingLimits[1]) TEntity::m_clippingLimits[0] = m_limits[0];
+	if(m_limits[1] < TEntity::m_clippingLimits[0] && m_limits[1] > TEntity::m_clippingLimits[1]) TEntity::m_clippingLimits[1] = m_limits[1];
+	if(m_limits[2] < TEntity::m_clippingLimits[2] && m_limits[2] > TEntity::m_clippingLimits[3]) TEntity::m_clippingLimits[2] = m_limits[2];
+	if(m_limits[3] < TEntity::m_clippingLimits[2] && m_limits[3] > TEntity::m_clippingLimits[3]) TEntity::m_clippingLimits[3] = m_limits[3];
 }
 
 void TPortal::CheckVisibility(glm::vec4 point, int* upDown, int* leftRight, int* nearFar){
@@ -111,11 +116,19 @@ void TPortal::CheckVisibility(glm::vec4 point, int* upDown, int* leftRight, int*
     else if(valueZ < 0) (*nearFar)--;
 
     // Actualizamos los limites del portal
-    if(valueX > m_limits[0]) m_limits[0] = valueX;
-    if(valueX < m_limits[1]) m_limits[1] = valueX;
+    if(valueZ < 0){
+    	m_limits[0] = +1.0f;
+    	m_limits[1] = -1.0f;
+    	m_limits[2] = +1.0f;
+    	m_limits[3] = -1.0f;
+    }
 
-    if(valueY > m_limits[2]) m_limits[2] = valueY;
+    if(valueX > m_limits[0]) m_limits[0] = valueX; 
+    if(valueX < m_limits[1]) m_limits[1] = valueX;
+		
+	if(valueY > m_limits[2]) m_limits[2] = valueY;
     if(valueY < m_limits[3]) m_limits[3] = valueY;
+    
 }
 
 
@@ -205,9 +218,12 @@ void TPortal::DrawDebug(){
 void TPortal::PrepareLimits(){
 	// Si quiero tener el maximo valor debo empezar por el minimo 
 	// Si quiero tener el minimo valor debo empezar por el maximo		
-	m_limits[0] = -std::numeric_limits<float>::max();
-	m_limits[1] = std::numeric_limits<float>::max();
-	m_limits[2] = -std::numeric_limits<float>::max();
-	m_limits[3] = std::numeric_limits<float>::max();
+	m_limits[0] = -1.0f;
+	m_limits[1] = +1.0f;
+	m_limits[2] = -1.0f;
+	m_limits[3] = +1.0f;
 }
 
+void TPortal::SetVisible(bool visible){
+	m_visible = visible;
+}

@@ -34,10 +34,12 @@ public:
 private:
 	float NearestPoint(float pointA, float pointB, float target);
 	void CalculateTransform();
-	void ResetClippingLimits();
+	void PushClippingLimits();
+	void PopClippingLimits();
 	bool drawed;	// Esta habitacion ha sido ya dibujada? Si/No
 
 	std::vector<TPortal*> m_portals;
+	float m_stackClipping[4];
 
 	// Tamanyo de la habitacion
 	glm::mat4 m_transform;
