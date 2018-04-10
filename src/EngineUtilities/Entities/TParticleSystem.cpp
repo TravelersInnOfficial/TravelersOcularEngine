@@ -20,6 +20,8 @@ TParticleSystem::~TParticleSystem(){
 }
 
 TParticleSystem::TParticleSystem(std::string path){
+	m_newParticlesPerSecond = 100;
+	m_particleAcumulation = 0;
 	//Inicializamos el manager de particulas y las particulas
 	m_manager = new ParticleManager();
 
@@ -52,6 +54,14 @@ TParticleSystem::TParticleSystem(std::string path){
 
 	SetTexture(path);
 
+}
+
+void TParticleSystem::SetNewPerSecond(int newPerSecond){
+	m_newParticlesPerSecond = newPerSecond;
+}
+
+int TParticleSystem::GetNewPerSecond(){
+	return m_newParticlesPerSecond;
 }
 
 void TParticleSystem::BeginDraw(){
@@ -162,17 +172,22 @@ void TParticleSystem::SendShaderData(){
 	}
 }
 
-void TParticleSystem::AddNewParticles(){
-	int size = 10;
-	for(int i=0; i<size; i++){
+void TParticleSystem::AddNewParticles(float deltaTime){
+	float newParticle = m_newParticlesPerSecond * deltaTime;
+	newParticle += m_particleAcumulation;
+	
+	while(newParticle >= 1){
 		int pos = FindUnusedParticle();
 		m_manager->InitParticle(m_particleContainer[pos]);
+		newParticle--;
 	}
+
+	m_particleAcumulation = newParticle;
 }
 
 void TParticleSystem::Update(float deltaTime){
 	// Anyadimos las particulas nuevas
-	AddNewParticles();
+	AddNewParticles(deltaTime);
 
 	m_particleCount = 0;
 	for(int i=0; i<m_maxParticles; i++){

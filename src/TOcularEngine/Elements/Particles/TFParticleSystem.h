@@ -13,6 +13,10 @@ public:
 	void SetTexture(std::string path);
 	void SetManager(ParticleManager* manager);
 	void Update(float deltaTime);
+
+	void SetNewPerSecond(int newPerSecond);
+	int GetNewPerSecond();
+
 private:
 	TFParticleSystem(
 		toe::core::TOEvector3df position = toe::core::TOEvector3df(0, 0, 0),
