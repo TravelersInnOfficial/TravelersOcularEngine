@@ -8,8 +8,8 @@
 TFSprite::TFSprite( std::string texture, toe::core::TOEvector2df position, toe::core::TOEvector2df size){
     w_dims = VideoDriver::GetInstance()->GetWindowDimensions();
 
-    m_position = new toe::core::TOEvector2df((position.X*2 - w_dims.X) / w_dims.X , (position.Y*2 - w_dims.Y) / w_dims.Y);
-    m_size = new toe::core::TOEvector2df(m_position->X + (std::abs(size.X *2) / w_dims.X), m_position->Y + (std::abs(size.Y *2) / w_dims.Y));
+    m_position  = toe::core::TOEvector2df((position.X*2 - w_dims.X) / w_dims.X , (position.Y*2 - w_dims.Y) / w_dims.Y);
+    m_size      = toe::core::TOEvector2df(m_position.X + (std::abs(size.X *2) / w_dims.X), m_position.Y + (std::abs(size.Y *2) / w_dims.Y));
 
     if(texture.compare("")==0) texture = VideoDriver::GetInstance()->GetAssetsPath() + "/textures/invisible_texture.png";
 	m_texture = TResourceManager::GetInstance()->GetResourceTexture(texture);
@@ -27,18 +27,14 @@ TFSprite::TFSprite( std::string texture, toe::core::TOEvector2df position, toe::
     m_VBO = 0;
     glGenBuffers(1, &m_VBO);
 
-    m_color = new TColor();
-    m_color->SetRGBA(1,1,1,1);
+    m_color.SetRGBA(1,1,1,1);
     scrollH = 0;
     scrollV = 0;
     std::string mask = VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_texture.png";
     m_mask = TResourceManager::GetInstance()->GetResourceTexture(mask);;
 }
 
-TFSprite::~TFSprite(){
-    delete m_size;
-    delete m_position;
-}
+TFSprite::~TFSprite(){}
 
 void TFSprite::Erase(){
     VideoDriver::GetInstance()->GetSceneManager()->Delete2Delement(this);
@@ -61,13 +57,13 @@ void TFSprite::Draw() const{
 
     float vertices[] = {
 //       X              Y                       U              V             U-MASK V-MASK  COLOR(RGBA)
-         m_position->X, m_position->Y,          0.0f+scrollH,  1.0f+scrollV, 0.0f,  1.0f,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
-         m_size->X,     m_position->Y,          1.0f+scrollH,  1.0f+scrollV, 1.0f,  1.0f,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
-         m_position->X, m_size->Y,              0.0f+scrollH,  0.0f+scrollV, 0.0f,  0.0f,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
+         m_position.X, m_position.Y,          0.0f+scrollH,  1.0f+scrollV, 0.0f,  1.0f,   m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
+         m_size.X,     m_position.Y,          1.0f+scrollH,  1.0f+scrollV, 1.0f,  1.0f,   m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
+         m_position.X, m_size.Y,              0.0f+scrollH,  0.0f+scrollV, 0.0f,  0.0f,   m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
          
-         m_size->X,     m_position->Y,          1.0f+scrollH,  1.0f+scrollV, 1.0f,  1.0f,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
-         m_size->X,     m_size->Y,              1.0f+scrollH,  0.0f+scrollV, 1.0f,  0.0f,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA(),
-         m_position->X, m_size->Y,              0.0f+scrollH,  0.0f+scrollV, 0.0f,  0.0f,   m_color->GetR(), m_color->GetG(), m_color->GetB(), m_color->GetA()
+         m_size.X,     m_position.Y,          1.0f+scrollH,  1.0f+scrollV, 1.0f,  1.0f,   m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
+         m_size.X,     m_size.Y,              1.0f+scrollH,  0.0f+scrollV, 1.0f,  0.0f,   m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
+         m_position.X, m_size.Y,              0.0f+scrollH,  0.0f+scrollV, 0.0f,  0.0f,   m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA()
     };
 
     glBindVertexArray( m_VAO );
@@ -115,7 +111,7 @@ void TFSprite::Draw() const{
 }
 
 void TFSprite::p_recalculate_size(){
-    m_size = new toe::core::TOEvector2df(m_position->X + (std::abs(m_InData.size.X *2) / w_dims.X), m_position->Y + (std::abs(m_InData.size.Y *2) / w_dims.Y));
+    m_size = toe::core::TOEvector2df(m_position.X + (std::abs(m_InData.size.X *2) / w_dims.X), m_position.Y + (std::abs(m_InData.size.Y *2) / w_dims.Y));
 }
 
 void TFSprite::ScrollH(float vel){
@@ -131,37 +127,37 @@ void TFSprite::SetMask(std::string mask_path){
 }
 
 void TFSprite::SetPosition(float x, float y){
-    m_position = new toe::core::TOEvector2df((x*2 - w_dims.X) / w_dims.X , (y*2 - w_dims.Y) / w_dims.Y);
+    m_position = toe::core::TOEvector2df((x*2 - w_dims.X) / w_dims.X , (y*2 - w_dims.Y) / w_dims.Y);
     m_InData.position.X = x;
     m_InData.position.Y = y;
     p_recalculate_size();
 }
 
 void TFSprite::SetPosX(float x){
-    m_position->X = (x*2 - w_dims.X) / w_dims.X;
+    m_position.X = (x*2 - w_dims.X) / w_dims.X;
     m_InData.position.X = x;
     p_recalculate_size();
 }
 
 void TFSprite::SetPosY(float y){
-    m_position->Y = (y*2 - w_dims.Y) / w_dims.Y;
+    m_position.Y = (y*2 - w_dims.Y) / w_dims.Y;
     m_InData.position.Y = y;
     p_recalculate_size();
 }
 
 void TFSprite::SetSize(float w, float h){
-    m_size = new toe::core::TOEvector2df(m_position->X + (std::abs(w *2) / w_dims.X), m_position->Y + (std::abs(h *2) / w_dims.Y));
+    m_size = toe::core::TOEvector2df(m_position.X + (std::abs(w *2) / w_dims.X), m_position.Y + (std::abs(h *2) / w_dims.Y));
     m_InData.size.X = w;
     m_InData.size.Y = h;
 }
 
 void TFSprite::SetWidth(float w){
-    m_size->X = m_position->X + (std::abs(w *2) / w_dims.X);
+    m_size.X = m_position.X + (std::abs(w *2) / w_dims.X);
     m_InData.size.X = w;
 }
 
 void TFSprite::SetHeight(float h){
-    m_size->Y =  m_position->Y + (std::abs(h *2) / w_dims.Y);
+    m_size.Y =  m_position.Y + (std::abs(h *2) / w_dims.Y);
     m_InData.size.Y = h;
 }
 

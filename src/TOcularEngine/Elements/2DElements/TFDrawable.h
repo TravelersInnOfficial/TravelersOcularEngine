@@ -37,15 +37,15 @@ public:
     virtual void Rotate(float deg) = 0;
     virtual void SetRotation(float deg) = 0;
 
-    virtual void SetColor(float r, float g, float b, float a = 1.0f) {  m_color->SetR(r);
-                                                                        m_color->SetG(g);
-                                                                        m_color->SetB(b);
-                                                                        m_color->SetA(a);}
+    virtual void SetColor(float r, float g, float b, float a = 1.0f) {  m_color.SetR(r);
+                                                                        m_color.SetG(g);
+                                                                        m_color.SetB(b);
+                                                                        m_color.SetA(a);}
 
-    virtual void SetRed(float r) {m_color->SetR(r);}
-    virtual void SetGreen(float g) {m_color->SetG(g);}
-    virtual void SetBlue(float b) {m_color->SetB(b);}
-    virtual void SetAlpha(float a) {m_color->SetA(a);}
+    virtual void SetRed(float r) {m_color.SetR(r);}
+    virtual void SetGreen(float g) {m_color.SetG(g);}
+    virtual void SetBlue(float b) {m_color.SetB(b);}
+    virtual void SetAlpha(float a) {m_color.SetA(a);}
 
     virtual void Erase() = 0;
 
@@ -56,10 +56,10 @@ public:
     virtual std::string GetTexture() const {return m_InData.texture;}
 
 protected:
-    toe::core::TOEvector2df* m_position = nullptr;
-    toe::core::TOEvector2df* m_size = nullptr;
+    toe::core::TOEvector2df m_position;
+    toe::core::TOEvector2df m_size;
     float m_rotation = 0.0;
-    TColor* m_color = nullptr;
+    TColor m_color;
 
     SHADERTYPE m_program = TWOD_SHADER;
     toe::core::TOEvector2di w_dims;

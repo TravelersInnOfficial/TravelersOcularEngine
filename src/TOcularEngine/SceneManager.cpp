@@ -125,6 +125,8 @@ void SceneManager::Delete2Delement(TFDrawable* elem){
 	for(; it != m_2Delems.end(); ++it){
 		if(*it == elem){ 
 			m_2Delems.erase(it);
+			//delete *it;
+
 			find = true;
 			break;
 		}
@@ -134,6 +136,8 @@ void SceneManager::Delete2Delement(TFDrawable* elem){
 		for(; it != m_bkg2Delems.end(); ++it){
 			if(*it == elem){ 
 				m_bkg2Delems.erase(it);
+				//delete *it;
+
 				break;
 			}
 		}
