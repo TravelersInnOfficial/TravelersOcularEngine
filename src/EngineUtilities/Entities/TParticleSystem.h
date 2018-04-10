@@ -20,17 +20,23 @@ public:
 	void SetManager(ParticleManager* manager);
 	void SetTranslate(glm::vec3 position);
 	void Translate(glm::vec3 position);
+	
+	void SetNewPerSecond(int newPerSecond);
+	int GetNewPerSecond();
+
 private:
 	void SendShaderData();
 	void ResetShaderData();
 	int FindUnusedParticle();
-	void AddNewParticles();
+	void AddNewParticles(float deltaTime);
 
 	ParticleManager*	m_manager;
 	TResourceTexture*	m_texture;
 
-	int 				m_particleCount;		// Numero de particulas activas en el momento
-	static const int 	m_maxParticles = 10000;	// Numero maximo de particulas
+	int 				m_particleCount;			// Numero de particulas activas en el momento
+	static const int 	m_maxParticles = 10000;		// Numero maximo de particulas
+	int					m_newParticlesPerSecond;	// Numero de particulas que se crean cada segundo
+	float				m_particleAcumulation;
 	
 	GLuint 				m_vbo;	// Vertex buffer del mesh basico
 	GLuint				m_pbo; 	// Buffer con las posiciones de las particulas

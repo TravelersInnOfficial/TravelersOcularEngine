@@ -54,3 +54,13 @@ void TFParticleSystem::Update(float deltaTime){
 	TParticleSystem* mySystem = (TParticleSystem*)m_entityNode->GetEntity();
 	mySystem->Update(deltaTime);
 }
+
+void TFParticleSystem::SetNewPerSecond(int newPerSecond){
+	TParticleSystem* mySystem = (TParticleSystem*)m_entityNode->GetEntity();
+	mySystem->SetNewPerSecond(newPerSecond);
+}
+
+int TFParticleSystem::GetNewPerSecond(){
+	TParticleSystem* mySystem = (TParticleSystem*)m_entityNode->GetEntity();
+	return mySystem->GetNewPerSecond();
+}

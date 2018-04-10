@@ -27,7 +27,7 @@ void ParticleManager::InitParticle(Particle& p){
 	p.b = (unsigned char)(rand() % 255);
 
 	// SIZE
-	int maxSize = 4;
+	int maxSize = 15;
 	p.size = (rand() % maxSize)/10.0f;
 
 	// ROTATION & LIFE
