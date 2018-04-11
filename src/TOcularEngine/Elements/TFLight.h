@@ -28,7 +28,7 @@ public:
 	bool GetActive();								// Returns the light active state
 	glm::vec3 CalculateLocation();
 
-	void SetBoundBox(bool);
+	void SetBoundBox(bool) override;				// Shows or hide tmesh bounding box
 	
 private:
 	TFLight(

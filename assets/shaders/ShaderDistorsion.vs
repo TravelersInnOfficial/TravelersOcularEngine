@@ -17,6 +17,7 @@ uniform mat4 MVP;
 uniform mat4 ViewMatrix;
 // ############  DON'T CHANGE ABOVE THIS LINE  ######################################################
 
+// IN UNIFORM FOR ONLY THIS SHADER 
 uniform float frameTime;	// Time from start
 uniform mat4 ModelMatrix;		//|
 //uniform mat4 ViewMatrix;		//|

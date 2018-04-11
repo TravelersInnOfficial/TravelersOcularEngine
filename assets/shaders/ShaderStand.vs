@@ -16,8 +16,9 @@ uniform mat4 ModelViewMatrix;
 uniform mat4 MVP;
 uniform mat4 ViewMatrix;
 // ############  DON'T CHANGE ABOVE THIS LINE  ######################################################
-uniform mat4 DepthBiasMVP;
 
+// IN UNIFORM FOR ONLY THIS SHADER 
+uniform mat4 DepthBiasMVP;
 
 void main() {
 	// TRANSFORMAR VERTICE Y NORMAL A COORDENADAS DE VISTA

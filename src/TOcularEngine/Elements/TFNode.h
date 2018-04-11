@@ -28,7 +28,7 @@ public:
 	virtual toe::core::TOEvector3df GetRotation();		// Returns the position of the Node
 	virtual toe::core::TOEvector3df GetScale();			// Returns the scale of the Node
 
-	bool AddChild(TFNode* children);	// Adds a Children to the TFNode
+	bool AddChild(TFNode* children);			// Adds a Children to the TFNode
 	bool RemoveChild(TFNode* children);			// Removes Children from the TFNode
 	void RemoveAllChildren();					// Remove ALL Children from the TFNode
 
@@ -46,7 +46,7 @@ public:
 	void DeleteAllBillboard();
 
 	/**
-	 * @brief TODO:
+	 * @brief Sets bounding box of the entity (normally meshes or lights)
 	 * 
 	 * @param visible 
 	 */
@@ -64,10 +64,11 @@ public:
 	
 
 protected:
-	TNode* m_rotationNode;
-	TNode* m_scaleNode;
-	TNode* m_positionNode;
-	TNode* m_entityNode;
+	// All internal nodes of a node
+	TNode* m_rotationNode;				// rotation node
+	TNode* m_scaleNode;					// scale node
+	TNode* m_positionNode;				// position node
+	TNode* m_entityNode;				// entity node (light, camera, mesh, animation, particles)
 	
 	std::vector<TFText*> m_billboards;	// Vector of billboards of the TFNode
 	std::vector<TFNode*> m_children;	// Vector of children of the TFNode
