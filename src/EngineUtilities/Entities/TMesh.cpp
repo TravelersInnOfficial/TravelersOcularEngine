@@ -307,7 +307,7 @@ bool TMesh::CheckClipping(){
 	return output;
 }
 
-bool TMesh::CheckOclusion(){
+bool TMesh::CheckOcclusion(){
 	bool output = true;
 	glm::vec3 center = m_mesh->GetCenter();
 	glm::vec3 size = m_mesh->GetSize();

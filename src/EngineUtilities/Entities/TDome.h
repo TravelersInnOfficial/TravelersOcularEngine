@@ -8,11 +8,23 @@ public:
 	TDome(std::string texturePath = "");
 	~TDome();
 
+	/**
+	 * @brief Draw mesh and send shader data
+	 * 
+	 */
 	void BeginDraw() override;
-	// Declare as empty method overriding mesh one for not drawing dome shadows
+	
+	/**
+	 * @brief Empty method overriding mesh one for not drawing dome shadows
+	 * 
+	 */
 	void DrawShadow() override;
 
 private:
+	/**
+	 * @brief Send to shader all vertex and texture
+	 * 
+	 */
 	void SendShaderData();
 
 };

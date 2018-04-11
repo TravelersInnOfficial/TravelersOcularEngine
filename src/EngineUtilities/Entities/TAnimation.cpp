@@ -14,22 +14,6 @@ TAnimation::TAnimation() : TMesh("","") {
 // Destructor
 TAnimation::~TAnimation(){ }
 
-/*
-void TAnimation::BeginDraw(){
-	if(m_mesh != nullptr && !m_drawingShadows && CheckClipping()){
-
-		// Bind and send the data to the VERTEX SHADER
-		SendShaderData();
-		
-		// Bind and draw elements depending of how many vbos
-		GLuint elementsBuffer = m_mesh->GetElementBuffer();
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBuffer);
-		glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
-
-		if(m_visibleBB) DrawBoundingBox();
-	}
-}*/
-
 void TAnimation::SetPaths(int frames, std::string paths[]){
     m_meshes.clear();
     m_frames = frames; 
@@ -41,21 +25,20 @@ void TAnimation::SetPaths(int frames, std::string paths[]){
 	m_mesh = m_meshes[0];
 }
 
-void TAnimation::SetFrame(int frame){
-	//if(frame >= 0 && frame < m_frames)
-	m_mesh = m_meshes[frame];
-}
-
 void TAnimation::UpdateAnimation(float deltatime){
+	// Update animation time
 	m_animTime += deltatime;
 
+	// Check if time is higher than max frame
 	if(m_animTime >= m_frames){
 		m_animTime = 0.0f;
 	}
 	
+	// If (int)time is diferent from actual frame, set actual frame
 	int actualTime = (int)m_animTime;
 	if(actualTime != m_actualFrame){
-		SetFrame(actualTime);
+		// Update animation mesh to correpondent
+		m_mesh = m_meshes[actualTime];
 		m_actualFrame = actualTime;
 	}
 }

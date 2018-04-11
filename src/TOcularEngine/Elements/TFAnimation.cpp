@@ -18,8 +18,7 @@ TFAnimation::TFAnimation(toe::core::TOEvector3df position, toe::core::TOEvector3
 	m_entity = TANIMATION_ENTITY;
 }
 
-TFAnimation::~TFAnimation(){
-}
+TFAnimation::~TFAnimation(){ }
 
 void TFAnimation::Update(float deltatime){
 	TAnimation* myAnim = (TAnimation*) m_entityNode->GetEntity();

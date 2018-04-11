@@ -2,11 +2,12 @@
 #include <GL/glew.h>
 #include "../TOcularEngine/VideoDriver.h"
 
-// String validation when calling father constructor
+// Get dome model (sphere)
 std::string getModel(){
 	return VideoDriver::GetInstance()->GetAssetsPath() + "/models/dome.obj";
 }
 
+// String validation when calling father constructor
 std::string checkText(std::string path){
 	std::string toRet = path;
 	if(path.compare("")==0) toRet = VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_skydome.jpg";
@@ -39,6 +40,7 @@ void TDome::BeginDraw(){
 
 }
 
+// This object doesnt produces shadows so has to override parent's method (tmesh)
 void TDome::DrawShadow(){ }
 
 void TDome::SendShaderData(){

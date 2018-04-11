@@ -7,11 +7,36 @@ class TFAnimation: public TFNode{
 	friend class SceneManager;
 
 public:
-	void SetAnimationPaths(int frames, std::string paths[]);        // Sets all paths for all the meshes and number of frames
-	void SetTexture(std::string texturePath = "");		// Replaces the Texture with a new one
-    void SetInvisible();								// Assigns and invisible texture (0,0,0,0)
-	void SetBoundBox(bool visible) override;			// Shows or hide mesh bounding box
-   
+	/**
+	 * @brief Replaces the Texture with a new one
+	 * 
+	 * @param texturePath: path to texture from executable
+	 */
+	void SetTexture(std::string texturePath = "");
+    /**
+     * @brief Assigns and invisible texture (0,0,0,0)
+     * 
+     */
+	void SetInvisible();
+	/**
+	 * @brief Shows or hide mesh bounding box
+	 * 
+	 * @param visible: visibility of bounding box
+	 */
+	void SetBoundBox(bool visible) override;
+	
+	/**
+	 * @brief Sets all paths for all the meshes and number of frames
+	 * 
+	 * @param frames 
+	 * @param paths 
+	 */
+	void SetAnimationPaths(int frames, std::string paths[]);
+	/**
+	 * @brief Update animation frames
+	 * 
+	 * @param deltatime 
+	 */
     void Update(float deltatime);
 
 protected:

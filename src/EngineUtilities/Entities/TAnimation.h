@@ -8,10 +8,36 @@ public:
 	TAnimation();
 	~TAnimation();
 
+	/**
+	 * @brief Begin draw called on tree drawing
+	 * 
+	 */
 	//void BeginDraw() override;
+
+	/**
+	 * @brief Set animation Paths of each frame 
+	 * 
+	 * @param frames: max frames
+	 * @param paths: string array of paths
+	 */
     void SetPaths(int frames, std::string paths[]);
-    void SetFrame(int frame = 0);
-    void UpdateAnimation(float deltatime);
+    
+	/**
+	 * @brief Updates Animation depending of deltatime
+	 * 
+	 * @param deltatime: time between frames
+	 */
+	void UpdateAnimation(float deltatime);
+
+private:
+	// Animation data
+	std::vector <TResourceMesh*> m_meshes;		// All resources of each frame of the animation
+	int m_frames;								// Max frames of animation
+
+	// Updating animation
+    int m_actualFrame;							// Actual frame beeing drawn in the scene
+    float m_animTime;							// Actual time of animation (0 - m_frames)
+};
 
 /*  INHERITED VARIABLES AND METHODS
 public:
@@ -29,15 +55,8 @@ protected:
 	void SendShaderData();
 	void DrawBoundingBox();	
 	virtual	bool CheckClipping() override;	
-	virtual	bool CheckOclusion();
+	virtual	bool CheckOcclusion();
 */
 
-private:
-    std::vector <TResourceMesh*> m_meshes;
-    int m_frames;
-
-    int m_actualFrame;
-    float m_animTime;
-};
 
 #endif

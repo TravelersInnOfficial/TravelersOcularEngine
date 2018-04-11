@@ -16,8 +16,23 @@ public:
 	virtual void EndDraw() override;
 	virtual void DrawShadow() override;
 
+	/**
+	 * @brief Changes all mesh of this mesh 
+	 * 
+	 * @param meshPath: Path to mesh from executable
+	 */
 	void LoadMesh(std::string meshPath = "");
+	/**
+	 * @brief Changes texture of this mesh
+	 * 
+	 * @param texturePath: Path to texture from executable
+	 */
 	void ChangeTexture(std::string texturePath = "");
+	/**
+	 * @brief Shows or hide mesh bounding box
+	 * 
+	 * @param visible: visibility of bounding box 
+	 */
 	void SetBBVisibility(bool visible);
 
 protected:
@@ -41,20 +56,20 @@ protected:
 	void DrawBoundingBox();	
 
 	/**
-	 * @brief 
+	 * @brief Check if this is mesh is clipped from camera so doesn't has to be drawn
 	 * 
-	 * @return true 
-	 * @return false 
+	 * @return true: is inside the viewport
+	 * @return false: is outside the viewport 
 	 */
 	virtual	bool CheckClipping() override;
 	
 	/**
-	 * @brief 
+	 * @brief Check if this is mesh is occluded by other object so doesn't has to be drawn
 	 * 
-	 * @return true 
-	 * @return false 
+	 * @return true: is visible in the viewport
+	 * @return false:  is totally occluded
 	 */
-	virtual	bool CheckOclusion();
+	virtual	bool CheckOcclusion();
 
 private:
 	int Sign(int v);
