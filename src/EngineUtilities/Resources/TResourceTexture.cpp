@@ -62,3 +62,7 @@ int  TResourceTexture::GetWidth(){
 int  TResourceTexture::GetHeight(){
 	return m_height;
 }
+
+std::string TResourceTexture::GetTexturePath(){
+	return m_name;
+}

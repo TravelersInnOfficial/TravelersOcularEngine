@@ -14,13 +14,11 @@ TFRect::TFRect(toe::core::TOEvector2df position, toe::core::TOEvector2df size, f
 
     m_position = toe::core::TOEvector2df((position.X*2 - w_dims.X) / w_dims.X , (position.Y*2 - w_dims.Y) / w_dims.Y);
     m_size = toe::core::TOEvector2df(m_position.X + (std::abs(size.X *2) / w_dims.X), m_position.Y + (std::abs(size.Y *2) / w_dims.Y));
-    m_rotation = rotation;
 
     m_color.SetRGBA(0,0,0,1);
 
     m_InData.position = position;
     m_InData.size = size;
-    m_InData.rotation = rotation;
     m_InData.texture = "";
 
     m_VAO = 0;
@@ -130,16 +128,6 @@ void TFRect::SetWidth(float w){
 void TFRect::SetHeight(float h){
     m_size.Y =  m_position.Y + (std::abs(h *2) / w_dims.Y);
     m_InData.size.Y = h;
-}
-
-void TFRect::Rotate(float deg){ 
-    m_rotation += deg; 
-    m_InData.rotation += deg; 
-}
-
-void TFRect::SetRotation(float deg){
-    m_rotation = deg;
-    m_InData.rotation = deg;
 }
 
 void TFRect::SetTexture(std::string texture){

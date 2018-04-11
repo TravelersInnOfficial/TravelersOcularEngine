@@ -17,10 +17,7 @@ public:
     void SetSize(float w, float h) override;                                       
     void SetWidth(float w) override; 
     void SetHeight(float h) override; 
-
-    void Rotate(float deg) override;
-    void SetRotation(float deg) override;
-
+    
     void SetTexture(std::string texture) override;
     
     void Erase() override;

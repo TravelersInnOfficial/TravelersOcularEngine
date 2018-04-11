@@ -4,21 +4,25 @@
 #include "./../../../EngineUtilities/TResourceManager.h"
 #include "./../../../EngineUtilities/Resources/Program.h"
 #include "./../../VideoDriver.h"
+#include "./../TOcularEngine/TOcularEngine.h"
 
-TFSprite::TFSprite( std::string texture, toe::core::TOEvector2df position, toe::core::TOEvector2df size){
+TFSprite::TFSprite(std::string texture, toe::core::TOEvector2df position, toe::core::TOEvector2df size){
     w_dims = VideoDriver::GetInstance()->GetWindowDimensions();
 
     m_position  = toe::core::TOEvector2df((position.X*2 - w_dims.X) / w_dims.X , (position.Y*2 - w_dims.Y) / w_dims.Y);
     m_size      = toe::core::TOEvector2df(m_position.X + (std::abs(size.X *2) / w_dims.X), m_position.Y + (std::abs(size.Y *2) / w_dims.Y));
 
+    //rect = toe::core::TOEvector4df(0.33f,0.33f, 1.0f, 1.0f);
     if(texture.compare("")==0) texture = VideoDriver::GetInstance()->GetAssetsPath() + "/textures/invisible_texture.png";
 	m_texture = TResourceManager::GetInstance()->GetResourceTexture(texture);
+    m_texture_size = size;
+    m_rect = toe::core::TOEvector4df(0.0f, 0.0f,1.0f, 1.0f);    //inicialmente el rectangulo ocupa la textura completa (coordenadas de 0 a 1)
+    m_mask_rect = toe::core::TOEvector4df(0.0f, 0.0f,1.0f, 1.0f);
 
     m_program = SPRITE_SHADER;
 
     m_InData.position = position;
     m_InData.size = size;
-    m_InData.rotation = 0.0f;
     m_InData.texture = texture;
 
     m_VAO = 0;
@@ -49,6 +53,23 @@ void TFSprite::ToFront(){
      VideoDriver::GetInstance()->GetSceneManager()->PushToFront(this);
 }
 
+void TFSprite::SetRect(float x, float y, float w, float h){
+    if(x < 0) x = 0;
+    if(y < 0) y = 0;
+    float sheetWidth = m_texture_size.X;                         //texture width
+    float sheetHeight = m_texture_size.Y;                        //texture height
+    float cellWidth = w;                                        //cell widht
+    float cellHeight = h;                                       //cell height
+    float left = x/sheetWidth;                                  //left texture uv point
+    float top = y/sheetHeight;                                  //top texture uv point
+    float cw = left + cellWidth/sheetWidth;                     //uv texture width
+    float ch = top + cellHeight/sheetHeight;                    //uv texture height
+    m_rect = toe::core::TOEvector4df(left, top, cw, ch);
+    m_mask_rect = toe::core::TOEvector4df(left, top, cw, ch);
+    SetSize(w,h);
+}
+
+
 void TFSprite::Draw() const{
     Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(m_program);
 
@@ -56,14 +77,14 @@ void TFSprite::Draw() const{
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     float vertices[] = {
-//       X              Y                       U              V             U-MASK V-MASK  COLOR(RGBA)
-         m_position.X, m_position.Y,          0.0f+scrollH,  1.0f+scrollV, 0.0f,  1.0f,   m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
-         m_size.X,     m_position.Y,          1.0f+scrollH,  1.0f+scrollV, 1.0f,  1.0f,   m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
-         m_position.X, m_size.Y,              0.0f+scrollH,  0.0f+scrollV, 0.0f,  0.0f,   m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
-         
-         m_size.X,     m_position.Y,          1.0f+scrollH,  1.0f+scrollV, 1.0f,  1.0f,   m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
-         m_size.X,     m_size.Y,              1.0f+scrollH,  0.0f+scrollV, 1.0f,  0.0f,   m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
-         m_position.X, m_size.Y,              0.0f+scrollH,  0.0f+scrollV, 0.0f,  0.0f,   m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA()
+//      X              Y                       U                 V                     U-MASK V-MASK  COLOR(RGBA)
+        m_position.X, m_position.Y,          m_rect.X +scrollH,  m_rect.Y2+scrollV,  m_mask_rect.X ,  m_mask_rect.Y2,   m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
+        m_size.X,     m_position.Y,          m_rect.X2+scrollH,  m_rect.Y2+scrollV,  m_mask_rect.X2,  m_mask_rect.Y2,   m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
+        m_position.X, m_size.Y,              m_rect.X +scrollH,  m_rect.Y+scrollV,   m_mask_rect.X ,  m_mask_rect.Y,    m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
+
+        m_size.X,     m_position.Y,          m_rect.X2+scrollH,  m_rect.Y2+scrollV,  m_mask_rect.X2 ,  m_mask_rect.Y2,   m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
+        m_size.X,     m_size.Y,              m_rect.X2+scrollH,  m_rect.Y+scrollV,   m_mask_rect.X2,  m_mask_rect.Y,   m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
+        m_position.X, m_size.Y,              m_rect.X +scrollH,  m_rect.Y+scrollV,   m_mask_rect.X ,  m_mask_rect.Y,    m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA()
     };
 
     glBindVertexArray( m_VAO );
@@ -80,12 +101,12 @@ void TFSprite::Draw() const{
     GLuint uvAttrib = glGetAttribLocation(myProgram->GetProgramID(), "TextureCoords");
     glEnableVertexAttribArray(uvAttrib);
     glVertexAttribPointer(uvAttrib, 2, GL_FLOAT, GL_FALSE, 10*sizeof(float), (const GLvoid*)(2 * sizeof(float)));
-
+    
     //mask coords
     GLuint uvMaskAttrib = glGetAttribLocation(myProgram->GetProgramID(), "MaskCoords");
     glEnableVertexAttribArray(uvMaskAttrib);
     glVertexAttribPointer(uvMaskAttrib, 2, GL_FLOAT, GL_FALSE, 10*sizeof(float), (const GLvoid*)(4 * sizeof(float)));
-
+    
     // Enviamos la textura del sprite
 	GLuint TextureID = glGetUniformLocation(myProgram->GetProgramID(), "uvMap");
 	glUniform1i(TextureID, 0);
@@ -161,18 +182,18 @@ void TFSprite::SetHeight(float h){
     m_InData.size.Y = h;
 }
 
-void TFSprite::Rotate(float deg){ 
-    m_rotation += deg; 
-    m_InData.rotation += deg; 
-}
-
-void TFSprite::SetRotation(float deg){
-    m_rotation = deg;
-    m_InData.rotation = deg;
-}
-
 void TFSprite::SetTexture(std::string texture){
     if(texture.compare("")==0) texture = VideoDriver::GetInstance()->GetAssetsPath() + "/textures/invisible_texture.png";
 	m_texture = TResourceManager::GetInstance()->GetResourceTexture(texture);
     m_InData.texture = texture;
+}
+
+float TFSprite::GetTextureHeight(){
+    return m_texture_size.Y;
+}
+float TFSprite::GetTextureWidth(){
+    return m_texture_size.X;
+}
+toe::core::TOEvector2df TFSprite::GetTextureSize(){
+    return m_texture_size;
 }

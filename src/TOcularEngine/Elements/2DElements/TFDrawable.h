@@ -9,7 +9,6 @@
 struct RectData{
     toe::core::TOEvector2df position;
     toe::core::TOEvector2df size;
-    float rotation;
     std::string texture = "";
 };
 
@@ -34,9 +33,6 @@ public:
     virtual void SetWidth(float w) = 0;
     virtual void SetHeight(float h) = 0;
 
-    virtual void Rotate(float deg) = 0;
-    virtual void SetRotation(float deg) = 0;
-
     virtual void SetColor(float r, float g, float b, float a = 1.0f) {  m_color.SetR(r);
                                                                         m_color.SetG(g);
                                                                         m_color.SetB(b);
@@ -58,7 +54,6 @@ public:
 protected:
     toe::core::TOEvector2df m_position;
     toe::core::TOEvector2df m_size;
-    float m_rotation = 0.0;
     TColor m_color;
 
     SHADERTYPE m_program = TWOD_SHADER;

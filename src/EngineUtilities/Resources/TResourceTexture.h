@@ -22,7 +22,8 @@ public:
     GLuint GetTextureId();
     int GetWidth();
     int GetHeight();
-
+    std::string GetTexturePath();
+    
 private:
     unsigned char* m_imageData;
     int m_width;

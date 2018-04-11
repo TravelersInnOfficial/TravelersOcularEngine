@@ -2,6 +2,7 @@
 #define TFSPRITE_H
 
 #include "TFDrawable.h"
+#include <TOEvector4d.h>
 
 //FAST FORWARD DECLARATION
 class TResourceTexture;
@@ -19,9 +20,7 @@ public:
     void SetSize(float w, float h) override;                  
     void SetWidth(float w) override; 
     void SetHeight(float h) override; 
-
-    void Rotate(float deg) override;
-    void SetRotation(float deg) override;
+    void SetRect (float x, float y, float w, float h);
 
     void SetTexture(std::string texture) override;
 
@@ -35,6 +34,10 @@ public:
 
     void SetMask(std::string mask_path);
 
+    float GetTextureHeight();
+    float GetTextureWidth();
+    toe::core::TOEvector2df GetTextureSize();
+
     float scrollH;
     float scrollV;
 
@@ -44,6 +47,9 @@ private:
 
     void p_recalculate_size();
     TResourceTexture* 	m_texture;
+    toe::core::TOEvector2df m_texture_size;
+    toe::core::TOEvector4df m_rect;
+    toe::core::TOEvector4df m_mask_rect;
     TResourceTexture* m_mask;
     GLuint m_VAO, m_VBO;
 };
