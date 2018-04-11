@@ -27,10 +27,16 @@ SceneManager::SceneManager(){
 
 SceneManager::~SceneManager(){
 	ClearElements();
+	glBindVertexArray(0);
 	glDeleteVertexArrays(1, &m_vao);
-
+	
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glDeleteFramebuffers(1, &m_fbo);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glDeleteTextures(1, &m_shadowMap);
+
+	if(m_dome != nullptr)
+		delete m_dome;
 }
 
 TFCamera* SceneManager::AddCamera(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, bool perspective){
@@ -53,7 +59,7 @@ TFLight* SceneManager::AddLight(toe::core::TOEvector3df position, toe::core::TOE
 TFMesh* SceneManager::AddMesh(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale, std::string meshPath){
 	TFMesh* toRet = nullptr;
 	toRet = new TFMesh(position, rotation, scale, meshPath);
-	m_objects.push_back((TFMesh*)toRet);
+	m_objects.push_back(toRet);
 	toRet->Attach(m_SceneTreeRoot);
 	return toRet;
 }
@@ -66,6 +72,14 @@ TFDome* SceneManager::AddDome(toe::core::TOEvector3df position, std::string text
 	}
 	else if(texturePath.compare("") != 0) m_dome->SetTexture(texturePath);
 	return m_dome;
+}
+
+TFAnimation* SceneManager::AddAnimation(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale){
+	TFAnimation* toRet = nullptr;
+	toRet = new TFAnimation(position, rotation, scale);
+	m_objects.push_back(toRet);
+	toRet->Attach(m_SceneTreeRoot);
+	return toRet;
 }
 
 TFRect* SceneManager::Add2DRect(toe::core::TOEvector2df position, toe::core::TOEvector2df size, float rotation){

@@ -142,6 +142,54 @@ void CreateTree(TFMesh* ms[], TFLight* ls[], TFLight*& shL){
 	sm->AddDynamicLight(shL);
 }
 
+void CreateAnimations(TFAnimation*& anim){
+	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
+
+	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0, 1, -6);
+	toe::core::TOEvector3df rot = toe::core::TOEvector3df(0, 0, 0);
+	toe::core::TOEvector3df scale = toe::core::TOEvector3df(2.0f, 2.0f, 2.0f);
+
+	anim = sm->AddAnimation(pos, rot, scale);
+
+	std::string paths[] = {
+		"./../assets/models/genius/genius_01.obj",
+		"./../assets/models/genius/genius_02.obj",
+		"./../assets/models/genius/genius_03.obj",
+		"./../assets/models/genius/genius_04.obj",
+		"./../assets/models/genius/genius_05.obj",
+		"./../assets/models/genius/genius_06.obj",
+		"./../assets/models/genius/genius_07.obj",
+		"./../assets/models/genius/genius_08.obj",
+		"./../assets/models/genius/genius_09.obj",
+		"./../assets/models/genius/genius_10.obj",
+		"./../assets/models/genius/genius_11.obj",
+		"./../assets/models/genius/genius_12.obj",
+		"./../assets/models/genius/genius_13.obj",
+		"./../assets/models/genius/genius_14.obj",
+		"./../assets/models/genius/genius_15.obj",
+		"./../assets/models/genius/genius_16.obj",
+		"./../assets/models/genius/genius_17.obj",
+		"./../assets/models/genius/genius_18.obj",
+		"./../assets/models/genius/genius_19.obj",
+		"./../assets/models/genius/genius_20.obj",
+		"./../assets/models/genius/genius_21.obj",
+		"./../assets/models/genius/genius_22.obj",
+		"./../assets/models/genius/genius_23.obj",
+		"./../assets/models/genius/genius_24.obj",
+		"./../assets/models/genius/genius_25.obj",
+		"./../assets/models/genius/genius_26.obj",
+		"./../assets/models/genius/genius_27.obj",
+		"./../assets/models/genius/genius_28.obj",
+		"./../assets/models/genius/genius_29.obj",
+		"./../assets/models/genius/genius_30.obj",
+	};
+
+	anim->SetAnimationPaths(30, paths);
+	anim->SetBoundBox(true);
+	anim->SetTexture("./../assets/textures/red.png");
+		
+}
+
 void RotateLights(const toe::core::TOEvector3df& rot, TFMesh* l1, TFMesh* l2, TFMesh* l3){
 	float radius = 12.0f;
 	float height = 8.0f;
@@ -174,6 +222,10 @@ int main(){
 	TFLight* shadowLight = nullptr;
 	
 	CreateTree(meshes, lights, shadowLight);
+
+	// CREATE ANIMATION
+	//TFAnimation* animation = nullptr;
+	//CreateAnimations(animation);
 
 	TFCamera* myCamera = sm->AddCamera();
 
@@ -209,6 +261,7 @@ int main(){
 	while(!EventHandler::m_close){
 		// EVENT HANDLER UPDATE
 		handler->Update();
+		//animation->Update(0.16f);
 
 		if(EventHandler::ChangeMain){
 			// ROTATE MESH
@@ -223,6 +276,7 @@ int main(){
 			ps->Update(0.16f);
 			ps1->Update(0.16f);
 			ps2->Update(0.16f);
+
 
 			////
 			shadowLight->SetActive(false);
