@@ -30,8 +30,7 @@ TFRect::TFRect(toe::core::TOEvector2df position, toe::core::TOEvector2df size, f
 TFRect::~TFRect(){}
 
 void TFRect::Erase(){
-    VideoDriver::GetInstance()->GetSceneManager()->Delete2Delement(this);
-    TFRect::~TFRect();
+    std::cout<<"Erase TFRect"<<std::endl;
 }
 
 void TFRect::ToBkg(){

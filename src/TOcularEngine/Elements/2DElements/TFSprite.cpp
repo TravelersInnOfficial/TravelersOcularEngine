@@ -41,8 +41,7 @@ TFSprite::TFSprite(std::string texture, toe::core::TOEvector2df position, toe::c
 TFSprite::~TFSprite(){}
 
 void TFSprite::Erase(){
-    VideoDriver::GetInstance()->GetSceneManager()->Delete2Delement(this);
-    TFSprite::~TFSprite();
+    std::cout<<"Erase TFSprite"<<std::endl;
 }
 
 void TFSprite::ToBkg(){
