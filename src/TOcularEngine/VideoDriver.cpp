@@ -58,7 +58,10 @@ bool VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2di
 
 	/// Iniciamos glew
 	glewExperimental = GL_TRUE;
-	glewInit();
+	GLenum err = glewInit();
+	if(GLEW_OK != err){
+		std::cout<<"Something wrong happen in glewInit"<<std::endl;
+	}
 
 
 	glEnable(GL_TEXTURE_2D);		
@@ -122,6 +125,7 @@ void VideoDriver::Drop(){
 
 	glfwDestroyWindow(m_window);
 	glfwTerminate();
+
 	//delete m_window; // Ya la elimina GLFW con el DestroyWindow
 }
 

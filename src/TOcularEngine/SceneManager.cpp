@@ -34,9 +34,6 @@ SceneManager::~SceneManager(){
 	glDeleteFramebuffers(1, &m_fbo);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDeleteTextures(1, &m_shadowMap);
-
-	if(m_dome != nullptr)
-		delete m_dome;
 }
 
 TFCamera* SceneManager::AddCamera(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, bool perspective){
@@ -484,7 +481,6 @@ void SceneManager::ResetManager(){
 	m_SceneTreeRoot = new TNode(myTransform);
 	//m_ambientLight = glm::vec3(0.25f);
 	m_main_camera = nullptr;
-	m_dome = nullptr;
 }
 
 void SceneManager::SetClipping(bool value){
@@ -525,7 +521,10 @@ void SceneManager::ClearElements(){
 	for(int i = size - 1; i>=0; i--) delete m_2Delems[i];
 	m_2Delems.clear();
 
+
+	if(m_dome != nullptr) delete m_dome;
+	m_dome = nullptr;
+	
 	delete m_SceneTreeRoot;
 	m_SceneTreeRoot = nullptr;
-	m_dome = nullptr;
 }

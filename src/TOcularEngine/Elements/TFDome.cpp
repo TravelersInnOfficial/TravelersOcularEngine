@@ -22,9 +22,7 @@ TFDome::TFDome( toe::core::TOEvector3df position,
 
 	m_entity = TDOME_ENTITY;
 }
-TFDome::~TFDome(){
-    
-}
+TFDome::~TFDome(){}
 
 void TFDome::SetTexture(std::string texturePath){
 	TMesh* myMesh = (TMesh*) m_entityNode->GetEntity();
