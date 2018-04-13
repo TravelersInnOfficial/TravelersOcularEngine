@@ -3,6 +3,14 @@
 
 #include "TMesh.h"
 
+struct AnimData{
+	int frames;								// Max frames of animation
+	int fps;									// Speed of animation
+	std::vector <TResourceMesh*> meshes;		// All resources of each frame of the animation
+
+	AnimData() : frames(0), fps(0) {}
+};
+
 class TAnimation: public TMesh{
 public:
 	TAnimation();
@@ -20,7 +28,7 @@ public:
 	 * @param frames: max frames
 	 * @param paths: string array of paths
 	 */
-    void SetPaths(int frames, std::string paths[]);
+    void SetPaths(std::string ID, int frames, std::string paths[], int fps);
     
 	/**
 	 * @brief Updates Animation depending of deltatime
@@ -29,10 +37,20 @@ public:
 	 */
 	void UpdateAnimation(float deltatime);
 
+	/**
+	 * @brief Play another animation
+	 * 
+	 * @param ID: name of the animation
+	 * @param fps 
+	 */
+    void ChangeAnim(std::string ID, int fps);
+	
 private:
+	void LoadMesh(std::string meshPath = "");
+
 	// Animation data
-	std::vector <TResourceMesh*> m_meshes;		// All resources of each frame of the animation
-	int m_frames;								// Max frames of animation
+	std::string m_id;							// Id of the actual animation
+	std::map<std::string, AnimData> m_anims;	// all animations availeables
 
 	// Updating animation
     int m_actualFrame;							// Actual frame beeing drawn in the scene

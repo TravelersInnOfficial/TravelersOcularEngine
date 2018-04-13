@@ -20,27 +20,32 @@ TFAnimation::TFAnimation(toe::core::TOEvector3df position, toe::core::TOEvector3
 
 TFAnimation::~TFAnimation(){ }
 
+void TFAnimation::SetTexture(std::string texturePath){
+	TAnimation* myAnim = (TAnimation*) m_entityNode->GetEntity();
+	myAnim->ChangeTexture(texturePath);
+}
+
+void TFAnimation::SetInvisible(){
+    TAnimation* myAnim = (TAnimation*) m_entityNode->GetEntity();
+	myAnim->ChangeTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/invisible_texture.png");
+}
+
+void TFAnimation::SetBoundBox(bool visible){
+	TAnimation* myAnim = (TAnimation*) m_entityNode->GetEntity();
+	myAnim->SetBBVisibility(visible);
+}
+
+void TFAnimation::SetAnimationPaths(std::string ID, int frames, std::string paths[], int fps){
+    TAnimation* myAnim = (TAnimation*) m_entityNode->GetEntity();
+	myAnim->SetPaths(ID, frames, paths, fps);
+}
+
 void TFAnimation::Update(float deltatime){
 	TAnimation* myAnim = (TAnimation*) m_entityNode->GetEntity();
 	myAnim->UpdateAnimation(deltatime);
 }
 
-void TFAnimation::SetAnimationPaths(int frames, std::string paths[]){
-    TAnimation* myAnim = (TAnimation*) m_entityNode->GetEntity();
-	myAnim->SetPaths(frames, paths);
-}
-
-void TFAnimation::SetTexture(std::string texturePath){
-	TAnimation* myMesh = (TAnimation*) m_entityNode->GetEntity();
-	myMesh->ChangeTexture(texturePath);
-}
-
-void TFAnimation::SetInvisible(){
-    TAnimation* myMesh = (TAnimation*) m_entityNode->GetEntity();
-	myMesh->ChangeTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/invisible_texture.png");
-}
-
-void TFAnimation::SetBoundBox(bool visible){
-	TAnimation* myMesh = (TAnimation*) m_entityNode->GetEntity();
-	myMesh->SetBBVisibility(visible);
+void TFAnimation::ChangeAnimation(std::string ID, int fps){
+	TAnimation* myAnim = (TAnimation*) m_entityNode->GetEntity();
+	myAnim->ChangeAnim(ID, fps);
 }

@@ -28,16 +28,25 @@ public:
 	/**
 	 * @brief Sets all paths for all the meshes and number of frames
 	 * 
+	 * @param ID 
 	 * @param frames 
 	 * @param paths 
 	 */
-	void SetAnimationPaths(int frames, std::string paths[]);
+	void SetAnimationPaths(std::string ID, int frames, std::string paths[], int fps = 25);
 	/**
 	 * @brief Update animation frames
 	 * 
 	 * @param deltatime 
 	 */
     void Update(float deltatime);
+
+	/**
+	 * @brief Play another animation
+	 * 
+	 * @param ID: name of the animation
+	 * @param fps 
+	 */
+    void ChangeAnimation(std::string ID, int fps = 25);
 
 protected:
 	TFAnimation(

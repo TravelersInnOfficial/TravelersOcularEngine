@@ -9,6 +9,10 @@
 #include <ShaderTypes.h>
 #include <vector>
 
+#include <thread>
+#include <chrono>
+
+
 std::vector<TFMesh*> sceneObjects;
 int currentShader = 0;
 
@@ -63,27 +67,27 @@ void CreateTree(TFMesh* ms[], TFLight* ls[], TFLight*& shL){
 
 	// TEAPOTS ###################################################
 
-	pos = toe::core::TOEvector3df(-7.0f, -1.8f, 10.0f);
+	pos = toe::core::TOEvector3df(-7.0f, -1.8f, 20.0f);
 	scale = toe::core::TOEvector3df(0.7f, 0.7f, 0.7f);
 	mesh = sm->AddMesh(pos, rot, scale, "./../assets/models/teapot.obj");
 	mesh->SetTexture("./../assets/textures/checkerboard_texture.jpg");
 	mesh->SetBoundBox(true);
 	sceneObjects.push_back(mesh);
 
-	pos = toe::core::TOEvector3df(0.0f, -1.8f, 10.0f);
+	pos = toe::core::TOEvector3df(0.0f, -1.8f, 20.0f);
 	scale = toe::core::TOEvector3df(0.55f, 0.55f, 0.55f);
 	mesh = sm->AddMesh(pos, rot, scale, "./../assets/models/teapot.obj");
 	mesh->SetTexture("./../assets/textures/teapot_texture1.jpg");
 	mesh->SetBoundBox(true);
 	sceneObjects.push_back(mesh);
 
-	pos = toe::core::TOEvector3df(7.0f, -1.8f, 10.0f);
+	pos = toe::core::TOEvector3df(7.0f, -1.8f, 20.0f);
 	scale = toe::core::TOEvector3df(0.4f, 0.4f, 0.4f);
 	mesh = sm->AddMesh(pos, rot, scale, "./../assets/models/teapot.obj");
 	mesh->SetTexture("./../assets/textures/teapot_texture2.jpg");
 
 	// Room model 
-	pos = toe::core::TOEvector3df(-2,-1,0);
+	pos = toe::core::TOEvector3df(-4,-1,0);
 	scale = toe::core::TOEvector3df(1,1,1);
 	mesh = sm->AddMesh(pos, toe::core::TOEvector3df(0,180,0), scale, "./../assets/models/room_thickwalls.obj");
 	mesh->SetTexture("./../assets/textures/room.png");
@@ -140,54 +144,209 @@ void CreateTree(TFMesh* ms[], TFLight* ls[], TFLight*& shL){
 	// DOME ###################################################
 	sm->AddDome();
 	sm->AddDynamicLight(shL);
+
+	/// SPRITES	###############################################
+	// TOE MANUAL
+	TFSprite* manual = toe::AddSprite("",toe::core::TOEvector2df(0, 0), toe::core::TOEvector2df(305,96));
+	manual->SetTexture("./../assets/textures/toe_manual.png");
+
+	// TIO LOGO
+	TFSprite* logo = toe::AddSprite("",toe::core::TOEvector2df(toe::GetVideoDriver()->GetScreenResolution().X - 534/3.5f, 0), toe::core::TOEvector2df(534/3.5f,624/3.5f));
+	logo->SetTexture("./../assets/textures/default_sprite.png");
 }
 
-void CreateAnimations(TFAnimation*& anim){
+void CreateAnimations(TFAnimation* anims[]){
 	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
 
-	toe::core::TOEvector3df pos = toe::core::TOEvector3df(0, 1, -6);
 	toe::core::TOEvector3df rot = toe::core::TOEvector3df(0, 0, 0);
 	toe::core::TOEvector3df scale = toe::core::TOEvector3df(2.0f, 2.0f, 2.0f);
 
-	anim = sm->AddAnimation(pos, rot, scale);
-
-	std::string paths[] = {
-		"./../assets/models/genius/genius_01.obj",
-		"./../assets/models/genius/genius_02.obj",
-		"./../assets/models/genius/genius_03.obj",
-		"./../assets/models/genius/genius_04.obj",
-		"./../assets/models/genius/genius_05.obj",
-		"./../assets/models/genius/genius_06.obj",
-		"./../assets/models/genius/genius_07.obj",
-		"./../assets/models/genius/genius_08.obj",
-		"./../assets/models/genius/genius_09.obj",
-		"./../assets/models/genius/genius_10.obj",
-		"./../assets/models/genius/genius_11.obj",
-		"./../assets/models/genius/genius_12.obj",
-		"./../assets/models/genius/genius_13.obj",
-		"./../assets/models/genius/genius_14.obj",
-		"./../assets/models/genius/genius_15.obj",
-		"./../assets/models/genius/genius_16.obj",
-		"./../assets/models/genius/genius_17.obj",
-		"./../assets/models/genius/genius_18.obj",
-		"./../assets/models/genius/genius_19.obj",
-		"./../assets/models/genius/genius_20.obj",
-		"./../assets/models/genius/genius_21.obj",
-		"./../assets/models/genius/genius_22.obj",
-		"./../assets/models/genius/genius_23.obj",
-		"./../assets/models/genius/genius_24.obj",
-		"./../assets/models/genius/genius_25.obj",
-		"./../assets/models/genius/genius_26.obj",
-		"./../assets/models/genius/genius_27.obj",
-		"./../assets/models/genius/genius_28.obj",
-		"./../assets/models/genius/genius_29.obj",
-		"./../assets/models/genius/genius_30.obj",
+	toe::core::TOEvector3df pos = toe::core::TOEvector3df(-4, 1, -12);
+	anims[0] = sm->AddAnimation(pos, rot, scale);
+	anims[1] = sm->AddAnimation(pos, rot, scale);
+	
+	pos = toe::core::TOEvector3df(4, 1, -12);
+	anims[2] = sm->AddAnimation(pos, rot, scale);
+	
+	std::string shoot1[] = {
+		"./../assets/models/mage/shoot1_42.obj",
+		"./../assets/models/mage/shoot1_43.obj",
+		"./../assets/models/mage/shoot1_44.obj",
+		"./../assets/models/mage/shoot1_45.obj",
+		"./../assets/models/mage/shoot1_46.obj",
+		"./../assets/models/mage/shoot1_47.obj",
+		"./../assets/models/mage/shoot1_48.obj",
+		"./../assets/models/mage/shoot1_49.obj",
+		"./../assets/models/mage/shoot1_50.obj",
+		"./../assets/models/mage/shoot1_51.obj",
+		"./../assets/models/mage/shoot1_52.obj",
+		"./../assets/models/mage/shoot1_53.obj",
+		"./../assets/models/mage/shoot1_54.obj",
+		"./../assets/models/mage/shoot1_55.obj",
+		"./../assets/models/mage/shoot1_56.obj",
+		"./../assets/models/mage/shoot1_57.obj",
+		"./../assets/models/mage/shoot1_58.obj",
+		"./../assets/models/mage/shoot1_59.obj",
+		"./../assets/models/mage/shoot1_60.obj",
+		"./../assets/models/mage/shoot1_61.obj",
+		"./../assets/models/mage/shoot1_62.obj",
+		"./../assets/models/mage/shoot1_63.obj",
+		"./../assets/models/mage/shoot1_64.obj",
+		"./../assets/models/mage/shoot1_65.obj",
+		"./../assets/models/mage/shoot1_66.obj",
+		"./../assets/models/mage/shoot1_67.obj",
+		"./../assets/models/mage/shoot1_68.obj",
+		"./../assets/models/mage/shoot1_69.obj",
+		"./../assets/models/mage/shoot1_70.obj",
+		"./../assets/models/mage/shoot1_71.obj",
+		"./../assets/models/mage/shoot1_72.obj",
+		"./../assets/models/mage/shoot1_73.obj",
+		"./../assets/models/mage/shoot1_74.obj",
+		"./../assets/models/mage/shoot1_75.obj",
+		"./../assets/models/mage/shoot1_76.obj",
+		"./../assets/models/mage/shoot1_77.obj",
+		"./../assets/models/mage/shoot1_78.obj",
+		"./../assets/models/mage/shoot1_79.obj",
+		"./../assets/models/mage/shoot1_80.obj",
+		"./../assets/models/mage/shoot1_81.obj",
+		"./../assets/models/mage/shoot1_82.obj"
+	};
+	
+	std::string shoot2[] = {
+		"./../assets/models/mage/shoot2_26.obj",
+		"./../assets/models/mage/shoot2_27.obj",
+		"./../assets/models/mage/shoot2_28.obj",
+		"./../assets/models/mage/shoot2_29.obj",
+		"./../assets/models/mage/shoot2_30.obj",
+		"./../assets/models/mage/shoot2_31.obj",
+		"./../assets/models/mage/shoot2_32.obj",
+		"./../assets/models/mage/shoot2_33.obj",
+		"./../assets/models/mage/shoot2_34.obj",
+		"./../assets/models/mage/shoot2_35.obj",
+		"./../assets/models/mage/shoot2_36.obj",
+		"./../assets/models/mage/shoot2_37.obj",
+		"./../assets/models/mage/shoot2_38.obj",
+		"./../assets/models/mage/shoot2_39.obj",
+		"./../assets/models/mage/shoot2_40.obj",
+		"./../assets/models/mage/shoot2_41.obj",
+		"./../assets/models/mage/shoot2_42.obj",
+		"./../assets/models/mage/shoot2_43.obj",
+		"./../assets/models/mage/shoot2_44.obj",
+		"./../assets/models/mage/shoot2_45.obj",
+		"./../assets/models/mage/shoot2_46.obj",
+		"./../assets/models/mage/shoot2_47.obj",
+		"./../assets/models/mage/shoot2_48.obj",
+		"./../assets/models/mage/shoot2_49.obj",
+		"./../assets/models/mage/shoot2_50.obj",
+		"./../assets/models/mage/shoot2_51.obj",
+		"./../assets/models/mage/shoot2_52.obj",
+		"./../assets/models/mage/shoot2_53.obj",
+		"./../assets/models/mage/shoot2_54.obj",
+		"./../assets/models/mage/shoot2_55.obj",
+		"./../assets/models/mage/shoot2_56.obj",
+		"./../assets/models/mage/shoot2_57.obj",
+		"./../assets/models/mage/shoot2_58.obj",
+		"./../assets/models/mage/shoot2_59.obj",
+		"./../assets/models/mage/shoot2_60.obj",
+		"./../assets/models/mage/shoot2_61.obj",
+		"./../assets/models/mage/shoot2_62.obj",
+		"./../assets/models/mage/shoot2_63.obj",
+		"./../assets/models/mage/shoot2_64.obj",
+		"./../assets/models/mage/shoot2_65.obj",
+		"./../assets/models/mage/shoot2_66.obj",
+		"./../assets/models/mage/shoot2_67.obj",
+		"./../assets/models/mage/shoot2_68.obj",
+		"./../assets/models/mage/shoot2_69.obj",
+		"./../assets/models/mage/shoot2_70.obj",
+		"./../assets/models/mage/shoot2_71.obj",
+		"./../assets/models/mage/shoot2_72.obj",
+		"./../assets/models/mage/shoot2_73.obj",
+		"./../assets/models/mage/shoot2_74.obj",
+		"./../assets/models/mage/shoot2_75.obj",
+		"./../assets/models/mage/shoot2_76.obj",
+		"./../assets/models/mage/shoot2_77.obj",
+		"./../assets/models/mage/shoot2_78.obj",
+		"./../assets/models/mage/shoot2_79.obj",
+		"./../assets/models/mage/shoot2_80.obj",
+		"./../assets/models/mage/shoot2_81.obj",
+		"./../assets/models/mage/shoot2_82.obj"
 	};
 
-	anim->SetAnimationPaths(30, paths);
-	anim->SetBoundBox(true);
-	anim->SetTexture("./../assets/textures/red.png");
-		
+	std::string walk[] = {
+		"./../assets/models/mage/top_24.obj",
+		"./../assets/models/mage/top_25.obj",
+		"./../assets/models/mage/top_26.obj",
+		"./../assets/models/mage/top_27.obj",
+		"./../assets/models/mage/top_28.obj",
+		"./../assets/models/mage/top_29.obj",
+		"./../assets/models/mage/top_30.obj",
+		"./../assets/models/mage/top_31.obj",
+		"./../assets/models/mage/top_32.obj",
+		"./../assets/models/mage/top_33.obj",
+		"./../assets/models/mage/top_34.obj",
+		"./../assets/models/mage/top_35.obj",
+		"./../assets/models/mage/top_36.obj",
+		"./../assets/models/mage/top_37.obj",
+		"./../assets/models/mage/top_38.obj",
+		"./../assets/models/mage/top_39.obj",
+		"./../assets/models/mage/top_40.obj",
+		"./../assets/models/mage/top_41.obj",
+		"./../assets/models/mage/top_42.obj",
+		"./../assets/models/mage/top_43.obj",
+		"./../assets/models/mage/top_44.obj",
+		"./../assets/models/mage/top_45.obj",
+		"./../assets/models/mage/top_46.obj",
+		"./../assets/models/mage/top_47.obj",
+	};
+	
+	std::string botwalk[] = {
+		"./../assets/models/mage/walk/bottom_24.obj",
+		"./../assets/models/mage/walk/bottom_25.obj",
+		"./../assets/models/mage/walk/bottom_26.obj",
+		"./../assets/models/mage/walk/bottom_27.obj",
+		"./../assets/models/mage/walk/bottom_28.obj",
+		"./../assets/models/mage/walk/bottom_29.obj",
+		"./../assets/models/mage/walk/bottom_30.obj",
+		"./../assets/models/mage/walk/bottom_31.obj",
+		"./../assets/models/mage/walk/bottom_32.obj",
+		"./../assets/models/mage/walk/bottom_33.obj",
+		"./../assets/models/mage/walk/bottom_34.obj",
+		"./../assets/models/mage/walk/bottom_35.obj",
+		"./../assets/models/mage/walk/bottom_36.obj",
+		"./../assets/models/mage/walk/bottom_37.obj",
+		"./../assets/models/mage/walk/bottom_38.obj",
+		"./../assets/models/mage/walk/bottom_39.obj",
+		"./../assets/models/mage/walk/bottom_40.obj",
+		"./../assets/models/mage/walk/bottom_41.obj",
+		"./../assets/models/mage/walk/bottom_42.obj",
+		"./../assets/models/mage/walk/bottom_43.obj",
+		"./../assets/models/mage/walk/bottom_44.obj",
+		"./../assets/models/mage/walk/bottom_45.obj",
+		"./../assets/models/mage/walk/bottom_46.obj",
+		"./../assets/models/mage/walk/bottom_47.obj",
+	};
+
+	int size = sizeof(walk)/sizeof(walk[0]);
+	anims[0]->SetAnimationPaths("topwalk", size , walk, 25);
+	anims[2]->SetAnimationPaths("topwalk", size , walk, 25);
+	
+	size = sizeof(shoot1)/sizeof(shoot1[0]);
+	anims[0]->SetAnimationPaths("shoot1", size, shoot1);
+	//anims[2]->SetAnimationPaths(1, size, shoot1);
+
+	size = sizeof(shoot2)/sizeof(shoot2[0]);
+	//anims[0]->SetAnimationPaths(0, size, shoot2);
+	
+	size = sizeof(botwalk)/sizeof(botwalk[0]);
+	anims[1]->SetAnimationPaths("bottomwalk", size , botwalk);
+
+	anims[0]->SetBoundBox(true);
+	anims[1]->SetBoundBox(true);
+	anims[2]->SetBoundBox(true);
+
+	anims[0]->SetTexture("./../assets/textures/wizard.png");
+	anims[1]->SetTexture("./../assets/textures/wizard.png");
+	anims[2]->SetTexture("./../assets/textures/wizard.png");
 }
 
 void RotateLights(const toe::core::TOEvector3df& rot, TFMesh* l1, TFMesh* l2, TFMesh* l3){
@@ -204,6 +363,36 @@ void RotateLights(const toe::core::TOEvector3df& rot, TFMesh* l1, TFMesh* l2, TF
 	x = sin(glm::radians(-rot.Y + 360.0f / 1.5f)) * radius;
 	z = cos(glm::radians(-rot.Y + 360.0f / 1.5f)) * radius;
 	l3->SetTranslate(toe::core::TOEvector3df(x, height, z));
+}
+
+void UpdateDelta(float &deltaTime){
+	using namespace std::chrono_literals;
+	using clk = std::chrono::high_resolution_clock;
+	static auto t = clk::now();
+
+	// DECLARAMOS SPF y FPS
+	constexpr auto fps = 200.0f;
+	constexpr auto spf = 1000000000ns / fps;
+
+	// CALCULAMOS DELTA TIME ANTES DE ESPERAR Y ESPERAMOS
+	auto passed = clk::now() - t;
+	if (passed < spf){
+		auto ns = std::chrono::duration_cast<std::chrono::nanoseconds>(spf - passed - 100us);
+		std::this_thread::sleep_for(ns);
+	}
+
+	// CALCULAMOS DELTA TIME
+	passed = clk::now() - t;
+	std::chrono::duration<double, std::milli> milisecondsPassed = passed;
+	deltaTime = milisecondsPassed.count() / 1000.0f;
+	if(deltaTime > 1.0f) deltaTime = 0.02f;
+
+	// GUARDAMOS LA T
+	t = clk::now();
+
+	// Esta cutremente aqui, SOLO ES PARA PRUEBAS
+	std::string myFps = std::to_string(int(1/(deltaTime)));
+	VideoDriver::GetInstance()->SetWindowName(myFps);
 }
 
 int main(){
@@ -223,10 +412,7 @@ int main(){
 	
 	CreateTree(meshes, lights, shadowLight);
 
-	// CREATE ANIMATION
-	//TFAnimation* animation = nullptr;
-	//CreateAnimations(animation);
-
+	// Main camera
 	TFCamera* myCamera = sm->AddCamera();
 
 	handler->screenCenterX = VDriv->GetScreenResolution().X/2;
@@ -240,30 +426,47 @@ int main(){
 	//ps1->SetManager(new ColoredParticle(false, true, false));
 	ps2->SetManager(new ColoredParticle(false, false, true));
 
-	// TOE MANUAL
-	TFSprite* manual = toe::AddSprite("",toe::core::TOEvector2df(0, 0), toe::core::TOEvector2df(305,96));
-	manual->SetTexture("./../assets/textures/toe_manual.png");
-
-	// TIO LOGO
-	TFSprite* logo = toe::AddSprite("",toe::core::TOEvector2df(VDriv->GetScreenResolution().X - 534/3.5f, 0), toe::core::TOEvector2df(534/3.5f,624/3.5f));
-	logo->SetTexture("./../assets/textures/default_sprite.png");
-
 	// SUZANNE
 	TFMesh* mesh = sm->AddMesh(toe::core::TOEvector3df(6.0f, 6.0f, 0.0f), toe::core::TOEvector3df(0.0f, 0.0f, 0.0f), toe::core::TOEvector3df(2.0f, 2.0f, 2.0f), "./../assets/models/suzanne.obj");
 	mesh->AddBillboard(toe::core::TOEvector3df(0.0f, 3.0f, 0.0f), "SUZANNE", 0.5f);
 	sceneObjects.push_back(mesh);
+	
+	// CREATE ANIMATION
+	//TFAnimation* animations[] = {nullptr, nullptr, nullptr};
+	//CreateAnimations(animations);
 
-	// INIT MODELS
-	shadowLight->SetTranslate(toe::core::TOEvector3df(EventHandler::xlight, EventHandler::ylight, EventHandler::zlight));
+	float deltaTime = 0.0f;
+	bool lastMain = true;
+
+	// INIT Lights position
 	RotateLights(mesh->GetRotation(), meshes[0], meshes[1], meshes[2]);
-	shadowLight->SetActive(true);
 
-	while(!EventHandler::m_close){
+	while(!EventHandler::m_close){		
 		// EVENT HANDLER UPDATE
 		handler->Update();
-		//animation->Update(0.16f);
 
-		if(EventHandler::ChangeMain){
+		// SHADOWS SCENE
+		if(!EventHandler::ChangeMain){
+			// called once
+			if(lastMain){
+				// CHANGE ANIMATION
+				//animations[0]->ChangeAnimation("topwalk");
+			}
+
+			shadowLight->SetActive(true);
+			lights[0]->SetActive(false);
+			lights[1]->SetActive(false);
+			lights[2]->SetActive(false);
+			
+			lastMain = false;
+		}
+		// ROTATING LIGHTS SCENE
+		else{
+			// called once
+			if(!lastMain){
+				// CHANGE ANIMATION
+				//animations[0]->ChangeAnimation("shoot1");
+			}
 			// ROTATE MESH
 			toe::core::TOEvector3df rot = mesh->GetRotation();
 			rot.Y += 0.5;
@@ -277,18 +480,19 @@ int main(){
 			ps1->Update(0.16f);
 			ps2->Update(0.16f);
 
-
-			////
+			//// TOGGLE LIGHTS
 			shadowLight->SetActive(false);
 			lights[0]->SetActive(true);
 			lights[1]->SetActive(true);
 			lights[2]->SetActive(true);
-		}else{
-			shadowLight->SetActive(true);
-			lights[0]->SetActive(false);
-			lights[1]->SetActive(false);
-			lights[2]->SetActive(false);
+
+			lastMain = true;
 		}
+
+		//animations[0]->Update(deltaTime);			// called 60 times per second aprox
+		//animations[1]->Update(deltaTime);			// called 60 times per second aprox
+		//animations[2]->Update(deltaTime);			// called 60 times per second aprox
+
 		shadowLight->SetTranslate(toe::core::TOEvector3df(EventHandler::xlight, EventHandler::ylight, EventHandler::zlight));
 		
 		// UPDATE CAMERA
@@ -302,6 +506,7 @@ int main(){
 		VDriv->SetCursorPosition(VDriv->GetScreenResolution().X/2,VDriv->GetScreenResolution().Y/2);
 
 		ChangeShader(EventHandler::shaderType);
+		UpdateDelta(deltaTime);
 	}
 
 	VDriv->CloseWindow();
