@@ -7,8 +7,8 @@
 class TFParticleSystem: public TFNode{
 	friend class SceneManager;
 public:
-	void SetTranslate(toe::core::TOEvector3df translation) override;
 	void Translate(toe::core::TOEvector3df translation) override;
+	void SetTranslateSmooth(toe::core::TOEvector3df translation);
 
 	void SetTexture(std::string path);
 	void SetManager(ParticleManager* manager);

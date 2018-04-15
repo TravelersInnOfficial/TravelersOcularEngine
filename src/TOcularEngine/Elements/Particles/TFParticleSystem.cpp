@@ -28,7 +28,7 @@ void TFParticleSystem::Translate(toe::core::TOEvector3df translation){
 	mySystem->Translate(glm::vec3(translation.X, translation.Y, translation.Z));
 }
 
-void TFParticleSystem::SetTranslate(toe::core::TOEvector3df translation){
+void TFParticleSystem::SetTranslateSmooth(toe::core::TOEvector3df translation){
 	glm::vec3 currentPosition = m_entityNode->GetTranslation();
 	glm::vec3 diffPosition = glm::vec3(currentPosition.x - translation.X, 
 									   currentPosition.y - translation.Y, 
