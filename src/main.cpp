@@ -466,7 +466,7 @@ int main(){
 			// called once
 			if(lastMain){
 				// CHANGE ANIMATION
-				animations[0]->ChangeAnimation("topwalk");
+				//animations[0]->ChangeAnimation("topwalk");
 			}
 
 			shadowLight->SetActive(true);
@@ -481,7 +481,8 @@ int main(){
 			// called once
 			if(!lastMain){
 				// CHANGE ANIMATION
-				animations[0]->ChangeAnimation("shoot1");
+				//animations[0]->ChangeAnimation("shoot1");
+				animations[0]->PlayAnimation("shoot1");
 			}
 			// ROTATE MESH
 			toe::core::TOEvector3df rot = mesh->GetRotation();

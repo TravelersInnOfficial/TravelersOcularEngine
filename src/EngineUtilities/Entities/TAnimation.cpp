@@ -16,6 +16,9 @@ TAnimation::~TAnimation(){ }
 
 void TAnimation::SetPaths(std::string ID, int frames, std::string paths[], int fps){
 	m_id = ID;						// Change actual animation to this id
+	m_queue.empty();
+	m_queue.push(m_id);
+
 	AnimData data;
 	m_anims[m_id] = data;			// add new animation
 
@@ -35,20 +38,25 @@ void TAnimation::SetPaths(std::string ID, int frames, std::string paths[], int f
 void TAnimation::UpdateAnimation(float deltatime){
 	// Update animation time
 	m_animTime += deltatime;			// animTime tracks seconds of the animation
-
+	std::string id = m_queue.top();
+	
 	// Total seconds of animation
-	float max_duration = (float)m_anims[m_id].frames / (float)m_anims[m_id].fps;
+	float max_duration = (float)m_anims[id].frames / (float)m_anims[id].fps;
 
 	// Check if time is higher than max duration
-	if(m_animTime > max_duration) m_animTime = 0.0f;
+	if(m_animTime > max_duration) {
+		m_animTime = 0.0f;
+
+		if(m_queue.size() > 1) m_queue.pop();
+	}
 	
 	// next frame to draw
-	int nextFrame = m_animTime / max_duration * m_anims[m_id].frames;
+	int nextFrame = m_animTime / max_duration * m_anims[id].frames;
 	
 	// If next frame is diferent from actual frame, set actual frame
 	if(nextFrame != m_actualFrame){
 		// Update animation mesh to correpondent
-		m_mesh = m_anims[m_id].meshes[nextFrame];
+		m_mesh = m_anims[id].meshes[nextFrame];
 		m_actualFrame = nextFrame;
 	}
 
@@ -63,12 +71,21 @@ void TAnimation::ChangeAnim(std::string ID, int fps){
 		m_id = ID;
 		m_anims[m_id].fps = fps;
 		m_animTime = 0.0f;
+
+		m_queue.empty();
+		m_queue.push(m_id);
 	}
 }
 
 
 void TAnimation::PlayAnim(std::string ID, int fps){
-	
+	if (m_anims.find(ID) != m_anims.end()){
+		m_id = ID;
+		m_anims[m_id].fps = fps;
+		m_animTime = 0.0f;
+
+		m_queue.push(m_id);
+	}
 }
 
 int TAnimation::GetActualFrame(){

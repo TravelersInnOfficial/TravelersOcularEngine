@@ -44,7 +44,7 @@ public:
 	 * @param fps: speed of animation
 	 */
     void ChangeAnim(std::string ID, int fps);
-	
+
 	/**
 	 * @brief Play another animation and queue last animation
 	 * 
@@ -65,6 +65,7 @@ private:
 
 	// Animation data
 	std::string m_id;							// Id of the actual animation
+	std::stack <std::string> m_queue;			// Queue of animation
 	std::map<std::string, AnimData> m_anims;	// all animations availeables
 
 	// Updating animation
