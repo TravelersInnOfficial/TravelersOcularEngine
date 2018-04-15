@@ -29,8 +29,7 @@ private:
     TFRect(toe::core::TOEvector2df position, toe::core::TOEvector2df size, float rotation);
     ~TFRect();
 
-    void p_recalculate_size();
-    GLuint m_VBO, m_VAO;
+    GLuint m_VBO;
     
 };
 

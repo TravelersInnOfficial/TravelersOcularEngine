@@ -10,7 +10,8 @@ TFSprite::TFSprite(std::string texture, toe::core::TOEvector2df position, toe::c
     w_dims = VideoDriver::GetInstance()->GetWindowDimensions();
 
     m_position  = toe::core::TOEvector2df((position.X*2 - w_dims.X) / w_dims.X , (position.Y*2 - w_dims.Y) / w_dims.Y);
-    m_size      = toe::core::TOEvector2df(m_position.X + (std::abs(size.X *2) / w_dims.X), m_position.Y + (std::abs(size.Y *2) / w_dims.Y));
+    m_size      = toe::core::TOEvector2df((size.X *2) / w_dims.X, (size.Y *2) / w_dims.Y);
+    m_rotation    = 0;
 
     //rect = toe::core::TOEvector4df(0.33f,0.33f, 1.0f, 1.0f);
     if(texture.compare("")==0) texture = VideoDriver::GetInstance()->GetAssetsPath() + "/textures/invisible_texture.png";
@@ -25,9 +26,6 @@ TFSprite::TFSprite(std::string texture, toe::core::TOEvector2df position, toe::c
     m_InData.size = size;
     m_InData.texture = texture;
 
-    m_VAO = 0;
-	glGenBuffers(1, &m_VAO);
-
     m_VBO = 0;
     glGenBuffers(1, &m_VBO);
 
@@ -38,7 +36,10 @@ TFSprite::TFSprite(std::string texture, toe::core::TOEvector2df position, toe::c
     m_mask = TResourceManager::GetInstance()->GetResourceTexture(mask);;
 }
 
-TFSprite::~TFSprite(){}
+TFSprite::~TFSprite(){
+    glBindBuffer(GL_ARRAY_BUFFER, 0);   
+    glDeleteBuffers(1, &m_VBO);
+}
 
 void TFSprite::Erase(){
     std::cout<<"Erase TFSprite"<<std::endl;
@@ -68,6 +69,9 @@ void TFSprite::SetRect(float x, float y, float w, float h){
     SetSize(w,h);
 }
 
+void TFSprite::SetTextureRect(float x, float y, float w, float h){
+    m_rect = toe::core::TOEvector4df(x, y, w+x, h+y);
+}
 
 void TFSprite::Draw() const{
     Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(m_program);
@@ -75,18 +79,31 @@ void TFSprite::Draw() const{
     glEnable (GL_BLEND); 
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    glm::mat2 rotationMatrix;
+    float rotRadian = m_rotation * M_PI / 180.0f;
+    rotationMatrix[0] = glm::vec2(cos(rotRadian), -sin(rotRadian));
+    rotationMatrix[1] = glm::vec2(sin(rotRadian),  cos(rotRadian));
+
+    glm::vec2 upLeftCorner(-m_size.X/2, m_size.Y/2);
+    glm::vec2 upRightCorner(m_size.X/2, m_size.Y/2);
+    glm::vec2 downLeftCorner(-m_size.X/2, -m_size.Y/2);
+    glm::vec2 downRightCorner(m_size.X/2, -m_size.Y/2);
+
+    upLeftCorner    = (rotationMatrix * upLeftCorner)       + glm::vec2(m_size.X/2, m_size.Y/2);
+    upRightCorner   = (rotationMatrix * upRightCorner)      + glm::vec2(m_size.X/2, m_size.Y/2);
+    downLeftCorner  = (rotationMatrix * downLeftCorner)     + glm::vec2(m_size.X/2, m_size.Y/2);
+    downRightCorner = (rotationMatrix * downRightCorner)    + glm::vec2(m_size.X/2, m_size.Y/2);
+
     float vertices[] = {
-//      X              Y                       U                 V                     U-MASK V-MASK  COLOR(RGBA)
-        m_position.X, m_position.Y,          m_rect.X +scrollH,  m_rect.Y2+scrollV,  m_mask_rect.X ,  m_mask_rect.Y2,   m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
-        m_size.X,     m_position.Y,          m_rect.X2+scrollH,  m_rect.Y2+scrollV,  m_mask_rect.X2,  m_mask_rect.Y2,   m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
-        m_position.X, m_size.Y,              m_rect.X +scrollH,  m_rect.Y+scrollV,   m_mask_rect.X ,  m_mask_rect.Y,    m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
+//      X                                   Y                                   U                 V                     U-MASK V-MASK  COLOR(RGBA)
+        m_position.X + downLeftCorner.x,    m_position.Y + downLeftCorner.y,    m_rect.X +scrollH,  m_rect.Y2+scrollV,  m_mask_rect.X ,  m_mask_rect.Y2,   m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
+        m_position.X + downRightCorner.x,   m_position.Y + downRightCorner.y,   m_rect.X2+scrollH,  m_rect.Y2+scrollV,  m_mask_rect.X2,  m_mask_rect.Y2,   m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
+        m_position.X + upLeftCorner.x,      m_position.Y + upLeftCorner.y,      m_rect.X +scrollH,  m_rect.Y+scrollV,   m_mask_rect.X ,  m_mask_rect.Y,    m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
 
-        m_size.X,     m_position.Y,          m_rect.X2+scrollH,  m_rect.Y2+scrollV,  m_mask_rect.X2 ,  m_mask_rect.Y2,   m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
-        m_size.X,     m_size.Y,              m_rect.X2+scrollH,  m_rect.Y+scrollV,   m_mask_rect.X2,  m_mask_rect.Y,   m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
-        m_position.X, m_size.Y,              m_rect.X +scrollH,  m_rect.Y+scrollV,   m_mask_rect.X ,  m_mask_rect.Y,    m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA()
+        m_position.X + downRightCorner.x,   m_position.Y + downRightCorner.y,   m_rect.X2+scrollH,  m_rect.Y2+scrollV,  m_mask_rect.X2 , m_mask_rect.Y2,   m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
+        m_position.X + upRightCorner.x,     m_position.Y + upRightCorner.y,     m_rect.X2+scrollH,  m_rect.Y+scrollV,   m_mask_rect.X2,  m_mask_rect.Y,    m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
+        m_position.X + upLeftCorner.x,      m_position.Y + upLeftCorner.y,      m_rect.X +scrollH,  m_rect.Y+scrollV,   m_mask_rect.X ,  m_mask_rect.Y,    m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA()
     };
-
-    glBindVertexArray( m_VAO );
 
     glBindBuffer( GL_ARRAY_BUFFER, m_VBO );
     glBufferData( GL_ARRAY_BUFFER, sizeof( vertices ), vertices, GL_STATIC_DRAW );
@@ -130,16 +147,30 @@ void TFSprite::Draw() const{
     glDisable(GL_BLEND);
 }
 
-void TFSprite::p_recalculate_size(){
-    m_size = toe::core::TOEvector2df(m_position.X + (std::abs(m_InData.size.X *2) / w_dims.X), m_position.Y + (std::abs(m_InData.size.Y *2) / w_dims.Y));
-}
-
 void TFSprite::ScrollH(float vel){
-    scrollH = scrollH > 1 ? vel : scrollH + vel;
+    scrollH += vel;
+    if(scrollH > 1) scrollH -= 1.0f;
+    else if(scrollH < 0) scrollH += 1.0f;
+    //scrollH = scrollH > 1 ? vel : scrollH + vel;
 }
 
 void TFSprite::ScrollV(float vel){
-    scrollV = scrollV > 1 ? vel : scrollV + vel;
+    scrollV += vel;
+    if(scrollV > 1) scrollV -= 1.0f;
+    else if(scrollV < 0) scrollV += 1.0f;
+    //scrollV = scrollV > 1 ? vel : scrollV + vel;
+}
+
+void TFSprite::SetScrollH(float value){
+    // 14.33 -> real = 14 -> scrollH = 14.33 - 14;
+    int real = (int)value;
+    scrollH = value - real;
+}
+
+void TFSprite::SetScrollV(float value){
+    // 14.33 -> real = 14 -> scrollH = 14.33 - 14;
+    int real = (int)value;
+    scrollV = value - real;
 }
 
 void TFSprite::SetMask(std::string mask_path){
@@ -150,34 +181,31 @@ void TFSprite::SetPosition(float x, float y){
     m_position = toe::core::TOEvector2df((x*2 - w_dims.X) / w_dims.X , (y*2 - w_dims.Y) / w_dims.Y);
     m_InData.position.X = x;
     m_InData.position.Y = y;
-    p_recalculate_size();
 }
 
 void TFSprite::SetPosX(float x){
     m_position.X = (x*2 - w_dims.X) / w_dims.X;
     m_InData.position.X = x;
-    p_recalculate_size();
 }
 
 void TFSprite::SetPosY(float y){
     m_position.Y = (y*2 - w_dims.Y) / w_dims.Y;
     m_InData.position.Y = y;
-    p_recalculate_size();
 }
 
 void TFSprite::SetSize(float w, float h){
-    m_size = toe::core::TOEvector2df(m_position.X + (std::abs(w *2) / w_dims.X), m_position.Y + (std::abs(h *2) / w_dims.Y));
+    m_size = toe::core::TOEvector2df((std::abs(w *2) / w_dims.X), (std::abs(h *2) / w_dims.Y));
     m_InData.size.X = w;
     m_InData.size.Y = h;
 }
 
 void TFSprite::SetWidth(float w){
-    m_size.X = m_position.X + (std::abs(w *2) / w_dims.X);
+    m_size.X = (std::abs(w *2) / w_dims.X);
     m_InData.size.X = w;
 }
 
 void TFSprite::SetHeight(float h){
-    m_size.Y =  m_position.Y + (std::abs(h *2) / w_dims.Y);
+    m_size.Y =  (std::abs(h *2) / w_dims.Y);
     m_InData.size.Y = h;
 }
 

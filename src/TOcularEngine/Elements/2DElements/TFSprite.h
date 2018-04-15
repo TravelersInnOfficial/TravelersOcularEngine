@@ -21,6 +21,7 @@ public:
     void SetWidth(float w) override; 
     void SetHeight(float h) override; 
     void SetRect (float x, float y, float w, float h);
+    void SetTextureRect(float x, float y, float w, float h);
 
     void SetTexture(std::string texture) override;
 
@@ -31,6 +32,8 @@ public:
 
     void ScrollH(float vel);
     void ScrollV(float vel);
+    void SetScrollH(float value);
+    void SetScrollV(float value);
 
     void SetMask(std::string mask_path);
 
@@ -45,7 +48,6 @@ private:
     TFSprite(std::string texture, toe::core::TOEvector2df position, toe::core::TOEvector2df size);
     ~TFSprite();
 
-    void p_recalculate_size();
     TResourceTexture* 	m_texture;
     toe::core::TOEvector2df m_texture_size;
     toe::core::TOEvector4df m_rect;

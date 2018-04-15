@@ -25,6 +25,7 @@ public:
     virtual float GetWidth() const {return m_InData.size.X;}
     virtual float GetHeight() const {return m_InData.size.Y;}
 
+    void SetRotation(float rot){ m_rotation = rot;}
     virtual void SetPosition(float x, float y) = 0;
     virtual void SetPosX(float x) = 0;
     virtual void SetPosY(float y) = 0;
@@ -54,6 +55,7 @@ public:
 protected:
     toe::core::TOEvector2df m_position;
     toe::core::TOEvector2df m_size;
+    float m_rotation;
     TColor m_color;
 
     SHADERTYPE m_program = TWOD_SHADER;
