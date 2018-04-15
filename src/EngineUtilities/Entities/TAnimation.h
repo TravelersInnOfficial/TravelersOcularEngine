@@ -38,12 +38,27 @@ public:
 	void UpdateAnimation(float deltatime);
 
 	/**
-	 * @brief Play another animation
+	 * @brief Play another animation in loop
 	 * 
 	 * @param ID: name of the animation
-	 * @param fps 
+	 * @param fps: speed of animation
 	 */
     void ChangeAnim(std::string ID, int fps);
+	
+	/**
+	 * @brief Play another animation and queue last animation
+	 * 
+	 * @param ID: name of the animation
+	 * @param fps: speed of animation
+	 */
+	void PlayAnim(std::string ID, int fps);
+
+	/**
+	 * @brief Get Actual Animation Frame
+	 * 
+	 * @return int: frame
+	 */
+	int GetActualFrame();
 	
 private:
 	void LoadMesh(std::string meshPath = "");

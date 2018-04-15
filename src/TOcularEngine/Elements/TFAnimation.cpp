@@ -49,3 +49,13 @@ void TFAnimation::ChangeAnimation(std::string ID, int fps){
 	TAnimation* myAnim = (TAnimation*) m_entityNode->GetEntity();
 	myAnim->ChangeAnim(ID, fps);
 }
+
+void TFAnimation::PlayAnimation(std::string ID, int fps){
+	TAnimation* myAnim = (TAnimation*) m_entityNode->GetEntity();
+	myAnim->PlayAnim(ID, fps);
+}
+
+int TFAnimation::GetAnimationFrame(){
+	TAnimation* myAnim = (TAnimation*) m_entityNode->GetEntity();
+	return myAnim->GetActualFrame();
+}

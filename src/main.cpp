@@ -155,16 +155,32 @@ void CreateTree(TFMesh* ms[], TFLight* ls[], TFLight*& shL){
 	logo->SetTexture("./../assets/textures/default_sprite.png");
 }
 
-void CreateAnimations(TFAnimation* anims[]){
+void CreateAnimations(TFAnimation* anims[], TFMesh* ms[]){
 	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
 
 	toe::core::TOEvector3df rot = toe::core::TOEvector3df(0, 0, 0);
 	toe::core::TOEvector3df scale = toe::core::TOEvector3df(2.0f, 2.0f, 2.0f);
 
+	// MAGE ANIMATION
 	toe::core::TOEvector3df pos = toe::core::TOEvector3df(-4, 1, -12);
 	anims[0] = sm->AddAnimation(pos, rot, scale);
 	anims[1] = sm->AddAnimation(pos, rot, scale);
+
+	// BILLBOARDS 
+	pos.Y += 2;
+	pos.X += -1;
+	ms[3] = sm->AddMesh(pos);
+	ms[3]->CreateSphere();
+
+	pos.X += 2;
+	ms[4] = sm->AddMesh(pos);
+	ms[4]->CreateSphere();
+
+	pos = toe::core::TOEvector3df(0.0f, 1.0f, 0.0f);
+	ms[3]->AddBillboard(pos, "0", 0.35f);
+	ms[4]->AddBillboard(pos, "0", 0.35f);
 	
+	// OTHER ANIMATION
 	pos = toe::core::TOEvector3df(4, 1, -12);
 	anims[2] = sm->AddAnimation(pos, rot, scale);
 	
@@ -406,7 +422,7 @@ int main(){
 	VDriv->SetIODriver(handler);
 	VDriv->SetMouseVisibility(false);
 
-	TFMesh* meshes[] = {nullptr, nullptr, nullptr};
+	TFMesh* meshes[] = {nullptr, nullptr, nullptr, nullptr, nullptr};
 	TFLight* lights[] = {nullptr, nullptr, nullptr};
 	TFLight* shadowLight = nullptr;
 	
@@ -432,8 +448,8 @@ int main(){
 	sceneObjects.push_back(mesh);
 	
 	// CREATE ANIMATION
-	//TFAnimation* animations[] = {nullptr, nullptr, nullptr};
-	//CreateAnimations(animations);
+	TFAnimation* animations[] = {nullptr, nullptr, nullptr};
+	CreateAnimations(animations, meshes);
 
 	float deltaTime = 0.0f;
 	bool lastMain = true;
@@ -441,7 +457,7 @@ int main(){
 	// INIT Lights position
 	RotateLights(mesh->GetRotation(), meshes[0], meshes[1], meshes[2]);
 
-	while(!EventHandler::m_close){		
+	while(!EventHandler::m_close){
 		// EVENT HANDLER UPDATE
 		handler->Update();
 
@@ -450,7 +466,7 @@ int main(){
 			// called once
 			if(lastMain){
 				// CHANGE ANIMATION
-				//animations[0]->ChangeAnimation("topwalk");
+				animations[0]->ChangeAnimation("topwalk");
 			}
 
 			shadowLight->SetActive(true);
@@ -465,7 +481,7 @@ int main(){
 			// called once
 			if(!lastMain){
 				// CHANGE ANIMATION
-				//animations[0]->ChangeAnimation("shoot1");
+				animations[0]->ChangeAnimation("shoot1");
 			}
 			// ROTATE MESH
 			toe::core::TOEvector3df rot = mesh->GetRotation();
@@ -489,9 +505,11 @@ int main(){
 			lastMain = true;
 		}
 
-		//animations[0]->Update(deltaTime);			// called 60 times per second aprox
-		//animations[1]->Update(deltaTime);			// called 60 times per second aprox
-		//animations[2]->Update(deltaTime);			// called 60 times per second aprox
+		animations[0]->Update(deltaTime);			// called 60 times per second aprox
+		animations[1]->Update(deltaTime);			// called 60 times per second aprox
+		animations[2]->Update(deltaTime);			// called 60 times per second aprox
+		meshes[3]->SetBillboardText(std::to_string(animations[0]->GetAnimationFrame()));
+		meshes[4]->SetBillboardText(std::to_string(animations[1]->GetAnimationFrame()));
 
 		shadowLight->SetTranslate(toe::core::TOEvector3df(EventHandler::xlight, EventHandler::ylight, EventHandler::zlight));
 		

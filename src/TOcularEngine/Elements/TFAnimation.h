@@ -48,6 +48,21 @@ public:
 	 */
     void ChangeAnimation(std::string ID, int fps = 25);
 
+	/**
+	 * @brief Play another animation and queue last animation
+	 * 
+	 * @param ID: name of the animation
+	 * @param fps: speed of animation
+	 */
+	void PlayAnimation(std::string ID, int fps = 25);
+
+	/**
+	 * @brief Get Actual Animation Frame
+	 * 
+	 * @return int: frame
+	 */
+	int GetAnimationFrame();
+
 protected:
 	TFAnimation(
 		toe::core::TOEvector3df position = toe::core::TOEvector3df(0, 0, 0),

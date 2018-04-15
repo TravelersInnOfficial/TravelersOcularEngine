@@ -58,7 +58,19 @@ void TAnimation::UpdateAnimation(float deltatime){
 }
 
 void TAnimation::ChangeAnim(std::string ID, int fps){
-	m_id = ID;
-	m_anims[m_id].fps = fps;
-	m_animTime = 0.0f;
+	// If doesnt exist animation
+	if (m_anims.find(ID) != m_anims.end()){
+		m_id = ID;
+		m_anims[m_id].fps = fps;
+		m_animTime = 0.0f;
+	}
+}
+
+
+void TAnimation::PlayAnim(std::string ID, int fps){
+	
+}
+
+int TAnimation::GetActualFrame(){
+	return m_actualFrame;
 }
