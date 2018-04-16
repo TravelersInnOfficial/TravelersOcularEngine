@@ -54,23 +54,38 @@ public:
 	void PlayAnim(std::string ID, int fps);
 
 	/**
+	 * @brief After playing an animation, this will take the time from the sync one
+	 * 
+	 * @param master 
+	 */
+	void BindSyncAnimMaster(TAnimation* master);
+
+	/**
 	 * @brief Get Actual Animation Frame
 	 * 
 	 * @return int: frame
 	 */
 	int GetActualFrame();
+
+	/**
+	 * @brief Get Actual Animation Time
+	 * 
+	 * @return float: time
+	 */
+	float GetAnimTime();
 	
 private:
 	void LoadMesh(std::string meshPath = "");
 
 	// Animation data
 	std::string m_id;							// Id of the actual animation
-	std::stack <std::string> m_queue;			// Queue of animation
 	std::map<std::string, AnimData> m_anims;	// all animations availeables
 
 	// Updating animation
     int m_actualFrame;							// Actual frame beeing drawn in the scene
     float m_animTime;							// Actual time of animation (0 - m_frames)
+	std::stack <std::string> m_queue;			// Queue of animation
+	TAnimation* m_boundMaster;
 };
 
 /*  INHERITED VARIABLES AND METHODS

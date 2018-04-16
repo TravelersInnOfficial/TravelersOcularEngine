@@ -26,6 +26,7 @@ public:
     static float ylight;
     static float zlight;
     static bool  ChangeMain;
+    static bool KP_ENTER;
     
     static float xdistGiro;
     static float ydistGiro;

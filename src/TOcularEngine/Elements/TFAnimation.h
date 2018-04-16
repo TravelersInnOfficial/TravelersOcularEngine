@@ -57,6 +57,13 @@ public:
 	void PlayAnimation(std::string ID, int fps = 25);
 
 	/**
+	 * @brief After playing an animation, this will take the time from the sync one
+	 * 
+	 * @param master 
+	 */
+	void BindSyncAnimation(TFAnimation* master);
+
+	/**
 	 * @brief Get Actual Animation Frame
 	 * 
 	 * @return int: frame

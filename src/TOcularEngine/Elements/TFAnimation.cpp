@@ -55,6 +55,12 @@ void TFAnimation::PlayAnimation(std::string ID, int fps){
 	myAnim->PlayAnim(ID, fps);
 }
 
+void TFAnimation::BindSyncAnimation(TFAnimation* master){
+	TAnimation* myAnim = (TAnimation*) m_entityNode->GetEntity();
+	TAnimation* animMaster = (TAnimation*) master->m_entityNode->GetEntity();
+	myAnim->BindSyncAnimMaster(animMaster);
+}
+
 int TFAnimation::GetAnimationFrame(){
 	TAnimation* myAnim = (TAnimation*) m_entityNode->GetEntity();
 	return myAnim->GetActualFrame();

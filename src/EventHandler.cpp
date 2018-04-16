@@ -10,8 +10,10 @@ float EventHandler::zdist = -10.0f;
 // 0.0f,15.0f,10.0f
 float EventHandler::xlight = 0.0f;
 float EventHandler::ylight = 15.0f;
-float EventHandler::zlight = 10.0f;
+float EventHandler::zlight = -20.0f;
+
 bool EventHandler::ChangeMain = false;
+bool EventHandler::KP_ENTER = false;
 
 float EventHandler::xdistGiro = 0.0f;
 float EventHandler::ydistGiro = 0.0f;
@@ -40,6 +42,7 @@ bool EventHandler::OnEvent(const TEvent& event){
 		}
 		
 		if (Keys[Key_Space]) ChangeMain = !ChangeMain;
+		if (Keys[Key_KP_ENTER]) KP_ENTER = !KP_ENTER;
 	}
 
 	if(event.m_type == Type_KeyReleased){
@@ -75,12 +78,12 @@ void EventHandler::Update()
 	}
 	else
 	{
-		if (Keys[Key_Y]) xlight -= 0.25f;
-		if (Keys[Key_U]) xlight += 0.25f;
-		if (Keys[Key_I]) ylight += 0.25f;
-		if (Keys[Key_K]) ylight -= 0.25f;
-		if (Keys[Key_O]) zlight += 0.25f;
-		if (Keys[Key_L]) zlight -= 0.25f;
+		if (Keys[Key_Left])  xlight -= 0.25f;
+		if (Keys[Key_Right]) xlight += 0.25f;
+		if (Keys[Key_Down])  zlight -= 0.25f;
+		if (Keys[Key_Up]) 	 zlight += 0.25f;
+		if (Keys[Key_I]) 	 ylight += 0.25f;
+		if (Keys[Key_K]) 	 ylight -= 0.25f;
 	}
 
 }
