@@ -39,6 +39,9 @@ bool IODriver::UpdateKeyboard(int key, int action){
         }
     }
 
+    // En el caso de que no se haya encontrado la tecla volvemos
+    if(glfwEvent.m_key.code == Key_Unknown) return true;
+
     const TEvent* pointer = &glfwEvent;
     return OnEvent(*pointer);
 }
