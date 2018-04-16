@@ -78,7 +78,6 @@ private:
 	void LoadMesh(std::string meshPath = "");
 
 	// Animation data
-	std::string m_id;							// Id of the actual animation
 	std::map<std::string, AnimData> m_anims;	// all animations availeables
 
 	// Updating animation
