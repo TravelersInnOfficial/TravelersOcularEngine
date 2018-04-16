@@ -4,8 +4,6 @@
 
 // Constructor
 TAnimation::TAnimation() : TMesh("","") {
-	m_id = "";
-
     m_animTime = 0.0f;
 	m_actualFrame = 0;
 	m_boundMaster = nullptr;
@@ -15,7 +13,6 @@ TAnimation::TAnimation() : TMesh("","") {
 TAnimation::~TAnimation(){ }
 
 void TAnimation::SetPaths(std::string ID, int frames, std::string paths[], int fps){
-	m_id = ID;					// Change actual animation to this id
 	AnimData data;
 	m_anims[ID] = data;			// add new animation
 
@@ -50,7 +47,7 @@ void TAnimation::UpdateAnimation(float deltatime){
 				m_queue.pop();
 
 				// If this animation has an animation master, we change the time to sync both animations
-				if(m_boundMaster!=nullptr) m_animTime = m_boundMaster->GetAnimTime();
+				if(m_queue.size() == 1 && m_boundMaster!=nullptr) m_animTime = m_boundMaster->GetAnimTime();
 			}
 		}
 		
@@ -69,7 +66,6 @@ void TAnimation::UpdateAnimation(float deltatime){
 void TAnimation::ChangeAnim(std::string ID, int fps){
 	// Find if exists animation, then change the looping animation
 	if (m_anims.find(ID) != m_anims.end()){
-		m_id = ID;
 		m_anims[ID].fps = fps;
 		m_animTime = 0.0f;
 
@@ -82,7 +78,6 @@ void TAnimation::ChangeAnim(std::string ID, int fps){
 void TAnimation::PlayAnim(std::string ID, int fps){
 	// Find if exists animation, then play once the animation
 	if (m_anims.find(ID) != m_anims.end()){
-		m_id = ID;
 		m_anims[ID].fps = fps;
 		m_animTime = 0.0f;
 
