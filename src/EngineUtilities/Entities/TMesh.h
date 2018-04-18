@@ -35,13 +35,19 @@ public:
 	 */
 	void SetBBVisibility(bool visible);
 
+	void SetTextureScale(float valueX, float valueY);
+
 protected:
 
 	TResourceMesh* 		m_mesh;
 	TResourceTexture* 	m_texture;
 	TResourceMaterial* 	m_material;
+
 	bool m_visibleBB;
 	bool m_drawingShadows;
+
+	float m_textureScaleX;
+	float m_textureScaleY;
 
 	/**
 	 * @brief Sends shader all needed information

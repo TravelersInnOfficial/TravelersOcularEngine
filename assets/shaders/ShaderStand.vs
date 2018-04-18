@@ -15,6 +15,7 @@ out vec4 ShadowCoord;       // VERTICES DESDE LA LUZ
 uniform mat4 ModelViewMatrix;
 uniform mat4 MVP;
 uniform mat4 ViewMatrix;
+uniform vec2 TextureScale;
 // ############  DON'T CHANGE ABOVE THIS LINE  ######################################################
 
 // IN UNIFORM FOR ONLY THIS SHADER 
@@ -27,7 +28,9 @@ void main() {
 	ShadowCoord = DepthBiasMVP * vec4(VertexPosition,1.0);
 
 	// LAS COORDENADAS DE TEXTURA NO SUFREN TRANSFORMACION
-	TexCoords = TextureCoords;
+	TexCoords.x = TextureCoords.x * TextureScale.x;
+	TexCoords.y = TextureCoords.y * TextureScale.y;
+
 	FragViewMatrix = ViewMatrix;
 
 	// TRANSFORMAR Y PROYECTAR EL VERTICE (POSICION DEL FRAGMENTO)

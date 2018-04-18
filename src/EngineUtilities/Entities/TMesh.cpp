@@ -11,6 +11,8 @@ TMesh::TMesh(std::string meshPath, std::string texturePath){
 	m_material = nullptr;
 	m_visibleBB = false;
 	m_drawingShadows = false;
+	m_textureScaleX = 1.0f;
+	m_textureScaleY = 1.0f;
 
 	LoadMesh(meshPath);
 	ChangeTexture(texturePath);
@@ -104,6 +106,11 @@ void TMesh::SendShaderData(){
 	glEnableVertexAttribArray(uvAttrib);
 	glVertexAttribPointer(uvAttrib, 2, GL_FLOAT, GL_FALSE, 0*sizeof(float), 0);
 
+	// SEND UV SCALE
+	const glm::vec2 scaleA(m_textureScaleX,m_textureScaleY);
+	GLint uvScale = glGetUniformLocation(myProgram->GetProgramID(), "TextureScale");
+	glUniform2fv(uvScale,1,&scaleA[0]);
+
 	// -------------------------------------------------------- ENVIAMOS LAS NORMALS
 	// BIND NORMALS
     GLuint normalBuffer = m_mesh->GetNormalBuffer();
@@ -171,6 +178,7 @@ void TMesh::SendShaderData(){
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, TEntity::ShadowMap);
 		glUniform1i(ShadowMapID, 1);
+
 	}
 
 	// -------------------------------------------------------- ENVIAMOS EL MATERIAL
@@ -262,6 +270,11 @@ void TMesh::DrawBoundingBox() {
 
 	glDeleteBuffers(1, &vbo_vertices);
 	glDeleteBuffers(1, &ibo_elements);
+}
+
+void TMesh::SetTextureScale(float valueX, float valueY){
+	m_textureScaleX = valueX;
+	m_textureScaleY = valueY;
 }
 
 int TMesh::Sign(int v){

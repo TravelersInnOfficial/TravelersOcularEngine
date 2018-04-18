@@ -50,3 +50,9 @@ void TFMesh::SetBoundBox(bool visible){
 	TMesh* myMesh = (TMesh*) m_entityNode->GetEntity();
 	myMesh->SetBBVisibility(visible);
 }
+
+void TFMesh::SetTextureScale(float valueX, float valueY){
+	TMesh* myMesh = (TMesh*) m_entityNode->GetEntity();
+	myMesh->SetTextureScale(valueX, valueY);
+}
+

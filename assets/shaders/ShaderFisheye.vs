@@ -14,6 +14,7 @@ out vec4 ShadowCoord;       // VERTICES DESDE LA LUZ
 uniform mat4 ModelViewMatrix;
 uniform mat4 MVP;
 uniform mat4 ViewMatrix;
+uniform float TextureScale;
 // ############  DON'T CHANGE ABOVE THIS LINE  ######################################################
 
 #define DIST_VALUE 0.75 // DISTORSION VALUE < 0
@@ -38,7 +39,7 @@ void main() {
 	Position = vec3 (ModelViewMatrix * vec4(VertexPosition, 1.0));
 	Normal = normalize (ModelViewMatrix * vec4(VertexNormal,0)).xyz;
 	// PASS COORDS AND VIEW MATRIX
-	TexCoords = TextureCoords;
+	TexCoords = TextureCoords * TextureScale;
 	FragViewMatrix = ViewMatrix;
     ShadowCoord = vec4(0.0);
     // ############  DON'T CHANGE ABOVE THIS LINE  ######################################################
