@@ -9,12 +9,12 @@ class TCamera: public TEntity{
 public:
 	TCamera	(
 				bool perspective = true,
-				float left = -1.0f,
-				float right = 1.0f,
-				float bottom = -0.75f,
-				float top = 0.75f,
-				float near = 1.0f,
-				float far = 100.0f
+				float left = -0.1f,
+				float right = 0.1f,
+				float bottom = -0.075f,
+				float top = 0.075f,
+				float near = 0.1f,
+				float far = 50.0f
 			);
 	~TCamera();
 
