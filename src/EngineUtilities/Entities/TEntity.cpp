@@ -39,8 +39,6 @@ bool TEntity::CheckClippingPoint(glm::vec4 Pclip){
 
 void TEntity::DrawShadow(){}
 
-#include <iostream>
-
 void TEntity::CheckClippingAreas(glm::vec4 point, int* upDown, int* leftRight, int* nearFar){
    float valueX = point.x / abs(point.w);
    float valueY = point.y / abs(point.w);

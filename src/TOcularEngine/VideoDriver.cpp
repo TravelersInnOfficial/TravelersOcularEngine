@@ -51,10 +51,9 @@ bool VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2di
 		glfwWindowHint( GLFW_DECORATED, GL_FALSE );
 		monitor = glfwGetPrimaryMonitor();
 	}
-	m_window = glfwCreateWindow(dimensions.X,dimensions.Y, m_name.c_str(), monitor, NULL);
 
+	m_window = glfwCreateWindow(dimensions.X,dimensions.Y, m_name.c_str(), monitor, NULL);
 	glfwMakeContextCurrent(m_window);
-	SetReceiver();
 
 	/// Iniciamos glew
 	glewExperimental = GL_TRUE;
@@ -62,7 +61,8 @@ bool VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2di
 	if(GLEW_OK != err){
 		std::cout<<"Something wrong happen in glewInit"<<std::endl;
 	}
-
+	
+	SetReceiver();
 
 	glEnable(GL_TEXTURE_2D);		
 	glEnable(GL_DEPTH_TEST);		// Habilitar el test de profundidad

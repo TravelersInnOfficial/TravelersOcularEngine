@@ -17,6 +17,18 @@ static const GLfloat g_vertex_buffer_data[] = {
 
 TParticleSystem::~TParticleSystem(){
 	delete m_manager;
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);   
+    glDeleteBuffers(1, &m_vbo);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);   
+    glDeleteBuffers(1, &m_pbo);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);   
+    glDeleteBuffers(1, &m_cbo);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);   
+    glDeleteBuffers(1, &m_ebo);
 }
 
 TParticleSystem::TParticleSystem(std::string path){

@@ -29,7 +29,13 @@ TText::TText(std::string text, float charSize, std::string texture){
 	m_program = TEXT_SHADER;
 }
 
-TText::~TText(){}
+TText::~TText(){
+	glBindBuffer(GL_ARRAY_BUFFER, 0);   
+    glDeleteBuffers(1, &m_vbo);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);   
+    glDeleteBuffers(1, &m_uvbo);
+}
 
 void TText::BeginDraw(){
 	// Bind and send the data to the VERTEX SHADER

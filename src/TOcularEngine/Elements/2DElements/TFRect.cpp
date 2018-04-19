@@ -26,7 +26,10 @@ TFRect::TFRect(toe::core::TOEvector2df position, toe::core::TOEvector2df size, f
     glGenBuffers( 1, &m_VBO );
 }
 
-TFRect::~TFRect(){}
+TFRect::~TFRect(){
+    glBindBuffer(GL_ARRAY_BUFFER, 0);   
+    glDeleteBuffers(1, &m_VBO);
+}
 
 void TFRect::Erase(){
     std::cout<<"Erase TFRect"<<std::endl;
