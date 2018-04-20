@@ -12,7 +12,7 @@ TAnimation::TAnimation() : TMesh("","") {
 // Destructor
 TAnimation::~TAnimation(){ }
 
-void TAnimation::SetPaths(std::string ID, int frames, std::string paths[], int fps){
+void TAnimation::SetPaths(std::string ID, int frames, const std::vector<std::string> paths, int fps){
 	AnimData data;
 	m_anims[ID] = data;			// add new animation
 

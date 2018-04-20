@@ -35,9 +35,9 @@ void TFAnimation::SetBoundBox(bool visible){
 	myAnim->SetBBVisibility(visible);
 }
 
-void TFAnimation::SetAnimationPaths(std::string ID, int frames, std::string paths[], int fps){
+void TFAnimation::SetAnimationPaths(std::string ID, const std::vector<std::string> paths, int fps){
     TAnimation* myAnim = (TAnimation*) m_entityNode->GetEntity();
-	myAnim->SetPaths(ID, frames, paths, fps);
+	myAnim->SetPaths(ID, paths.size(), paths, fps);
 }
 
 void TFAnimation::Update(float deltatime){

@@ -1,6 +1,6 @@
 #include <string>
 
-static std::string AMAGE_TSHOOT1[] = {
+static std::vector<std::string> AMAGE_TSHOOT1= {
     "./../assets/models/mage/shoot1/shoot1_42.obj",
     "./../assets/models/mage/shoot1/shoot1_43.obj",
     "./../assets/models/mage/shoot1/shoot1_44.obj",
@@ -44,7 +44,7 @@ static std::string AMAGE_TSHOOT1[] = {
     "./../assets/models/mage/shoot1/shoot1_82.obj"
 };
 
-static std::string AMAGE_TSHOOT2[] = {
+static std::vector<std::string> AMAGE_TSHOOT2= {
     "./../assets/models/mage/shoot2/shoot2_26.obj",
     "./../assets/models/mage/shoot2/shoot2_27.obj",
     "./../assets/models/mage/shoot2/shoot2_28.obj",
@@ -104,7 +104,7 @@ static std::string AMAGE_TSHOOT2[] = {
     "./../assets/models/mage/shoot2/shoot2_82.obj"
 };
 
-static std::string AMAGE_TWALK[] = {
+static std::vector<std::string> AMAGE_TWALK= {
     "./../assets/models/mage/walk/top_24.obj",
     "./../assets/models/mage/walk/top_25.obj",
     "./../assets/models/mage/walk/top_26.obj",
@@ -131,7 +131,7 @@ static std::string AMAGE_TWALK[] = {
     "./../assets/models/mage/walk/top_47.obj"
 };
 
-static std::string AMAGE_BWALK[] = {
+static std::vector<std::string> AMAGE_BWALK= {
     "./../assets/models/mage/walk/bottom_24.obj",
     "./../assets/models/mage/walk/bottom_25.obj",
     "./../assets/models/mage/walk/bottom_26.obj",
@@ -158,7 +158,7 @@ static std::string AMAGE_BWALK[] = {
     "./../assets/models/mage/walk/bottom_47.obj"
 };
 
-static std::string AMAGE_TIDDLE[] = {
+static std::vector<std::string> AMAGE_TIDDLE= {
     "./../assets/models/mage/iddle/topidle_40.obj",
     "./../assets/models/mage/iddle/topidle_41.obj",
     "./../assets/models/mage/iddle/topidle_42.obj",
@@ -215,7 +215,7 @@ static std::string AMAGE_TIDDLE[] = {
     "./../assets/models/mage/iddle/topidle_89.obj"
 };
 
-static std::string AMAGE_BIDDLE[] = {
+static std::vector<std::string> AMAGE_BIDDLE= {
     "./../assets/models/mage/iddle/botidle_40.obj",
     "./../assets/models/mage/iddle/botidle_41.obj",
     "./../assets/models/mage/iddle/botidle_42.obj",
