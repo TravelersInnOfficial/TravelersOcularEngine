@@ -31,12 +31,12 @@ void TAnimation::SetPaths(std::string ID, int frames, std::string paths[], int f
 }
 
 void TAnimation::UpdateAnimation(float deltatime){
-	if(m_queue.size() > 0){
+	if(!m_queue.empty()){
 		// Update animation time
 		m_animTime += deltatime;			// animTime tracks seconds of the animation
 		
 		// Total seconds of animation
-		float max_duration = (float)m_anims[m_queue.top()].frames / (float)m_anims[m_queue.top()].fps;
+		float max_duration = (float)m_anims[m_queue.back()].frames / (float)m_anims[m_queue.back()].fps;
 
 		// Check if animation is over
 		if(m_animTime > max_duration) {
@@ -44,7 +44,7 @@ void TAnimation::UpdateAnimation(float deltatime){
 
 			// If this animation is not the last of the stack, play the next one
 			if(m_queue.size() > 1){
-				m_queue.pop();
+				m_queue.pop_back();
 
 				// If this animation has an animation master, we change the time to sync both animations
 				if(m_queue.size() == 1 && m_boundMaster!=nullptr) m_animTime = m_boundMaster->GetAnimTime();
@@ -52,12 +52,12 @@ void TAnimation::UpdateAnimation(float deltatime){
 		}
 		
 		// Next frame to draw
-		int nextFrame = m_animTime / max_duration * m_anims[m_queue.top()].frames;
+		int nextFrame = m_animTime / max_duration * m_anims[m_queue.back()].frames;
 		
 		// If next frame is diferent from actual frame, set actual frame
 		if(nextFrame != m_actualFrame){
 			// Update animation mesh to correpondent
-			m_mesh = m_anims[m_queue.top()].meshes[nextFrame];
+			m_mesh = m_anims[m_queue.back()].meshes[nextFrame];
 			m_actualFrame = nextFrame;
 		}
 	}
@@ -67,10 +67,11 @@ void TAnimation::ChangeAnim(std::string ID, int fps){
 	// Find if exists animation, then change the looping animation
 	if (m_anims.find(ID) != m_anims.end()){
 		m_anims[ID].fps = fps;
-		m_animTime = 0.0f;
+		//m_animTime = 0.0f;
 
-		m_queue.empty();
-		m_queue.push(ID);
+		// Replace vector loop element
+		if(m_queue.size() >= 1) m_queue[0] = ID;
+		else m_queue.push_back(ID);
 	}
 }
 
@@ -78,10 +79,12 @@ void TAnimation::ChangeAnim(std::string ID, int fps){
 void TAnimation::PlayAnim(std::string ID, int fps){
 	// Find if exists animation, then play once the animation
 	if (m_anims.find(ID) != m_anims.end()){
-		m_anims[ID].fps = fps;
 		m_animTime = 0.0f;
 
-		m_queue.push(ID);
+		if(ID != m_queue.back()){
+			m_anims[ID].fps = fps;
+			m_queue.push_back(ID);
+		}
 	}
 }
 

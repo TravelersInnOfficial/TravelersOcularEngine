@@ -83,7 +83,7 @@ private:
 	// Updating animation
     int m_actualFrame;							// Actual frame beeing drawn in the scene
     float m_animTime;							// Actual time of animation (0 - m_frames)
-	std::stack <std::string> m_queue;			// Queue of animation
+	std::vector <std::string> m_queue;			// Queue of animation
 	TAnimation* m_boundMaster;
 };
 

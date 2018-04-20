@@ -186,25 +186,24 @@ void CreateAnimations(TFAnimation* anims[], TFMesh* ms[]){
 	pos = toe::core::TOEvector3df(4, 1, 12);
 	anims[2] = sm->AddAnimation(pos, rot, scale);
 
-	int size = sizeof(walk)/sizeof(walk[0]);
-	anims[0]->SetAnimationPaths("topwalk", size , walk, 25);
-	anims[2]->SetAnimationPaths("topwalk", size , walk, 25);
+	int size = sizeof(AMAGE_TWALK)/sizeof(AMAGE_TWALK[0]);
+	anims[0]->SetAnimationPaths("topwalk", size , AMAGE_TWALK, 25);
+	anims[2]->SetAnimationPaths("topwalk", size , AMAGE_TWALK, 25);
+
+	size = sizeof(AMAGE_BWALK)/sizeof(AMAGE_BWALK[0]);
+	anims[1]->SetAnimationPaths("botwalk", size, AMAGE_BWALK);
 	
-	size = sizeof(shoot1)/sizeof(shoot1[0]);
-	anims[0]->SetAnimationPaths("shoot1", size, shoot1);
-	//anims[2]->SetAnimationPaths("shoot1", size, shoot1);
+	size = sizeof(AMAGE_TSHOOT1)/sizeof(AMAGE_TSHOOT1[0]);
+	anims[0]->SetAnimationPaths("shoot1", size, AMAGE_TSHOOT1);
 
-	size = sizeof(shoot2)/sizeof(shoot2[0]);
-	//anims[0]->SetAnimationPaths("", size, shoot2);
+	size = sizeof(AMAGE_TSHOOT2)/sizeof(AMAGE_TSHOOT2[0]);
+	anims[0]->SetAnimationPaths("shoot2", size, AMAGE_TSHOOT2);
 	
-	size = sizeof(topidle)/sizeof(topidle[0]);
-	anims[0]->SetAnimationPaths("topiddle", size, topidle);
+	size = sizeof(AMAGE_TIDDLE)/sizeof(AMAGE_TIDDLE[0]);
+	anims[0]->SetAnimationPaths("topiddle", size, AMAGE_TIDDLE);
 
-	size = sizeof(botwalk)/sizeof(botwalk[0]);
-	anims[1]->SetAnimationPaths("botwalk", size, botwalk);
-
-	size = sizeof(botidle)/sizeof(botidle[0]);
-	anims[1]->SetAnimationPaths("botiddle", size, botidle);
+	size = sizeof(AMAGE_BIDDLE)/sizeof(AMAGE_BIDDLE[0]);
+	anims[1]->SetAnimationPaths("botiddle", size, AMAGE_BIDDLE);
 
 	//anims[0]->SetBoundBox(true);
 	//anims[1]->SetBoundBox(true);
@@ -367,8 +366,8 @@ int main(){
 	sceneObjects.push_back(mesh);
 	
 	// CREATE ANIMATION
-	TFAnimation* animations[] = {nullptr, nullptr, nullptr};
-	CreateAnimations(animations, meshes);
+	//TFAnimation* animations[] = {nullptr, nullptr, nullptr};
+	//CreateAnimations(animations, meshes);
 
 	float deltaTime = 0.0f;
 	bool lastMain = true;
@@ -423,11 +422,11 @@ int main(){
 
 		// CHANGE ANIMATION
 		if(EventHandler::KP_ENTER){
-			animations[0]->PlayAnimation("shoot1", 25);
+			//animations[0]->PlayAnimation("shoot2", 25);
 			EventHandler::KP_ENTER = false;
 		}
 
-		UpdatePlayer(animations, meshes, deltaTime, EventHandler::PlayerX, EventHandler::PlayerZ);
+		//UpdatePlayer(animations, meshes, deltaTime, EventHandler::PlayerX, EventHandler::PlayerZ);
 
 		// TRANSLATE SHADOW LIGHT
 		shadowLight->SetTranslate(toe::core::TOEvector3df(EventHandler::xlight, EventHandler::ylight, EventHandler::zlight));
