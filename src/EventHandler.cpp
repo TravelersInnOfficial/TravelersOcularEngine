@@ -12,6 +12,9 @@ float EventHandler::xlight = 0.0f;
 float EventHandler::ylight = 15.0f;
 float EventHandler::zlight = -20.0f;
 
+int EventHandler::PlayerX = 0;
+int EventHandler::PlayerZ = 0;
+
 bool EventHandler::ChangeMain = false;
 bool EventHandler::KP_ENTER = false;
 
@@ -34,15 +37,7 @@ bool EventHandler::OnEvent(const TEvent& event){
 		Keys[event.m_key.code] = true;
 
 		// ONLY WHEN DOWN
-		if(Keys[Key_Escape])m_close = true;
-		
-		if(Keys[Key_ENTER]){
-			shaderType++;
-			if(shaderType > 3) shaderType = 0;
-		}
-		
-		if (Keys[Key_Space]) ChangeMain = !ChangeMain;
-		if (Keys[Key_KP_ENTER]) KP_ENTER = !KP_ENTER;
+		CheckPressedKeys();
 	}
 
 	if(event.m_type == Type_KeyReleased){
@@ -84,6 +79,27 @@ void EventHandler::Update()
 		if (Keys[Key_Up]) 	 zlight += 0.25f;
 		if (Keys[Key_I]) 	 ylight += 0.25f;
 		if (Keys[Key_K]) 	 ylight -= 0.25f;
+
+		if (Keys[Key_KP_5]) PlayerZ = -1;
+		if (Keys[Key_KP_8]) PlayerZ = +1;
+		if (Keys[Key_KP_4]) PlayerX = -1;
+		if (Keys[Key_KP_6]) PlayerX = +1;
+
+		if (!Keys[Key_KP_5] && !Keys[Key_KP_8]) PlayerZ = 0;
+		if (!Keys[Key_KP_4] && !Keys[Key_KP_6]) PlayerX = 0;
 	}
 
+}
+
+
+void EventHandler::CheckPressedKeys(){
+	if(Keys[Key_Escape])m_close = true;
+	
+	if(Keys[Key_ENTER]){
+		shaderType++;
+		if(shaderType > 3) shaderType = 0;
+	}
+	
+	if (Keys[Key_Space]) ChangeMain = !ChangeMain;
+	if (Keys[Key_KP_ENTER]) KP_ENTER = !KP_ENTER;
 }

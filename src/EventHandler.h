@@ -12,6 +12,8 @@ public:
 
     void Update();
 
+    void CheckPressedKeys();
+
     float screenCenterX;
     float screenCenterY;
 
@@ -21,6 +23,9 @@ public:
     static float xdist;
     static float ydist;
     static float zdist;
+
+    static int PlayerX;
+    static int PlayerZ;
 
     static float xlight;
     static float ylight;

@@ -16,6 +16,7 @@
 
 std::vector<TFMesh*> sceneObjects;
 int currentShader = 0;
+bool movingPlayer = true;
 
 void ChangeShader(int newShader){
 	if(newShader != currentShader){
@@ -182,7 +183,7 @@ void CreateAnimations(TFAnimation* anims[], TFMesh* ms[]){
 	ms[4]->AddBillboard(pos, "0", 0.35f);
 	
 	// OTHER ANIMATION
-	pos = toe::core::TOEvector3df(4, 1, -12);
+	pos = toe::core::TOEvector3df(4, 1, 12);
 	anims[2] = sm->AddAnimation(pos, rot, scale);
 
 	int size = sizeof(walk)/sizeof(walk[0]);
@@ -205,8 +206,8 @@ void CreateAnimations(TFAnimation* anims[], TFMesh* ms[]){
 	size = sizeof(botidle)/sizeof(botidle[0]);
 	anims[1]->SetAnimationPaths("botiddle", size, botidle);
 
-	anims[0]->SetBoundBox(true);
-	anims[1]->SetBoundBox(true);
+	//anims[0]->SetBoundBox(true);
+	//anims[1]->SetBoundBox(true);
 	anims[2]->SetBoundBox(true);
 
 	anims[0]->SetTexture("./../assets/textures/wizard.png");
@@ -214,12 +215,12 @@ void CreateAnimations(TFAnimation* anims[], TFMesh* ms[]){
 	anims[2]->SetTexture("./../assets/textures/wizard.png");
 
 	// PLAY ANIMATION
-	anims[0]->ChangeAnimation("topwalk");
-	anims[1]->ChangeAnimation("botwalk");
-	//anims[0]->ChangeAnimation("topiddle");
-	//anims[1]->ChangeAnimation("botiddle");
+	//anims[0]->PlayAnimation("topiddle");
+	//anims[1]->PlayAnimation("botiddle");
 
-	anims[2]->ChangeAnimation("topwalk");
+	//anims[0]->PlayAnimation("topwalk");
+	//anims[1]->PlayAnimation("botwalk");
+	//anims[2]->PlayAnimation("topwalk");
 	
 	// SYNC ANIMATIONS
 	anims[0]->BindSyncAnimation(anims[1]);
@@ -271,6 +272,64 @@ void UpdateDelta(float &deltaTime){
 	VideoDriver::GetInstance()->SetWindowName(myFps);
 }
 
+void UpdatePlayer(TFAnimation* anims[], TFMesh* meshes[], float deltaT, int px, int pz){
+
+	// UPDATE ANIMATIONS
+	anims[0]->Update(deltaT);			// called 60 times per second aprox
+	anims[1]->Update(deltaT);			// called 60 times per second aprox
+	anims[2]->Update(deltaT);			// called 60 times per second aprox
+	
+	if(px != 0 || pz != 0){
+
+		if(!movingPlayer){
+			// Is moving
+			anims[0]->ChangeAnimation("topwalk");
+			anims[1]->ChangeAnimation("botwalk");
+			movingPlayer = true;
+		}
+	
+		float angle = 0.0f;
+		
+		if(px == 0){
+			if(pz == +1) angle = 180.0f;
+			if(pz == -1) angle = 0.0f;
+		}
+		else if (px == 1){
+			if(pz == -1) angle = 45.0f;
+			if(pz ==  0) angle = 90.0f; 
+			if(pz == +1) angle = 135.0f;
+		}
+		else{
+			if(pz == +1) angle = 225.0f;
+			if(pz ==  0) angle = 270.0f; 
+			if(pz == -1) angle = 315.0f;
+		}
+
+		float speed = 0.1f;
+		float movex = sin(glm::radians(angle)) * speed;
+		float movez = -cos(glm::radians(angle)) * speed;
+
+		anims[0]->Translate(toe::core::TOEvector3df(movex, 0, movez));
+		anims[1]->Translate(toe::core::TOEvector3df(movex, 0, movez));
+		anims[0]->SetRotation(toe::core::TOEvector3df(0, -angle, 0));
+		anims[1]->SetRotation(toe::core::TOEvector3df(0, -angle, 0));
+	}
+	else{
+		if(movingPlayer){
+			// Is not moving
+			anims[0]->ChangeAnimation("topiddle");
+			anims[1]->ChangeAnimation("botiddle");
+
+			movingPlayer = false;
+		}
+	}
+
+	// UPDATE BILLBOARDS
+	meshes[3]->SetBillboardText(std::to_string(anims[0]->GetAnimationFrame()));
+	meshes[4]->SetBillboardText(std::to_string(anims[1]->GetAnimationFrame()));
+	//meshes[4]->SetBillboardText(std::to_string(movingPlayer));
+}
+
 int main(){
 	VideoDriver::m_assetsPath = "./../assets";
 	EventHandler* handler = new EventHandler();	
@@ -308,8 +367,8 @@ int main(){
 	sceneObjects.push_back(mesh);
 	
 	// CREATE ANIMATION
-	//TFAnimation* animations[] = {nullptr, nullptr, nullptr};
-	//CreateAnimations(animations, meshes);
+	TFAnimation* animations[] = {nullptr, nullptr, nullptr};
+	CreateAnimations(animations, meshes);
 
 	float deltaTime = 0.0f;
 	bool lastMain = true;
@@ -364,17 +423,11 @@ int main(){
 
 		// CHANGE ANIMATION
 		if(EventHandler::KP_ENTER){
-			//animations[0]->PlayAnimation("shoot1", 25);
+			animations[0]->PlayAnimation("shoot1", 25);
 			EventHandler::KP_ENTER = false;
 		}
 
-		// UPDATE ANIMATIONS
-		//animations[0]->Update(deltaTime);			// called 60 times per second aprox
-		//animations[1]->Update(deltaTime);			// called 60 times per second aprox
-		//animations[2]->Update(deltaTime);			// called 60 times per second aprox
-		// UPDATE BILLBOARDS
-		//meshes[3]->SetBillboardText(std::to_string(animations[0]->GetAnimationFrame()));
-		//meshes[4]->SetBillboardText(std::to_string(animations[1]->GetAnimationFrame()));
+		UpdatePlayer(animations, meshes, deltaTime, EventHandler::PlayerX, EventHandler::PlayerZ);
 
 		// TRANSLATE SHADOW LIGHT
 		shadowLight->SetTranslate(toe::core::TOEvector3df(EventHandler::xlight, EventHandler::ylight, EventHandler::zlight));
