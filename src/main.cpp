@@ -186,6 +186,12 @@ void CreateAnimations(TFAnimation* anims[], TFMesh* ms[]){
 	pos = toe::core::TOEvector3df(4, 1, 12);
 	anims[2] = sm->AddAnimation(pos, rot, scale);
 
+	// SET TEXTURES
+	anims[0]->SetTexture("./../assets/textures/wizard.png");
+	anims[1]->SetTexture("./../assets/textures/wizard.png");
+	anims[2]->SetTexture("./../assets/textures/wizard.png");
+
+	// ADD ANIMATIONS
 	anims[0]->SetAnimationPaths("topwalk", AMAGE_TWALK, 25);
 	anims[0]->SetAnimationPaths("shoot1", AMAGE_TSHOOT1);
 	anims[0]->SetAnimationPaths("shoot2", AMAGE_TSHOOT2);
@@ -199,10 +205,6 @@ void CreateAnimations(TFAnimation* anims[], TFMesh* ms[]){
 	//anims[0]->SetBoundBox(true);
 	//anims[1]->SetBoundBox(true);
 	anims[2]->SetBoundBox(true);
-
-	anims[0]->SetTexture("./../assets/textures/wizard.png");
-	anims[1]->SetTexture("./../assets/textures/wizard.png");
-	anims[2]->SetTexture("./../assets/textures/wizard.png");
 
 	// PLAY ANIMATION
 	//anims[0]->PlayAnimation("topiddle");
@@ -357,8 +359,8 @@ int main(){
 	sceneObjects.push_back(mesh);
 	
 	// CREATE ANIMATION
-	TFAnimation* animations[] = {nullptr, nullptr, nullptr};
-	CreateAnimations(animations, meshes);
+	//TFAnimation* animations[] = {nullptr, nullptr, nullptr};
+	//CreateAnimations(animations, meshes);
 
 	float deltaTime = 0.0f;
 	bool lastMain = true;
@@ -413,11 +415,11 @@ int main(){
 
 		// CHANGE ANIMATION
 		if(EventHandler::KP_ENTER){
-			animations[0]->PlayAnimation("shoot2", 25);
+			//animations[0]->PlayAnimation("shoot2", 25);
 			EventHandler::KP_ENTER = false;
 		}
 
-		UpdatePlayer(animations, meshes, deltaTime, EventHandler::PlayerX, EventHandler::PlayerZ);
+		//UpdatePlayer(animations, meshes, deltaTime, EventHandler::PlayerX, EventHandler::PlayerZ);
 
 		// TRANSLATE SHADOW LIGHT
 		shadowLight->SetTranslate(toe::core::TOEvector3df(EventHandler::xlight, EventHandler::ylight, EventHandler::zlight));
