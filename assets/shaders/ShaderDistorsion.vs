@@ -15,7 +15,7 @@ out vec4 ShadowCoord;       // VERTICES DESDE LA LUZ
 uniform mat4 ModelViewMatrix;
 uniform mat4 MVP;
 uniform mat4 ViewMatrix;
-uniform float TextureScale;
+uniform vec2 TextureScale;
 // ############  DON'T CHANGE ABOVE THIS LINE  ######################################################
 
 // IN UNIFORM FOR ONLY THIS SHADER 
@@ -29,8 +29,9 @@ void main() {
 	// TRANSFORM VERTEX AND NORMAL TO VIEW COORDINATES
 	Position = vec3 (ModelViewMatrix * vec4(VertexPosition, 1.0));
 	Normal = normalize (ModelViewMatrix * vec4(VertexNormal,0)).xyz;
-	// PASS COORDS AND VIEW MATRIX
-	TexCoords = TextureCoords * TextureScale;
+	// LAS COORDENADAS DE TEXTURA NO SUFREN TRANSFORMACION
+	TexCoords.x = TextureCoords.x * TextureScale.x;
+	TexCoords.y = TextureCoords.y * TextureScale.y;
 	FragViewMatrix = ViewMatrix;
     ShadowCoord = vec4(0.0);
     // ############  DON'T CHANGE ABOVE THIS LINE  ######################################################
