@@ -9,6 +9,7 @@ TLight::TLight(TColor color, float attenuation){
 	m_program = STANDARD_SHADER;
 	m_active = true;
 	drawBB = false;
+	m_directional = false;
 }
 
 TLight::~TLight(){}
@@ -36,6 +37,14 @@ void TLight::SetActive(bool active){
 
 bool TLight::GetActive(){
 	return m_active;
+}
+
+void TLight::SetDirectional(bool directional){
+	m_directional = directional;
+}
+
+bool TLight::GetDirectional(){
+	return m_directional;
 }
 
 void TLight::BeginDraw(){if(drawBB) DrawBB();}

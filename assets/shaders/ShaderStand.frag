@@ -23,7 +23,12 @@ struct TLight {
 	vec3 Position;
 	vec3 Diffuse;
 	vec3 Specular;
+	
+	// Only for POINT
 	float Attenuation;
+	
+	// Is it DIRECTIONAL
+	bool Directional;
 };
 
 // IN UNIFORMS
@@ -38,11 +43,22 @@ uniform sampler2DShadow shadowMap;
 
 // FUNCION QUE CALCULA EL MODELO DE REFLEXION DE PHONG
 vec3  Phong (int num) {
+	
 	// CALCULAR LOS DIFERENTES VECTORES	 
 	vec3 eyeDir = -Position;
 	vec3 n = normalize(Normal); 
 	vec3 lightPos = (FragViewMatrix * vec4(Light[num].Position, 1)).xyz;
+	
+	// Vector from SURFACE to LIGHT
 	vec3 objToToLight = lightPos + eyeDir;
+	
+	// Desde el 0,0,0 a la posicion de la luz
+	if(Light[num].Directional) objToToLight = normalize(lightPos - (FragViewMatrix * vec4(0, 0, 0, 1)).xyz);
+	
+	// Desde la posición de la luz 
+	//vec3 lightdir = vec3(0,1,0);
+	//objToToLight = normalize((FragViewMatrix * vec4(lightdir,1)).xyz);
+	
 	vec3 s = normalize(objToToLight);
 	vec3 r = reflect(-s, n);
   	
@@ -58,10 +74,11 @@ vec3  Phong (int num) {
 
 	// CALCULAMOS ATENUACION
 	float Attenuation = 1.0 / (1.0 + Light[num].Attenuation * pow(length(objToToLight), 2));
+	if(Light[num].Directional) Attenuation = 1;
 
 	// ENVIAMOS EL RESULTADO
 	return Attenuation * (Diffuse + Specular);
-} 
+}
 
 // POISSON SAMPLING
 vec2 poissonDisk[4] = vec2[]( 
@@ -85,7 +102,7 @@ void main() {
 	float visibility = 1.0;
 	
 	// Sample the shadow map 4 times
-	for (int i=0;i<4;i++){
+	for (int i = 0; i < 4; i++){
 		int index = i;
 		// being fully in the shadow will eat up 4*0.2 = 0.8
 		// 0.2 potentially remain, which is quite dark.
@@ -97,9 +114,5 @@ void main() {
 	// SUMAMOS AMBIENTAL
 	vec3 Ambient = AmbientLight * vec3(texValue) * Material.Ambient;
 	result += vec4(Ambient, 1.0);
-
-	// SPOTLIGHT
-	///if ( textureProj( shadowMap, ShadowCoord.xyw ).z  <  (ShadowCoord.z-bias)/ShadowCoord.w )
-	///if ( texture( shadowMap, (ShadowCoord.xy/ShadowCoord.w) ).z  <  (ShadowCoord.z-bias)/ShadowCoord.w )
 	FragColor = result;
 }

@@ -64,6 +64,16 @@ bool TFLight::GetActive(){
 	return myEntity->GetActive();
 }
 
+void TFLight::SetDirectional(bool directional){
+	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
+	myEntity->SetDirectional(directional);
+}
+
+bool TFLight::GetDirectional(){
+	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
+	return myEntity->GetDirectional();
+}
+
 void TFLight::DrawLight(int num){
 	TLight* ent = (TLight*) m_entityNode->GetEntity();
 
@@ -72,6 +82,7 @@ void TFLight::DrawLight(int num){
 	glm::vec3 diffuse = glm::vec3(0.0f);
 	glm::vec3 specular = glm::vec3(0.0f);
 	float att = 0;
+	bool directional = false;
 
 	if(ent->GetActive()){
 		toe::core::TOEvector4df color = GetColor();
@@ -80,6 +91,7 @@ void TFLight::DrawLight(int num){
 		diffuse = glm::vec3(color.X, color.Y, color.X2);
 		specular = glm::vec3(color.X, color.Y, color.X2);
 		att = GetAttenuation();
+		directional = GetDirectional();
 	}
 
 	VideoDriver* vd = VideoDriver::GetInstance();
@@ -99,6 +111,9 @@ void TFLight::DrawLight(int num){
 
 	aux = str +"Attenuation";
 	glUniform1f(glGetUniformLocation(progID, aux.c_str()), att);
+
+	aux = str +"Directional";
+	glUniform1i(glGetUniformLocation(progID, aux.c_str()), directional);
 }
 
 void TFLight::DrawLightShadow(int num){

@@ -22,10 +22,12 @@ public:
 	void SetColor(toe::core::TOEvector4df color);	// Changes the light color
 	void SetAttenuation(float attenuation);			// Changes the light attenuation
 	void SetActive(bool active);					// Changes the light active state
+	void SetDirectional(bool directional);			// Changes the light type
 
 	toe::core::TOEvector4df GetColor();				// Returns the light color
 	float GetAttenuation();							// Returns the light attenuation
 	bool GetActive();								// Returns the light active state
+	bool GetDirectional();							// Returns the light type
 	glm::vec3 CalculateLocation();
 
 	void SetBoundBox(bool) override;				// Shows or hide tmesh bounding box

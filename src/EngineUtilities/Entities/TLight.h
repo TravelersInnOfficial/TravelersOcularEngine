@@ -18,6 +18,9 @@ public:
 	void	SetActive(bool active);
 	bool	GetActive();
 
+	void	SetDirectional(bool directional);
+	bool	GetDirectional();
+
 	void 	BeginDraw();				// Empezar a pintar la luz
 	void 	EndDraw();					// Acabar de pintar la luz
 	
@@ -28,6 +31,7 @@ private:
 	TColor m_color;
 	float m_attenuation;
 	bool m_active;
+	bool m_directional;
 	
 };
 
