@@ -327,11 +327,14 @@ void SceneManager::Draw(){
 	// Send lights position to shader
 	SendLights();
 
-	// Luego pintar el resto de elementos
+	// Draw all of the elements in tree
     m_SceneTreeRoot->Draw();
     
 	// Pintar aqui las habitaciones
 	DrawRooms();
+
+	// Draw debug lines
+	DrawAllLines();
 }
 
 void SceneManager::DrawRooms(){
@@ -378,12 +381,93 @@ void SceneManager::DrawBoundingBoxes(bool draw){
 	}
 }
 
+void SceneManager::DrawLine(toe::core::TOEvector3df start, toe::core::TOEvector3df end, toe::core::TOEvector3df color){
+	vertexVector.push_back(start.X); 
+	vertexVector.push_back(start.Y); 
+	vertexVector.push_back(start.Z);
+	vertexVector.push_back(1.0f);
+
+	vertexVector.push_back(end.X); 
+	vertexVector.push_back(end.Y); 
+	vertexVector.push_back(end.Z);
+	vertexVector.push_back(1.0f);
+	
+	// el color me lo paso por lo h*ev*s
+}
+
 void SceneManager::ChangeShader(SHADERTYPE shader, ENTITYTYPE entity){
 	int size = m_objects.size();
 	for(int i=0; i<size; i++){
 		TFNode* currentNode = m_objects[i];
 		currentNode->SetProgram(shader, entity);
 	}
+}
+
+bool SceneManager::AddDynamicLight(TFLight* light){
+	bool ret = true;
+	// Find light then add at the back
+	if ( std::find(m_dynamicLights.begin(), m_dynamicLights.end(), light) != m_dynamicLights.end() ){
+		ret = false;
+	}
+	else{
+		m_dynamicLights.push_back(light);		
+	}
+
+	return ret;
+}
+
+void SceneManager::ResetManager(){
+	ClearElements();
+	TTransform* myTransform = new TTransform();
+	m_SceneTreeRoot = new TNode(myTransform);
+	//m_ambientLight = glm::vec3(0.25f);
+	m_main_camera = nullptr;
+}
+
+void SceneManager::SetClipping(bool value){
+	TEntity::m_checkClipping = value;
+}
+
+// PRIVATE FUNCTIONS
+void SceneManager::ClearElements(){
+	int size = m_cameras.size();
+	for(int i = size - 1; i >= 0; i--){
+		delete m_cameras[i];
+	}
+	m_cameras.clear();
+	
+	size = m_lights.size();
+	for(int i = size - 1; i >= 0; i--){
+		delete m_lights[i];
+	}
+	m_lights.clear();
+
+	size = m_objects.size();
+	for(int i = size - 1; i>=0; i--){
+		delete m_objects[i];
+	}
+	m_objects.clear();
+
+	size = m_rooms.size();
+	for(int i = size -1; i>=0; i--){
+		delete m_rooms[i];
+	}
+	m_rooms.clear();
+
+	size = m_bkg2Delems.size();
+	for (int i = size -1; i>=0; i--) delete m_bkg2Delems[i];
+	m_bkg2Delems.clear();
+
+	size = m_2Delems.size();
+	for(int i = size - 1; i>=0; i--) delete m_2Delems[i];
+	m_2Delems.clear();
+
+
+	if(m_dome != nullptr) delete m_dome;
+	m_dome = nullptr;
+	
+	delete m_SceneTreeRoot;
+	m_SceneTreeRoot = nullptr;
 }
 
 void SceneManager::RecalculateLightPosition(){
@@ -461,70 +545,46 @@ void SceneManager::DrawSceneShadows()
 	}
 }
 
+void SceneManager::DrawAllLines(){
+	Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(BB_SHADER);
 
-bool SceneManager::AddDynamicLight(TFLight* light){
-	bool ret = true;
-	// Find light then add at the back
-	if ( std::find(m_dynamicLights.begin(), m_dynamicLights.end(), light) != m_dynamicLights.end() ){
-		ret = false;
-	}
-	else{
-		m_dynamicLights.push_back(light);		
-	}
+	// Full buffer of all vertices
+	GLuint vbo_vertices;
+	glGenBuffers(1, &vbo_vertices);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
+	glBufferData(GL_ARRAY_BUFFER, vertexVector.size()*sizeof(GLfloat), &vertexVector[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	return ret;
-}
+	// Apply object's transformation matrix
+	glm::mat4 m = TEntity::ProjMatrix * TEntity::ViewMatrix;
+	GLuint uniform_m = glGetUniformLocation(myProgram->GetProgramID(), "MVP");
+	glUniformMatrix4fv(uniform_m, 1, GL_FALSE, &m[0][0]);
 
-void SceneManager::ResetManager(){
-	ClearElements();
-	TTransform* myTransform = new TTransform();
-	m_SceneTreeRoot = new TNode(myTransform);
-	//m_ambientLight = glm::vec3(0.25f);
-	m_main_camera = nullptr;
-}
+	// Send light color
+	GLuint linecolor = glGetUniformLocation(myProgram->GetProgramID(), "LineColor");
+	//glUniform3f(linecolor, color.X, color.Y, color.Z);
+	glUniform3f(linecolor, 1.0f, 1.0f, 0.0f);
 
-void SceneManager::SetClipping(bool value){
-	TEntity::m_checkClipping = value;
-}
+	// Send each vertex data
+	GLuint attribute_v_coord = glGetAttribLocation(myProgram->GetProgramID(), "VertexPosition");	
+	glEnableVertexAttribArray(attribute_v_coord);
 
-// PRIVATE FUNCTIONS
-void SceneManager::ClearElements(){
-	int size = m_cameras.size();
-	for(int i = size - 1; i >= 0; i--){
-		delete m_cameras[i];
-	}
-	m_cameras.clear();
+	glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
+	glVertexAttribPointer(
+		attribute_v_coord,  // attribute
+		4,                  // number of elements per vertex, here (x,y,z,w)
+		GL_FLOAT,           // the type of each element
+		GL_FALSE,           // take our values as-is
+		0,                  // no extra data between each position
+		0                   // offset of first element
+	);
 	
-	size = m_lights.size();
-	for(int i = size - 1; i >= 0; i--){
-		delete m_lights[i];
-	}
-	m_lights.clear();
+	// Send shader
+	glDrawArrays(GL_LINES, 0, vertexVector.size());
 
-	size = m_objects.size();
-	for(int i = size - 1; i>=0; i--){
-		delete m_objects[i];
-	}
-	m_objects.clear();
+	glDisableVertexAttribArray(attribute_v_coord);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	size = m_rooms.size();
-	for(int i = size -1; i>=0; i--){
-		delete m_rooms[i];
-	}
-	m_rooms.clear();
-
-	size = m_bkg2Delems.size();
-	for (int i = size -1; i>=0; i--) delete m_bkg2Delems[i];
-	m_bkg2Delems.clear();
-
-	size = m_2Delems.size();
-	for(int i = size - 1; i>=0; i--) delete m_2Delems[i];
-	m_2Delems.clear();
-
-
-	if(m_dome != nullptr) delete m_dome;
-	m_dome = nullptr;
-	
-	delete m_SceneTreeRoot;
-	m_SceneTreeRoot = nullptr;
+	glDeleteBuffers(1, &vbo_vertices);
+	vertexVector.clear();
 }

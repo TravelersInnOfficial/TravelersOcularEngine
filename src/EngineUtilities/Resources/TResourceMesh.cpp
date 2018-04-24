@@ -55,15 +55,11 @@ TResourceMesh::TResourceMesh(){
 TResourceMesh::~TResourceMesh(){
 	// Eliminamos el buffer
 	glBindBuffer(GL_ARRAY_BUFFER, 0);	
-	glDeleteBuffers(1, &m_vbo);
-
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	glDeleteBuffers(1, &m_vbo);
 	glDeleteBuffers(1, &m_ebo);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glDeleteBuffers(1, &m_uvbo);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glDeleteBuffers(1, &m_nbo);
 }
 
