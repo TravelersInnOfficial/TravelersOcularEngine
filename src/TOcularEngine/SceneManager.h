@@ -17,7 +17,7 @@
 #include <vector>
 
 // Forward declaration
-typedef unsigned int GLuint;
+#include <GL/glew.h>
 class Program;
 
 class SceneManager{
@@ -226,13 +226,6 @@ public:
     /**
      * @brief TODO: finish comment
      * 
-     */
-    void DrawSceneShadows();
-
-
-    /**
-     * @brief TODO: finish comment
-     * 
      * @param light 
      * @param num 
      */
@@ -256,11 +249,14 @@ public:
      * @brief TODO: finish comment
      * 
      */
+    void DrawLine(toe::core::TOEvector3df start, toe::core::TOEvector3df end, toe::core::TOEvector3df color);
+
+    /**
+     * @brief TODO: finish comment
+     * 
+     */
     void ResetManager();
 
-    void RecalculateLightPosition();
-    void SendLights();
-    void SendLightsToShader();
     bool AddDynamicLight(TFLight*);
     
     void SetClipping(bool value);
@@ -288,6 +284,13 @@ private:
     glm::vec3 m_ambientLight;
     TFCamera* m_main_camera;
     TFDome* m_dome;
+
+    void RecalculateLightPosition();
+    void SendLights();
+    void SendLightsToShader();
+    void DrawSceneShadows();
+    void DrawAllLines(); 
+    std::vector<GLfloat> vertexVector; 
 
     void ClearElements();
 };
