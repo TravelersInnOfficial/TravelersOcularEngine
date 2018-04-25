@@ -12,7 +12,7 @@ TAnimation::TAnimation() : TMesh("","") {
 // Destructor
 TAnimation::~TAnimation(){ }
 
-void TAnimation::SetPaths(std::string ID, int frames, const std::vector<std::string> paths, int fps){
+void TAnimation::SetPaths(std::string ID, int frames, const std::vector<std::string> &paths, int fps){
 	AnimData data;
 	m_anims[ID] = data;			// add new animation
 
@@ -20,7 +20,7 @@ void TAnimation::SetPaths(std::string ID, int frames, const std::vector<std::str
     m_anims[ID].frames = frames;
 	m_anims[ID].fps = fps;
 
-    m_anims[ID].meshes.clear();
+    m_anims[ID].meshes.clear();	
 	// add all paths to the animation vector
     for (int i = 0; i < frames; i++){
         m_anims[ID].meshes.push_back(TResourceManager::GetInstance()->GetResourceMesh(paths[i]));

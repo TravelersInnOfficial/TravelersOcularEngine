@@ -32,7 +32,7 @@ public:
 	 * @param frames 
 	 * @param paths 
 	 */
-	void SetAnimationPaths(std::string ID, const std::vector<std::string> paths, int fps = 25);
+	void SetAnimationPaths(std::string ID, const std::vector<std::string> &paths, int fps = 25);
 	
 	/**
 	 * @brief Update animation frames
