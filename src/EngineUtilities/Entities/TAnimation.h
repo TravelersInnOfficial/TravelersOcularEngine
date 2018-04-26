@@ -28,7 +28,7 @@ public:
 	 * @param frames: max frames
 	 * @param paths: string array of paths
 	 */
-    void SetPaths(std::string ID, int frames, const std::vector<std::string> paths, int fps);
+    void SetPaths(std::string ID, int frames, const std::vector<std::string> &paths, int fps);
     
 	/**
 	 * @brief Updates Animation depending of deltatime
