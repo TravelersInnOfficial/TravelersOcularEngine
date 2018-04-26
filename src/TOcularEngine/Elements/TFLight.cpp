@@ -4,6 +4,7 @@
 #include "./../../EngineUtilities/TNode.h"
 #include "./../VideoDriver.h"
 
+
 // GLEW AND GLM
 #include <GL/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -22,7 +23,7 @@ TFLight::TFLight(toe::core::TOEvector3df position, toe::core::TOEvector3df rotat
 	TColor myColor = TColor(glmColor);
 	m_entityNode->SetEntity(new TLight(myColor, attenuation));
 
-	m_LastLocation = glm::vec3(0);
+	m_LastLocation = glm::vec3(position.X, position.Y, position.Z);
 
 	m_entity = TLIGHT_ENTITY;
 }

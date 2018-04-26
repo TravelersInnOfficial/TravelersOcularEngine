@@ -16,11 +16,14 @@ public:
 	bool CheckVisibility();
 	void CheckVisibility(glm::vec4 point, int* upDown, int* leftRight, int* nearFar);
 	void CalculateTransform();
+	void DrawSecondRoom();
 
 	void SetVisible(bool visible);
 	void SetSize(glm::vec3 size);
 	void SetCenter(glm::vec3 center);
 	void SetRotation(glm::vec3 rot);
+
+	bool GetVisible();
 
 private:
 	int Sign(int v);

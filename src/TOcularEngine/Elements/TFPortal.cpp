@@ -1,11 +1,16 @@
 #include "./TFPortal.h"
 #include "./../../EngineUtilities/TPortal.h"
 
-TFPortal::TFPortal(TPortal* portal){
+TFPortal::TFPortal(TPortal* portal, TFRoom* first, TFRoom* second){
 	m_portal = portal;
+	m_firstRoom = first;
+	m_secondRoom = second;
 }
 
 TFPortal::~TFPortal(){
+	m_portal = nullptr;
+	m_firstRoom = nullptr;
+	m_secondRoom = nullptr;
 	// Los portales los eliminara, o bien el propio programador a través de TFRoom o al eliminar TFRoom
 	// Esta clase solamente es fachada
 }
@@ -33,3 +38,18 @@ TPortal* TFPortal::GetPortal(){
 	return m_portal;
 }
 
+TFRoom* TFPortal::GetFirstRoom(){
+	return m_firstRoom;
+}
+
+TFRoom* TFPortal::GetSecondRoom(){
+	return m_secondRoom;
+}
+
+bool TFPortal::CheckVisibility(){
+	return m_portal->CheckVisibility();
+}
+
+bool TFPortal::GetVisible(){
+	return m_portal->GetVisible();
+}

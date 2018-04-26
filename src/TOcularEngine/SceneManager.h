@@ -264,7 +264,13 @@ public:
     void PushToFront(TFDrawable*);
 
     void ChangeShader(SHADERTYPE shader, ENTITYTYPE entity);
+
     void DrawRooms();
+    int SendRoomLights(int value);
+    void UpdateCurrentRoom();
+    bool Light2Room(TFNode* node);
+    void DeleteRoomLight(TFNode* light);
+
 
 private:
     GLuint m_vao;
@@ -273,6 +279,8 @@ private:
     
     TNode* m_SceneTreeRoot;                         // Root of the scene
     std::vector<TFRoom*>        m_rooms;            // Rooms in the scene  
+    int                         m_currentRoom;      // Current room of the Camera
+    std::vector<TFLight*>       m_lightRooms;       // Lights of the rooms
 
     std::vector<TFCamera*>      m_cameras;          // Pointers to the cameras created
     std::vector<TFLight*>       m_lights;           // Pointers to the lights created

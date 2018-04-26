@@ -64,7 +64,7 @@ vec3  Phong (int num) {
   	
 	// COMPONENTE DIFUSA
 	vec3 Diffuse = vec3(0);
-	Diffuse = Light[num].Diffuse * clamp(dot(n,s), 0, 1) * vec3(texture(uvMap, TexCoords)) * Material.Diffuse;
+	Diffuse = Light[num].Diffuse * clamp(dot(n,s), 0, 1)  * Material.Diffuse;
 
 	// COMPONENTE ESPECULAR  
 	vec3 Specular = vec3(0);
@@ -97,6 +97,8 @@ void main() {
 	vec4 result = vec4(0.0);
 	for(int i = 0; i < nlights; i++) result += vec4(Phong(i), 0.0);
 
+	result = round(result * 8.0)/8.0;
+
 	/// CHECK SHADOWS
 	float bias = 0.005;
 	float visibility = 1.0;
@@ -113,6 +115,7 @@ void main() {
 
 	// SUMAMOS AMBIENTAL
 	vec3 Ambient = AmbientLight * vec3(texValue) * Material.Ambient;
+	Ambient = round(Ambient * 16.0)/16.0;
 	result += vec4(Ambient, 1.0);
 	FragColor = result;
 }

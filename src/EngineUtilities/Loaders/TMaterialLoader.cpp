@@ -10,7 +10,7 @@ bool TMaterialLoader::LoadMaterial(std::string name, TResourceMesh* mesh, const 
 	TResourceMaterial* recMaterial = TResourceManager::GetInstance()->GetResourceMaterial(name);
 
 	// Cargamos el material en el caso de que no haya sido cargado antes
-	if(!recMaterial->GetLoaded()){
+	if(!recMaterial->GetLoaded() && material != nullptr){
 		//std::cout<<"Cargamos el material: "<<name<<std::endl;
 
 		aiColor3D  vec3;

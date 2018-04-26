@@ -1,5 +1,6 @@
 #include "./TFRoom.h"
 #include "./../../EngineUtilities/TRoom.h"
+#include "./../VideoDriver.h"
 
 TFRoom::TFRoom(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale) : TFNode(){
 	glm::vec3 size(scale.X, scale.Y, scale.Z);
@@ -15,6 +16,8 @@ TFRoom::TFRoom(toe::core::TOEvector3df position, toe::core::TOEvector3df rotatio
 	m_positionNode->AddChild(newRoom);
 
 	m_entity = TROOM_ENTITY;
+
+	lightsSend = false;
 }
 
 TFRoom::~TFRoom(){
@@ -23,6 +26,8 @@ TFRoom::~TFRoom(){
 		delete m_portals[i];
 	}
 	m_portals.clear();
+
+	m_roomLights.clear();
 }
 
 TFPortal* TFRoom::AddConnection(TFRoom* room, toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale){
@@ -36,12 +41,49 @@ TFPortal* TFRoom::AddConnection(TFRoom* room, toe::core::TOEvector3df position, 
 												glm::vec3(position.X, position.Y, position.Z),
 												glm::vec3(rotation.X, rotation.Y, rotation.Z));
 
-		TFPortal* fPortal = new TFPortal(portal);
+		TFPortal* fPortal = new TFPortal(portal, this, room);
 		m_portals.push_back(fPortal);
 
 		return fPortal;
 	}
 	return nullptr;
+}
+
+int TFRoom::DrawLights(int value, int nextTo){
+	int output = value;
+
+	if(!lightsSend){
+		lightsSend = true;
+
+		int size = m_roomLights.size();
+		for(int i=0;i<size; i++){
+			m_roomLights[i]->DrawLight(value + i);
+		}
+		output += size;
+
+		size = m_portals.size();
+		for(int i=0; i<size; i++){
+										// Solo el 0 es negativo
+			if(m_portals[i]->GetVisible() && (nextTo || m_portals[i]->CheckVisibility())){
+				output = m_portals[i]->GetSecondRoom()->DrawLights(output, nextTo-1);
+
+
+				TEntity::m_clippingLimits[0] = 1;
+				TEntity::m_clippingLimits[1] = -1;
+				TEntity::m_clippingLimits[2] = 1;
+				TEntity::m_clippingLimits[3] = -1;
+			}
+		}
+
+		lightsSend = false;
+	}
+
+	return output;
+}
+
+void TFRoom::Draw(){
+	TRoom* room = (TRoom*)m_entityNode;
+	room->Draw();
 }
 
 bool TFRoom::DeletePortal(TFPortal* portal){
@@ -106,4 +148,25 @@ float TFRoom::GetDistance(toe::core::TOEvector3df position){
 
 TNode* TFRoom::GetConnectionNode(){
 	return m_entityNode;
+}
+
+bool TFRoom::AddChild(TFNode* children){
+	bool output = TFNode::AddChild(children);
+
+	if(output && children->GetEntityType() == TLIGHT_ENTITY){
+		VideoDriver::GetInstance()->GetSceneManager()->Light2Room(children);
+		m_roomLights.push_back((TFLight*)children);
+	}
+
+	return output;
+}
+
+void TFRoom::DeleteLight(TFNode* light){
+	int size = m_roomLights.size();
+	for(int i=0; i<size; i++){
+		if(m_roomLights[i] == light){
+			m_roomLights.erase(m_roomLights.begin() + i);
+			break;
+		}
+	}
 }

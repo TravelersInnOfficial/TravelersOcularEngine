@@ -17,6 +17,7 @@
 
 class TFLight: public TFNode{
 	friend class SceneManager;
+	friend class TFRoom;
 
 public:
 	void SetColor(toe::core::TOEvector4df color);	// Changes the light color

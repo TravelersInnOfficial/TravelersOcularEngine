@@ -51,7 +51,7 @@ void TPortal::CalculateTransform(){
 
 bool TPortal::CheckVisibility(){
 	bool output = true;
-	DrawDebug();
+	//DrawDebug();
 	if(m_secondConnection->GetDrawed() || !m_visible){
 		output = false;
 	}else{	
@@ -87,7 +87,6 @@ bool TPortal::CheckVisibility(){
 	// PINTAR LA SEGUNA HABITACION DE LA CONEXION SIEMPRE QUE AUN NO SE HAYA PINTADO
 	if(output){
 		ChangeEntityClipping();
-		m_secondConnection->Draw();
 	}
 
 	return output;
@@ -226,4 +225,12 @@ void TPortal::PrepareLimits(){
 
 void TPortal::SetVisible(bool visible){
 	m_visible = visible;
+}
+
+void TPortal::DrawSecondRoom(){
+	m_secondConnection->Draw();
+}
+
+bool TPortal::GetVisible(){
+	return m_visible;
 }

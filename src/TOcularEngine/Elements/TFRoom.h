@@ -4,6 +4,8 @@
 #include "./TFNode.h"
 #include "./TFPortal.h"
 
+class TFLight;
+
 class TFRoom: public TFNode{
 	friend class SceneManager;
 public:
@@ -26,11 +28,19 @@ public:
 	toe::core::TOEvector3df GetRotation() override;
 	toe::core::TOEvector3df GetScale() override;
 
+	bool AddChild(TFNode* children) override;
+
+
 	float GetDistance(toe::core::TOEvector3df position);
+	void DeleteLight(TFNode* light);
 
 private:
 	std::vector<TFPortal*> m_portals;
+	std::vector<TFLight*> m_roomLights;		// COPIA a las luces, no eliminar
+	bool lightsSend;
 
+	void Draw();
+	int DrawLights(int value, int nextTo = 2);
 	TNode* GetConnectionNode() override;
 	TFRoom(toe::core::TOEvector3df position = toe::core::TOEvector3df(0, 0, 0),
 		toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0, 0, 0),

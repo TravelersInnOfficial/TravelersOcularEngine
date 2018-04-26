@@ -16,11 +16,16 @@ public:
 	void SetSize(toe::core::TOEvector3df size);
 private:
 	TPortal* m_portal;
-	TFRoom* m_room;
+	TFRoom*  m_firstRoom;
+	TFRoom*  m_secondRoom;
 
 	~TFPortal();
-	TFPortal(TPortal* portal);
+	TFPortal(TPortal* portal, TFRoom* first, TFRoom* second);
 	TPortal* GetPortal();
+	TFRoom* GetFirstRoom();
+	TFRoom* GetSecondRoom();
+	bool CheckVisibility();
+	bool GetVisible();
 };
 
 #endif

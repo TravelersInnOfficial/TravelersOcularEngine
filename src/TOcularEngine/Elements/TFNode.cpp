@@ -95,19 +95,6 @@ toe::core::TOEvector3df TFNode::GetScale(){
 	return toRet;
 }
 
-bool TFNode::AddChild(TFNode* children){
-	bool exists = false;
-	
-	for(int i = 0; i < m_children.size() && !exists ; i++){
-		if (m_children.at(i) == children) exists = true;
-	}
-
-	if(!exists){
-		m_children.push_back(children);
-		children->SetParent(this);
-	}
-	return exists;
-}
 
 bool TFNode::RemoveChild(TFNode* children){
 	bool exists = false;
@@ -129,6 +116,19 @@ void TFNode::RemoveAllChildren(){
 
 std::vector<TFNode*> TFNode::GetChildren(){
 	return m_children;
+}
+bool TFNode::AddChild(TFNode* children){
+	bool exists = false;
+	
+	for(int i = 0; i < m_children.size() && !exists ; i++){
+		if (m_children.at(i) == children) exists = true;
+	}
+
+	if(!exists){
+		m_children.push_back(children);
+		children->SetParent(this);
+	}
+	return !exists;
 }
 
 void TFNode::SetParent(TFNode* parent){
@@ -243,6 +243,11 @@ void TFNode::SetProgram(SHADERTYPE shader, ENTITYTYPE entity){
 		myEntity->SetProgram(shader);
 	}
 }
+
+ENTITYTYPE TFNode::GetEntityType(){
+	return m_entity;
+}
+
 
 TNode* TFNode::GetEntityNode(){
 	return m_entityNode;

@@ -7,7 +7,7 @@ class aiMaterial;
 
 class TMaterialLoader{
 public:
-	static bool LoadMaterial(std::string name, TResourceMesh* mesh, const aiMaterial* material);
+	static bool LoadMaterial(std::string name, TResourceMesh* mesh, const aiMaterial* material = nullptr);
 private:
 };
 

@@ -28,7 +28,7 @@ public:
 	virtual toe::core::TOEvector3df GetRotation();		// Returns the position of the Node
 	virtual toe::core::TOEvector3df GetScale();			// Returns the scale of the Node
 
-	bool AddChild(TFNode* children);			// Adds a Children to the TFNode
+	virtual bool AddChild(TFNode* children);			// Adds a Children to the TFNode
 	bool RemoveChild(TFNode* children);			// Removes Children from the TFNode
 	void RemoveAllChildren();					// Remove ALL Children from the TFNode
 
@@ -61,7 +61,7 @@ public:
 	 */
 	virtual void SetProgram(SHADERTYPE shader, ENTITYTYPE entity = NONE_ENTITY);
 
-	
+	ENTITYTYPE GetEntityType();
 
 protected:
 	// All internal nodes of a node

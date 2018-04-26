@@ -148,6 +148,148 @@ bool TObjectLoader::LoadObj(TResourceMesh* mesh, int option){
 
 // ============================================================================================================================================
 //
+// BINARY
+//
+// ============================================================================================================================================
+
+/*
+	1º  SIZE 	- 3 FLOATS, SIZE
+	2º  CENTER	- 3 FLOATS, CENTER
+	3º  INT 	- SIZE DE VERTICES (3*SIZE = TOTAL FLOATS)
+	4º  FLOAT 	- VERTICES
+	5º  INT  	- SIZE DE UVS (2*SIZE = TOTAL FLOATS)
+	6º  FLOAT 	- UVS
+	7º  INT 	- SIZE DE NORMALES (3*SIZE = TOTAL FLOATS)
+	8º  FLOAT 	- NORMALES	
+	9º  INT 	- SIZE DE ELEMENTOS
+	10º UINT	- ELEMENTOS
+	11º INT		- SIZE DEL STRING DE TEXTURA
+	12º CHAR	- CADA CHAR DEL STRING
+	13º INT		- SIZE DEL STRING DE MATERIAL
+	14º CHAR	- CADA CHAR DEL STRING
+*/
+
+bool TObjectLoader::LoadObjBinary(TResourceMesh* mesh){
+	bool output = false;
+
+	std::string path = mesh->GetName();
+
+	std::ifstream objFile;
+	objFile.open(path, std::ios::binary);
+
+	if(objFile.is_open()){
+		std::vector<glm::vec3> vertex;
+		std::vector<glm::vec2> uv;
+		std::vector<glm::vec3> normal;
+		std::vector<unsigned int> index;
+
+		// -------------------------------------------------------------- 1º
+		glm::vec3 vecRead;
+		objFile.read(reinterpret_cast<char*>(&vecRead.x), sizeof(float));  
+		objFile.read(reinterpret_cast<char*>(&vecRead.y), sizeof(float));
+		objFile.read(reinterpret_cast<char*>(&vecRead.z), sizeof(float));
+		mesh->SetSize(vecRead);
+
+		// -------------------------------------------------------------- 2º
+		objFile.read(reinterpret_cast<char*>(&vecRead.x), sizeof(float));  
+		objFile.read(reinterpret_cast<char*>(&vecRead.y), sizeof(float));
+		objFile.read(reinterpret_cast<char*>(&vecRead.z), sizeof(float));
+		mesh->SetCenter(vecRead);
+		// -------------------------------------------------------------- 3º
+		int size;
+		objFile.read(reinterpret_cast<char*>(&size), sizeof(int));
+		// -------------------------------------------------------------- 4º
+			// vertices
+		for(int i=0; i<size; i++){
+			objFile.read(reinterpret_cast<char*>(&vecRead.x), sizeof(float));  
+			objFile.read(reinterpret_cast<char*>(&vecRead.y), sizeof(float));
+			objFile.read(reinterpret_cast<char*>(&vecRead.z), sizeof(float));
+			vertex.push_back(vecRead);
+		}
+		// -------------------------------------------------------------- 5º
+		objFile.read(reinterpret_cast<char*>(&size), sizeof(int));
+		// -------------------------------------------------------------- 6º
+			// uvs
+			glm::vec2 vecRead2;
+		for(int i=0; i<size; i++){
+			objFile.read(reinterpret_cast<char*>(&vecRead2.x), sizeof(float));  
+			objFile.read(reinterpret_cast<char*>(&vecRead2.y), sizeof(float));
+			uv.push_back(vecRead2);
+		}
+		// -------------------------------------------------------------- 7º
+		objFile.read(reinterpret_cast<char*>(&size), sizeof(int));
+		// -------------------------------------------------------------- 8º
+			//normales
+		for(int i=0; i<size; i++){
+			objFile.read(reinterpret_cast<char*>(&vecRead.x), sizeof(float));  
+			objFile.read(reinterpret_cast<char*>(&vecRead.y), sizeof(float));
+			objFile.read(reinterpret_cast<char*>(&vecRead.z), sizeof(float));
+			normal.push_back(vecRead);
+		}
+		// -------------------------------------------------------------- 9º
+		objFile.read(reinterpret_cast<char*>(&size), sizeof(int));
+		// -------------------------------------------------------------- 10º
+			// elementos
+		unsigned int element;
+		for(int i=0; i<size; i++){
+			objFile.read(reinterpret_cast<char*>(&element), sizeof(unsigned int));  
+			index.push_back(element);
+		}
+		// -------------------------------------------------------------- 11º
+		objFile.read(reinterpret_cast<char*>(&size), sizeof(int));
+		// -------------------------------------------------------------- 12º
+			// path textura
+		std::string path;
+		char currentChar;
+		for(int i=0; i<size; i++){
+			objFile.read(reinterpret_cast<char*>(&currentChar), sizeof(char));
+			path.push_back(currentChar);
+		}
+		//TResourceTexture* texture = TResourceManager::GetInstance()->GetResourceTexture(path);
+		//if(texture != nullptr){
+		//	mesh->AddTexture(texture);
+		//}
+
+		// -------------------------------------------------------------- 13º
+		objFile.read(reinterpret_cast<char*>(&size), sizeof(int));
+		// -------------------------------------------------------------- 14º
+			// path material
+			path.clear();
+		for(int i=0; i<size; i++){
+			objFile.read(reinterpret_cast<char*>(&currentChar), sizeof(char));
+			path.push_back(currentChar);
+		}
+		TMaterialLoader::LoadMaterial(path, mesh);
+
+		// Cargamos el buffer de vertices
+		GLuint currentBuffer = mesh->GetVertexBuffer();
+		glBindBuffer(GL_ARRAY_BUFFER, currentBuffer);
+		glBufferData(GL_ARRAY_BUFFER, vertex.size()*sizeof(glm::vec3), &vertex[0], GL_STATIC_DRAW);
+
+		// Cargamos el buffer de uvs
+		currentBuffer = mesh->GetUvBuffer();
+		glBindBuffer(GL_ARRAY_BUFFER, currentBuffer);
+		glBufferData(GL_ARRAY_BUFFER, uv.size()*sizeof(glm::vec2), &uv[0], GL_STATIC_DRAW);
+		
+		// Cargamos el buffer de normales
+		currentBuffer = mesh->GetNormalBuffer();
+		glBindBuffer(GL_ARRAY_BUFFER, currentBuffer);
+		glBufferData(GL_ARRAY_BUFFER, normal.size()*sizeof(glm::vec3), &normal[0], GL_STATIC_DRAW);
+
+		// Cargamos el buffer de elementos
+		currentBuffer = mesh->GetElementBuffer();
+		mesh->SetElementSize(index.size());
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, currentBuffer);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, index.size()*sizeof(unsigned int), &index[0], GL_STATIC_DRAW);
+
+		output = true;
+	}
+	objFile.close();
+	return output;
+}
+
+// ============================================================================================================================================
+//
 // ASSIMP
 //
 // ============================================================================================================================================

@@ -19,11 +19,13 @@ SceneManager::SceneManager(){
 	m_ambientLight = glm::vec3(0.25f);
 	m_main_camera = nullptr;
 	m_dome = nullptr;
+	m_currentRoom = -1;
 
 	m_vao = 0;
 	m_fbo = 0;
 	m_shadowMap = 0;
 }
+
 
 SceneManager::~SceneManager(){
 	ClearElements();
@@ -174,12 +176,39 @@ bool SceneManager::DeleteLight(TFLight* light){
 	std::vector<TFLight*>::iterator it = m_lights.begin();
 	for(; it!= m_lights.end() && !toRet; ++it){
 		if(*it == light){
-			delete light;
 			m_lights.erase(it);
+			delete light;
 			toRet = true;
 		}
 	}
+
+	it = m_dynamicLights.begin();
+	for(; it!= m_dynamicLights.end() && !toRet; ++it){
+		if(*it == light){
+			m_dynamicLights.erase(it);
+			delete light;
+			toRet = true;
+		}
+	}
+
+	it = m_lightRooms.begin();
+	for(; it!=m_lightRooms.end() && !toRet; ++it){
+		if(*it == light){
+			DeleteRoomLight(light);
+			m_lightRooms.erase(it);
+			delete light;
+			toRet = true;
+		}
+	}
+
 	return toRet;
+}
+
+void SceneManager::DeleteRoomLight(TFNode* light){
+	int size = m_rooms.size();
+	for(int i=0; i<size; i++){
+		m_rooms[i]->DeleteLight(light);
+	}
 }
 
 bool SceneManager::DeleteMesh(TFNode* node){
@@ -324,6 +353,9 @@ void SceneManager::Draw(){
 	// Select active camera and set view and projection matrix
 	SetMainCameraData();
 
+	// Actualizamos la habitacion actual
+	UpdateCurrentRoom();
+
 	// Send lights position to shader
 	SendLights();
 
@@ -337,13 +369,13 @@ void SceneManager::Draw(){
 	DrawAllLines();
 }
 
-void SceneManager::DrawRooms(){
-	if(m_main_camera != nullptr){
+void SceneManager::UpdateCurrentRoom(){
+	int value = -1;
 
+	if(m_main_camera != nullptr){
 		// Lo primero es saber cual de todas las habitaciones esta mas cerca de la mainCamera
 		toe::core::TOEvector3df camPos = m_main_camera->GetTranslation();
 		float minDistance =  std::numeric_limits<float>::max();
-		int value = -1;
 
 		int size = m_rooms.size();
 		for(int i=0; i<size; i++){
@@ -354,12 +386,27 @@ void SceneManager::DrawRooms(){
 				value = i;
 			}
 		}
+	}
 
+	m_currentRoom = value;
+}
+
+int SceneManager::SendRoomLights(int value){
+	if(m_main_camera != nullptr){
 		// Una vez aqui ya se habra visto cual es la habitacion mas cercana a la camara
-		if(value != -1){
+		if(m_currentRoom != -1){
+			value = m_rooms[m_currentRoom]->DrawLights(value);
+		}
+	}
+	return value;
+}
+
+void SceneManager::DrawRooms(){
+	if(m_main_camera != nullptr){
+		// Una vez aqui ya se habra visto cual es la habitacion mas cercana a la camara
+		if(m_currentRoom != -1){
 			// Procedemos a pintar la habitacion mas cercana
-			TRoom* nearestRoom = (TRoom*)(m_rooms[value]->GetEntityNode());
-			nearestRoom->Draw();
+			m_rooms[m_currentRoom]->Draw();
 		} 
 	}
 }
@@ -414,14 +461,6 @@ bool SceneManager::AddDynamicLight(TFLight* light){
 	}
 
 	return ret;
-}
-
-void SceneManager::ResetManager(){
-	ClearElements();
-	TTransform* myTransform = new TTransform();
-	m_SceneTreeRoot = new TNode(myTransform);
-	//m_ambientLight = glm::vec3(0.25f);
-	m_main_camera = nullptr;
 }
 
 void SceneManager::SetClipping(bool value){
@@ -504,14 +543,21 @@ void SceneManager::SendLightsToShader(){
 	GLint ambLocation = glGetUniformLocation(programID, "AmbientLight");
 	glUniform3fv(ambLocation, 1, &m_ambientLight[0]);
 
-	// Send size of lights
-	GLint size = m_lights.size();
-	GLuint nlightspos = glGetUniformLocation(programID, "nlights");
-	glUniform1i(nlightspos, size);
 
 	// Draw all lights
-    for(int i = 0; i < size; i++) m_lights[i]->DrawLight(i);
+	int i=0;
+	int size = m_lights.size();
+    while(i < size){ 
+    	m_lights[i]->DrawLight(i);
+    	i++;
+    }
+    size = SendRoomLights(i);
+
+    // Send size of lights
+	GLuint nlightspos = glGetUniformLocation(programID, "nlights");
+	glUniform1i(nlightspos, size);
 }
+
 
 void SceneManager::DrawSceneShadows()
 {
@@ -543,6 +589,37 @@ void SceneManager::DrawSceneShadows()
 			TEntity::DepthWVP = glm::mat4(0.0f);
 		}
 	}
+}
+
+void SceneManager::ResetManager(){
+	ClearElements();
+	TTransform* myTransform = new TTransform();
+	m_SceneTreeRoot = new TNode(myTransform);
+	//m_ambientLight = glm::vec3(0.25f);
+	m_main_camera = nullptr;
+}
+
+// PRIVATE FUNCTIONS
+bool SceneManager::Light2Room(TFNode* node){
+	int size = m_lights.size();
+	for(int i = 0; i<size; i++){
+		if(m_lights[i] == node){
+			m_lightRooms.push_back(m_lights[i]);
+			m_lights.erase(m_lights.begin() + i);
+			return true;
+		}
+	}
+
+	size = m_dynamicLights.size();
+	for(int i=0; i<size; i++){
+		if(m_dynamicLights[i] == node){
+			m_lightRooms.push_back(m_dynamicLights[i]);
+			m_dynamicLights.erase(m_dynamicLights.begin() + i);
+			return true;
+		}
+	}
+
+	return false;		// La luz no se ha encontrado entre las del arbol de escen
 }
 
 void SceneManager::DrawAllLines(){

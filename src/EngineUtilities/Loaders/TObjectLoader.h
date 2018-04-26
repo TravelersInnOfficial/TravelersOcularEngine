@@ -19,6 +19,7 @@ class TObjectLoader{
 public:
 	static bool LoadObjAssimp(TResourceMesh* mesh);
 	static bool LoadObjCustom(TResourceMesh* mesh);
+	static bool LoadObjBinary(TResourceMesh* mesh);
 	static bool LoadObj(TResourceMesh* mesh, int option);
 private:
 	static bool LoadBoundingBox(TResourceMesh* mesh, std::vector<glm::vec3>* vertex);

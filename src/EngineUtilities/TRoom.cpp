@@ -41,7 +41,9 @@ void TRoom::Draw(){
 	for(int i=0; i<size; i++){
 		TPortal* currentPortal = m_portals[i];
 		PushClippingLimits();
-		currentPortal->CheckVisibility();
+		if(currentPortal->CheckVisibility()){
+			currentPortal->DrawSecondRoom();
+		}
 		PopClippingLimits();
 	}
 
