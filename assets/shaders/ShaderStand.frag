@@ -29,6 +29,7 @@ struct TLight {
 	
 	// Is it DIRECTIONAL
 	bool Directional;
+	vec3 Direction;
 };
 
 // IN UNIFORMS
@@ -51,13 +52,13 @@ vec3  Phong (int num) {
 	
 	// Vector from SURFACE to LIGHT
 	vec3 objToToLight = lightPos + eyeDir;
-	
-	// Desde el 0,0,0 a la posicion de la luz
-	if(Light[num].Directional) objToToLight = normalize(lightPos - (FragViewMatrix * vec4(0, 0, 0, 1)).xyz);
-	
-	// Desde la posición de la luz 
-	//vec3 lightdir = vec3(0,1,0);
-	//objToToLight = normalize((FragViewMatrix * vec4(lightdir,1)).xyz);
+	if(Light[num].Directional){
+		vec3 pointA = vec3(0,0,0);						// Ponemos el principio en el centro
+		vec3 pointB = pointA - Light[num].Direction;	// Calculamos el punto final
+		pointA = (FragViewMatrix * vec4(pointA,1)).xyz;	//|
+		pointB = (FragViewMatrix * vec4(pointB,1)).xyz;	//| Calculamos ambos en el espacio de vision
+		objToToLight = normalize(pointB - pointA);		// Calculamos el vector en espacio de vision
+	}
 	
 	vec3 s = normalize(objToToLight);
 	vec3 r = reflect(-s, n);
@@ -75,6 +76,7 @@ vec3  Phong (int num) {
 	// CALCULAMOS ATENUACION
 	float Attenuation = 1.0 / (1.0 + Light[num].Attenuation * pow(length(objToToLight), 2));
 	if(Light[num].Directional) Attenuation = 1;
+	
 
 	// ENVIAMOS EL RESULTADO
 	return Attenuation * (Diffuse + Specular);

@@ -13,6 +13,7 @@
  */
 
 #include <TOEvector4d.h>
+#include <TOEvector3d.h>
 #include "TFNode.h"
 
 class TFLight: public TFNode{
@@ -32,6 +33,8 @@ public:
 	glm::vec3 CalculateLocation();
 
 	void SetBoundBox(bool) override;				// Shows or hide tmesh bounding box
+	void SetDirection(toe::core::TOEvector3df direction);
+	toe::core::TOEvector3df GetDirection();
 	
 private:
 	TFLight(
