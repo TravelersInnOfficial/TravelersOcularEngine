@@ -4,7 +4,7 @@
 #include "./../../../EngineUtilities/TNode.h"
 #include "./../../VideoDriver.h"
 
-TFParticleSystem::TFParticleSystem(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale) : TFNode(){	
+TFParticleSystem::TFParticleSystem(TOEvector3df position, TOEvector3df rotation, TOEvector3df scale) : TFNode(){	
 	TTransform*  t = (TTransform*) m_scaleNode->GetEntity();
 	t->Scale(scale.X, scale.Y, scale.Z);
 
@@ -21,14 +21,14 @@ TFParticleSystem::~TFParticleSystem(){
 	
 }
 
-void TFParticleSystem::Translate(toe::core::TOEvector3df translation){
+void TFParticleSystem::Translate(TOEvector3df translation){
 	TFNode::Translate(translation);
 
 	TParticleSystem* mySystem = (TParticleSystem*)m_entityNode->GetEntity();
 	mySystem->Translate(glm::vec3(translation.X, translation.Y, translation.Z));
 }
 
-void TFParticleSystem::SetTranslateSmooth(toe::core::TOEvector3df translation){
+void TFParticleSystem::SetTranslateSmooth(TOEvector3df translation){
 	glm::vec3 currentPosition = m_entityNode->GetTranslation();
 	glm::vec3 diffPosition = glm::vec3(currentPosition.x - translation.X, 
 									   currentPosition.y - translation.Y, 

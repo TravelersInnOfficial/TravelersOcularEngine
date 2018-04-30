@@ -11,7 +11,7 @@ public:
 	void SetNearFar(float near, float far);			// Sets the Near and Far components of the camera
 	void SetLeftRight(float left, float right);		// Sets the Left and Right components
 	void SetTopBottom(float up, float down);		// Sets the Up and Down components
-	void LookAt(toe::core::TOEvector3df target, toe::core::TOEvector3df up = toe::core::TOEvector3df(0,1,0));
+	void LookAt(TOEvector3df target, TOEvector3df up = TOEvector3df(0,1,0));
 
 	bool GetPerspective();							// Gets the Perspective data from the Camera
 	float GetNear();								// Gets the Near data from the Camera
@@ -23,8 +23,8 @@ public:
 
 protected:
 	TFCamera(
-		toe::core::TOEvector3df position = toe::core::TOEvector3df(0, 0, 0),
-		toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0, 0, 0),
+		TOEvector3df position = TOEvector3df(0, 0, 0),
+		TOEvector3df rotation = TOEvector3df(0, 0, 0),
 		bool perspective = true
 	);
 	~TFCamera();

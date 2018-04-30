@@ -44,54 +44,54 @@ void TFNode::AttachFirst(TNode* root){
 	if(root != nullptr) root->AddFirstChild(m_scaleNode);	
 }
 
-void TFNode::SetTranslate(toe::core::TOEvector3df translation){
+void TFNode::SetTranslate(TOEvector3df translation){
 	TTransform* myTransform = (TTransform*) m_positionNode->GetEntity();
 	myTransform->Identity();
 	myTransform->Translate(translation.X, translation.Y, translation.Z);
 }
 
-void TFNode::SetRotation(toe::core::TOEvector3df rotation){
+void TFNode::SetRotation(TOEvector3df rotation){
 	TTransform* myTransform = (TTransform*) m_rotationNode->GetEntity();
 	myTransform->Identity();
 	myTransform->Rotate(rotation.X, rotation.Y, rotation.Z);
 }
 
-void TFNode::SetScale(toe::core::TOEvector3df scale){
+void TFNode::SetScale(TOEvector3df scale){
 	TTransform* myTransform = (TTransform*) m_scaleNode->GetEntity();
 	myTransform->Identity();
 	myTransform->Scale(scale.X, scale.Y, scale.Z);
 }
 
-void TFNode::Translate(toe::core::TOEvector3df translation){
+void TFNode::Translate(TOEvector3df translation){
 	TTransform* myTransform = (TTransform*) m_positionNode->GetEntity();
 	myTransform->Translate(translation.X, translation.Y, translation.Z);
 }
 
-void TFNode::Rotate(toe::core::TOEvector3df rotation){
+void TFNode::Rotate(TOEvector3df rotation){
 	TTransform* myTransform = (TTransform*) m_rotationNode->GetEntity();
 	myTransform->Rotate(rotation.X, rotation.Y, rotation.Z);
 }
 
-void TFNode::Scale(toe::core::TOEvector3df scale){
+void TFNode::Scale(TOEvector3df scale){
 	TTransform* myTransform = (TTransform*) m_scaleNode->GetEntity();
 	myTransform->Scale(scale.X, scale.Y, scale.Z);
 }
 
-toe::core::TOEvector3df TFNode::GetTranslation(){
+TOEvector3df TFNode::GetTranslation(){
 	glm::vec3 translation = m_entityNode->GetTranslation();
-	toe::core::TOEvector3df toRet = toe::core::TOEvector3df(translation.x,translation.y,translation.z);
+	TOEvector3df toRet = TOEvector3df(translation.x,translation.y,translation.z);
 	return toRet;
 }
 
-toe::core::TOEvector3df TFNode::GetRotation(){
+TOEvector3df TFNode::GetRotation(){
 	glm::vec3 rotation = m_entityNode->GetRotation();
-	toe::core::TOEvector3df toRet = toe::core::TOEvector3df(rotation.x,rotation.y,rotation.z);
+	TOEvector3df toRet = TOEvector3df(rotation.x,rotation.y,rotation.z);
 	return toRet;
 }
 
-toe::core::TOEvector3df TFNode::GetScale(){
+TOEvector3df TFNode::GetScale(){
 	glm::vec3 scale = m_entityNode->GetScale();
-	toe::core::TOEvector3df toRet = toe::core::TOEvector3df(scale.x,scale.y,scale.z);
+	TOEvector3df toRet = TOEvector3df(scale.x,scale.y,scale.z);
 	return toRet;
 }
 
@@ -180,7 +180,7 @@ void TFNode::DeleteBillboard(int id){
 	}
 }
 
-void TFNode::SetBillboardPosition(toe::core::TOEvector3df position, int id){
+void TFNode::SetBillboardPosition(TOEvector3df position, int id){
 	int size = m_billboards.size();
 	if(id>=0 && id<size){
 		if(m_billboards[id] != nullptr){
@@ -211,11 +211,11 @@ void TFNode::SetBillboardText(std::string text, int id){
 
 void TFNode::DeleteChildren(){}
 
-int TFNode::AddBillboard(toe::core::TOEvector3df position, std::string text, float charSize, std::string texture){
+int TFNode::AddBillboard(TOEvector3df position, std::string text, float charSize, std::string texture){
 	// Ponemos la rotacion a 0, en si no se llegara a rotar nunca el billboard
-	toe::core::TOEvector3df rotation 	= toe::core::TOEvector3df(0, 0, 0);
+	TOEvector3df rotation 	= TOEvector3df(0, 0, 0);
 	// La escala por defecto la pondremos a 1
-	toe::core::TOEvector3df scale 		= toe::core::TOEvector3df(1, 1, 1);
+	TOEvector3df scale 		= TOEvector3df(1, 1, 1);
 
 	TFText* myText = new TFText(position, rotation, scale, text, charSize, texture);
 	

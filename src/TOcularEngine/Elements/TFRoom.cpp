@@ -1,7 +1,7 @@
 #include "./TFRoom.h"
 #include "./../../EngineUtilities/TRoom.h"
 
-TFRoom::TFRoom(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale) : TFNode(){
+TFRoom::TFRoom(TOEvector3df position, TOEvector3df rotation, TOEvector3df scale) : TFNode(){
 	glm::vec3 size(scale.X, scale.Y, scale.Z);
 	glm::vec3 center(position.X, position.Y, position.Z);
 	glm::vec3 rot(rotation.X, rotation.Y, rotation.Z);
@@ -25,7 +25,7 @@ TFRoom::~TFRoom(){
 	m_portals.clear();
 }
 
-TFPortal* TFRoom::AddConnection(TFRoom* room, toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale){
+TFPortal* TFRoom::AddConnection(TFRoom* room, TOEvector3df position, TOEvector3df rotation, TOEvector3df scale){
 	// Que hago con el TPortal que devuelve el AddPortal?
 	ENTITYTYPE type = room->m_entity;
 	if(type == TROOM_ENTITY){
@@ -51,55 +51,55 @@ bool TFRoom::DeletePortal(TFPortal* portal){
 	return output;
 }
 
-void TFRoom::SetTranslate(toe::core::TOEvector3df translation){
+void TFRoom::SetTranslate(TOEvector3df translation){
 	TRoom* currentRoom = (TRoom*)m_entityNode;
 	currentRoom->SetCenter(glm::vec3(translation.X, translation.Y, translation.Z));
 }
 
-void TFRoom::SetRotation(toe::core::TOEvector3df rotation){
+void TFRoom::SetRotation(TOEvector3df rotation){
 	TRoom* currentRoom = (TRoom*)m_entityNode;
 	currentRoom->SetRotation(glm::vec3(rotation.X, rotation.Y, rotation.Z));
 }
 
-void TFRoom::SetScale(toe::core::TOEvector3df scale){
+void TFRoom::SetScale(TOEvector3df scale){
 	TRoom* currentRoom = (TRoom*)m_entityNode;
 	currentRoom->SetSize(glm::vec3(scale.X, scale.Y, scale.Z));
 }	
 
-void TFRoom::Translate(toe::core::TOEvector3df translation){
+void TFRoom::Translate(TOEvector3df translation){
 	TRoom* currentRoom = (TRoom*)m_entityNode;
 	currentRoom->Translate(glm::vec3(translation.X, translation.Y, translation.Z));
 }
 
-void TFRoom::Rotate(toe::core::TOEvector3df rotation){
+void TFRoom::Rotate(TOEvector3df rotation){
 	TRoom* currentRoom = (TRoom*)m_entityNode;
 	currentRoom->Rotate(glm::vec3(rotation.X, rotation.Y, rotation.Z));
 }
 
-void TFRoom::Scale(toe::core::TOEvector3df scale){
+void TFRoom::Scale(TOEvector3df scale){
 	TRoom* currentRoom = (TRoom*)m_entityNode;
 	currentRoom->Scale(glm::vec3(scale.X, scale.Y, scale.Z));
 }
 
-toe::core::TOEvector3df TFRoom::GetTranslation(){
+TOEvector3df TFRoom::GetTranslation(){
 	TRoom* currentRoom = (TRoom*)m_entityNode;
 	glm::vec3 center = currentRoom->GetCenter();
-	return toe::core::TOEvector3df(center.x, center.y, center.z);
+	return TOEvector3df(center.x, center.y, center.z);
 }
 
-toe::core::TOEvector3df TFRoom::GetRotation(){
+TOEvector3df TFRoom::GetRotation(){
 	TRoom* currentRoom = (TRoom*)m_entityNode;
 	glm::vec3 rot = currentRoom->GetRotation();
-	return toe::core::TOEvector3df(rot.x, rot.y, rot.z);
+	return TOEvector3df(rot.x, rot.y, rot.z);
 }
 
-toe::core::TOEvector3df TFRoom::GetScale(){
+TOEvector3df TFRoom::GetScale(){
 	TRoom* currentRoom = (TRoom*)m_entityNode;
 	glm::vec3 scale = currentRoom->GetSize();
-	return toe::core::TOEvector3df(scale.x, scale.y, scale.z);
+	return TOEvector3df(scale.x, scale.y, scale.z);
 }
 
-float TFRoom::GetDistance(toe::core::TOEvector3df position){
+float TFRoom::GetDistance(TOEvector3df position){
 	TRoom* currentRoom = (TRoom*)m_entityNode;
 	return currentRoom->GetDistance(glm::vec3(position.X, position.Y, position.Z));
 }

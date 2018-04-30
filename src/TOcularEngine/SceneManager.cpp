@@ -36,7 +36,7 @@ SceneManager::~SceneManager(){
 	glDeleteTextures(1, &m_shadowMap);
 }
 
-TFCamera* SceneManager::AddCamera(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, bool perspective){
+TFCamera* SceneManager::AddCamera(TOEvector3df position, TOEvector3df rotation, bool perspective){
 	TFCamera* toRet = nullptr;
 	toRet = new TFCamera(position, rotation, perspective);
 	m_cameras.push_back(toRet);
@@ -45,7 +45,7 @@ TFCamera* SceneManager::AddCamera(toe::core::TOEvector3df position, toe::core::T
 	return toRet;
 }
 
-TFLight* SceneManager::AddLight(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector4df color, float attenuation){
+TFLight* SceneManager::AddLight(TOEvector3df position, TOEvector3df rotation, TOEvector4df color, float attenuation){
 	TFLight* toRet = nullptr;
 	toRet = new TFLight(position, rotation, color, attenuation);
 	m_lights.push_back(toRet);
@@ -53,7 +53,7 @@ TFLight* SceneManager::AddLight(toe::core::TOEvector3df position, toe::core::TOE
 	return toRet;
 }
 
-TFMesh* SceneManager::AddMesh(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale, std::string meshPath){
+TFMesh* SceneManager::AddMesh(TOEvector3df position, TOEvector3df rotation, TOEvector3df scale, std::string meshPath){
 	TFMesh* toRet = nullptr;
 	toRet = new TFMesh(position, rotation, scale, meshPath);
 	m_objects.push_back(toRet);
@@ -61,9 +61,9 @@ TFMesh* SceneManager::AddMesh(toe::core::TOEvector3df position, toe::core::TOEve
 	return toRet;
 }
 
-TFDome* SceneManager::AddDome(toe::core::TOEvector3df position, std::string texturePath){
+TFDome* SceneManager::AddDome(TOEvector3df position, std::string texturePath){
 	if(m_dome == nullptr){
-		TFDome* toRet = new TFDome(position, toe::core::TOEvector3df(0.0f,0.0f,0.0f), toe::core::TOEvector3df(50.0f,50.0f,50.0f), texturePath);
+		TFDome* toRet = new TFDome(position, TOEvector3df(0.0f,0.0f,0.0f), TOEvector3df(50.0f,50.0f,50.0f), texturePath);
 		m_dome = toRet;
 		m_dome->AttachFirst(m_SceneTreeRoot);	
 	}
@@ -71,7 +71,7 @@ TFDome* SceneManager::AddDome(toe::core::TOEvector3df position, std::string text
 	return m_dome;
 }
 
-TFAnimation* SceneManager::AddAnimation(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale){
+TFAnimation* SceneManager::AddAnimation(TOEvector3df position, TOEvector3df rotation, TOEvector3df scale){
 	TFAnimation* toRet = nullptr;
 	toRet = new TFAnimation(position, rotation, scale);
 	m_objects.push_back(toRet);
@@ -79,19 +79,25 @@ TFAnimation* SceneManager::AddAnimation(toe::core::TOEvector3df position, toe::c
 	return toRet;
 }
 
-TFRect* SceneManager::Add2DRect(toe::core::TOEvector2df position, toe::core::TOEvector2df size, float rotation){
+TFRect* SceneManager::Add2DRect(TOEvector2df position, TOEvector2df size, float rotation){
 	TFRect* toRet = new TFRect(position, size, rotation);
 	m_bkg2Delems.push_back(toRet);
 	return toRet;
 }
 
-TFSprite* SceneManager::AddSprite(std::string texture, toe::core::TOEvector2df position, toe::core::TOEvector2df size){
+TF2DText* SceneManager::Add2DText(std::string text, TOEvector2df position){
+	TF2DText* toRet = new TF2DText(text, position);
+	m_bkg2Delems.push_back(toRet);
+	return toRet;
+}
+
+TFSprite* SceneManager::AddSprite(std::string texture, TOEvector2df position, TOEvector2df size){
 	TFSprite* toRet =  new TFSprite(texture, position, size);
 	m_bkg2Delems.push_back(toRet);
 	return toRet;
 }
 
-TFParticleSystem* SceneManager::AddParticleSystem(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale){
+TFParticleSystem* SceneManager::AddParticleSystem(TOEvector3df position, TOEvector3df rotation, TOEvector3df scale){
 	TFParticleSystem* toRet = nullptr;
 	toRet = new TFParticleSystem(position, rotation, scale);
 	m_objects.push_back(toRet);
@@ -99,7 +105,7 @@ TFParticleSystem* SceneManager::AddParticleSystem(toe::core::TOEvector3df positi
 	return toRet;
 }
 
-TFRoom* SceneManager::AddRoom(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale){
+TFRoom* SceneManager::AddRoom(TOEvector3df position, TOEvector3df rotation, TOEvector3df scale){
 	TFRoom* toRet = nullptr;
 	toRet = new TFRoom(position, rotation, scale);
 	m_rooms.push_back(toRet);
@@ -210,12 +216,12 @@ bool SceneManager::DeleteRoom(TFNode* node){
 	return toRet;
 }
 
-void SceneManager::SetAmbientLight(toe::core::TOEvector3df ambientLight){
+void SceneManager::SetAmbientLight(TOEvector3df ambientLight){
 	m_ambientLight = glm::vec3(ambientLight.X, ambientLight.Y, ambientLight.Z);
 }
 
-toe::core::TOEvector3df SceneManager::GetAmbientLight(){
-	return toe::core::TOEvector3df(m_ambientLight.x, m_ambientLight.y, m_ambientLight.z);
+TOEvector3df SceneManager::GetAmbientLight(){
+	return TOEvector3df(m_ambientLight.x, m_ambientLight.y, m_ambientLight.z);
 }
 
 void SceneManager::SetMainCameraData(){
@@ -297,7 +303,7 @@ void SceneManager::InitScene(){
 void SceneManager::Update(){
 	// MOVE DOME WITH CAMERA
 	if(m_main_camera != nullptr && m_dome != nullptr){
-		toe::core::TOEvector3df position = m_main_camera->GetTranslation();
+		TOEvector3df position = m_main_camera->GetTranslation();
 		m_dome->SetTranslate(position);
 	}
 }
@@ -341,7 +347,7 @@ void SceneManager::DrawRooms(){
 	if(m_main_camera != nullptr){
 
 		// Lo primero es saber cual de todas las habitaciones esta mas cerca de la mainCamera
-		toe::core::TOEvector3df camPos = m_main_camera->GetTranslation();
+		TOEvector3df camPos = m_main_camera->GetTranslation();
 		float minDistance =  std::numeric_limits<float>::max();
 		int value = -1;
 
@@ -381,7 +387,7 @@ void SceneManager::DrawBoundingBoxes(bool draw){
 	}
 }
 
-void SceneManager::DrawLine(toe::core::TOEvector3df start, toe::core::TOEvector3df end, toe::core::TOEvector3df color){
+void SceneManager::DrawLine(TOEvector3df start, TOEvector3df end, TOEvector3df color){
 	vertexVector.push_back(start.X); 
 	vertexVector.push_back(start.Y); 
 	vertexVector.push_back(start.Z);

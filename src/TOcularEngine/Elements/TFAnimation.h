@@ -73,9 +73,9 @@ public:
 
 protected:
 	TFAnimation(
-		toe::core::TOEvector3df position = toe::core::TOEvector3df(0, 0, 0),
-		toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0, 0, 0),
-		toe::core::TOEvector3df scale = toe::core::TOEvector3df(1, 1, 1)
+		TOEvector3df position = TOEvector3df(0, 0, 0),
+		TOEvector3df rotation = TOEvector3df(0, 0, 0),
+		TOEvector3df scale = TOEvector3df(1, 1, 1)
 	);
 	~TFAnimation();
     

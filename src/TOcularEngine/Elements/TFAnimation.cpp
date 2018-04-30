@@ -4,7 +4,7 @@
 #include "./../../EngineUtilities/TNode.h"
 #include "./../VideoDriver.h"
 
-TFAnimation::TFAnimation(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale) : TFNode(){	
+TFAnimation::TFAnimation(TOEvector3df position, TOEvector3df rotation, TOEvector3df scale) : TFNode(){	
 	TTransform*  t = (TTransform*) m_scaleNode->GetEntity();
 	t->Scale(scale.X, scale.Y, scale.Z);
 

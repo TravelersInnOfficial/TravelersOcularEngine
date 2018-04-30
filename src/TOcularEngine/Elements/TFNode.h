@@ -16,17 +16,17 @@ class TFNode{
 	friend class SceneManager;
 
 public:
-	virtual void SetTranslate(toe::core::TOEvector3df translation);	// Sets the rotation of the Node
-	virtual void SetRotation(toe::core::TOEvector3df rotation);		// Sets the position of the Node
-	virtual void SetScale(toe::core::TOEvector3df scale);			// Sets the scale of the Node
+	virtual void SetTranslate(TOEvector3df translation);	// Sets the rotation of the Node
+	virtual void SetRotation(TOEvector3df rotation);		// Sets the position of the Node
+	virtual void SetScale(TOEvector3df scale);			// Sets the scale of the Node
 
-	virtual void Translate(toe::core::TOEvector3df translation);	// Adds the position to the current position
-	virtual void Rotate(toe::core::TOEvector3df rotation);					// Adds the rotation to the current rotation
-	virtual void Scale(toe::core::TOEvector3df scale);						// Adds the scale to the current scale
+	virtual void Translate(TOEvector3df translation);	// Adds the position to the current position
+	virtual void Rotate(TOEvector3df rotation);					// Adds the rotation to the current rotation
+	virtual void Scale(TOEvector3df scale);						// Adds the scale to the current scale
 
-	virtual toe::core::TOEvector3df GetTranslation();	// Returns the rotation of the Node
-	virtual toe::core::TOEvector3df GetRotation();		// Returns the position of the Node
-	virtual toe::core::TOEvector3df GetScale();			// Returns the scale of the Node
+	virtual TOEvector3df GetTranslation();	// Returns the rotation of the Node
+	virtual TOEvector3df GetRotation();		// Returns the position of the Node
+	virtual TOEvector3df GetScale();			// Returns the scale of the Node
 
 	bool AddChild(TFNode* children);			// Adds a Children to the TFNode
 	bool RemoveChild(TFNode* children);			// Removes Children from the TFNode
@@ -38,9 +38,9 @@ public:
 	std::vector<TFNode*> GetChildren();
 
 	// Devuelve la posicion en el vector para poder editarlo
-	int AddBillboard(toe::core::TOEvector3df position, std::string text, float charSize = 0.2f, std::string texture = "");
+	int AddBillboard(TOEvector3df position, std::string text, float charSize = 0.2f, std::string texture = "");
 	void SetBillboardText(std::string text, int id = 0);
-	void SetBillboardPosition(toe::core::TOEvector3df position, int id = 0);
+	void SetBillboardPosition(TOEvector3df position, int id = 0);
 	void SetBillboardSize(float charSize, int id = 0);
 	void DeleteBillboard(int id = 0);
 	void DeleteAllBillboard();

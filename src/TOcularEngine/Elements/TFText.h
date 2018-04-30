@@ -13,9 +13,9 @@ public:
 
 protected:
 	TFText(
-		toe::core::TOEvector3df position,
-		toe::core::TOEvector3df rotation,
-		toe::core::TOEvector3df scale,
+		TOEvector3df position,
+		TOEvector3df rotation,
+		TOEvector3df scale,
 		std::string text,
 		float charSize,
 		std::string texture

@@ -10,19 +10,19 @@ ColoredParticle::~ColoredParticle(){
 }
 
 void ColoredParticle::InitParticle(Particle& p){
-	p.translation = toe::core::TOEvector3df(0,0,0);
+	p.translation = TOEvector3df(0,0,0);
 
 	float X = (rand() % 10)/10.0f - 0.5f;
 	float Y = (rand() % 10)/10.0f - 0.5f;
 	float Z = (rand() % 10)/10.0f - 0.5f;
 
-	p.pos 	= toe::core::TOEvector3df(X, Y, Z);
+	p.pos 	= TOEvector3df(X, Y, Z);
 
 	Y = (rand() % 4)/10.0f - 0.2f;
 	X = (rand() % 2)/10.0f - 0.1f;
 	Z = (rand() % 2)/10.0f - 0.1f;
 
-	p.speed = toe::core::TOEvector3df(X,Y,Z);
+	p.speed = TOEvector3df(X,Y,Z);
 
 	if(r) p.r = 255;
 	else p.r = (unsigned char)(rand() % 255);

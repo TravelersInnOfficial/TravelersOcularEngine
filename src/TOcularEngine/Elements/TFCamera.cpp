@@ -4,7 +4,7 @@
 #include "./../../EngineUtilities/Entities/TCamera.h"
 #include "./../../EngineUtilities/TNode.h"
 
-TFCamera::TFCamera(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, bool perspective) : TFNode(){
+TFCamera::TFCamera(TOEvector3df position, TOEvector3df rotation, bool perspective) : TFNode(){
 	TTransform* t = (TTransform*) m_scaleNode->GetEntity();
 	t->Scale(1.0f, 1.0f, 1.0f);
 
@@ -81,7 +81,7 @@ float TFCamera::GetBottom(){
 	return myEntity->GetBottom();
 }
 
-void TFCamera::LookAt(toe::core::TOEvector3df target, toe::core::TOEvector3df up){
+void TFCamera::LookAt(TOEvector3df target, TOEvector3df up){
 
 	glm::vec3 position 	= m_entityNode->GetTranslation();
 	glm::vec3 targetPos	= glm::vec3(target.X, target.Y, target.Z);

@@ -3,9 +3,9 @@
 #include "./../../EngineUtilities/TNode.h"
 #include "./../../EngineUtilities/Entities/TDome.h"
 
-TFDome::TFDome( toe::core::TOEvector3df position, 
-                toe::core::TOEvector3df rotation, 
-                toe::core::TOEvector3df scale, 
+TFDome::TFDome( TOEvector3df position, 
+                TOEvector3df rotation, 
+                TOEvector3df scale, 
                 std::string texturePath): TFNode()
 {
 

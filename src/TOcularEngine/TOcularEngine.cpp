@@ -12,23 +12,29 @@ SceneManager* toe::GetSceneManager(){
     return privateSceneManager;
 }
 
-TFMesh* toe::AddCube(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale){
+TFMesh* toe::AddCube(TOEvector3df position, TOEvector3df rotation, TOEvector3df scale){
     TFMesh* m = privateSceneManager->AddMesh(position, rotation, scale, "");
     return m;
 }
 
-TFMesh* toe::AddSphere(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale){
+TFMesh* toe::AddSphere(TOEvector3df position, TOEvector3df rotation, TOEvector3df scale){
     TFMesh* m = privateSceneManager->AddMesh(position, rotation, scale, "");
     m->CreateSphere();
     return m;
 }
 
-TFRect* toe::Add2DRect(toe::core::TOEvector2df position, toe::core::TOEvector2df size, float rotation){
+TFRect* toe::Add2DRect(TOEvector2df position, TOEvector2df size, float rotation){
     TFRect* toRet = privateSceneManager->Add2DRect(position, size, rotation);
     return toRet;
 }
 
-TFSprite* toe::AddSprite(std::string texture, toe::core::TOEvector2df position, toe::core::TOEvector2df size){
+TF2DText* toe::Add2DText(std::string text, TOEvector2df position){
+    TF2DText* toRet = privateSceneManager->Add2DText(text, position);
+    return toRet;
+}
+
+
+TFSprite* toe::AddSprite(std::string texture, TOEvector2df position, TOEvector2df size){
     TFSprite* toRet = privateSceneManager->AddSprite(texture, position, size);
     return toRet;
 }
@@ -45,10 +51,10 @@ GLuint toe::GetTextureID(std::string path){
     return TResourceManager::GetInstance()->GetResourceTexture(path)->GetTextureId();
 }
 
-toe::core::TOEvector2di toe::GetTextureDims(std::string path){
+TOEvector2di toe::GetTextureDims(std::string path){
     int w = TResourceManager::GetInstance()->GetResourceTexture(path)->GetWidth();
     int h = TResourceManager::GetInstance()->GetResourceTexture(path)->GetHeight();
-    return toe::core::TOEvector2di(w,h);
+    return TOEvector2di(w,h);
 }
 
 int toe::GetTextureWidth(std::string path){
