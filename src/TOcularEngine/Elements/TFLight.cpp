@@ -81,17 +81,21 @@ void TFLight::DrawLight(int num){
 	glm::vec3 position = glm::vec3(0.0f);
 	glm::vec3 diffuse = glm::vec3(0.0f);
 	glm::vec3 specular = glm::vec3(0.0f);
+	glm::vec3 direction = glm::vec3(0.0f);
 	float att = 0;
 	bool directional = false;
 
 	if(ent->GetActive()){
 		toe::core::TOEvector4df color = GetColor();
-		
+		toe::core::TOEvector3df dir = GetDirection();
+
 		position = m_LastLocation;
 		diffuse = glm::vec3(color.X, color.Y, color.X2);
 		specular = glm::vec3(color.X, color.Y, color.X2);
 		att = GetAttenuation();
 		directional = GetDirectional();
+
+		direction = glm::vec3(dir.X, dir.Y, dir.Z);
 	}
 
 	VideoDriver* vd = VideoDriver::GetInstance();
@@ -114,6 +118,9 @@ void TFLight::DrawLight(int num){
 
 	aux = str +"Directional";
 	glUniform1i(glGetUniformLocation(progID, aux.c_str()), directional);
+
+	aux = str +"Direction";
+	glUniform3fv(glGetUniformLocation(progID, aux.c_str()), 1, &direction[0]);
 }
 
 void TFLight::DrawLightShadow(int num){
@@ -155,4 +162,14 @@ void TFLight::SetBoundBox(bool box){
 glm::vec3 TFLight::CalculateLocation(){
 	m_LastLocation = m_entityNode->GetTranslation();
 	return m_LastLocation;
+}
+
+void TFLight::SetDirection(toe::core::TOEvector3df direction){
+	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
+	myEntity->SetDirection(direction);
+}
+
+toe::core::TOEvector3df TFLight::GetDirection(){
+	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
+	return myEntity->GetDirection();
 }
