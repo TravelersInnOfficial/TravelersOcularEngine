@@ -51,7 +51,7 @@ void TPortal::CalculateTransform(){
 
 bool TPortal::CheckVisibility(){
 	bool output = true;
-	DrawDebug();
+	//DrawDebug();
 	if(m_secondConnection->GetDrawed() || !m_visible){
 		output = false;
 	}else{	

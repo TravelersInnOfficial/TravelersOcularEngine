@@ -33,7 +33,7 @@ TRoom::~TRoom(){
 void TRoom::Draw(){
 	drawed = true;
 
-	DrawDebug();
+	//DrawDebug();
 
 	TNode::Draw();
 	
