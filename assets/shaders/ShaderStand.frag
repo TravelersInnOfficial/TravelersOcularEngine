@@ -40,7 +40,7 @@ uniform vec3 AmbientLight;		// AMBIENT LIGHT
 
 // TEMPORAL TEXTURE WITHOUT MATERIALS
 uniform sampler2D uvMap;
-uniform sampler2D normalMap;
+uniform sampler2D specularMap;
 uniform sampler2DShadow shadowMap;
 
 // FUNCION QUE CALCULA EL MODELO DE REFLEXION DE PHONG
@@ -63,9 +63,10 @@ vec3  Phong (int num) {
 		objToToLight = normalize(pointB - pointA);		// Calculamos el vector en espacio de vision
 	}
 	
-	vec3 normalTexture = 2.0 * texture2D (normalMap, TexCoords).rgb - 1.0;
-	normalTexture = normalize (normalTexture);
-	float lamberFactor = max (dot (objToToLight, normalTexture), 0.0);
+	//vec3 normalTexture = 2.0 * texture2D (normalMap, TexCoords).rgb - 1.0;
+	vec3 specTexure = texture2D(specularMap, TexCoords).rgb;
+	//normalTexture = normalize (normalTexture);
+	//float lamberFactor = max (dot (objToToLight, normalTexture), 0.0);
 
 	vec3 s = normalize(objToToLight);
 	vec3 r = reflect(-s, n);
@@ -86,7 +87,7 @@ vec3  Phong (int num) {
 	
 
 	// ENVIAMOS EL RESULTADO
-	return (Attenuation * (Diffuse + Specular))*lamberFactor;
+	return (Attenuation * (Diffuse + Specular)* specTexure);
 }
 
 // POISSON SAMPLING
@@ -106,8 +107,6 @@ void main() {
 	vec4 result = vec4(0.0);
 	for(int i = 0; i < nlights; i++) result += vec4(Phong(i), 0.0);
 
-	result = round(result * 8.0)/8.0;
-
 	/// CHECK SHADOWS
 	float bias = 0.005;
 	float visibility = 1.0;
@@ -124,7 +123,6 @@ void main() {
 
 	// SUMAMOS AMBIENTAL
 	vec3 Ambient = AmbientLight * vec3(texValue) * Material.Ambient;
-	Ambient = round(Ambient * 16.0)/16.0;
 	result += vec4(Ambient, 1.0);
 	FragColor = result;
 }

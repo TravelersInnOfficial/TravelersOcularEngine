@@ -9,6 +9,7 @@ TMesh::TMesh(std::string meshPath, std::string texturePath){
 	m_mesh = nullptr;
 	m_texture = nullptr;
 	m_material = nullptr;
+	m_specularMap = nullptr;
 	m_visibleBB = false;
 	m_drawingShadows = false;
 	m_textureScaleX = 1.0f;
@@ -19,7 +20,7 @@ TMesh::TMesh(std::string meshPath, std::string texturePath){
 	m_program = STANDARD_SHADER;
 }
 
-TMesh::~TMesh(){ }
+TMesh::~TMesh(){}
 
 void TMesh::LoadMesh(std::string meshPath){
 	if(meshPath.compare("")==0) meshPath = VideoDriver::GetInstance()->GetAssetsPath() + "/models/cube.obj";
@@ -29,6 +30,11 @@ void TMesh::LoadMesh(std::string meshPath){
 void TMesh::ChangeTexture(std::string texturePath){
 	if(texturePath.compare("")!=0) m_texture = TResourceManager::GetInstance()->GetResourceTexture(texturePath);
 	else m_texture = nullptr;
+}
+
+void TMesh::ChangeSpecularMap(std::string texturePath){
+	if(texturePath.compare("")!=0) m_specularMap = TResourceManager::GetInstance()->GetResourceTexture(texturePath);
+	else m_specularMap = nullptr;
 }
 
 void TMesh::SetBBVisibility(bool visible){
@@ -179,6 +185,18 @@ void TMesh::SendShaderData(){
 		glBindTexture(GL_TEXTURE_2D, TEntity::ShadowMap);
 		glUniform1i(ShadowMapID, 1);
 
+	}
+	// -------------------------------------------------------- ENVIAMOS EL BUMPMAP
+	currentTexture = nullptr;
+	if(m_specularMap != nullptr) currentTexture = m_specularMap;
+	else if(m_mesh != nullptr) currentTexture = m_mesh->GetSpecularMap();
+
+	if(currentTexture != nullptr){
+		GLuint TextureID = glGetUniformLocation(myProgram->GetProgramID(), "specularMap");
+
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, currentTexture->GetTextureId());
+		glUniform1i(TextureID, 2); 
 	}
 
 	// -------------------------------------------------------- ENVIAMOS EL MATERIAL

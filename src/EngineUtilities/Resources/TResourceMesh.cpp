@@ -8,7 +8,9 @@
 TResourceMesh::TResourceMesh(std::string name){
 	m_name = name;
 	m_basicTexture = nullptr;
+	m_specularMap = nullptr;
 	m_basicMaterial = nullptr;
+
 	m_center = glm::vec3(0,0,0);
 	m_size = glm::vec3(1,1,1);
 
@@ -28,6 +30,10 @@ TResourceMesh::TResourceMesh(std::string name){
 	LoadFile();
 	if(m_basicTexture == nullptr){
 		m_basicTexture = TResourceManager::GetInstance()->GetResourceTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_texture.png");
+	}
+
+	if(m_specularMap == nullptr){
+		m_specularMap = TResourceManager::GetInstance()->GetResourceTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_texture.png");
 	}
 }
 
@@ -63,6 +69,10 @@ TResourceMesh::~TResourceMesh(){
 	glDeleteBuffers(1, &m_nbo);
 }
 
+void TResourceMesh::AddSpecularMap(TResourceTexture* texture){
+	m_specularMap = texture;
+}
+
 void TResourceMesh::AddTexture(TResourceTexture* texture){
 	m_basicTexture = texture;
 }
@@ -75,6 +85,10 @@ bool TResourceMesh::LoadFile(){
 	bool toRet = TObjectLoader::LoadObjAssimp(this);
 	SetLoaded(toRet);
 	return toRet;
+}
+
+TResourceTexture* TResourceMesh::GetSpecularMap(){
+	return m_specularMap;
 }
 
 TResourceTexture* TResourceMesh::GetTexture(){

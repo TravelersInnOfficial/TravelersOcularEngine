@@ -27,6 +27,11 @@ void TFMesh::SetTexture(std::string texturePath){
 	myMesh->ChangeTexture(texturePath);
 }
 
+void TFMesh::SetSpecularMap(std::string texturePath){
+	TMesh* myMesh = (TMesh*) m_entityNode->GetEntity();
+	myMesh->ChangeSpecularMap(texturePath);
+}
+
 void TFMesh::SetMesh(std::string meshPath){
 	TMesh* myMesh = (TMesh*) m_entityNode->GetEntity();
 	myMesh->LoadMesh(meshPath);

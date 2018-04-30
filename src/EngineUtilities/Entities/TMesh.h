@@ -28,6 +28,9 @@ public:
 	 * @param texturePath: Path to texture from executable
 	 */
 	void ChangeTexture(std::string texturePath = "");
+
+	void ChangeSpecularMap(std::string texturePath = "");
+
 	/**
 	 * @brief Shows or hide mesh bounding box
 	 * 
@@ -41,6 +44,7 @@ protected:
 
 	TResourceMesh* 		m_mesh;
 	TResourceTexture* 	m_texture;
+	TResourceTexture*	m_specularMap;
 	TResourceMaterial* 	m_material;
 
 	bool m_visibleBB;
