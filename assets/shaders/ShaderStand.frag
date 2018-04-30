@@ -40,6 +40,7 @@ uniform vec3 AmbientLight;		// AMBIENT LIGHT
 
 // TEMPORAL TEXTURE WITHOUT MATERIALS
 uniform sampler2D uvMap;
+uniform sampler2D normalMap;
 uniform sampler2DShadow shadowMap;
 
 // FUNCION QUE CALCULA EL MODELO DE REFLEXION DE PHONG
@@ -50,8 +51,10 @@ vec3  Phong (int num) {
 	vec3 n = normalize(Normal); 
 	vec3 lightPos = (FragViewMatrix * vec4(Light[num].Position, 1)).xyz;
 	
+
 	// Vector from SURFACE to LIGHT
 	vec3 objToToLight = lightPos + eyeDir;
+
 	if(Light[num].Directional){
 		vec3 pointA = vec3(0,0,0);						// Ponemos el principio en el centro
 		vec3 pointB = pointA - Light[num].Direction;	// Calculamos el punto final
@@ -60,6 +63,10 @@ vec3  Phong (int num) {
 		objToToLight = normalize(pointB - pointA);		// Calculamos el vector en espacio de vision
 	}
 	
+	vec3 normalTexture = 2.0 * texture2D (normalMap, TexCoords).rgb - 1.0;
+	normalTexture = normalize (normalTexture);
+	float lamberFactor = max (dot (objToToLight, normalTexture), 0.0);
+
 	vec3 s = normalize(objToToLight);
 	vec3 r = reflect(-s, n);
   	
@@ -79,7 +86,7 @@ vec3  Phong (int num) {
 	
 
 	// ENVIAMOS EL RESULTADO
-	return Attenuation * (Diffuse + Specular);
+	return (Attenuation * (Diffuse + Specular))*lamberFactor;
 }
 
 // POISSON SAMPLING
