@@ -7,8 +7,8 @@
 #include <cmath>  
 
 struct RectData{
-    toe::core::TOEvector2df position;
-    toe::core::TOEvector2df size;
+    TOEvector2df position;
+    TOEvector2df size;
     std::string texture = "";
 };
 
@@ -17,49 +17,43 @@ public:
     virtual ~TFDrawable(){}
     virtual void Draw() const = 0;
     
-    virtual toe::core::TOEvector2df GetPosition() const {return m_InData.position;}
-    virtual float GetPosX() const {return m_InData.position.X;}
-    virtual float GetPosY() const {return m_InData.position.Y;}
+    virtual TOEvector2df GetPosition() const;
+    virtual float GetPosX() const;
+    virtual float GetPosY() const;
 
-    virtual toe::core::TOEvector2df GetSize() const {return m_InData.size;}
-    virtual float GetWidth() const {return m_InData.size.X;}
-    virtual float GetHeight() const {return m_InData.size.Y;}
+    virtual TOEvector2df GetSize() const;
+    virtual float GetWidth() const;
+    virtual float GetHeight() const;
 
-    void SetRotation(float rot){ m_rotation = rot;}
-    virtual void SetPosition(float x, float y) = 0;
-    virtual void SetPosX(float x) = 0;
-    virtual void SetPosY(float y) = 0;
+    virtual void SetRotation(float rot);
+    virtual void SetPosition(float x, float y);
+    virtual void SetPosX(float x);
+    virtual void SetPosY(float y);
 
-    virtual void SetSize(float w, float h) = 0;
-    virtual void SetWidth(float w) = 0;
-    virtual void SetHeight(float h) = 0;
+    virtual void SetSize(float w, float h);
+    virtual void SetWidth(float w);
+    virtual void SetHeight(float h);
 
-    virtual void SetColor(float r, float g, float b, float a = 1.0f) {  m_color.SetR(r);
-                                                                        m_color.SetG(g);
-                                                                        m_color.SetB(b);
-                                                                        m_color.SetA(a);}
+    virtual void SetColor(float r, float g, float b, float a = 1.0f);
 
-    virtual void SetRed(float r) {m_color.SetR(r);}
-    virtual void SetGreen(float g) {m_color.SetG(g);}
-    virtual void SetBlue(float b) {m_color.SetB(b);}
-    virtual void SetAlpha(float a) {m_color.SetA(a);}
+    virtual void SetRed(float r);
+    virtual void SetGreen(float g);
+    virtual void SetBlue(float b);
+    virtual void SetAlpha(float a);
 
     virtual void Erase() = 0;
 
-    virtual void ToBkg() = 0;
-    virtual void ToFront() = 0;
-
-    virtual void SetTexture(std::string texture_path) = 0;
-    virtual std::string GetTexture() const {return m_InData.texture;}
+    virtual void ToBkg();
+    virtual void ToFront();
 
 protected:
-    toe::core::TOEvector2df m_position;
-    toe::core::TOEvector2df m_size;
+    TOEvector2df m_position;
+    TOEvector2df m_size;
     float m_rotation;
     TColor m_color;
 
     SHADERTYPE m_program = TWOD_SHADER;
-    toe::core::TOEvector2di w_dims;
+    TOEvector2di w_dims;
     RectData m_InData;
 };
 #endif

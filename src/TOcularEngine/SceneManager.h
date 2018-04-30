@@ -4,6 +4,7 @@
 #include "./Elements/Particles/TFParticleSystem.h"
 #include "./Elements/2DElements/TFSprite.h"
 #include "./Elements/2DElements/TFRect.h"
+#include "./Elements/2DElements/TF2DText.h"
 #include "./Elements/TFCamera.h"
 #include "./Elements/TFLight.h"
 #include "./Elements/TFRoom.h"
@@ -37,52 +38,52 @@ public:
     /**
      * @brief Adds a new camera to the scene tree
      * 
-     * @param position (toe::core::TOEvector3df)
-     * @param rotation (toe::core::TOEvector3df)
+     * @param position (TOEvector3df)
+     * @param rotation (TOEvector3df)
      * @param perspective (bool)
      * @return TFCamera* NewCamera
      */
-    TFCamera* AddCamera(toe::core::TOEvector3df position = toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,0,0), bool perspective = true);
+    TFCamera* AddCamera(TOEvector3df position = TOEvector3df(0,0,0), TOEvector3df rotation = TOEvector3df(0,0,0), bool perspective = true);
 
     /**
      * @brief Adds a new Light to the scene tree
      * 
-     * @param position (toe::core::TOEvector3df)
-     * @param rotation (toe::core::TOEvector3df)
-     * @param color (toe::core::TOEvector4df)
+     * @param position (TOEvector3df)
+     * @param rotation (TOEvector3df)
+     * @param color (TOEvector4df)
      * @param attenuation (float)
      * @return TFLight* NewLight
      */
-    TFLight* AddLight(toe::core::TOEvector3df position = toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,0,0), toe::core::TOEvector4df color = toe::core::TOEvector4df(1,1,1,1), float attenuation = 0.05f);
+    TFLight* AddLight(TOEvector3df position = TOEvector3df(0,0,0), TOEvector3df rotation = TOEvector3df(0,0,0), TOEvector4df color = TOEvector4df(1,1,1,1), float attenuation = 0.05f);
 
     /**
      * @brief Adds a new Mesh to the scene tree
      * 
-     * @param position (toe::core::TOEvector3df)
-     * @param rotation (toe::core::TOEvector3df)
-     * @param scale (toe::core::TOEvector3df)
+     * @param position (TOEvector3df)
+     * @param rotation (TOEvector3df)
+     * @param scale (TOEvector3df)
      * @param meshPath (std::string)
      * @return TFMesh* NewMesh
      */
-    TFMesh* AddMesh(toe::core::TOEvector3df position = toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df scale = toe::core::TOEvector3df(1.0f,1.0f,1.0f), std::string meshPath = "");
+    TFMesh* AddMesh(TOEvector3df position = TOEvector3df(0,0,0), TOEvector3df rotation = TOEvector3df(0,0,0), TOEvector3df scale = TOEvector3df(1.0f,1.0f,1.0f), std::string meshPath = "");
 
     /**
      * @brief Adds a Dome/Skybox to the scene tree
      * 
-     * @param position (toe::core::TOEvector3df)
+     * @param position (TOEvector3df)
      * @param meshPath (std::string)
      * @return TFMesh* NewDome
      */
-    TFDome* AddDome(toe::core::TOEvector3df position = toe::core::TOEvector3df(0.0f,0.0f,0.0f), std::string texturePath = "");
+    TFDome* AddDome(TOEvector3df position = TOEvector3df(0.0f,0.0f,0.0f), std::string texturePath = "");
 
     /**
      * @brief Adds a Dome/Skybox to the scene tree
      * 
-     * @param position (toe::core::TOEvector3df)
+     * @param position (TOEvector3df)
      * @param meshPath (std::string)
      * @return TFMesh* NewDome
      */
-    TFAnimation* AddAnimation(toe::core::TOEvector3df position = toe::core::TOEvector3df(0.0f,0.0f,0.0f), toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,0,0), toe::core::TOEvector3df scale = toe::core::TOEvector3df(1.0f,1.0f,1.0f));
+    TFAnimation* AddAnimation(TOEvector3df position = TOEvector3df(0.0f,0.0f,0.0f), TOEvector3df rotation = TOEvector3df(0,0,0), TOEvector3df scale = TOEvector3df(1.0f,1.0f,1.0f));
 
     /**
      * @brief Adds a 2d rectangle to the screen
@@ -92,7 +93,7 @@ public:
      * @param rotation 
      * @return TFRect* 
      */
-    TFRect* Add2DRect(toe::core::TOEvector2df position, toe::core::TOEvector2df size, float rotation);
+    TFRect* Add2DRect(TOEvector2df position, TOEvector2df size, float rotation);
 
     /**
     * @brief Deletes a 2D element from draw vector
@@ -108,29 +109,38 @@ public:
      * @param position 
      * @return TFSprite* 
      */
-    TFSprite* AddSprite(std::string texture, toe::core::TOEvector2df position, toe::core::TOEvector2df size);
+    TFSprite* AddSprite(std::string texture, TOEvector2df position, TOEvector2df size);
+    
+    /**
+     * @brief Adds 2D text to the screen
+     * 
+     * @param text 
+     * @param position 
+     * @return TF2DText* 
+     */
+    TF2DText* Add2DText(std::string text, TOEvector2df position);
 
     /**
      * @brief Adds a Particle System in the scene
      * 
-     * @param position  (toe::core::TOEvector3df)
-     * @param rotation  (toe::core::TOEvector3df)
-     * @param scale     (toe::core::TOEvector3df)
+     * @param position  (TOEvector3df)
+     * @param rotation  (TOEvector3df)
+     * @param scale     (TOEvector3df)
      * 
      * @return TFParticleSystem* 
      */
-    TFParticleSystem* AddParticleSystem(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale);
+    TFParticleSystem* AddParticleSystem(TOEvector3df position, TOEvector3df rotation, TOEvector3df scale);
 
     /**
      * @brief Adds a Room in the Scene
      * 
-     * @param position  (toe::core::TOEvector3df)   Position of the Room
-     * @param rotation  (toe::core::TOEvector3df)   Rotation of the Room
-     * @param scale     (toe::core::TOEvector3df)   Size of the Room
+     * @param position  (TOEvector3df)   Position of the Room
+     * @param rotation  (TOEvector3df)   Rotation of the Room
+     * @param scale     (TOEvector3df)   Size of the Room
      * 
      * @return          (TFRoom*)                   The Room Created
      */
-    TFRoom* AddRoom(toe::core::TOEvector3df position = toe::core::TOEvector3df(0.0f, 0.0f, 0.0f), toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0.0f, 0.0f, 0.0f), toe::core::TOEvector3df scale = toe::core::TOEvector3df(1.0f, 1.0f, 1.0f));
+    TFRoom* AddRoom(TOEvector3df position = TOEvector3df(0.0f, 0.0f, 0.0f), TOEvector3df rotation = TOEvector3df(0.0f, 0.0f, 0.0f), TOEvector3df scale = TOEvector3df(1.0f, 1.0f, 1.0f));
 
     /**
      * @brief Deletes the Camera given
@@ -169,7 +179,7 @@ public:
      * 
      * @param ambientLight 
      */
-    void SetAmbientLight(toe::core::TOEvector3df ambientLight);
+    void SetAmbientLight(TOEvector3df ambientLight);
 
     /**
      * @brief Change the main camera
@@ -187,9 +197,9 @@ public:
     /**
      * @brief Get the Ambient Light object
      * 
-     * @return toe::core::TOEvector3df 
+     * @return TOEvector3df 
      */
-    toe::core::TOEvector3df GetAmbientLight();
+    TOEvector3df GetAmbientLight();
 
     /**
      * @brief Get the Root Node object
@@ -249,7 +259,7 @@ public:
      * @brief TODO: finish comment
      * 
      */
-    void DrawLine(toe::core::TOEvector3df start, toe::core::TOEvector3df end, toe::core::TOEvector3df color);
+    void DrawLine(TOEvector3df start, TOEvector3df end, TOEvector3df color);
 
     /**
      * @brief TODO: finish comment

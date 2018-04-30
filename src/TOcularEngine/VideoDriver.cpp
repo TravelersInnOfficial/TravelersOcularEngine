@@ -18,7 +18,7 @@ VideoDriver::VideoDriver(){
 	m_name = "";
 	m_lastShaderUsed = STANDARD_SHADER;
 	m_window = nullptr;
-	m_clearSceenColor = toe::core::TOEvector4df(0,0,0,0);
+	m_clearSceenColor = TOEvector4df(0,0,0,0);
 
 	// Init engine stuff
 	privateSceneManager = new SceneManager();
@@ -34,7 +34,7 @@ VideoDriver::~VideoDriver(){
 }
 
 // Main functions
-bool VideoDriver::CreateWindows(std::string window_name, toe::core::TOEvector2di dimensions, bool fullscreen){
+bool VideoDriver::CreateWindows(std::string window_name, TOEvector2di dimensions, bool fullscreen){
 	m_name = window_name;
 
 	//initialize gflwindow parameters
@@ -172,8 +172,8 @@ std::string VideoDriver::GetWindowName(){
 	return m_name;
 }
 
-toe::core::TOEvector2di VideoDriver::GetWindowDimensions(){
-   	toe::core::TOEvector2di toRet(0.0f,0.0f);
+TOEvector2di VideoDriver::GetWindowDimensions(){
+   	TOEvector2di toRet(0.0f,0.0f);
 	glfwGetWindowSize(m_window, &toRet.X, &toRet.Y);
    	return toRet;
 }
@@ -186,10 +186,10 @@ std::map<SHADERTYPE,Program*>& VideoDriver::GetProgramVector(){
 	return m_programs;
 }
 
-toe::core::TOEvector2di VideoDriver::GetCursorPosition(){
+TOEvector2di VideoDriver::GetCursorPosition(){
 	double x, y;
 	glfwGetCursorPos(m_window, &x, &y);
-	return toe::core::TOEvector2di((int)x, (int)y);
+	return TOEvector2di((int)x, (int)y);
 }
 
 GLFWwindow* VideoDriver::GetWindow(){
@@ -200,20 +200,20 @@ std::string VideoDriver::GetAssetsPath(){
 	return m_assetsPath;
 }
 
-toe::core::TOEvector2di VideoDriver::GetScreenResolution(){
+TOEvector2di VideoDriver::GetScreenResolution(){
     const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-    return toe::core::TOEvector2di(mode->width, mode->height);
+    return TOEvector2di(mode->width, mode->height);
 }
 
-toe::core::TOEvector2di VideoDriver::GetWindowResolution(){
+TOEvector2di VideoDriver::GetWindowResolution(){
 	int x = 0;
 	int y = 0;
 	if(m_window != nullptr) glfwGetWindowSize(m_window, &x, &y); 	
-	return toe::core::TOEvector2di(x, y);
+	return TOEvector2di(x, y);
 }
 
 // Setters
-void VideoDriver::SetClearScreenColor(toe::core::TOEvector4df color){
+void VideoDriver::SetClearScreenColor(TOEvector4df color){
 	m_clearSceenColor = color;
 }
 
@@ -291,6 +291,12 @@ void VideoDriver::initShaders(){
 	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/Shader2D.frag", GL_FRAGMENT_SHADER));
 	m_programs.insert(std::pair<SHADERTYPE, Program*>(TWOD_SHADER, new Program(shaders)));
 
+	// CARGAMOS EL PROGRAMA DE TEXTO 2D
+	shaders = std::map<std::string, GLenum>();
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/Shader2DText.vs", GL_VERTEX_SHADER));
+	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/Shader2DText.frag", GL_FRAGMENT_SHADER));
+	m_programs.insert(std::pair<SHADERTYPE, Program*>(TWODTEXT_SHADER, new Program(shaders)));
+
 	// CARGAMOS EL PROGRAMA DE SPRITES
 	shaders = std::map<std::string, GLenum>();
 	shaders.insert(std::pair<std::string, GLenum>(m_assetsPath + "/shaders/ShaderSprites.vs", GL_VERTEX_SHADER));
@@ -336,7 +342,7 @@ void VideoDriver::start2DDrawState(){
 	glLoadIdentity(); 				//cargamos la matriz identidad en la matriz Projection
 
 	//creamos una vista ortografica de la camara
-	toe::core::TOEvector2di dims = GetWindowDimensions();	//cojemos las dimensiones de la ventana
+	TOEvector2di dims = GetWindowDimensions();	//cojemos las dimensiones de la ventana
 	glOrtho(0, dims.X, dims.Y, 0, -1.0f, 1.0f);				//sup-izq, inf-izq, inf-der, sup-der, near, far
 
 	glMatrixMode(GL_MODELVIEW);		//activamos la matriz ModelView

@@ -22,8 +22,8 @@ public:
 	void	SetDirectional(bool directional);
 	bool	GetDirectional();
 
-	void	SetDirection(toe::core::TOEvector3df direction);
-	toe::core::TOEvector3df GetDirection();
+	void	SetDirection( TOEvector3df direction);
+	 TOEvector3df GetDirection();
 
 	void 	BeginDraw();				// Empezar a pintar la luz
 	void 	EndDraw();					// Acabar de pintar la luz
@@ -36,7 +36,7 @@ private:
 	float m_attenuation;
 	bool m_active;
 	bool m_directional;
-	toe::core::TOEvector3df m_direction;
+	 TOEvector3df m_direction;
 	
 };
 

@@ -9,7 +9,7 @@
 #include <GL/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
 
-TFLight::TFLight(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector4df color, float attenuation) : TFNode(){
+TFLight::TFLight(TOEvector3df position, TOEvector3df rotation, TOEvector4df color, float attenuation) : TFNode(){
 	TTransform* t = (TTransform*) m_scaleNode->GetEntity();
 	t->Scale(1, 1, 1);
 
@@ -31,7 +31,7 @@ TFLight::TFLight(toe::core::TOEvector3df position, toe::core::TOEvector3df rotat
 TFLight::~TFLight(){
 }
 
-void TFLight::SetColor(toe::core::TOEvector4df color){
+void TFLight::SetColor(TOEvector4df color){
 	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
 	glm::vec4 glmColor = glm::vec4(color.X, color.Y, color.X2, color.Y2);
 	TColor myColor = TColor(glmColor);
@@ -43,10 +43,10 @@ void TFLight::SetAttenuation(float attenuation){
 	myEntity->SetAttenuation(attenuation);
 }
 
-toe::core::TOEvector4df TFLight::GetColor(){
+TOEvector4df TFLight::GetColor(){
 	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
 	glm::vec4 myColor = myEntity->GetColor().GetRGBA();
-	toe::core::TOEvector4df toRetColor = toe::core::TOEvector4df(myColor.x, myColor.y, myColor.z, myColor.w);
+	TOEvector4df toRetColor = TOEvector4df(myColor.x, myColor.y, myColor.z, myColor.w);
 	return toRetColor;
 }
 
@@ -87,8 +87,8 @@ void TFLight::DrawLight(int num){
 	bool directional = false;
 
 	if(ent->GetActive()){
-		toe::core::TOEvector4df color = GetColor();
-		toe::core::TOEvector3df dir = GetDirection();
+		 TOEvector4df color = GetColor();
+		 TOEvector3df dir = GetDirection();
 
 		position = m_LastLocation;
 		diffuse = glm::vec3(color.X, color.Y, color.X2);
@@ -165,12 +165,12 @@ glm::vec3 TFLight::CalculateLocation(){
 	return m_LastLocation;
 }
 
-void TFLight::SetDirection(toe::core::TOEvector3df direction){
+void TFLight::SetDirection( TOEvector3df direction){
 	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
 	myEntity->SetDirection(direction);
 }
 
-toe::core::TOEvector3df TFLight::GetDirection(){
+ TOEvector3df TFLight::GetDirection(){
 	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
 	return myEntity->GetDirection();
 }

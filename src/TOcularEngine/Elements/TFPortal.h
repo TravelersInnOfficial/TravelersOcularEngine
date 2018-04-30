@@ -11,9 +11,9 @@ class TFPortal{
 public:
 
 	void SetVisible(bool visible);
-	void SetCenter(toe::core::TOEvector3df center);
-	void SetRotation(toe::core::TOEvector3df rot);
-	void SetSize(toe::core::TOEvector3df size);
+	void SetCenter(TOEvector3df center);
+	void SetRotation(TOEvector3df rot);
+	void SetSize(TOEvector3df size);
 private:
 	TPortal* m_portal;
 	TFRoom*  m_firstRoom;

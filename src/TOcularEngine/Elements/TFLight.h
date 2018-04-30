@@ -21,26 +21,26 @@ class TFLight: public TFNode{
 	friend class TFRoom;
 
 public:
-	void SetColor(toe::core::TOEvector4df color);	// Changes the light color
+	void SetColor(TOEvector4df color);	// Changes the light color
 	void SetAttenuation(float attenuation);			// Changes the light attenuation
 	void SetActive(bool active);					// Changes the light active state
 	void SetDirectional(bool directional);			// Changes the light type
 
-	toe::core::TOEvector4df GetColor();				// Returns the light color
+	TOEvector4df GetColor();				// Returns the light color
 	float GetAttenuation();							// Returns the light attenuation
 	bool GetActive();								// Returns the light active state
 	bool GetDirectional();							// Returns the light type
 	glm::vec3 CalculateLocation();
 
 	void SetBoundBox(bool) override;				// Shows or hide tmesh bounding box
-	void SetDirection(toe::core::TOEvector3df direction);
-	toe::core::TOEvector3df GetDirection();
+	void SetDirection( TOEvector3df direction);
+	 TOEvector3df GetDirection();
 	
 private:
 	TFLight(
-		toe::core::TOEvector3df position = toe::core::TOEvector3df(0, 0, 0),
-		toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0, 0, 0),
-		toe::core::TOEvector4df color = toe::core::TOEvector4df(255.0f, 255.0f, 255.0f, 255.0f),
+		TOEvector3df position = TOEvector3df(0, 0, 0),
+		TOEvector3df rotation = TOEvector3df(0, 0, 0),
+		TOEvector4df color = TOEvector4df(255.0f, 255.0f, 255.0f, 255.0f),
 		float attenuation = 0.0f
 	);
 	~TFLight();

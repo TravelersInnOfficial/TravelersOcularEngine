@@ -345,7 +345,7 @@ bool TMesh::CheckOcclusion(){
 
 	glm::mat4 mvpMatrix = ProjMatrix * ViewMatrix * m_stack.top();
 
-	toe::core::TOEvector2di sizeWindow = VideoDriver::GetInstance()->GetWindowResolution();
+	TOEvector2di sizeWindow = VideoDriver::GetInstance()->GetWindowResolution();
 	int width = sizeWindow.X;
 	int height = sizeWindow.Y;
 

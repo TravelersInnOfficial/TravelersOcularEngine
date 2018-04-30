@@ -10,16 +10,16 @@ TLight::TLight(TColor color, float attenuation){
 	m_active = true;
 	drawBB = false;
 	m_directional = false;
-	m_direction = toe::core::TOEvector3df(0,-1,0);
+	m_direction =  TOEvector3df(0,-1,0);
 }
 
 TLight::~TLight(){}
 
-void TLight::SetDirection(toe::core::TOEvector3df direction){
+void TLight::SetDirection( TOEvector3df direction){
 	m_direction = direction;
 }
 
-toe::core::TOEvector3df TLight::GetDirection(){
+ TOEvector3df TLight::GetDirection(){
 	return m_direction;
 }
 

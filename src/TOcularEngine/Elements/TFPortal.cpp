@@ -19,17 +19,17 @@ void TFPortal::SetVisible(bool visible){
 	m_portal->SetVisible(visible);
 }
 
-void TFPortal::SetCenter(toe::core::TOEvector3df center){
+void TFPortal::SetCenter(TOEvector3df center){
 	glm::vec3 input(center.X, center.Y, center.Z);
 	m_portal->SetCenter(input);
 }
 
-void TFPortal::SetRotation(toe::core::TOEvector3df rotation){
+void TFPortal::SetRotation(TOEvector3df rotation){
 	glm::vec3 input(rotation.X, rotation.Y, rotation.Z);
 	m_portal->SetRotation(input);
 }
 
-void TFPortal::SetSize(toe::core::TOEvector3df size){
+void TFPortal::SetSize(TOEvector3df size){
 	glm::vec3 input(size.X, size.Y, size.Z);
 	m_portal->SetSize(input);
 }

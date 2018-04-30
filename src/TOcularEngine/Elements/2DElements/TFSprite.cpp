@@ -6,19 +6,18 @@
 #include "./../../VideoDriver.h"
 #include "./../TOcularEngine/TOcularEngine.h"
 
-TFSprite::TFSprite(std::string texture, toe::core::TOEvector2df position, toe::core::TOEvector2df size){
+TFSprite::TFSprite(std::string texture, TOEvector2df position, TOEvector2df size){
     w_dims = VideoDriver::GetInstance()->GetWindowDimensions();
 
-    m_position  = toe::core::TOEvector2df((position.X*2 - w_dims.X) / w_dims.X , (position.Y*2 - w_dims.Y) / w_dims.Y);
-    m_size      = toe::core::TOEvector2df((size.X *2) / w_dims.X, (size.Y *2) / w_dims.Y);
+    m_position  = TOEvector2df((position.X*2 - w_dims.X) / w_dims.X , (position.Y*2 - w_dims.Y) / w_dims.Y);
+    m_size      = TOEvector2df((size.X *2) / w_dims.X, (size.Y *2) / w_dims.Y);
     m_rotation    = 0;
 
-    //rect = toe::core::TOEvector4df(0.33f,0.33f, 1.0f, 1.0f);
     if(texture.compare("")==0) texture = VideoDriver::GetInstance()->GetAssetsPath() + "/textures/invisible_texture.png";
 	m_texture = TResourceManager::GetInstance()->GetResourceTexture(texture);
     m_texture_size = size;
-    m_rect = toe::core::TOEvector4df(0.0f, 0.0f,1.0f, 1.0f);    //inicialmente el rectangulo ocupa la textura completa (coordenadas de 0 a 1)
-    m_mask_rect = toe::core::TOEvector4df(0.0f, 0.0f,1.0f, 1.0f);
+    m_rect = TOEvector4df(0.0f, 0.0f,1.0f, 1.0f);    //inicialmente el rectangulo ocupa la textura completa (coordenadas de 0 a 1)
+    m_mask_rect = TOEvector4df(0.0f, 0.0f,1.0f, 1.0f);
 
     m_program = SPRITE_SHADER;
 
@@ -45,33 +44,33 @@ void TFSprite::Erase(){
     std::cout<<"Erase TFSprite"<<std::endl;
 }
 
-void TFSprite::ToBkg(){
-    VideoDriver::GetInstance()->GetSceneManager()->PushToBkg(this);
-}
-
-void TFSprite::ToFront(){
-     VideoDriver::GetInstance()->GetSceneManager()->PushToFront(this);
-}
-
 void TFSprite::SetRect(float x, float y, float w, float h){
     if(x < 0) x = 0;
     if(y < 0) y = 0;
-    float sheetWidth = m_texture_size.X;                         //texture width
-    float sheetHeight = m_texture_size.Y;                        //texture height
+    float sheetWidth = m_texture_size.X;                        //texture width
+    float sheetHeight = m_texture_size.Y;                       //texture height
     float cellWidth = w;                                        //cell widht
     float cellHeight = h;                                       //cell height
     float left = x/sheetWidth;                                  //left texture uv point
     float top = y/sheetHeight;                                  //top texture uv point
     float cw = left + cellWidth/sheetWidth;                     //uv texture width
     float ch = top + cellHeight/sheetHeight;                    //uv texture height
-    m_rect = toe::core::TOEvector4df(left, top, cw, ch);
-    m_mask_rect = toe::core::TOEvector4df(left, top, cw, ch);
+    m_rect = TOEvector4df(left, top, cw, ch);
+    m_mask_rect = TOEvector4df(left, top, cw, ch);
     SetSize(w,h);
 }
 
 void TFSprite::SetTextureRect(float x, float y, float w, float h){
-    m_rect = toe::core::TOEvector4df(x, y, w+x, h+y);
+    m_rect = TOEvector4df(x, y, w+x, h+y);
 }
+
+void TFSprite::SetTexture(std::string texture){
+    if(texture.compare("")==0) texture = VideoDriver::GetInstance()->GetAssetsPath() + "/textures/invisible_texture.png";
+	m_texture = TResourceManager::GetInstance()->GetResourceTexture(texture);
+    m_InData.texture = texture;
+}
+
+std::string TFSprite::GetTexture() const {return m_InData.texture;}
 
 void TFSprite::Draw() const{
     Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(m_program);
@@ -177,50 +176,12 @@ void TFSprite::SetMask(std::string mask_path){
     if(mask_path.compare("")!=0) m_mask = TResourceManager::GetInstance()->GetResourceTexture(mask_path);
 }
 
-void TFSprite::SetPosition(float x, float y){
-    m_position = toe::core::TOEvector2df((x*2 - w_dims.X) / w_dims.X , (y*2 - w_dims.Y) / w_dims.Y);
-    m_InData.position.X = x;
-    m_InData.position.Y = y;
-}
-
-void TFSprite::SetPosX(float x){
-    m_position.X = (x*2 - w_dims.X) / w_dims.X;
-    m_InData.position.X = x;
-}
-
-void TFSprite::SetPosY(float y){
-    m_position.Y = (y*2 - w_dims.Y) / w_dims.Y;
-    m_InData.position.Y = y;
-}
-
-void TFSprite::SetSize(float w, float h){
-    m_size = toe::core::TOEvector2df((std::abs(w *2) / w_dims.X), (std::abs(h *2) / w_dims.Y));
-    m_InData.size.X = w;
-    m_InData.size.Y = h;
-}
-
-void TFSprite::SetWidth(float w){
-    m_size.X = (std::abs(w *2) / w_dims.X);
-    m_InData.size.X = w;
-}
-
-void TFSprite::SetHeight(float h){
-    m_size.Y =  (std::abs(h *2) / w_dims.Y);
-    m_InData.size.Y = h;
-}
-
-void TFSprite::SetTexture(std::string texture){
-    if(texture.compare("")==0) texture = VideoDriver::GetInstance()->GetAssetsPath() + "/textures/invisible_texture.png";
-	m_texture = TResourceManager::GetInstance()->GetResourceTexture(texture);
-    m_InData.texture = texture;
-}
-
 float TFSprite::GetTextureHeight(){
     return m_texture_size.Y;
 }
 float TFSprite::GetTextureWidth(){
     return m_texture_size.X;
 }
-toe::core::TOEvector2df TFSprite::GetTextureSize(){
+TOEvector2df TFSprite::GetTextureSize(){
     return m_texture_size;
 }

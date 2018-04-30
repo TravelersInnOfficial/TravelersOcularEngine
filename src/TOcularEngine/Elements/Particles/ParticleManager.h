@@ -4,7 +4,7 @@
 #include <TOEvector3d.h>
 
 struct Particle{
-	toe::core::TOEvector3df pos, speed, translation;
+	TOEvector3df pos, speed, translation;
 	unsigned char r, g, b;
 	float size, rotation;
 	float life = -1.0f;

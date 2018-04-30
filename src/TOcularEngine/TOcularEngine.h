@@ -9,24 +9,27 @@ namespace toe{
 
     SceneManager* GetSceneManager();
 
-    TFMesh* AddCube(toe::core::TOEvector3df position = toe::core::TOEvector3df(0,0,0),
-                 toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,0,0),
-                 toe::core::TOEvector3df scale = toe::core::TOEvector3df(1,1,1));
+    TFMesh* AddCube(TOEvector3df position = TOEvector3df(0,0,0),
+                 TOEvector3df rotation = TOEvector3df(0,0,0),
+                 TOEvector3df scale = TOEvector3df(1,1,1));
 
-    TFMesh* AddSphere(toe::core::TOEvector3df position = toe::core::TOEvector3df(0,0,0),
-                 toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,0,0),
-                 toe::core::TOEvector3df scale = toe::core::TOEvector3df(1,1,1));
+    TFMesh* AddSphere(TOEvector3df position = TOEvector3df(0,0,0),
+                 TOEvector3df rotation = TOEvector3df(0,0,0),
+                 TOEvector3df scale = TOEvector3df(1,1,1));
 
-    TFRect* Add2DRect(toe::core::TOEvector2df position = toe::core::TOEvector2df(0.0f),
-                 toe::core::TOEvector2df size = toe::core::TOEvector2df(10,10),
+    TFRect* Add2DRect(TOEvector2df position = TOEvector2df(0.0f),
+                 TOEvector2df size = TOEvector2df(10,10),
                  float rotation = 0.0f);
 
-    TFSprite* AddSprite(std::string texture = "", toe::core::TOEvector2df position = toe::core::TOEvector2df(0,0), toe::core::TOEvector2df size = toe::core::TOEvector2df(10,10));
+    TF2DText* Add2DText(std::string text = "",
+                 TOEvector2df position = TOEvector2df(0.0f,0.0f));
+
+    TFSprite* AddSprite(std::string texture = "", TOEvector2df position = TOEvector2df(0,0), TOEvector2df size = TOEvector2df(10,10));
 
     void LoadMesh(std::string path);
     void LoadTexture(std::string path);
     GLuint GetTextureID(std::string path);
-    toe::core::TOEvector2di GetTextureDims(std::string path);
+    TOEvector2di GetTextureDims(std::string path);
     int GetTextureWidth(std::string path);
     int GetTextureHeight(std::string path);
 

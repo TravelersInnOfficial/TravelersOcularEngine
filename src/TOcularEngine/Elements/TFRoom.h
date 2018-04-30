@@ -10,29 +10,28 @@ class TFRoom: public TFNode{
 	friend class SceneManager;
 public:
 	TFPortal* AddConnection(TFRoom* room, 
-							toe::core::TOEvector3df position = toe::core::TOEvector3df(0,0,0), 
-							toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0,0,0),
-							toe::core::TOEvector3df scale = toe::core::TOEvector3df(1,1,1));
+							TOEvector3df position = TOEvector3df(0,0,0), 
+							TOEvector3df rotation = TOEvector3df(0,0,0),
+							TOEvector3df scale = TOEvector3df(1,1,1));
 
 	bool DeletePortal(TFPortal* portal);
 
-	void SetTranslate(toe::core::TOEvector3df translation) override;	
-	void SetRotation(toe::core::TOEvector3df rotation) override;		
-	void SetScale(toe::core::TOEvector3df scale) override;			
+	void SetTranslate(TOEvector3df translation) override;	
+	void SetRotation(TOEvector3df rotation) override;		
+	void SetScale(TOEvector3df scale) override;			
 
-	void Translate(toe::core::TOEvector3df translation) override;	
-	void Rotate(toe::core::TOEvector3df rotation) override;					
-	void Scale(toe::core::TOEvector3df scale) override;
+	void Translate(TOEvector3df translation) override;	
+	void Rotate(TOEvector3df rotation) override;					
+	void Scale(TOEvector3df scale) override;
 
-	toe::core::TOEvector3df GetTranslation() override;
-	toe::core::TOEvector3df GetRotation() override;
-	toe::core::TOEvector3df GetScale() override;
+	TOEvector3df GetTranslation() override;
+	TOEvector3df GetRotation() override;
+	TOEvector3df GetScale() override;
 
 	bool AddChild(TFNode* children) override;
-
-
-	float GetDistance(toe::core::TOEvector3df position);
 	void DeleteLight(TFNode* light);
+
+	float GetDistance(TOEvector3df position);
 
 private:
 	std::vector<TFPortal*> m_portals;
@@ -42,9 +41,9 @@ private:
 	void Draw();
 	int DrawLights(int value, int nextTo = 2);
 	TNode* GetConnectionNode() override;
-	TFRoom(toe::core::TOEvector3df position = toe::core::TOEvector3df(0, 0, 0),
-		toe::core::TOEvector3df rotation = toe::core::TOEvector3df(0, 0, 0),
-		toe::core::TOEvector3df scale = toe::core::TOEvector3df(1, 1, 1));
+	TFRoom(TOEvector3df position = TOEvector3df(0, 0, 0),
+		TOEvector3df rotation = TOEvector3df(0, 0, 0),
+		TOEvector3df scale = TOEvector3df(1, 1, 1));
 	~TFRoom();
 };
 

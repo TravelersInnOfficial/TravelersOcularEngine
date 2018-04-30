@@ -4,7 +4,7 @@
 #include "./../../EngineUtilities/TNode.h"
 #include "./../VideoDriver.h"
 
-TFMesh::TFMesh(toe::core::TOEvector3df position, toe::core::TOEvector3df rotation, toe::core::TOEvector3df scale, std::string meshPath) : TFNode(){	
+TFMesh::TFMesh(TOEvector3df position, TOEvector3df rotation, TOEvector3df scale, std::string meshPath) : TFNode(){	
 	TTransform*  t = (TTransform*) m_scaleNode->GetEntity();
 	t->Scale(scale.X, scale.Y, scale.Z);
 

@@ -23,7 +23,7 @@ public:
 
 	static std::string m_assetsPath;
 
-    bool CreateWindows(std::string window_name, toe::core::TOEvector2di dimensions, bool fullscreeen = false);
+    bool CreateWindows(std::string window_name, TOEvector2di dimensions, bool fullscreeen = false);
     bool Update();
     void BeginDraw();
 	void EndDraw();
@@ -77,22 +77,22 @@ public:
 	/**
 	 * @brief Get the Screen Resolution
 	 * 
-	 * @return toe::core::TOEvector2di 
+	 * @return TOEvector2di 
 	 */
-	toe::core::TOEvector2di GetScreenResolution();
+	TOEvector2di GetScreenResolution();
 
 	/**
 	 * @brief Get the Window Resolution
-	 * @return toe::core::TOEvector2di 
+	 * @return TOEvector2di 
 	 */
-	toe::core::TOEvector2di GetWindowResolution();
+	TOEvector2di GetWindowResolution();
 
 	/**
 	 * @brief Get the Window Dimensions
 	 * 
-	 * @return toe::core::TOEvector2di 
+	 * @return TOEvector2di 
 	 */
-	toe::core::TOEvector2di GetWindowDimensions();
+	TOEvector2di GetWindowDimensions();
 
 	/**
 	 * @brief Get the Program object
@@ -127,17 +127,17 @@ public:
 	/**
 	 * @brief Get the Cursor Position
 	 * 
-	 * @return toe::core::TOEvector2di 
+	 * @return TOEvector2di 
 	 */
-	toe::core::TOEvector2di GetCursorPosition();
+	TOEvector2di GetCursorPosition();
 
 //SETTERS
 	/**
 	 * @brief Sets the update clear screen color
 	 * 
-	 * @param color (toe::core::TOEvector4df)
+	 * @param color (TOEvector4df)
 	 */
-	void SetClearScreenColor(toe::core::TOEvector4df color);
+	void SetClearScreenColor(TOEvector4df color);
 
 	/**
 	 * @brief Sets the window title
@@ -187,7 +187,7 @@ private:
 	// Private GLFW window stuff
 	GLFWwindow* m_window;
 	std::string m_name;
-	toe::core::TOEvector4df m_clearSceenColor;
+	TOEvector4df m_clearSceenColor;
 
 	// Private Graphic Engine stuff
 	static SceneManager* privateSceneManager;
