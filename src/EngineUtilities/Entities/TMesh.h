@@ -45,6 +45,7 @@ protected:
 	TResourceMesh* 		m_mesh;
 	TResourceTexture* 	m_texture;
 	TResourceTexture*	m_specularMap;
+	TResourceTexture*	m_bumpMap;
 	TResourceMaterial* 	m_material;
 
 	bool m_visibleBB;

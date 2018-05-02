@@ -9,6 +9,7 @@ TResourceMesh::TResourceMesh(std::string name){
 	m_name = name;
 	m_basicTexture = nullptr;
 	m_specularMap = nullptr;
+	m_bumpMap = nullptr;
 	m_basicMaterial = nullptr;
 
 	m_center = glm::vec3(0,0,0);
@@ -34,6 +35,10 @@ TResourceMesh::TResourceMesh(std::string name){
 
 	if(m_specularMap == nullptr){
 		m_specularMap = TResourceManager::GetInstance()->GetResourceTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_texture.png");
+	}
+
+	if(m_bumpMap == nullptr){
+		m_bumpMap = TResourceManager::GetInstance()->GetResourceTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_bump.png");
 	}
 }
 
@@ -85,6 +90,10 @@ bool TResourceMesh::LoadFile(){
 	bool toRet = TObjectLoader::LoadObjAssimp(this);
 	SetLoaded(toRet);
 	return toRet;
+}
+
+TResourceTexture* TResourceMesh::GetBumpMap(){
+	return m_bumpMap;
 }
 
 TResourceTexture* TResourceMesh::GetSpecularMap(){

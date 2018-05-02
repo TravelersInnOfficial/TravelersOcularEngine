@@ -25,8 +25,11 @@ public:
     void AddSpecularMap(TResourceTexture* texture);
     void AddMaterial(TResourceMaterial* material);
     void SetElementSize(int value);
+
+
     TResourceTexture* GetTexture();
     TResourceTexture* GetSpecularMap();
+    TResourceTexture* GetBumpMap();
     TResourceMaterial* GetMaterial();
 
 // =====================================================================================================
@@ -84,6 +87,7 @@ private:
     int m_elementSize;
     TResourceTexture*   m_basicTexture;
     TResourceTexture*   m_specularMap;
+    TResourceTexture*   m_bumpMap;
     TResourceMaterial*  m_basicMaterial;
 
     GLuint m_vbo;

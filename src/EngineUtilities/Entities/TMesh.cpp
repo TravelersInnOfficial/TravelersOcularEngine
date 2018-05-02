@@ -8,8 +8,9 @@
 TMesh::TMesh(std::string meshPath, std::string texturePath){
 	m_mesh = nullptr;
 	m_texture = nullptr;
-	m_material = nullptr;
 	m_specularMap = nullptr;
+	m_bumpMap = nullptr;
+	m_material = nullptr;
 	m_visibleBB = false;
 	m_drawingShadows = false;
 	m_textureScaleX = 1.0f;
@@ -142,6 +143,11 @@ void TMesh::SendShaderData(){
 	GLint vLocation = glGetUniformLocation(myProgram->GetProgramID(), "ViewMatrix");
 	glUniformMatrix4fv(vLocation, 1, GL_FALSE, &ViewMatrix[0][0]);
 
+	// SEND MODEL MATRIX
+	glm::mat4 model =  m_stack.top();
+	GLint mLocation = glGetUniformLocation(myProgram->GetProgramID(), "ModelMatrix");
+	glUniformMatrix4fv(mLocation, 1, GL_FALSE, &model[0][0]);
+
 	// SEND MODELVIEW MATRIX
 	glm::mat4 modelView = ViewMatrix * m_stack.top();
 	GLint mvLocation = glGetUniformLocation(myProgram->GetProgramID(), "ModelViewMatrix");
@@ -186,7 +192,8 @@ void TMesh::SendShaderData(){
 		glUniform1i(ShadowMapID, 1);
 
 	}
-	// -------------------------------------------------------- ENVIAMOS EL BUMPMAP
+
+	// -------------------------------------------------------- ENVIAMOS EL SPECULAR MAP
 	currentTexture = nullptr;
 	if(m_specularMap != nullptr) currentTexture = m_specularMap;
 	else if(m_mesh != nullptr) currentTexture = m_mesh->GetSpecularMap();
@@ -197,6 +204,19 @@ void TMesh::SendShaderData(){
 		glActiveTexture(GL_TEXTURE2);
 		glBindTexture(GL_TEXTURE_2D, currentTexture->GetTextureId());
 		glUniform1i(TextureID, 2); 
+	}
+
+	// -------------------------------------------------------- ENVIAMOS EL BUMP MAP
+	currentTexture = nullptr;
+	if(m_specularMap != nullptr) currentTexture = m_bumpMap;
+	else if(m_mesh != nullptr) currentTexture = m_mesh->GetBumpMap();
+
+	if(currentTexture != nullptr){
+		GLuint TextureID = glGetUniformLocation(myProgram->GetProgramID(), "bumpMap");
+
+		glActiveTexture(GL_TEXTURE3);
+		glBindTexture(GL_TEXTURE_2D, currentTexture->GetTextureId());
+		glUniform1i(TextureID, 3); 
 	}
 
 	// -------------------------------------------------------- ENVIAMOS EL MATERIAL

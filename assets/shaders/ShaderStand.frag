@@ -1,10 +1,12 @@
 #version 130
 
+// https://blender.stackexchange.com/questions/52865/creating-normal-maps-from-a-texture
+
 // ENTRADA, PROVENIENTE DEL VERTEX SHADER
 in vec3 Position;    		// VERTICES EN COORDENADAS DE VISTA
-in vec3 Normal;      		// NORMAL EN COORDENADAS DE VISTA
 in vec2 TexCoords;   		// COORDENADAS DE TEXTURA
 in mat4 FragViewMatrix;   	// VIEW MATRIX
+in mat4 RotationNormal;		// MODELVIEW MATRIX
 in vec4 ShadowCoord;      	// VERTICES DESDE LA LUZ
 
 // SALIDA PARA COMUNICAR CON EL RESTO DEL PIPELINE
@@ -41,14 +43,19 @@ uniform vec3 AmbientLight;		// AMBIENT LIGHT
 // TEMPORAL TEXTURE WITHOUT MATERIALS
 uniform sampler2D uvMap;
 uniform sampler2D specularMap;
+uniform sampler2D bumpMap;
 uniform sampler2DShadow shadowMap;
 
 // FUNCION QUE CALCULA EL MODELO DE REFLEXION DE PHONG
 vec3  Phong (int num) {
 	
+
 	// CALCULAR LOS DIFERENTES VECTORES	 
 	vec3 eyeDir = -Position;
-	vec3 n = normalize(Normal); 
+	vec3 normalTexture = normalize(2.0 * texture2D (bumpMap, TexCoords).rgb - 1.0);
+
+	vec3 n = normalize (RotationNormal * vec4(normalTexture,1.0)).xyz;
+
 	vec3 lightPos = (FragViewMatrix * vec4(Light[num].Position, 1)).xyz;
 	
 
@@ -57,16 +64,13 @@ vec3  Phong (int num) {
 
 	if(Light[num].Directional){
 		vec3 pointA = vec3(0,0,0);						// Ponemos el principio en el centro
-		vec3 pointB = pointA - Light[num].Direction;	// Calculamos el punto final
+		vec3 pointB = -Light[num].Direction;			// Calculamos el punto final
 		pointA = (FragViewMatrix * vec4(pointA,1)).xyz;	//|
 		pointB = (FragViewMatrix * vec4(pointB,1)).xyz;	//| Calculamos ambos en el espacio de vision
 		objToToLight = normalize(pointB - pointA);		// Calculamos el vector en espacio de vision
 	}
 	
-	//vec3 normalTexture = 2.0 * texture2D (normalMap, TexCoords).rgb - 1.0;
-	vec3 specTexure = texture2D(specularMap, TexCoords).rgb;
-	//normalTexture = normalize (normalTexture);
-	//float lamberFactor = max (dot (objToToLight, normalTexture), 0.0);
+	vec3 specTexure = texture(specularMap, TexCoords).rgb;
 
 	vec3 s = normalize(objToToLight);
 	vec3 r = reflect(-s, n);
@@ -87,7 +91,7 @@ vec3  Phong (int num) {
 	
 
 	// ENVIAMOS EL RESULTADO
-	return (Attenuation * (Diffuse + Specular)* specTexure);
+	return (Attenuation * (Diffuse + Specular) * specTexure);
 }
 
 // POISSON SAMPLING
