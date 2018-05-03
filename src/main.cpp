@@ -145,9 +145,6 @@ void CreateTree(TFMesh* ms[], TFLight* ls[], TFLight*& shL){
 
 	// DOME ###################################################
 	sm->AddDome();
-	
-	// SHADOWS
-	sm->AddDynamicLight(shL);
 
 	/// SPRITES	###############################################
 	// TOE MANUAL

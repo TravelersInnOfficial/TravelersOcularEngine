@@ -21,20 +21,25 @@ class TFLight: public TFNode{
 	friend class TFRoom;
 
 public:
-	void SetColor(TOEvector4df color);	// Changes the light color
+	void SetColor(TOEvector4df color);				// Changes the light color
 	void SetAttenuation(float attenuation);			// Changes the light attenuation
 	void SetActive(bool active);					// Changes the light active state
 	void SetDirectional(bool directional);			// Changes the light type
 
-	TOEvector4df GetColor();				// Returns the light color
+	TOEvector4df GetColor();						// Returns the light color
 	float GetAttenuation();							// Returns the light attenuation
 	bool GetActive();								// Returns the light active state
 	bool GetDirectional();							// Returns the light type
 	glm::vec3 CalculateLocation();
 
 	void SetBoundBox(bool) override;				// Shows or hide tmesh bounding box
-	void SetDirection( TOEvector3df direction);
-	 TOEvector3df GetDirection();
+	void SetDirection(TOEvector3df direction);
+	TOEvector3df GetDirection();
+
+	void SetShadowsState(bool shadowState);
+	bool GetShadowsState();
+
+	void CalculateShadowTexture(int num);
 	
 private:
 	TFLight(
@@ -47,6 +52,9 @@ private:
 	void DrawLight(int num);
 	void DrawLightShadow(int num);
 	glm::vec3 m_LastLocation;
+
+	GLuint m_fbo;
+    GLuint m_shadowMap;
 
 };
 

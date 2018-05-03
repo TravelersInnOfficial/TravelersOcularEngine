@@ -8,6 +8,7 @@ TLight::TLight(TColor color, float attenuation){
 	m_attenuation = attenuation;
 	m_program = STANDARD_SHADER;
 	m_active = true;
+	m_shadowState = false;
 	drawBB = false;
 	m_directional = false;
 	m_direction =  TOEvector3df(0,-1,0);
@@ -127,4 +128,12 @@ void TLight::DrawBB(){
 
 	glDeleteBuffers(1, &vbo_vertices);
 	glDeleteBuffers(1, &ibo_elements);
+}
+
+void TLight::SetShadowsState(bool shadowState){
+	m_shadowState = shadowState;
+}
+
+bool TLight::GetShadowsState(){
+	return m_shadowState;
 }
