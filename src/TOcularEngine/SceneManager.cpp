@@ -575,7 +575,7 @@ void SceneManager::DrawSceneShadows()
 	int size = m_dynamicLights.size();
 	for(int i = 0; i < size; i++){
 		if(m_dynamicLights[i]->GetActive()){
-			// Change renger target
+			// Change render target
 			glViewport(0,0,1024,1024);						// Change viewport resolution for rendering in frame buffer 
 			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);	// BIND FRAME BUFFER FOR WRITING
 

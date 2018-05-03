@@ -36,7 +36,7 @@ struct TLight {
 
 // IN UNIFORMS
 uniform TMaterial Material;		// MODEL MATERIAL
-uniform TLight Light[20];		// LIGHTS
+uniform TLight Light[40];		// LIGHTS
 uniform int nlights;			// NUMBER OF CURRENT LIGHTS
 uniform vec3 AmbientLight;		// AMBIENT LIGHT
 
