@@ -15,6 +15,9 @@
 #include <TOEvector4d.h>
 #include <TOEvector3d.h>
 #include "TFNode.h"
+#include <GL/glew.h>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 class TFLight: public TFNode{
 	friend class SceneManager;

@@ -158,13 +158,13 @@ void TFLight::SetShadowsState(bool shadowState){
 		// Iniciamos o borramos la informacion de las sombras
 		if(!shadowState) EraseShadow();
 		else InitShadow();
-		myEntity->SetShadowState(shadowState);
+		myEntity->SetShadowsState(shadowState);
 	}
 }
 
 bool TFLight::GetShadowsState(){
 	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
-	return myEntity->GetShadowState();
+	return myEntity->GetShadowsState();
 }
 
 void TFLight::InitShadow(){
@@ -205,7 +205,7 @@ void TFLight::EraseShadow(){
 	m_shadowMap = 0;
 }
 
-void TFLight::CalculateShadowTexture(int num){
+bool TFLight::CalculateShadowTexture(int num){
 	bool paintBuffer = false;
 
 	if(GetActive() && GetShadowsState()){
@@ -231,8 +231,6 @@ void TFLight::CalculateShadowTexture(int num){
 
 // DEBERIA SER DIFERENTE PARA LUCES DE PUNTO
 void TFLight::DrawLightShadow(int num){
-	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
-
 	// Fill variables
 	VideoDriver* vd = VideoDriver::GetInstance();
 	GLuint progID = vd->GetProgram(SHADOW_SHADER)->GetProgramID();
@@ -242,7 +240,7 @@ void TFLight::DrawLightShadow(int num){
 	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, 5, 40);
 
 	// Calculate the direction of the light
-	vector3df dir = GetDirection();
+	TOEvector3df dir = GetDirection();
 	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(dir.X,dir.Y,dir.Z), glm::vec3(0.0f,1.0f,0.0f));
 	glm::mat4 depthVP = depthProjectionMatrix * depthViewMatrix;
 
