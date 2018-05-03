@@ -569,29 +569,6 @@ void SceneManager::DrawAllLines(){
 	vertexVector.clear();
 }
 
-void TFLight::CalculateShadowTexture(int num){
-	if(GetActive()){
-		// Change render target
-		glViewport(0,0,1024,1024);						// Change viewport resolution for rendering in frame buffer 
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);	// BIND FRAME BUFFER FOR WRITING
-
-		// Clear the screen
-		glClear(GL_DEPTH_BUFFER_BIT);
-
-		// Options
-		glDisable(GL_CULL_FACE);	// DISABLE BACKFACE CULLING FOR BETER PLANNING (corners sometimes don't produce shadows)
-		glEnable(GL_DEPTH_TEST);	// ENABLE ZBUFFER
-
-		// Compute the MVP matrix from the light's point of view
-		DrawLightShadow(num);
-
-		m_SceneTreeRoot->DrawShadows();
-	}
-	//#################################
-	else TEntity::DepthWVP = glm::mat4(0.0f);
-	//#################################
-}
-
 void SceneManager::DrawSceneShadows(){
 	// Set shadow program
 	VideoDriver::GetInstance()->SetShaderProgram(SHADOW_SHADER);
@@ -603,40 +580,11 @@ void SceneManager::DrawSceneShadows(){
 	for(int i = 0; i < m_lights.size(); i++){
 		TFLight* toCheck = m_lights[i];
 		if(toCheck != nullptr){
-			toCheck->CalculateShadowTexture();
-			m_SceneTreeRoot->DrawShadows();
-		}
-	}
-}
-
-void SceneManager::DrawSceneShadows()
-{
-	// Set shadow program
-	VideoDriver::GetInstance()->SetShaderProgram(SHADOW_SHADER);
-	// Update lights position
-	RecalculateLightPosition();
-
-	int size = m_dynamicLights.size();
-	for(int i = 0; i < size; i++){
-		if(m_dynamicLights[i]->GetActive()){
-			// Change render target
-			glViewport(0,0,1024,1024);						// Change viewport resolution for rendering in frame buffer 
-			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);	// BIND FRAME BUFFER FOR WRITING
-
-			// Clear the screen
-			glClear(GL_DEPTH_BUFFER_BIT);
-
-			// Options
-			glDisable(GL_CULL_FACE);	// DISABLE BACKFACE CULLING FOR PETER PLANNING (corners sometimes doesn't produce shadows)
-			glEnable(GL_DEPTH_TEST);	// ENABLE ZBUFFER
-		
-			// Compute the MVP matrix from the light's point of view
-			m_dynamicLights[i]->DrawLightShadow(i);
-			
-			m_SceneTreeRoot->DrawShadows();
-		}
-		else{
-			TEntity::DepthWVP = glm::mat4(0.0f);
+			// Caulculamos si esta activa y tiene sombras
+			// Si esta activa y necesita sombra, las pintamos
+			// Se pintan desde el SceneTreeRot en el buffer vinculado en
+			// La funcion CalculateShadowTexture
+			if(toCheck->CalculateShadowTexture()) m_SceneTreeRoot->DrawShadows();
 		}
 	}
 }

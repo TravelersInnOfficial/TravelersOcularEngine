@@ -29,37 +29,10 @@ TFLight::TFLight(TOEvector3df position, TOEvector3df rotation, TOEvector4df colo
 
 	m_fbo = 0;
 	m_shadowMap = 0;
-	
-	glGenFramebuffers(1, &m_fbo);
-	glGenTextures(1, &m_shadowMap);
-
-	//#################################
-	TEntity::ShadowMap = m_shadowMap;
-	//#################################
-	glBindTexture(GL_TEXTURE_2D, m_shadowMap);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, 1024, 1024, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
-	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_shadowMap, 0);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
-
-	glDrawBuffer(GL_NONE);
-	glReadBuffer(GL_NONE);
-
-	GLenum Status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-	if (Status != GL_FRAMEBUFFER_COMPLETE) printf("FB error, status: 0x%x\n", Status);
 }
 
 TFLight::~TFLight(){
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glDeleteFramebuffers(1, &m_fbo);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glDeleteTextures(1, &m_shadowMap);
+	if(GetShadowsState()) EraseShadow();
 }
 
 void TFLight::SetColor(TOEvector4df color){
@@ -155,52 +128,6 @@ void TFLight::DrawLight(int num){
 	glUniform3fv(glGetUniformLocation(progID, aux.c_str()), 1, &direction[0]);
 }
 
-void TFLight::CalculateShadowTexture(int num){
-	if(GetActive()){
-		// Change render target
-		glViewport(0,0,1024,1024);						// Change viewport resolution for rendering in frame buffer 
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);	// BIND FRAME BUFFER FOR WRITING
-
-		// Clear the screen
-		glClear(GL_DEPTH_BUFFER_BIT);
-
-		// Options
-		glDisable(GL_CULL_FACE);	// DISABLE BACKFACE CULLING FOR BETER PLANNING (corners sometimes don't produce shadows)
-		glEnable(GL_DEPTH_TEST);	// ENABLE ZBUFFER
-
-		// Compute the MVP matrix from the light's point of view
-		DrawLightShadow(num);
-
-		m_SceneTreeRoot->DrawShadows();
-	}
-	//#################################
-	else TEntity::DepthWVP = glm::mat4(0.0f);
-	//#################################
-}
-
-void TFLight::DrawLightShadow(int num){
-	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
-
-	if(myEntity->GetActive()){
-		VideoDriver* vd = VideoDriver::GetInstance();
-		GLuint progID = vd->GetProgram(SHADOW_SHADER)->GetProgramID();
-
-		glm::vec3 lightInvDir = m_LastLocation;
-		glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, 5, 40);
-		glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0.0f,0.0f,0.0f), glm::vec3(0.0f,1.0f,0.0f));
-		glm::mat4 depthVP = depthProjectionMatrix * depthViewMatrix;
-
-		// Send our transformation to the currently bound shader,
-		// in the "MVP" uniform
-		GLuint depthMatrixID = glGetUniformLocation(progID, "DepthMVP");
-		glUniformMatrix4fv(depthMatrixID, 1, GL_FALSE, &depthVP[0][0]);
-
-		//#################################
-		TEntity::DepthWVP = depthVP;
-		//#################################
-	}
-}
-
 void TFLight::SetBoundBox(bool box){
 	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
 	myEntity->drawBB = box;
@@ -221,12 +148,110 @@ TOEvector3df TFLight::GetDirection(){
 	return myEntity->GetDirection();
 }
 
+//##############################################################################################################################
+
 void TFLight::SetShadowsState(bool shadowState){
 	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
-	myEntity->SetShadowState(shadowState);
+	
+	// Si de verdad se esta cambiando	
+	if(GetShadowsState() != shadowState){
+		// Iniciamos o borramos la informacion de las sombras
+		if(!shadowState) EraseShadow();
+		else InitShadow();
+		myEntity->SetShadowState(shadowState);
+	}
 }
 
 bool TFLight::GetShadowsState(){
 	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
 	return myEntity->GetShadowState();
 }
+
+void TFLight::InitShadow(){
+	m_fbo = 0;
+	m_shadowMap = 0;
+
+	glGenFramebuffers(1, &m_fbo); 
+
+	glGenTextures(1, &m_shadowMap);
+	TEntity::ShadowMap = m_shadowMap;
+	glBindTexture(GL_TEXTURE_2D, m_shadowMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, 1024, 1024, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_shadowMap, 0);
+
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+
+	GLenum Status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+	if (Status != GL_FRAMEBUFFER_COMPLETE) printf("FB error, status: 0x%x\n", Status);
+}
+
+void TFLight::EraseShadow(){
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glDeleteFramebuffers(1, &m_fbo);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDeleteTextures(1, &m_shadowMap);
+	m_fbo = 0;
+	m_shadowMap = 0;
+}
+
+void TFLight::CalculateShadowTexture(int num){
+	bool paintBuffer = false;
+
+	if(GetActive() && GetShadowsState()){
+		paintBuffer = true;
+		// Change render target
+		glViewport(0,0,1024,1024);						// Change viewport resolution for rendering in frame buffer 
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);	// BIND FRAME BUFFER FOR WRITING
+
+		// Clear the screen
+		glClear(GL_DEPTH_BUFFER_BIT);
+
+		// Options
+		glDisable(GL_CULL_FACE);	// DISABLE BACKFACE CULLING FOR BETER PLANNING (corners sometimes don't produce shadows)
+		glEnable(GL_DEPTH_TEST);	// ENABLE ZBUFFER
+
+		// Compute the MVP matrix from the light's point of view
+		DrawLightShadow(num);
+	}
+	else m_depthWVP = glm::mat4(0.0f);
+
+	return paintBuffer;
+}
+
+// DEBERIA SER DIFERENTE PARA LUCES DE PUNTO
+void TFLight::DrawLightShadow(int num){
+	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
+
+	// Fill variables
+	VideoDriver* vd = VideoDriver::GetInstance();
+	GLuint progID = vd->GetProgram(SHADOW_SHADER)->GetProgramID();
+	glm::vec3 lightInvDir = m_LastLocation;
+
+	// Get the orthogonal view of the light
+	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, 5, 40);
+
+	// Calculate the direction of the light
+	vector3df dir = GetDirection();
+	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(dir.X,dir.Y,dir.Z), glm::vec3(0.0f,1.0f,0.0f));
+	glm::mat4 depthVP = depthProjectionMatrix * depthViewMatrix;
+
+	// Send our transformation to the currently bound shader in the "MVP" uniform
+	// The currently boudn shader is the shadow one which will calculate the shadow texture
+	GLuint depthMatrixID = glGetUniformLocation(progID, "DepthMVP");
+	glUniformMatrix4fv(depthMatrixID, 1, GL_FALSE, &depthVP[0][0]);
+
+	m_depthWVP = depthVP;
+}
+
+//##############################################################################################################################

@@ -39,7 +39,7 @@ public:
 	void SetShadowsState(bool shadowState);
 	bool GetShadowsState();
 
-	void CalculateShadowTexture(int num);
+	bool CalculateShadowTexture(int num);
 	
 private:
 	TFLight(
@@ -49,12 +49,18 @@ private:
 		float attenuation = 0.0f
 	);
 	~TFLight();
+
 	void DrawLight(int num);
 	void DrawLightShadow(int num);
+
+	void InitShadow();
+	void EraseShadow();
+
 	glm::vec3 m_LastLocation;
 
 	GLuint m_fbo;
     GLuint m_shadowMap;
+	glm::mat4 m_depthWVP;
 
 };
 
