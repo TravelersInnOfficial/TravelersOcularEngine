@@ -26,6 +26,8 @@ TF2DText::TF2DText(std::string text , TOEvector2df position){
 	m_texture = TResourceManager::GetInstance()->GetResourceTexture(tex_path);
 
     SetText(m_text);
+
+	m_InData.position = position;
 }
 
 TF2DText::~TF2DText(){
@@ -60,7 +62,7 @@ void TF2DText::Draw() const {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, m_texture->GetTextureId());
 
-    glDrawArrays(GL_TRIANGLES, 0, m_size);
+    glDrawArrays(GL_TRIANGLES, 0, m_vertexSize);
 
 }
 
@@ -106,6 +108,7 @@ void TF2DText::SetText(std::string txt){
     	// Una vez ya tenemos los vertices calculamos los UV de la letra
     	// En nuestra imagen tenemos 16 columnas y filas, de ahi dividirlo entre 16
     	char character = txt[i];
+		//std::cout<<"character "<<i<<":\t"<<character<<"\n";
 		float reason = 1.0f/16.0f;
 
 		float UV_X1 = (character%16)/16.0f;
@@ -130,7 +133,7 @@ void TF2DText::SetText(std::string txt){
 
 	}
 
-	m_size = textVertex.size();
+	m_vertexSize = textVertex.size();
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 	glBufferData(GL_ARRAY_BUFFER, textVertex.size()*sizeof(glm::vec2), &textVertex[0], GL_STATIC_DRAW);
@@ -138,4 +141,24 @@ void TF2DText::SetText(std::string txt){
 	glBindBuffer(GL_ARRAY_BUFFER, m_UVBO);
 	glBufferData(GL_ARRAY_BUFFER, textUv.size()*sizeof(glm::vec2), &textUv[0], GL_STATIC_DRAW);
 
+}
+
+void TF2DText::SetTextSize(float siz){
+	m_textSize = siz;
+}
+
+std::string TF2DText::GetText(){
+	return m_text;
+}
+
+float TF2DText::GetTextSize(){
+	return m_textSize;
+}
+
+void TF2DText::SetPosition(float x, float y){
+	TOEvector2di w_dims = VideoDriver::GetInstance()->GetWindowDimensions();
+	m_position = TOEvector2df((x*2 - w_dims.X) / w_dims.X , (y*2 - w_dims.Y) / w_dims.Y);
+    m_InData.position.X = x;
+    m_InData.position.Y = y;
+	SetText(m_text);
 }

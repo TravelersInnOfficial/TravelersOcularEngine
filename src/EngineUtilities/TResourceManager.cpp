@@ -111,6 +111,5 @@ std::string TResourceManager::TreatName(std::string newName) {
 			finish = true;
 		} 
 	} while (finish);
-
 	return newName;
 }
