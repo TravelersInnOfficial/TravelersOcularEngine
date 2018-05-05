@@ -4,17 +4,17 @@ TResourceMaterial::TResourceMaterial(std::string name){
 	m_name = name;
 	
 	// Cargamos los valores por defecto
-	m_colorDifuse 		= glm::vec3(0.6f, 0.6f, 0.6f);
-	m_colorSpecular 	= glm::vec3(0.0f, 0.0f, 0.0f);
-	m_colorAmbient 		= glm::vec3(0.0f, 0.0f, 0.0f);
+	m_colorDifuse 		= glm::vec3(1.0f, 1.0f, 1.0f);
+	m_colorSpecular 	= glm::vec3(1.0f, 1.0f, 1.0f);
+	m_colorAmbient 		= glm::vec3(1.0f, 1.0f, 1.0f);
 	m_colorEmmisive		= glm::vec3(0.0f, 0.0f, 0.0f);
 	m_colorTransparent	= glm::vec3(1.0f, 1.0f, 1.0f);
 	m_twosided = 1;
 	m_shadingModel = 2;
 	m_blendFunc = 2;
 	m_opacity = 1.0f;
-	m_shininess = 0.0f;
-	m_shininessStrength = 0.0f;
+	m_shininess = 1.0f;
+	m_shininessStrength = 10.0f;
 	m_reflact = 1.0f;
 	
 	SetLoaded(false);

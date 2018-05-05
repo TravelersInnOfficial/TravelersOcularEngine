@@ -6,6 +6,67 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+#include <iostream>
+#include <fstream>
+#include <string.h>
+#include <stdio.h>
+
+bool TMaterialLoader::LoadMaterial(std::string path, TResourceMesh* mesh){
+	bool output = false;
+
+	std::ifstream readFile;
+	readFile.open(path, std::ifstream::out);
+
+	if(readFile.is_open()){
+		std::string line;
+
+		std::string token;
+		std::string mode;
+
+		while(std::getline(readFile, line)){
+			//token = std::strtok(line," ");
+
+			if(token[0]=='#')break;
+			else mode = token;
+
+			if(mode.compare("newmtl")==0){
+			}
+			else if(mode.compare("Ns")==0){
+
+			}
+  			else if(mode.compare("Ka")==0){
+
+  			}
+  			else if(mode.compare("Kd")==0){
+
+  			}
+  			else if(mode.compare("Ks")==0){
+
+  			}
+  			else if(mode.compare("Ke")==0){
+
+  			}
+  			else if(mode.compare("Ni")==0){
+
+  			}
+  			else if(mode.compare("d")==0){
+
+  			}
+  			else if(mode.compare("illum")==0){
+
+  			}
+  			else if(mode.compare("map_Kd")==0){
+
+  			}
+
+		}
+		output = true;
+	}
+	readFile.close();
+
+	return output;
+}
+
 bool TMaterialLoader::LoadMaterial(std::string name, TResourceMesh* mesh, const aiMaterial* material){
 	TResourceMaterial* recMaterial = TResourceManager::GetInstance()->GetResourceMaterial(name);
 
