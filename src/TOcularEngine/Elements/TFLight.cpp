@@ -276,10 +276,14 @@ void TFLight::DrawLightShadow(int num){
 
 	// Get the orthogonal view of the light
 	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, 5, 40);
-
+	
 	// Calculate the direction of the light
-	TOEvector3df dir = GetDirection();
-	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(dir.X,dir.Y,dir.Z), glm::vec3(0.0f,1.0f,0.0f));
+	//TOEvector3df dir = GetDirection();
+	//glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(dir.X,dir.Y,dir.Z), glm::vec3(0.0f,1.0f,0.0f));
+	
+	// ARREGLAR PARA QUE APUNTE AL MISMO LUGAR QUE LA LUZ, NO AL CENTRO SIEMPRE
+	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0,0,0), glm::vec3(0.0f,1.0f,0.0f));
+	
 	glm::mat4 depthVP = depthProjectionMatrix * depthViewMatrix;
 
 	// Send our transformation to the currently bound shader in the "MVP" uniform
