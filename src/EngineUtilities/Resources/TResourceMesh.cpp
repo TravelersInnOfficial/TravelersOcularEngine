@@ -38,7 +38,7 @@ TResourceMesh::TResourceMesh(std::string name){
 	}
 
 	if(m_bumpMap == nullptr){
-		m_bumpMap = TResourceManager::GetInstance()->GetResourceTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_bump.png");
+		m_bumpMap = TResourceManager::GetInstance()->GetResourceTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/mainWall_normal.png");
 	}
 }
 

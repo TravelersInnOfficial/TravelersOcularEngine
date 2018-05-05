@@ -7,8 +7,8 @@
 #include <cmath>  
 
 struct RectData{
-    TOEvector2df position;
-    TOEvector2df size;
+    TOEvector2df position = TOEvector2df(0.0f, 0.0f);
+    TOEvector2df size = TOEvector2df(0.0f, 0.0f);
     std::string texture = "";
 };
 

@@ -145,13 +145,30 @@ void CreateTree(TFMesh* ms[], TFLight* ls[], TFLight*& shL){
 
 	// DOME ###################################################
 	sm->AddDome();
+	
+	// SHADOWS
 	sm->AddDynamicLight(shL);
 
 	/// SPRITES	###############################################
 	// TOE MANUAL
+	/*
 	TFSprite* manual = toe::AddSprite("",TOEvector2df(0, 0), TOEvector2df(305,96));
-	manual->SetTexture("./../assets/textures/toe_manual.png");
+	manual->SetTexture("./../assets/textures/toe_manual.png");*/
+	
+	std::vector<std::string> instructions;
+	instructions.push_back("[ WASD ] move");
+	instructions.push_back("[MOUSE ] aim");
+	instructions.push_back("[ARROWS] move light box");
+	instructions.push_back("[SPACE ] play/pause scene");
+	instructions.push_back("[ENTER ] change shader");
+	instructions.push_back("[ ESC  ] exit");
 
+	float posX = 0;
+	float posY = 0;
+	for(int i = instructions.size()-1; i>=0;i--){
+		TF2DText* ManTxt = toe::Add2DText(instructions[i],TOEvector2df(posX,posY));
+		posY+= ManTxt->GetHeight();
+	}
 	// TIO LOGO
 	TFSprite* logo = toe::AddSprite("",TOEvector2df(toe::GetVideoDriver()->GetScreenResolution().X - 534/3.5f, 0), TOEvector2df(534/3.5f,624/3.5f));
 	logo->SetTexture("./../assets/textures/default_sprite.png");
@@ -328,7 +345,8 @@ int main(){
 	VideoDriver* VDriv = toe::GetVideoDriver();
 	SceneManager* sm = VDriv->GetSceneManager();
 	
-	VDriv->CreateWindows("TOE Demonstrative Application", VDriv->GetScreenResolution(), false);
+	VDriv->CreateWindows("TOE Demonstrative Application", VDriv->GetScreenResolution(), true);
+	//VDriv->CreateWindows("TOE Demonstrative Application", TOEvector2di(800,600), false);
 	VDriv->SetClearScreenColor(TOEvector4df(0.1, 0.1, 0.3, 1));
 	VDriv->SetIODriver(handler);
 	VDriv->SetMouseVisibility(false);
