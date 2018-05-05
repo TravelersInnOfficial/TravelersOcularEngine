@@ -68,7 +68,6 @@ void CreateTree(TFMesh* ms[], TFLight* ls[], TFLight*& shL){
 	sceneObjects.push_back(mesh);
 
 	// TEAPOTS ###################################################
-
 	pos = TOEvector3df(-7.0f, -1.8f, 20.0f);
 	scale = TOEvector3df(0.7f, 0.7f, 0.7f);
 	mesh = sm->AddMesh(pos, rot, scale, "./../assets/models/teapot.obj");
@@ -137,11 +136,14 @@ void CreateTree(TFMesh* ms[], TFLight* ls[], TFLight*& shL){
 	ms[2]->AddChild(l);
 	sceneObjects.push_back(ms[2]);
 	
-	// STATIC BUT DYNAMIC LIGHT
+	// SHADOW DIRECTIONAL LIGHT
 	pos = TOEvector3df(0.0f,5.0f,0.0f);
 	color = TOEvector4df(1.0f, 0.6f, 0.0f, 1.0f);
 	shL = sm->AddLight(pos, rot, color, attenuation);
-	shL->SetBoundBox(true);	
+	shL->SetBoundBox(true);
+	shL->SetDirectional(true);
+	shL->SetDirection(TOEvector3df(0.0f,-1.0f,0.0f));
+	shL->SetShadowsState(true);
 
 	// DOME ###################################################
 	sm->AddDome();

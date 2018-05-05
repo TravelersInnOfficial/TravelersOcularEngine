@@ -201,6 +201,7 @@ void TFLight::EraseShadow(){
 	glDeleteFramebuffers(1, &m_fbo);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDeleteTextures(1, &m_shadowMap);
+	m_depthWVP = glm::mat4(0.0f);
 	m_fbo = 0;
 	m_shadowMap = 0;
 }
@@ -224,7 +225,6 @@ bool TFLight::CalculateShadowTexture(int num){
 		// Compute the MVP matrix from the light's point of view
 		DrawLightShadow(num);
 	}
-	else m_depthWVP = glm::mat4(0.0f);
 
 	return paintBuffer;
 }
@@ -245,7 +245,7 @@ void TFLight::DrawLightShadow(int num){
 	glm::mat4 depthVP = depthProjectionMatrix * depthViewMatrix;
 
 	// Send our transformation to the currently bound shader in the "MVP" uniform
-	// The currently boudn shader is the shadow one which will calculate the shadow texture
+	// The currently boudn shader is the shadow one, which will calculate the shadow texture
 	GLuint depthMatrixID = glGetUniformLocation(progID, "DepthMVP");
 	glUniformMatrix4fv(depthMatrixID, 1, GL_FALSE, &depthVP[0][0]);
 
