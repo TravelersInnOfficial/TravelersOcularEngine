@@ -75,6 +75,7 @@ void TMesh::DrawShadow(){
 	glVertexAttribPointer(posAttrib,3, GL_FLOAT, GL_FALSE, 0, (void*)0);  			// Pour buffer data to shader
 
 	/// SEND DEPTHMVP UNIFORM (UniformMatrix4)
+	//¡¡¡!!!
 	glm::mat4 depthMVP = TEntity::DepthWVP * m_stack.top();
 	GLuint dMVPID = glGetUniformLocation(myProgram->GetProgramID(), "DepthMVP");	// Get uniform location
 	glUniformMatrix4fv(dMVPID, 1, GL_FALSE, &depthMVP[0][0]);						// Send uniform

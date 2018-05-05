@@ -186,6 +186,7 @@ TOEvector3df TFLight::GetDirection(){
 	return myEntity->GetDirection();
 }
 
+// SHADOWS #####################################################################################################################
 //##############################################################################################################################
 
 void TFLight::SetShadowsState(bool shadowState){
@@ -287,6 +288,8 @@ void TFLight::DrawLightShadow(int num){
 	glUniformMatrix4fv(depthMatrixID, 1, GL_FALSE, &depthVP[0][0]);
 
 	m_depthWVP = depthVP;
+	TEntity::DepthWVP = m_depthWVP;	//Only for the shadow texture calculation
 }
 
+// SHADOWS #####################################################################################################################
 //##############################################################################################################################
