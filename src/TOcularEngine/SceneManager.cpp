@@ -20,7 +20,7 @@ SceneManager::SceneManager(){
 	m_main_camera = nullptr;
 	m_dome = nullptr;
 	m_currentRoom = -1;
-
+	m_numshadowlights = 0;
 	m_vao = 0;
 }
 
@@ -460,24 +460,46 @@ void SceneManager::RecalculateLightPosition(){
 	for(int i = 0; i < size; i++) m_lights[i]->CalculateLocation();
 }
 
+void SceneManager::RecalculateShadowLightsNumber(){
+	m_numshadowlights = 0;
+	GLint size = m_lights.size();
+	for(int i = 0; i < size; i++){
+		if(m_lights[i] != nullptr && m_lights[i]->GetActive() && m_lights[i]->GetShadowsState()) m_numshadowlights++;
+	}
+}
+
 void SceneManager::SendLights(){
 	// Change light last position
 	RecalculateLightPosition();
+	RecalculateShadowLightsNumber();
 	
 	VideoDriver* vd = VideoDriver::GetInstance();
+	GLuint progID = 0;
 
 	// SEND ALL LIGHTS TO ALL SHADERS
 	vd->SetShaderProgram(BARREL_SHADER);
 	SendLightsToShader();
+	SendLightMVP();
+	progID = vd->GetProgram(vd->GetCurrentProgram())->GetProgramID();
+	glUniform1i(glGetUniformLocation(progID, "nshadowlights"), m_numshadowlights); // SE ENVIA EL NUMERO -- TOTAL -- DE LUCES CON SOMBRA (Sin tener en cuenta habitaciones)
 
 	vd->SetShaderProgram(FISHEYE_SHADER);
 	SendLightsToShader();
+	SendLightMVP();
+	progID = vd->GetProgram(vd->GetCurrentProgram())->GetProgramID();
+	glUniform1i(glGetUniformLocation(progID, "nshadowlights"), m_numshadowlights); // SE ENVIA EL NUMERO -- TOTAL -- DE LUCES CON SOMBRA (Sin tener en cuenta habitaciones)
 
 	vd->SetShaderProgram(DISTORSION_SHADER);
 	SendLightsToShader();
+	SendLightMVP();
+	progID = vd->GetProgram(vd->GetCurrentProgram())->GetProgramID();
+	glUniform1i(glGetUniformLocation(progID, "nshadowlights"), m_numshadowlights); // SE ENVIA EL NUMERO -- TOTAL -- DE LUCES CON SOMBRA (Sin tener en cuenta habitaciones)
 
 	vd->SetShaderProgram(STANDARD_SHADER);
 	SendLightsToShader();
+	SendLightMVP();
+	progID = vd->GetProgram(vd->GetCurrentProgram())->GetProgramID();
+	glUniform1i(glGetUniformLocation(progID, "nshadowlights"), m_numshadowlights); // SE ENVIA EL NUMERO -- TOTAL -- DE LUCES CON SOMBRA (Sin tener en cuenta habitaciones)
 }
 
 void SceneManager::SendLightsToShader(){
@@ -502,6 +524,17 @@ void SceneManager::SendLightsToShader(){
     // Send size of lights
 	GLuint nlightspos = glGetUniformLocation(programID, "nlights");
 	glUniform1i(nlightspos, size);
+}
+
+void SceneManager::SendLightMVP(){
+	GLint size = m_lights.size();
+	int mvpIndex = 0;
+	for(int i = 0; i < size; i++){
+		if(m_lights[i] != nullptr && m_lights[i]->GetActive() && m_lights[i]->GetShadowsState()){
+			bool valid = m_lights[i]->DrawLightMVP(i);
+			if(valid) mvpIndex++;
+		}
+	}
 }
 
 void SceneManager::ResetManager(){

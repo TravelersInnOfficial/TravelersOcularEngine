@@ -47,7 +47,7 @@ void main() {
 
 	//bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 	for (int i = 0; i < 0/*nshadowlights*/; i++){
-		ShadowCoordArray[i] = DepthBiasMVPArray[i] * vec4(VertexPosition,1.0);
+		ShadowCoordArray[i] = DepthBiasMVPArray[i] * ModelMatrix * vec4(VertexPosition,1.0);
 	}
 	//bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 

@@ -89,18 +89,18 @@ void TFLight::DrawLight(int num){
 	glm::vec3 direction = glm::vec3(0.0f);
 	float att = 0;
 	bool directional = false;
+	bool shadowlight = false;
 
 	if(ent->GetActive()){
-		 TOEvector4df color = GetColor();
-		 TOEvector3df dir = GetDirection();
-
+		TOEvector4df color = GetColor();
+		TOEvector3df dir = GetDirection();
 		position = m_LastLocation;
 		diffuse = glm::vec3(color.X, color.Y, color.X2);
 		specular = glm::vec3(color.X, color.Y, color.X2);
 		att = GetAttenuation();
 		directional = GetDirectional();
-
 		direction = glm::vec3(dir.X, dir.Y, dir.Z);
+		shadowlight = GetShadowsState();
 	}
 
 	VideoDriver* vd = VideoDriver::GetInstance();
@@ -124,8 +124,46 @@ void TFLight::DrawLight(int num){
 	aux = str +"Directional";
 	glUniform1i(glGetUniformLocation(progID, aux.c_str()), directional);
 
-	aux = str +"Direction";
-	glUniform3fv(glGetUniformLocation(progID, aux.c_str()), 1, &direction[0]);
+	if(directional){
+		aux = str +"Direction";
+		glUniform3fv(glGetUniformLocation(progID, aux.c_str()), 1, &direction[0]);
+	}
+
+	aux = str +"ShadowLight";
+	glUniform1i(glGetUniformLocation(progID, aux.c_str()), shadowlight);
+
+	if(shadowlight){
+		// SEND THE SHADOW MAP
+		aux = str +"ShadowMap";
+		int textureNumber = 100 + num;	// Empezamos en el 100 para dejar sitio a las demas texturas
+		glActiveTexture(textureNumber);
+		glBindTexture(GL_TEXTURE_2D, m_shadowMap);
+		glUniform1i(glGetUniformLocation(progID, aux.c_str()), textureNumber);
+	}
+}
+
+bool TFLight::DrawLightMVP(int num){
+	bool toRet = false;
+	
+	if(GetShadowsState()){
+		// CALCULATE
+		glm::mat4 biasMatrix(
+				0.5, 0.0, 0.0, 0.0,
+				0.0, 0.5, 0.0, 0.0,
+				0.0, 0.0, 0.5, 0.0,
+				0.5, 0.5, 0.5, 1.0
+		);
+		glm::mat4 depthBIASMVP = biasMatrix * m_depthWVP;
+
+		// SEND
+		std::string aux = "DepthBiasMVPArray["+std::to_string(num)+"]";
+		VideoDriver* vd = VideoDriver::GetInstance();
+		GLuint progID = vd->GetProgram(vd->GetCurrentProgram())->GetProgramID();
+		glUniformMatrix4fv(glGetUniformLocation(progID, aux.c_str()), 1, GL_FALSE, &depthBIASMVP[0][0]);
+		toRet = true;
+	}
+
+	return toRet;
 }
 
 void TFLight::SetBoundBox(bool box){

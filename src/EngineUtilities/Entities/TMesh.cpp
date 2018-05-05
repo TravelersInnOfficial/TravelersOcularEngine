@@ -143,11 +143,6 @@ void TMesh::SendShaderData(){
 	GLint vLocation = glGetUniformLocation(myProgram->GetProgramID(), "ViewMatrix");
 	glUniformMatrix4fv(vLocation, 1, GL_FALSE, &ViewMatrix[0][0]);
 
-	// SEND MODEL MATRIX
-	glm::mat4 model =  m_stack.top();
-	GLint mLocation = glGetUniformLocation(myProgram->GetProgramID(), "ModelMatrix");
-	glUniformMatrix4fv(mLocation, 1, GL_FALSE, &model[0][0]);
-
 	// SEND MODELVIEW MATRIX
 	glm::mat4 modelView = ViewMatrix * m_stack.top();
 	GLint mvLocation = glGetUniformLocation(myProgram->GetProgramID(), "ModelViewMatrix");

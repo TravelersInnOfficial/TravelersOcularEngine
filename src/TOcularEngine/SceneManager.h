@@ -297,10 +297,13 @@ private:
     glm::vec3 m_ambientLight;
     TFCamera* m_main_camera;
     TFDome* m_dome;
+    int m_numshadowlights;
 
     void RecalculateLightPosition();
+    void RecalculateShadowLightsNumber();
     void SendLights();
     void SendLightsToShader();
+    void SendLightMVP();
     void DrawSceneShadows();
     void DrawAllLines(); 
     std::vector<GLfloat> vertexVector; 
