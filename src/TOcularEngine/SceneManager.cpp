@@ -616,7 +616,8 @@ void SceneManager::DrawSceneShadows(){
 			// Caulculamos si esta activa y tiene sombras
 			// Si esta activa y necesita sombra, las pintamos
 			// Se pintan desde el SceneTreeRot en el buffer vinculado en
-			// La funcion CalculateShadowTexture
+			// La funcion CalculateShadowTexture y con la MVP calculada
+			// Tambien en esa funcion
 			if(toCheck->CalculateShadowTexture(i)) m_SceneTreeRoot->DrawShadows();
 		}
 	}
