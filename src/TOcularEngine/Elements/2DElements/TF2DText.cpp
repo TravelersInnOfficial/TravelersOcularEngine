@@ -8,7 +8,7 @@
 
 TF2DText::TF2DText(std::string text , TOEvector2df position){
     m_text = text;
-    m_textSize = 0.1f;
+    m_textSize = 0.06f;
 
     TOEvector2di w_dims = VideoDriver::GetInstance()->GetWindowDimensions();
     m_position  = TOEvector2df((position.X*2 - w_dims.X) / w_dims.X , (position.Y*2 - w_dims.Y) / w_dims.Y);
@@ -27,7 +27,13 @@ TF2DText::TF2DText(std::string text , TOEvector2df position){
 
     SetText(m_text);
 
+	float w = m_textSize * (m_vertexSize/6);
+	float h = m_textSize;
+
+	float sizeX = w * w_dims.X / 2;
+	float sizeY = h * w_dims.Y / 2;
 	m_InData.position = position;
+	m_InData.size = TOEvector2df(sizeX,sizeY);
 }
 
 TF2DText::~TF2DText(){
