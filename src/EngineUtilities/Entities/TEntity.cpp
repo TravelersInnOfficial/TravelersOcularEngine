@@ -20,7 +20,6 @@ glm::mat4 TEntity::ProjMatrix;
 bool TEntity::m_checkClipping = false;
 float TEntity::m_clippingLimits[4] = {+1.0f, -1.0f, +1.0f, -1.0f};
 glm::mat4 TEntity::DepthWVP;
-unsigned int TEntity::ShadowMap = 0;
 
 
 void TEntity::SetViewMatrixPtr(glm::mat4 view){

@@ -10,14 +10,7 @@ out vec3 Position;    	    // VERTICES EN COORDENADAS DE VISTA
 out vec2 TexCoords;   	    // COORDENADAS DE TEXTURA
 out mat4 FragViewMatrix;    // VIEW MATRIX
 out mat4 RotationNormal;
-
-//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
-out vec4 ShadowCoord;       // VERTICES DESDE LA LUZ
-//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
-
-//bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-out vec4 ShadowCoordArray[40];       // VERTICES DESDE LA LUZ
-//bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+out vec4 ShadowCoordArray[20];       // VERTICES DESDE LA LUZ
 
 // IN UNIFORMS
 uniform mat4 ModelMatrix;
@@ -28,28 +21,16 @@ uniform vec2 TextureScale;
 // ############  DON'T CHANGE ABOVE THIS LINE  ######################################################
 
 // IN UNIFORM FOR ONLY THIS SHADER
-//bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-uniform mat4 DepthBiasMVPArray[40];		// Son las MVP de cada luz
+uniform mat4 DepthBiasMVPArray[10];		// Son las MVP de cada luz
 uniform int nshadowlights;				// NUMBER OF CURRENT SHADOW LIGHTS
-//bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-
-//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
-uniform mat4 DepthBiasMVP;				// Son las MVP de cada luz, habria que enviar un array del MVP de cada luz con sombra
-//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
 
 void main() {
 	// TRANSFORMAR VERTICE Y NORMAL A COORDENADAS DE VISTA
 	Position = vec3 (ModelViewMatrix * vec4(VertexPosition, 1.0));
-	
-	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
-	ShadowCoord = DepthBiasMVP * vec4(VertexPosition,1.0);		// En realidad deberia haber un array de ShadowCoord, uno por cada luz con sombra
-	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
 
-	//bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-	for (int i = 0; i < 0/*nshadowlights*/; i++){
+	for (int i = 0; i < nshadowlights; i++){
 		ShadowCoordArray[i] = DepthBiasMVPArray[i] * ModelMatrix * vec4(VertexPosition,1.0);
 	}
-	//bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 
 	// LAS COORDENADAS DE TEXTURA NO SUFREN TRANSFORMACION
 	TexCoords.x = TextureCoords.x * TextureScale.x;

@@ -8,13 +8,7 @@ in vec2 TexCoords;   		// COORDENADAS DE TEXTURA
 in mat4 FragViewMatrix;   	// VIEW MATRIX
 in mat4 RotationNormal;		// MODELVIEW MATRIX
 
-//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
-in vec4 ShadowCoord;      	// VERTICES DESDE LA LUZ ¡¡¡¡ESTO TIENE QUE SER UN ARRAY!!!!
-//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
-
-//bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-in vec4 ShadowCoordArray[40];       // POSICION DE VERTICES EN LA TEXTURA DE SOMBRAS (VERTICE VISTO DESDE LA LUZ)
-//bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+in vec4 ShadowCoordArray[20];       // POSICION DE VERTICES EN LA TEXTURA DE SOMBRAS (VERTICE VISTO DESDE LA LUZ)
 
 // SALIDA PARA COMUNICAR CON EL RESTO DEL PIPELINE
 out vec4 FragColor;	// COLOR FINAL DEL FRAGMENTO
@@ -40,11 +34,9 @@ struct TLight {
 	bool Directional;			// Is it directiona?
 	vec3 Direction;				// Direction of the light
 
-	//bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 	// For SHADOW
 	bool ShadowLight;			// Does it has shadow?
 	sampler2DShadow ShadowMap;	// Shadow texture of the light
-	//bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 };
 
 // IN UNIFORMS
@@ -57,10 +49,6 @@ uniform vec3 AmbientLight;		// AMBIENT LIGHT
 uniform sampler2D uvMap;
 uniform sampler2D specularMap;
 uniform sampler2D bumpMap;
-
-//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
-uniform sampler2DShadow shadowMap; // Tendria que haber un array de shadowmaps, uno por cada luz con sombra (moverlo a TLIGHT entonces)
-//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
 
 // FUNCION QUE CALCULA EL MODELO DE REFLEXION DE PHONG
 vec3  Phong (int num) {
@@ -130,9 +118,8 @@ void main() {
 	float bias = 0.005;
 	float visibility = 1.0;
 	
-	//bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 	int shadowindex = 0;
-	for(int i = 0; i < 0/*nlights*/; i++){
+	for(int i = 0; i < nlights; i++){
 		if(Light[i].ShadowLight){
 			for (int i = 0; i < 4; i++){
 				visibility -= 0.2*(1.0-texture(Light[i].ShadowMap, vec3(ShadowCoordArray[shadowindex].xy + poissonDisk[i]/700.0,  (ShadowCoordArray[shadowindex].z-bias)/ShadowCoordArray[shadowindex].w) ));
@@ -140,17 +127,6 @@ void main() {
 			shadowindex = shadowindex + 1;
 		}
 	}
-	//bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-
-	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
-	// Sample the shadow map 4 times
-	for (int i = 0; i < 4; i++){
-		int index = i;
-		// being fully in the shadow will eat up 4*0.2 = 0.8
-		// 0.2 potentially remain, which is quite dark.
-		visibility -= 0.2*(1.0-texture( shadowMap, vec3(ShadowCoord.xy + poissonDisk[index]/700.0,  (ShadowCoord.z-bias)/ShadowCoord.w) ));
-	}
-	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
 	
 	// ADD shadow
 	result *= visibility;	

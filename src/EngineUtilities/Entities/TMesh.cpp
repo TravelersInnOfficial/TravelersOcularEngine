@@ -158,17 +158,6 @@ void TMesh::SendShaderData(){
 	GLint mvpLocation = glGetUniformLocation(myProgram->GetProgramID(), "MVP");
 	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, &mvpMatrix[0][0]);
 
-	// SEND DepthBiasMVP MATRIX
-	glm::mat4 biasMatrix(
-			0.5, 0.0, 0.0, 0.0,
-			0.0, 0.5, 0.0, 0.0,
-			0.0, 0.0, 0.5, 0.0,
-			0.5, 0.5, 0.5, 1.0
-	);
-	glm::mat4 depthBIASMVP = biasMatrix * TEntity::DepthWVP * m_stack.top();
-	GLint depthMID = glGetUniformLocation(myProgram->GetProgramID(), "DepthBiasMVP");
-	glUniformMatrix4fv(depthMID, 1, GL_FALSE, &depthBIASMVP[0][0]);
-
 	// -------------------------------------------------------- ENVIAMOS LA TEXTURA
 	TResourceTexture* currentTexture = nullptr;
 	if(m_texture != nullptr) currentTexture = m_texture;
@@ -176,16 +165,9 @@ void TMesh::SendShaderData(){
 
 	if(currentTexture != nullptr){
 		GLuint TextureID = glGetUniformLocation(myProgram->GetProgramID(), "uvMap");
-		GLuint ShadowMapID = glGetUniformLocation(myProgram->GetProgramID(), "shadowMap");
-
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, currentTexture->GetTextureId());
 		glUniform1i(TextureID, 0); 
-
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, TEntity::ShadowMap);
-		glUniform1i(ShadowMapID, 1);
-
 	}
 
 	// -------------------------------------------------------- ENVIAMOS EL SPECULAR MAP

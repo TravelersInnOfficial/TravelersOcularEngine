@@ -617,11 +617,7 @@ void SceneManager::DrawSceneShadows(){
 			// Si esta activa y necesita sombra, las pintamos
 			// Se pintan desde el SceneTreeRot en el buffer vinculado en
 			// La funcion CalculateShadowTexture
-			if(toCheck->CalculateShadowTexture(i)){
-				std::cout<<"Calculamos la luz "<<i<<"."<<std::endl;
-				m_SceneTreeRoot->DrawShadows();
-			}
+			if(toCheck->CalculateShadowTexture(i)) m_SceneTreeRoot->DrawShadows();
 		}
 	}
-	std::cout<<"Terminamos frame"<<std::endl;
 }

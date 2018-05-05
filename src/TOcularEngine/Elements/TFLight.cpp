@@ -212,7 +212,6 @@ void TFLight::InitShadow(){
 	glGenFramebuffers(1, &m_fbo); 
 
 	glGenTextures(1, &m_shadowMap);
-	TEntity::ShadowMap = m_shadowMap;
 	glBindTexture(GL_TEXTURE_2D, m_shadowMap);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, 1024, 1024, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
 
