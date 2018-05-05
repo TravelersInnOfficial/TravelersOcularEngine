@@ -16,6 +16,7 @@ public:
 	void SetProgram(SHADERTYPE program);
 
 	static void SetViewMatrixPtr(glm::mat4 view);
+	static void ResetClippingVariables();
 
 	static std::stack<glm::mat4> InitializeStack();
 	static std::stack<glm::mat4> m_stack;

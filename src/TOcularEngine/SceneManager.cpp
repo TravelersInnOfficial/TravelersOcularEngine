@@ -401,9 +401,18 @@ int SceneManager::SendRoomLights(int value){
 	if(m_main_camera != nullptr){
 		// Una vez aqui ya se habra visto cual es la habitacion mas cercana a la camara
 		if(m_currentRoom != -1){
-			value = m_rooms[m_currentRoom]->DrawLights(value);
+			value = m_rooms[m_currentRoom]->DrawLights(value, 1);
 		}
 	}
+
+	// Volvemos a poner al valor inicial los valores de clipping
+	TEntity::ResetClippingVariables();
+	// Volvemos a poner al valor inicial los booleanos de las habitacions
+	int size = m_rooms.size();
+	for(int i=0; i<size; i++){
+		m_rooms[i]->SetLightsSend(false);
+	}
+
 	return value;
 }
 
@@ -414,6 +423,13 @@ void SceneManager::DrawRooms(){
 			// Procedemos a pintar la habitacion mas cercana
 			m_rooms[m_currentRoom]->Draw();
 		} 
+
+		// Reseteamos las variables de pintado
+		int size = m_rooms.size();
+		for(int i=0; i<size; i++){
+			m_rooms[i]->SetDrawed(false);
+		}
+
 	}
 }
 

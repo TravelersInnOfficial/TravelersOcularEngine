@@ -63,27 +63,27 @@ int TFRoom::DrawLights(int value, int nextTo){
 
 		size = m_portals.size();
 		for(int i=0; i<size; i++){
-										// Solo el 0 es negativo
-			if(m_portals[i]->GetVisible() && (nextTo || m_portals[i]->CheckVisibility())){
+			if(m_portals[i]->GetVisible() && (nextTo > 0 || m_portals[i]->CheckVisibility())){
 				output = m_portals[i]->GetSecondRoom()->DrawLights(output, nextTo-1);
-
-
-				TEntity::m_clippingLimits[0] = 1;
-				TEntity::m_clippingLimits[1] = -1;
-				TEntity::m_clippingLimits[2] = 1;
-				TEntity::m_clippingLimits[3] = -1;
 			}
 		}
-
-		lightsSend = false;
 	}
 
 	return output;
 }
 
+void TFRoom::SetLightsSend(bool value){
+	lightsSend = value;
+}
+
 void TFRoom::Draw(){
 	TRoom* room = (TRoom*)m_entityNode;
 	room->Draw();
+}
+
+void TFRoom::SetDrawed(bool value){
+	TRoom* room = (TRoom*)m_entityNode;
+	room->SetDrawed(value);
 }
 
 bool TFRoom::DeletePortal(TFPortal* portal){

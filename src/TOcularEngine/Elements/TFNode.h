@@ -24,8 +24,8 @@ public:
 	virtual void Rotate(TOEvector3df rotation);					// Adds the rotation to the current rotation
 	virtual void Scale(TOEvector3df scale);						// Adds the scale to the current scale
 
-	virtual TOEvector3df GetTranslation();	// Returns the rotation of the Node
-	virtual TOEvector3df GetRotation();		// Returns the position of the Node
+	virtual TOEvector3df GetTranslation();	// Returns the position of the Node
+	virtual TOEvector3df GetRotation();		// Returns the rotation of the Node
 	virtual TOEvector3df GetScale();			// Returns the scale of the Node
 
 	virtual bool AddChild(TFNode* children);			// Adds a Children to the TFNode

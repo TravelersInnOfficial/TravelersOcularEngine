@@ -29,6 +29,7 @@ public:
 	glm::vec3 GetRotation();
 
 	bool GetDrawed();
+	void SetDrawed(bool value);
 	float GetDistance(glm::vec3 point);
 
 private:

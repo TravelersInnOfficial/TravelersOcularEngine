@@ -22,6 +22,12 @@ float TEntity::m_clippingLimits[4] = {+1.0f, -1.0f, +1.0f, -1.0f};
 glm::mat4 TEntity::DepthWVP;
 unsigned int TEntity::ShadowMap = 0;
 
+void TEntity::ResetClippingVariables(){
+    m_clippingLimits[0] = 1;
+    m_clippingLimits[1] = -1;
+    m_clippingLimits[2] = 1;
+    m_clippingLimits[3] = -1;
+}
 
 void TEntity::SetViewMatrixPtr(glm::mat4 view){
     ViewMatrix = view;

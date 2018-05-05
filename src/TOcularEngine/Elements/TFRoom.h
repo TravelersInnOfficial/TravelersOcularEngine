@@ -32,6 +32,7 @@ public:
 	void DeleteLight(TFNode* light);
 
 	float GetDistance(TOEvector3df position);
+	void SetLightsSend(bool value);
 
 private:
 	std::vector<TFPortal*> m_portals;
@@ -40,6 +41,8 @@ private:
 
 	void Draw();
 	int DrawLights(int value, int nextTo = 2);
+	void SetDrawed(bool value);
+
 	TNode* GetConnectionNode() override;
 	TFRoom(TOEvector3df position = TOEvector3df(0, 0, 0),
 		TOEvector3df rotation = TOEvector3df(0, 0, 0),
