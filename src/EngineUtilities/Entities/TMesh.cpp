@@ -44,7 +44,6 @@ void TMesh::SetBBVisibility(bool visible){
 
 void TMesh::BeginDraw(){
 	if(m_mesh != nullptr && !m_drawingShadows && CheckClipping()){
-
 		// Bind and send the data to the VERTEX SHADER
 		SendShaderData();
 		

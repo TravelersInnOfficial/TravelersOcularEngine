@@ -12,6 +12,7 @@ TLight::TLight(TColor color, float attenuation){
 	drawBB = false;
 	m_directional = false;
 	m_direction =  TOEvector3df(0,-1,0);
+	m_drawingShadows = false;
 }
 
 TLight::~TLight(){}
@@ -56,9 +57,17 @@ bool TLight::GetDirectional(){
 	return m_directional;
 }
 
-void TLight::BeginDraw(){if(drawBB) DrawBB();}
+void TLight::BeginDraw(){
+	if(drawBB && !m_drawingShadows) DrawBB();
+}
 
-void TLight::EndDraw(){}
+void TLight::EndDraw(){
+	m_drawingShadows = false;
+}
+
+void TLight::DrawShadow(){
+	m_drawingShadows = true;
+}
 
 // TODO: Optimize buffer by filling them only one time
 void TLight::DrawBB(){
