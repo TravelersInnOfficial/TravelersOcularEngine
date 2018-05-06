@@ -58,6 +58,11 @@ vec2 poissonDisk[4] = vec2[](
    vec2( 0.34495938, 0.29387760 )
 );
 
+float RandomNumber(vec4 seed4){
+	float dot_product = dot(seed4, vec4(12.9898,78.233,45.164,94.673));
+	return fract(sin(dot_product) * 43758.5453);
+}
+
 // FUNCION QUE CALCULA EL MODELO DE REFLEXION DE PHONG
 vec3  Phong (int num) {
 
@@ -122,8 +127,8 @@ void main() {
 	for(int i = 0; i < nlights; i++){
 		if(Light[i].ShadowLight == true){
 			for (int j = 0; j < 4; j++){
-				// SHADOW MAP COMPLETAMENTE NEGRO?
-				visibility -= 0.2*(1.0-texture(Light[i].ShadowMap, vec3(ShadowCoordArray[shadowindex].xy + poissonDisk[j]/700.0, (ShadowCoordArray[shadowindex].z-bias)/ShadowCoordArray[shadowindex].w)));
+				int index = int(16.0*RandomNumber(vec4(gl_FragCoord.xyy, i)))%16;
+				visibility -= 0.2*(1.0-texture(Light[i].ShadowMap, vec3(ShadowCoordArray[shadowindex].xy + poissonDisk[index]/700.0, (ShadowCoordArray[shadowindex].z-bias)/ShadowCoordArray[shadowindex].w)));
 			}
 			shadowindex = shadowindex + 1;
 		}

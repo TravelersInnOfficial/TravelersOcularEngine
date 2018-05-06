@@ -30,7 +30,6 @@ void main() {
 	Position = vec3 (ModelViewMatrix * vec4(VertexPosition, 1.0));
 
 	for (int i = 0; i < nshadowlights; i++){
-		// COORDENADAS MAL CALCULADAS?
 		ShadowCoordArray[i] = (DepthBiasMVPArray[i] * ModelMatrix) * vec4(VertexPosition,1.0);
 	}
 

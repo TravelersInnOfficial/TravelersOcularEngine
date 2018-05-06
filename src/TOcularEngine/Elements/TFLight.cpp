@@ -135,7 +135,6 @@ void TFLight::DrawLight(int num){
 
 	if(shadowlight){
 		// SEND THE SHADOW MAP
-		// NO SE PUEDE ENVIAR ASI?
 		aux = str +"ShadowMap";
 		GLint textureNumber = 50 + num;	// Empezamos en el 50 para dejar sitio a las demas texturas
 		glActiveTexture(GL_TEXTURE0 + textureNumber);
@@ -279,7 +278,7 @@ void TFLight::DrawLightShadow(int num){
 	glm::vec3 lightInvDir = m_LastLocation;
 
 	// Get the orthogonal view of the light
-	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, 5, 40);
+	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 100);
 	
 	// Calculate the direction of the light
 	//TOEvector3df dir = GetDirection();
@@ -287,7 +286,8 @@ void TFLight::DrawLightShadow(int num){
 	
 	// ARREGLAR PARA QUE APUNTE AL MISMO LUGAR QUE LA LUZ, NO AL CENTRO SIEMPRE
 	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0,0,0), glm::vec3(0.0f,1.0f,0.0f));
-	glm::mat4 depthVP = depthProjectionMatrix * depthViewMatrix;
+	glm::mat4 depthModelMatrix = glm::mat4(1.0);
+	glm::mat4 depthVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
 
 	m_depthWVP = depthVP;
 	TEntity::DepthWVP = m_depthWVP;	//Only for the shadow texture calculation
