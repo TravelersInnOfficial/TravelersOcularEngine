@@ -2,15 +2,16 @@
 
 // ##################################################################################################
 // IN VARIABLES
-in vec3 VertexPosition;     // VERTICE EN COORDENADAS LOCALES
-in vec3 VertexNormal;       // NORMAL EL COORDENADAS LOCALES
-in vec2 TextureCoords;      // COORDENADAS DE TEXTURA
+in vec3 VertexPosition;			// VERTICE EN COORDENADAS LOCALES
+in vec3 VertexNormal;			// NORMAL EL COORDENADAS LOCALES
+in vec2 TextureCoords;			// COORDENADAS DE TEXTURA
+
 // OUT VARIABLES TO FRAGMENT
-out vec3 Position;    	    // VERTICES EN COORDENADAS DE VISTA
-out vec2 TexCoords;   	    // COORDENADAS DE TEXTURA
-out mat4 FragViewMatrix;    // VIEW MATRIX
+out vec3 Position;				// VERTICES EN COORDENADAS DE VISTA
+out vec2 TexCoords;				// COORDENADAS DE TEXTURA
+out mat4 FragViewMatrix;		// VIEW MATRIX
 out mat4 RotationNormal;
-out vec4 ShadowCoordArray[20];       // VERTICES DESDE LA LUZ
+out vec4 ShadowCoordArray[20];	// VERTICES DESDE LA LUZ
 
 // IN UNIFORMS
 uniform mat4 ModelMatrix;
@@ -21,7 +22,7 @@ uniform vec2 TextureScale;
 // ############  DON'T CHANGE ABOVE THIS LINE  ######################################################
 
 // IN UNIFORM FOR ONLY THIS SHADER
-uniform mat4 DepthBiasMVPArray[10];		// Son las MVP de cada luz
+uniform mat4 DepthBiasMVPArray[20];		// Son las MVP de cada luz
 uniform int nshadowlights;				// NUMBER OF CURRENT SHADOW LIGHTS
 
 void main() {
@@ -29,6 +30,7 @@ void main() {
 	Position = vec3 (ModelViewMatrix * vec4(VertexPosition, 1.0));
 
 	for (int i = 0; i < nshadowlights; i++){
+		// COORDENADAS MAL CALCULADAS
 		ShadowCoordArray[i] = (DepthBiasMVPArray[i] * ModelMatrix) * vec4(VertexPosition,1.0);
 	}
 

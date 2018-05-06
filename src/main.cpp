@@ -135,15 +135,18 @@ void CreateTree(TFMesh* ms[], TFLight* ls[], TFLight*& shL){
 	ms[2]->AddBillboard(pos, "SPHERE3", 0.35f);
 	ms[2]->AddChild(l);
 	sceneObjects.push_back(ms[2]);
-	
+
 	// SHADOW DIRECTIONAL LIGHT
+	std::cout<<"Creamos una luz"<<std::endl;
 	pos = TOEvector3df(0.0f,5.0f,0.0f);
 	color = TOEvector4df(1.0f, 0.6f, 0.0f, 1.0f);
 	shL = sm->AddLight(pos, rot, color, attenuation);
 	shL->SetBoundBox(true);
 	shL->SetDirectional(true);
 	shL->SetDirection(TOEvector3df(0.0f,-1.0f,0.0f));
+	std::cout<<"Le activamos la sombra"<<std::endl;
 	shL->SetShadowsState(true);
+	std::cout<<"Terminamos la creacion"<<std::endl;
 
 	// DOME ###################################################
 	sm->AddDome();

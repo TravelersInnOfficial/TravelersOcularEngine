@@ -55,7 +55,7 @@ private:
 
 	void DrawLight(int num);
 	void DrawLightShadow(int num);
-	bool DrawLightMVP(int num);
+	void DrawLightMVP(int num);
 
 	void InitShadow();
 	void EraseShadow();

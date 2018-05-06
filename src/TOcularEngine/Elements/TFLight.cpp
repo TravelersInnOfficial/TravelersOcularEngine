@@ -142,28 +142,21 @@ void TFLight::DrawLight(int num){
 	}
 }
 
-bool TFLight::DrawLightMVP(int num){
-	bool toRet = false;
-	
-	if(GetShadowsState()){
-		// CALCULATE
-		glm::mat4 biasMatrix(
-				0.5, 0.0, 0.0, 0.0,
-				0.0, 0.5, 0.0, 0.0,
-				0.0, 0.0, 0.5, 0.0,
-				0.5, 0.5, 0.5, 1.0
-		);
-		glm::mat4 depthBIASMVP = biasMatrix * m_depthWVP;
+void TFLight::DrawLightMVP(int num){
+	// CALCULATE
+	glm::mat4 biasMatrix(
+			0.5, 0.0, 0.0, 0.0,
+			0.0, 0.5, 0.0, 0.0,
+			0.0, 0.0, 0.5, 0.0,
+			0.5, 0.5, 0.5, 1.0
+	);
+	glm::mat4 depthBIASMVP = biasMatrix * m_depthWVP;
 
-		// SEND
-		std::string aux = "DepthBiasMVPArray["+std::to_string(num)+"]";
-		VideoDriver* vd = VideoDriver::GetInstance();
-		GLuint progID = vd->GetProgram(vd->GetCurrentProgram())->GetProgramID();
-		glUniformMatrix4fv(glGetUniformLocation(progID, aux.c_str()), 1, GL_FALSE, &depthBIASMVP[0][0]);
-		toRet = true;
-	}
-
-	return toRet;
+	// SEND
+	std::string aux = "DepthBiasMVPArray["+std::to_string(num)+"]";
+	VideoDriver* vd = VideoDriver::GetInstance();
+	GLuint progID = vd->GetProgram(vd->GetCurrentProgram())->GetProgramID();
+	glUniformMatrix4fv(glGetUniformLocation(progID, aux.c_str()), 1, GL_FALSE, &depthBIASMVP[0][0]);
 }
 
 void TFLight::SetBoundBox(bool box){
@@ -207,6 +200,9 @@ bool TFLight::GetShadowsState(){
 }
 
 void TFLight::InitShadow(){
+
+	std::cout<<"Generamos el FBO y bindeamos el shadow map"<<std::endl;
+
 	m_fbo = 0;
 	m_shadowMap = 0;
 
@@ -230,11 +226,13 @@ void TFLight::InitShadow(){
 	glReadBuffer(GL_NONE);
 
 	GLenum Status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-
 	if (Status != GL_FRAMEBUFFER_COMPLETE) printf("FB error, status: 0x%x\n", Status);
 }
 
 void TFLight::EraseShadow(){
+
+	std::cout<<"Borramos los datos de las sombras"<<std::endl;
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glDeleteFramebuffers(1, &m_fbo);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -248,6 +246,9 @@ bool TFLight::CalculateShadowTexture(int num){
 	bool paintBuffer = false;
 
 	if(GetActive() && GetShadowsState()){
+
+		std::cout<<"Bindeamos el frame buffer para pintar la textura de sombras de la luz numero "<<num<<std::endl;
+
 		paintBuffer = true;
 		// Change render target
 		glViewport(0,0,1024,1024);						// Change viewport resolution for rendering in frame buffer 
@@ -269,9 +270,12 @@ bool TFLight::CalculateShadowTexture(int num){
 
 // DEBERIA SER DIFERENTE PARA LUCES DE PUNTO
 void TFLight::DrawLightShadow(int num){
+
+	std::cout<<"Calculamos la DepthMVP de la luz numero "<<num<<" y se la pasamos a TENTITY (de donde la cogera el shader de sombras para pintar la textura de sombras)"<<std::endl;
+
 	// Fill variables
-	VideoDriver* vd = VideoDriver::GetInstance();
-	GLuint progID = vd->GetProgram(SHADOW_SHADER)->GetProgramID();
+	//VideoDriver* vd = VideoDriver::GetInstance();
+	//GLuint progID = vd->GetProgram(SHADOW_SHADER)->GetProgramID();
 	glm::vec3 lightInvDir = m_LastLocation;
 
 	// Get the orthogonal view of the light
@@ -286,10 +290,10 @@ void TFLight::DrawLightShadow(int num){
 	
 	glm::mat4 depthVP = depthProjectionMatrix * depthViewMatrix;
 
-	// Send our transformation to the currently bound shader in the "MVP" uniform
-	// The currently boudn shader is the shadow one, which will calculate the shadow texture
-	GLuint depthMatrixID = glGetUniformLocation(progID, "DepthMVP");
-	glUniformMatrix4fv(depthMatrixID, 1, GL_FALSE, &depthVP[0][0]);
+	// Send our transformation to the shadow shader in the "MVP" uniform
+	// The shader will calculate the shadow texture
+	// GLuint depthMatrixID = glGetUniformLocation(progID, "DepthMVP");
+	// glUniformMatrix4fv(depthMatrixID, 1, GL_FALSE, &depthVP[0][0]);
 
 	m_depthWVP = depthVP;
 	TEntity::DepthWVP = m_depthWVP;	//Only for the shadow texture calculation
