@@ -63,7 +63,7 @@ private:
 	glm::vec3 m_LastLocation;
 
 	GLuint m_fbo;
-    GLuint m_shadowMap;
+    unsigned int m_shadowMap;
 	glm::mat4 m_depthWVP;
 
 };

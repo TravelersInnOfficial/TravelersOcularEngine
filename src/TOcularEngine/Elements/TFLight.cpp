@@ -29,6 +29,7 @@ TFLight::TFLight(TOEvector3df position, TOEvector3df rotation, TOEvector4df colo
 
 	m_fbo = 0;
 	m_shadowMap = 0;
+	m_depthWVP = glm::mat4(0.0f);
 }
 
 TFLight::~TFLight(){
@@ -136,8 +137,8 @@ void TFLight::DrawLight(int num){
 		// SEND THE SHADOW MAP
 		// NO SE PUEDE ENVIAR ASI?
 		aux = str +"ShadowMap";
-		int textureNumber = 10 + num;	// Empezamos en el 10 para dejar sitio a las demas texturas
-		glActiveTexture(textureNumber);
+		GLint textureNumber = 50 + num;	// Empezamos en el 10 para dejar sitio a las demas texturas
+		glActiveTexture(GL_TEXTURE0 + textureNumber);
 		glBindTexture(GL_TEXTURE_2D, m_shadowMap);
 		glUniform1i(glGetUniformLocation(progID, aux.c_str()), textureNumber);
 	}
@@ -275,8 +276,6 @@ void TFLight::DrawLightShadow(int num){
 	std::cout<<"Calculamos la DepthMVP de la luz numero "<<num<<" y se la pasamos a TENTITY (de donde la cogera el shader de sombras para pintar la textura de sombras)"<<std::endl;
 
 	// Fill variables
-	//VideoDriver* vd = VideoDriver::GetInstance();
-	//GLuint progID = vd->GetProgram(SHADOW_SHADER)->GetProgramID();
 	glm::vec3 lightInvDir = m_LastLocation;
 
 	// Get the orthogonal view of the light
@@ -288,16 +287,16 @@ void TFLight::DrawLightShadow(int num){
 	
 	// ARREGLAR PARA QUE APUNTE AL MISMO LUGAR QUE LA LUZ, NO AL CENTRO SIEMPRE
 	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0,0,0), glm::vec3(0.0f,1.0f,0.0f));
-	
 	glm::mat4 depthVP = depthProjectionMatrix * depthViewMatrix;
-
-	// Send our transformation to the shadow shader in the "MVP" uniform
-	// The shader will calculate the shadow texture
-	// GLuint depthMatrixID = glGetUniformLocation(progID, "DepthMVP");
-	// glUniformMatrix4fv(depthMatrixID, 1, GL_FALSE, &depthVP[0][0]);
 
 	m_depthWVP = depthVP;
 	TEntity::DepthWVP = m_depthWVP;	//Only for the shadow texture calculation
+
+	// Enviar al shader actual
+	//VideoDriver* vd = VideoDriver::GetInstance();
+	//GLuint progID = vd->GetProgram(SHADOW_SHADER)->GetProgramID();
+	//GLuint depthMatrixID = glGetUniformLocation(progID, "DepthMVP");
+	//glUniformMatrix4fv(depthMatrixID, 1, GL_FALSE, &depthVP[0][0]);
 }
 
 // SHADOWS #####################################################################################################################
