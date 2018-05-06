@@ -50,6 +50,14 @@ uniform sampler2D uvMap;
 uniform sampler2D specularMap;
 uniform sampler2D bumpMap;
 
+// POISSON SAMPLING
+vec2 poissonDisk[4] = vec2[]( 
+   vec2( -0.94201624, -0.39906216 ), 
+   vec2( 0.94558609, -0.76890725 ), 
+   vec2( -0.094184101, -0.92938870 ), 
+   vec2( 0.34495938, 0.29387760 )
+);
+
 // FUNCION QUE CALCULA EL MODELO DE REFLEXION DE PHONG
 vec3  Phong (int num) {
 
@@ -97,14 +105,6 @@ vec3  Phong (int num) {
 	return (Attenuation * (Diffuse + Specular) * specTexure);
 }
 
-// POISSON SAMPLING
-vec2 poissonDisk[4] = vec2[]( 
-   vec2( -0.94201624, -0.39906216 ), 
-   vec2( 0.94558609, -0.76890725 ), 
-   vec2( -0.094184101, -0.92938870 ), 
-   vec2( 0.34495938, 0.29387760 )
-);
-
 void main() {
 	// Check alpha and discard fragments
 	vec4 texValue = texture(uvMap, TexCoords);
@@ -122,8 +122,8 @@ void main() {
 	for(int i = 0; i < nlights; i++){
 		if(Light[i].ShadowLight == true){
 			for (int j = 0; j < 4; j++){
-				// SHADOW MAP COMPLETAMENTE NEGRO
-				visibility -= 0.2*(1.0-texture(Light[j].ShadowMap, vec3(ShadowCoordArray[shadowindex].xy + poissonDisk[j]/700.0, (ShadowCoordArray[shadowindex].z-bias)/ShadowCoordArray[shadowindex].w)));
+				// SHADOW MAP COMPLETAMENTE NEGRO?
+				visibility -= 0.2*(1.0-texture(Light[i].ShadowMap, vec3(ShadowCoordArray[shadowindex].xy + poissonDisk[j]/700.0, (ShadowCoordArray[shadowindex].z-bias)/ShadowCoordArray[shadowindex].w)));
 			}
 			shadowindex = shadowindex + 1;
 		}

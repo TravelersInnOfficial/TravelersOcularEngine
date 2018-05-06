@@ -134,14 +134,15 @@ void TFLight::DrawLight(int num){
 
 	if(shadowlight){
 		// SEND THE SHADOW MAP
+		// NO SE PUEDE ENVIAR ASI?
 		aux = str +"ShadowMap";
-		int textureNumber = 100 + num;	// Empezamos en el 100 para dejar sitio a las demas texturas
+		int textureNumber = 10 + num;	// Empezamos en el 10 para dejar sitio a las demas texturas
 		glActiveTexture(textureNumber);
 		glBindTexture(GL_TEXTURE_2D, m_shadowMap);
 		glUniform1i(glGetUniformLocation(progID, aux.c_str()), textureNumber);
 	}
 }
-
+// SEND MVP TO THE SHADER
 void TFLight::DrawLightMVP(int num){
 	// CALCULATE
 	glm::mat4 biasMatrix(

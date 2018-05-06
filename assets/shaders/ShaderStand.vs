@@ -30,7 +30,7 @@ void main() {
 	Position = vec3 (ModelViewMatrix * vec4(VertexPosition, 1.0));
 
 	for (int i = 0; i < nshadowlights; i++){
-		// COORDENADAS MAL CALCULADAS
+		// COORDENADAS MAL CALCULADAS?
 		ShadowCoordArray[i] = (DepthBiasMVPArray[i] * ModelMatrix) * vec4(VertexPosition,1.0);
 	}
 
@@ -41,7 +41,6 @@ void main() {
 	FragViewMatrix = ViewMatrix;
 
 	// CALCULAR LA MATRIZ DE ROTACION DE LA NORMAL
-
 	vec3 B =  normalize (vec4(0,0,1,0)).xyz;
 	vec3 A = normalize (ModelViewMatrix * vec4(VertexNormal,0)).xyz;
 

@@ -130,8 +130,9 @@ void TMesh::SendShaderData(){
 
 	// -------------------------------------------------------- ENVIAMOS LAS MATRICES
 	// SEND MODEL MATRIX
-	GLint mmLocation = glGetUniformLocation(myProgram->GetProgramID(), "ModelMatrix");
-	glUniformMatrix4fv(mmLocation, 1, GL_FALSE, &m_stack.top()[0][0]);
+	glm::mat4 model =  m_stack.top();
+	GLint mLocation = glGetUniformLocation(myProgram->GetProgramID(), "ModelMatrix");
+	glUniformMatrix4fv(mLocation, 1, GL_FALSE, &model[0][0]);
 
 	// SEND NORMAL MATRIX (ROTAMOS LAS NORMALES)
 	glm::mat3 normalMatrix = m_stack.top();
