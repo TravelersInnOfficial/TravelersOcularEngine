@@ -146,11 +146,19 @@ void TF2DText::SetText(std::string txt){
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_UVBO);
 	glBufferData(GL_ARRAY_BUFFER, textUv.size()*sizeof(glm::vec2), &textUv[0], GL_STATIC_DRAW);
+	
+	TOEvector2di w_dims = VideoDriver::GetInstance()->GetWindowDimensions();
+	float w = m_textSize * (m_vertexSize/6);
+	float h = m_textSize;
+	float sizeX = w * w_dims.X / 2;
+	float sizeY = h * w_dims.Y / 2;
+	m_InData.size = TOEvector2df(sizeX,sizeY);
 
 }
 
 void TF2DText::SetTextSize(float siz){
 	m_textSize = siz;
+	SetText(m_text);
 }
 
 std::string TF2DText::GetText(){
