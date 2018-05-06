@@ -10,8 +10,9 @@ public:
 	TText(std::string text, float charSize, std::string texture);
 	~TText();
 
-	void BeginDraw();
-	void EndDraw();
+	virtual void BeginDraw() override;
+	virtual void EndDraw() override;
+	virtual void DrawShadow() override;
 
 	void ChangeText(std::string text);
 	void ChangeSize(float charSize);
@@ -27,6 +28,8 @@ private:
 	int 				m_size;		// Number of vertex
 	GLuint				m_uvbo;		// Buffer de uvs
 	GLuint				m_vbo;		// Buffer de vertices
+
+	bool m_drawingShadows;
 };
 
 #endif

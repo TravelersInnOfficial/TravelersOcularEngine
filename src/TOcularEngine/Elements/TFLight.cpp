@@ -137,7 +137,7 @@ void TFLight::DrawLight(int num){
 		// SEND THE SHADOW MAP
 		// NO SE PUEDE ENVIAR ASI?
 		aux = str +"ShadowMap";
-		GLint textureNumber = 50 + num;	// Empezamos en el 10 para dejar sitio a las demas texturas
+		GLint textureNumber = 50 + num;	// Empezamos en el 50 para dejar sitio a las demas texturas
 		glActiveTexture(GL_TEXTURE0 + textureNumber);
 		glBindTexture(GL_TEXTURE_2D, m_shadowMap);
 		glUniform1i(glGetUniformLocation(progID, aux.c_str()), textureNumber);
