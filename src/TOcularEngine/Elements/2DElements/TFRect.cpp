@@ -1,5 +1,6 @@
 #include "TFRect.h"
 #include <GL/glew.h>
+#include "./../../../EngineUtilities/TResourceManager.h"
 #include "./../../../EngineUtilities/Resources/Program.h"
 #include "./../../VideoDriver.h"
 
@@ -11,6 +12,10 @@ TFRect::TFRect(TOEvector2df position, TOEvector2df size, float rotation){
     m_rotation = 0;
 
     m_color.SetRGBA(0,0,0,1);
+    
+    std::string mask = VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_texture.png";
+    m_mask = TResourceManager::GetInstance()->GetResourceTexture(mask);
+    m_mask_rect = TOEvector4df(0.0f, 0.0f,1.0f, 1.0f);
 
     m_InData.position = position;
     m_InData.size = size;
@@ -55,16 +60,16 @@ void TFRect::Draw() const{
     float vertices[] =
     {
         //first triangle
-        //POSITION                                                              COLOR
-        m_position.X + downLeftCorner.x,    m_position.Y + downLeftCorner.y,     m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
-        m_position.X + downRightCorner.x,   m_position.Y + downRightCorner.y,    m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
-        m_position.X + upLeftCorner.x,      m_position.Y + upLeftCorner.y,       m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
+        //POSITION                                                              U-MASK V-MASK                       COLOR
+        m_position.X + downLeftCorner.x,    m_position.Y + downLeftCorner.y,    m_mask_rect.X ,  m_mask_rect.Y2,    m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
+        m_position.X + downRightCorner.x,   m_position.Y + downRightCorner.y,   m_mask_rect.X2,  m_mask_rect.Y2,    m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
+        m_position.X + upLeftCorner.x,      m_position.Y + upLeftCorner.y,      m_mask_rect.X ,  m_mask_rect.Y,     m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
 
         //second triangle
-        //POSITION                                                              COLOR
-        m_position.X + downRightCorner.x,   m_position.Y + downRightCorner.y,    m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
-        m_position.X + upRightCorner.x,     m_position.Y + upRightCorner.y,      m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
-        m_position.X + upLeftCorner.x,      m_position.Y + upLeftCorner.y,       m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA()
+        //POSITION                                                              U-MASK V-MASK                      COLOR
+        m_position.X + downRightCorner.x,   m_position.Y + downRightCorner.y,   m_mask_rect.X2 , m_mask_rect.Y2,   m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
+        m_position.X + upRightCorner.x,     m_position.Y + upRightCorner.y,     m_mask_rect.X2,  m_mask_rect.Y,    m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA(),
+        m_position.X + upLeftCorner.x,      m_position.Y + upLeftCorner.y,      m_mask_rect.X ,  m_mask_rect.Y,    m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA()
     };
 
     // Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
@@ -73,15 +78,30 @@ void TFRect::Draw() const{
     glBufferData( GL_ARRAY_BUFFER, sizeof( vertices ), vertices, GL_STATIC_DRAW );
     
     GLint posAttrib = glGetAttribLocation(myProgram->GetProgramID(), "position");
-    glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 6 * sizeof( float ), ( GLvoid * ) 0 );
+    glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof( float ), ( GLvoid * ) 0 );
     glEnableVertexAttribArray(posAttrib);
+
+    //mask coords
+    GLuint uvMaskAttrib = glGetAttribLocation(myProgram->GetProgramID(), "MaskCoords");
+    glEnableVertexAttribArray(uvMaskAttrib);
+    glVertexAttribPointer(uvMaskAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (const GLvoid*)(2 * sizeof(float)));
 
     GLint colAttrib = glGetAttribLocation(myProgram->GetProgramID(), "color");
     glEnableVertexAttribArray(colAttrib);
-    glVertexAttribPointer(colAttrib, 4, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(2*sizeof(float)));
+    glVertexAttribPointer(colAttrib, 4, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(4*sizeof(float)));
+
+    // Enviamos la mascara si tiene
+    GLuint MaskID = glGetUniformLocation(myProgram->GetProgramID(), "myMask");
+    glUniform1i(MaskID, 1);
+
+    glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, m_mask->GetTextureId());
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
     glDisable(GL_BLEND);
 }
 
+void TFRect::SetMask(std::string mask_path){
+    if(mask_path.compare("")!=0) m_mask = TResourceManager::GetInstance()->GetResourceTexture(mask_path);
+}

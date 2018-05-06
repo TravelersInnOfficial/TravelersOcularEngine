@@ -32,7 +32,7 @@ TFSprite::TFSprite(std::string texture, TOEvector2df position, TOEvector2df size
     scrollH = 0;
     scrollV = 0;
     std::string mask = VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_texture.png";
-    m_mask = TResourceManager::GetInstance()->GetResourceTexture(mask);;
+    m_mask = TResourceManager::GetInstance()->GetResourceTexture(mask);
 }
 
 TFSprite::~TFSprite(){
