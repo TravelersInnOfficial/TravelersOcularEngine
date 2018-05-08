@@ -68,7 +68,7 @@ vec3  Phong (int num) {
 
 	// CALCULAR LOS DIFERENTES VECTORES	 
 	vec3 eyeDir = -Position;
-	vec3 normalTexture = normalize(2.0 * texture2D (bumpMap, TexCoords).rgb - 1.0);
+	vec3 normalTexture = normalize(2.0 * texture(bumpMap, TexCoords).rgb - 1.0);
 
 	vec3 n = normalize (RotationNormal * vec4(normalTexture,1.0)).xyz;
 
