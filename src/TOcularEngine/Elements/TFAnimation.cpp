@@ -55,6 +55,11 @@ void TFAnimation::PlayAnimation(std::string ID, int fps){
 	myAnim->PlayAnim(ID, fps);
 }
 
+void TFAnimation::PlayAnimationAbove(std::string ID, int fps){
+	TAnimation* myAnim = (TAnimation*) m_entityNode->GetEntity();
+	myAnim->PlayAnimAbove(ID, fps);
+}
+
 void TFAnimation::BindSyncAnimation(TFAnimation* master){
 	TAnimation* myAnim = (TAnimation*) m_entityNode->GetEntity();
 	TAnimation* animMaster = (TAnimation*) master->m_entityNode->GetEntity();
@@ -64,4 +69,9 @@ void TFAnimation::BindSyncAnimation(TFAnimation* master){
 int TFAnimation::GetAnimationFrame(){
 	TAnimation* myAnim = (TAnimation*) m_entityNode->GetEntity();
 	return myAnim->GetActualFrame();
+}
+
+std::string TFAnimation::GetAnimationName(){
+	TAnimation* myAnim = (TAnimation*) m_entityNode->GetEntity();
+	return myAnim->GetActualAnimation();
 }

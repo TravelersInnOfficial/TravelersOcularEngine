@@ -58,6 +58,14 @@ public:
 	void PlayAnimation(std::string ID, int fps = 25);
 
 	/**
+	 * @brief Play another animation and queue last animation
+	 * 
+	 * @param ID: name of the animation
+	 * @param fps: speed of animation
+	 */
+	void PlayAnimationAbove(std::string ID, int fps = 25);
+
+	/**
 	 * @brief After playing an animation, this will take the time from the sync one
 	 * 
 	 * @param master 
@@ -70,6 +78,14 @@ public:
 	 * @return int: frame
 	 */
 	int GetAnimationFrame();
+
+	/**
+	 * @brief Gets playing animation name
+	 * 
+	 * @return std::string: name
+	 */
+	std::string GetAnimationName();
+
 
 protected:
 	TFAnimation(

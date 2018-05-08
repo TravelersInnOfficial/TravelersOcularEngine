@@ -47,7 +47,7 @@ void TAnimation::UpdateAnimation(float deltatime){
 				m_queue.pop_back();
 
 				// If this animation has an animation master, we change the time to sync both animations
-				if(m_queue.size() == 1 && m_boundMaster!=nullptr) m_animTime = m_boundMaster->GetAnimTime();
+				if(m_boundMaster!=nullptr) m_animTime = m_boundMaster->GetAnimTime();
 			}
 		}
 		
@@ -81,6 +81,18 @@ void TAnimation::PlayAnim(std::string ID, int fps){
 	if (m_anims.find(ID) != m_anims.end()){
 		m_animTime = 0.0f;
 
+		m_anims[ID].fps = fps;
+		if(m_queue.size() > 1)
+			m_queue.back() = ID;
+		else m_queue.push_back(ID);
+	}
+}
+
+void TAnimation::PlayAnimAbove(std::string ID, int fps){
+	// Find if exists animation, then play once the animation
+	if (m_anims.find(ID) != m_anims.end()){
+		m_animTime = 0.0f;
+
 		if(ID != m_queue.back()){
 			m_anims[ID].fps = fps;
 			m_queue.push_back(ID);
@@ -98,4 +110,12 @@ int TAnimation::GetActualFrame(){
 
 float TAnimation::GetAnimTime(){
 	return m_animTime;
+}
+
+std::string TAnimation::GetActualAnimation(){
+	std::string ret = "";
+	if(m_queue.size() >= 1)
+		ret = m_queue.back();
+	
+	return ret;
 }

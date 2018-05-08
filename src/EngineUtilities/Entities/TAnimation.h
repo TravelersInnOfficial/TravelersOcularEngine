@@ -38,7 +38,7 @@ public:
 	void UpdateAnimation(float deltatime);
 
 	/**
-	 * @brief Play another animation in loop
+	 * @brief Plays a new animation in loop
 	 * 
 	 * @param ID: name of the animation
 	 * @param fps: speed of animation
@@ -46,12 +46,20 @@ public:
     void ChangeAnim(std::string ID, int fps);
 
 	/**
-	 * @brief Play another animation and queue last animation
+	 * @brief Plays a new animation and removes last animation
 	 * 
 	 * @param ID: name of the animation
 	 * @param fps: speed of animation
 	 */
 	void PlayAnim(std::string ID, int fps);
+
+	/**
+	 * @brief Plays a new animation and queue last animation
+	 * 
+	 * @param ID: name of the animation
+	 * @param fps: speed of animation
+	 */
+	void PlayAnimAbove(std::string ID, int fps);
 
 	/**
 	 * @brief After playing an animation, this will take the time from the sync one
@@ -73,6 +81,14 @@ public:
 	 * @return float: time
 	 */
 	float GetAnimTime();
+
+	/**
+	 * @brief Get Actual Animation Name
+	 * 
+	 * @return std::string: id
+	 */
+	std::string GetActualAnimation();
+	
 	
 private:
 	void LoadMesh(std::string meshPath = "");
