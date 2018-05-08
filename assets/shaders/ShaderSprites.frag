@@ -14,5 +14,5 @@ void main() {
 	vec4 outColor = texture(uvMap, FragTexCoords) * FragOverColor;
 	
 	color = vec4(outColor.rgb, outColor.a * mask.r);
-	//if(color.a < 0.5) discard;
+	if(color.a < 0.1) discard;
 }

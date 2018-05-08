@@ -14,6 +14,9 @@ public:
     void Erase() override;
     
     void SetMask(std::string mask_path);
+    void SetWidth(float w) override;
+    void SetHeight(float h) override;
+    
 private:
     TFRect(TOEvector2df position, TOEvector2df size, float rotation);
     ~TFRect();

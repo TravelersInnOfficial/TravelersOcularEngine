@@ -102,6 +102,51 @@ void TFRect::Draw() const{
     glDisable(GL_BLEND);
 }
 
+void TFRect::SetWidth(float w){
+    m_size.X = (std::abs(w *2) / w_dims.X);
+    m_InData.size.X = w;
+
+    float x = m_position.X;
+    float y = m_position.Y;
+    float sheetWidth = m_InData.size.X;                        //texture width
+    float sheetHeight = m_InData.size.Y;                       //texture height
+    float cellWidth = w;                                        //cell widht
+    float cellHeight = sheetHeight;                             //cell height
+    float left = x/sheetWidth;                                  //left texture uv point
+    float top = y/sheetHeight;                                  //top texture uv point
+    float cw = left + cellWidth/sheetWidth;                     //uv texture width
+    float ch = top + cellHeight/sheetHeight;                    //uv texture height
+    //m_rect = TOEvector4df(left, top, cw, ch);
+    m_mask_rect = TOEvector4df(0, 0, 0.5, 0.5);
+}
+
+void TFRect::SetHeight(float h){
+    m_size.Y =  (std::abs(h *2) / w_dims.Y);
+    m_InData.size.Y = h;
+
+    float x = -1;
+    float y = -1;
+    float sheetWidth = 1;                         //texture width
+    float sheetHeight = 1;                        //texture height
+    float cellWidth = sheetWidth;                               //cell widht
+    float cellHeight = h;                                       //cell height
+    float left = x/sheetWidth;                                  //left texture uv point
+    float top = y/sheetHeight;                                  //top texture uv point
+    float cw = left + cellWidth/sheetWidth;                     //uv texture width
+    float ch = top + cellHeight/sheetHeight;                    //uv texture height
+    //m_rect = TOEvector4df(left, top, cw, ch);
+    /*
+    std::string s(30,'-');
+    std::cout<<s<<"\n"
+    <<"left:\t"<<left<<"\n"
+    <<"top:\t"<<top<<"\n"
+    <<"cw:\t"<<cw<<"\n"
+    <<"ch:\t"<<ch<<"\n"
+    <<s<<"\n";
+    */
+    m_mask_rect = TOEvector4df(left, top, cw, ch);
+}
+
 void TFRect::SetMask(std::string mask_path){
     if(mask_path.compare("")!=0) m_mask = TResourceManager::GetInstance()->GetResourceTexture(mask_path);
 }
