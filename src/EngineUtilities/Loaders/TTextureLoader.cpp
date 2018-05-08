@@ -20,5 +20,6 @@ bool TTextureLoader::LoadTexture(std::string path, unsigned char** imageData, in
 		std::cout<<"Could not open file " + path<<std::endl;
 		toRet = false;
 	}
+
 	return toRet;
 }

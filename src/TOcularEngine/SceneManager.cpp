@@ -466,6 +466,7 @@ void SceneManager::RecalculateShadowLightsNumber(){
 	for(int i = 0; i < size; i++){
 		if(m_lights[i] != nullptr && m_lights[i]->GetActive() && m_lights[i]->GetShadowsState()) m_numshadowlights++;
 	}
+	std::cout<<size<<std::endl;std::cout<<size<<std::endl;std::cout<<size<<std::endl;std::cout<<size<<std::endl;std::cout<<size<<std::endl;
 	std::cout<<"Calculamos el numero de luces con sombra que tenemos: "<<m_numshadowlights<<std::endl;
 }
 

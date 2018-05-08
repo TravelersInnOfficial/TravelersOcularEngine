@@ -9,13 +9,17 @@ out vec3 Position;    	    // VERTICES EN COORDENADAS DE VISTA
 out vec2 TexCoords;   	    // COORDENADAS DE TEXTURA
 out mat4 FragViewMatrix;    // VIEW MATRIX
 out mat4 RotationNormal;
-out vec4 ShadowCoord;       // VERTICES DESDE LA LUZ
+out vec4 ShadowCoordArray[20];	// VERTICES DESDE LA LUZ
 // IN UNIFORMS
+uniform mat4 ModelMatrix;
 uniform mat4 ModelViewMatrix;
 uniform mat4 MVP;
 uniform mat4 ViewMatrix;
 uniform vec2 TextureScale;
 // ############  DON'T CHANGE ABOVE THIS LINE  ######################################################
+
+uniform mat4 DepthBiasMVPArray[20];		// Son las MVP de cada luz
+uniform int nshadowlights;				// NUMBER OF CURRENT SHADOW LIGHTS
 
 #define DIST_VALUE 0.75 // DISTORSION VALUE < 0
 
@@ -41,8 +45,11 @@ void main() {
 	TexCoords.x = TextureCoords.x * TextureScale.x;
 	TexCoords.y = TextureCoords.y * TextureScale.y;
 	FragViewMatrix = ViewMatrix;
-    ShadowCoord = vec4(0.0);
     // ############  DON'T CHANGE ABOVE THIS LINE  ######################################################
+
+	for (int i = 0; i < nshadowlights; i++){
+		ShadowCoordArray[i] = (DepthBiasMVPArray[i] * ModelMatrix) * vec4(VertexPosition,1.0);
+	}
 
     // FISH EYE DISTORTION
 	vec4 P = MVP * vec4(VertexPosition, 1.0);
