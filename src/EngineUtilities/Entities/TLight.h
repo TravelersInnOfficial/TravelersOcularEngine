@@ -23,20 +23,26 @@ public:
 	bool	GetDirectional();
 
 	void	SetDirection( TOEvector3df direction);
-	 TOEvector3df GetDirection();
+	TOEvector3df GetDirection();
 
-	void 	BeginDraw();				// Empezar a pintar la luz
-	void 	EndDraw();					// Acabar de pintar la luz
+	virtual void BeginDraw() override;
+	virtual void EndDraw() override;
+	virtual void DrawShadow() override;
 	
 	void 	DrawBB();
 	bool 	drawBB;
+
+	void SetShadowsState(bool shadowState);
+	bool GetShadowsState();
 
 private:
 	TColor m_color;
 	float m_attenuation;
 	bool m_active;
 	bool m_directional;
-	 TOEvector3df m_direction;
+	TOEvector3df m_direction;
+	bool m_shadowState;
+	bool m_drawingShadows;
 	
 };
 

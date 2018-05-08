@@ -266,8 +266,6 @@ public:
      * 
      */
     void ResetManager();
-
-    bool AddDynamicLight(TFLight*);
     
     void SetClipping(bool value);
     void PushToBkg(TFDrawable*);
@@ -284,8 +282,6 @@ public:
 
 private:
     GLuint m_vao;
-    GLuint m_fbo;
-    GLuint m_shadowMap;
     
     TNode* m_SceneTreeRoot;                         // Root of the scene
     std::vector<TFRoom*>        m_rooms;            // Rooms in the scene  
@@ -294,7 +290,6 @@ private:
 
     std::vector<TFCamera*>      m_cameras;          // Pointers to the cameras created
     std::vector<TFLight*>       m_lights;           // Pointers to the lights created
-    std::vector<TFLight*>       m_dynamicLights;    // Lights that emit shadows
     std::vector<TFNode*>        m_objects;          // Pointers to the nodes created
     std::vector<TFDrawable*>    m_2Delems;
     std::vector<TFDrawable*>    m_bkg2Delems;
@@ -302,10 +297,13 @@ private:
     glm::vec3 m_ambientLight;
     TFCamera* m_main_camera;
     TFDome* m_dome;
+    int m_numshadowlights;
 
     void RecalculateLightPosition();
+    void RecalculateShadowLightsNumber();
     void SendLights();
     void SendLightsToShader();
+    void SendLightMVP();
     void DrawSceneShadows();
     void DrawAllLines(); 
     std::vector<GLfloat> vertexVector; 

@@ -32,6 +32,7 @@ TParticleSystem::~TParticleSystem(){
 }
 
 TParticleSystem::TParticleSystem(std::string path){
+	m_drawingShadows = false;
 	m_newParticlesPerSecond = 100;
 	m_particleAcumulation = 0;
 	//Inicializamos el manager de particulas y las particulas
@@ -77,15 +78,19 @@ int TParticleSystem::GetNewPerSecond(){
 }
 
 void TParticleSystem::BeginDraw(){
-	if(true || CheckClipping()){
+	if(!m_drawingShadows && CheckClipping()){
 		SendShaderData();
 		glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, m_particleCount);
 		ResetShaderData();
 	}
 }
 
-void TParticleSystem::EndDraw(){
+void TParticleSystem::DrawShadow(){
+	m_drawingShadows = true;
+}
 
+void TParticleSystem::EndDraw(){
+	m_drawingShadows = false;	
 }
 
 void TParticleSystem::ResetShaderData(){

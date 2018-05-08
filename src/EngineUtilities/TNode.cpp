@@ -120,7 +120,7 @@ void TNode::DrawShadows(){
 		m_entity->DrawShadow();						// For mesh sets drawingShadows to true
 		m_entity->BeginDraw();						// for mesh: if drawingShadowsn, doenst draw
 		// ^^^^^^^^^^^^^^^^^^^^	THIS NEED TO BE DONE DUE TO STACK PUSHS AND POPS
-	} 
+	}
 	
 	int size = m_children.size();
 	for(int i=0; i<size; i++){

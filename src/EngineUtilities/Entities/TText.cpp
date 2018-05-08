@@ -6,6 +6,8 @@
 #include <glm/gtc/type_ptr.hpp>
 
 TText::TText(std::string text, float charSize, std::string texture){
+	m_drawingShadows = false;
+	
 	// Inicializamos los buffer
 	m_vbo = 0;
 	glGenBuffers(1, &m_vbo);
@@ -37,13 +39,21 @@ TText::~TText(){
     glDeleteBuffers(1, &m_uvbo);
 }
 
-void TText::BeginDraw(){
-	// Bind and send the data to the VERTEX SHADER
-	SendShaderData();
-	glDrawArrays(GL_TRIANGLES, 0, m_size);
+void TText::DrawShadow(){
+	m_drawingShadows = true;
 }
 
-void TText::EndDraw(){}
+void TText::BeginDraw(){
+	if(!m_drawingShadows){
+		// Bind and send the data to the VERTEX SHADER
+		SendShaderData();
+		glDrawArrays(GL_TRIANGLES, 0, m_size);
+	}
+}
+
+void TText::EndDraw(){
+	m_drawingShadows = false;
+}
 
 void TText::ChangeSize(float charSize){
 	if(m_charSize != charSize){

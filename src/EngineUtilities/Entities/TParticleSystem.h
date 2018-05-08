@@ -11,8 +11,9 @@ public:
 	TParticleSystem(std::string path = "");
 	~TParticleSystem();
 
-	void BeginDraw();
-	void EndDraw();
+	virtual void BeginDraw() override;
+	virtual void EndDraw() override;
+	virtual void DrawShadow() override;
 
 	void Update(float deltaTime);
 
@@ -49,6 +50,8 @@ private:
 	unsigned char 		m_particlesColorData	[m_maxParticles*3];		// Array con todos los colores de las particulas
 	float				m_particlePositionData	[m_maxParticles*3];		// Array con las posiciones de las particulas
 	float 				m_particlesExtra		[m_maxParticles*2];		// Array con el tamanyo y la rotacion de las particulas
+
+	bool m_drawingShadows;
 };
 
 #endif

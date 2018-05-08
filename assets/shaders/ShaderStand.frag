@@ -7,7 +7,8 @@ in vec3 Position;    		// VERTICES EN COORDENADAS DE VISTA
 in vec2 TexCoords;   		// COORDENADAS DE TEXTURA
 in mat4 FragViewMatrix;   	// VIEW MATRIX
 in mat4 RotationNormal;		// MODELVIEW MATRIX
-in vec4 ShadowCoord;      	// VERTICES DESDE LA LUZ
+
+in vec4 ShadowCoordArray[20];       // POSICION DE VERTICES EN LA TEXTURA DE SOMBRAS (VERTICE VISTO DESDE LA LUZ)
 
 // SALIDA PARA COMUNICAR CON EL RESTO DEL PIPELINE
 out vec4 FragColor;	// COLOR FINAL DEL FRAGMENTO
@@ -20,23 +21,27 @@ struct TMaterial {
 	float Shininess;
 };
 
-// ESTRUCTURA PARA GUARDAR LAS LUCES (POSICION, Y PROPIEDADES AMBIENTAL, DIFUSA Y ESPECULAR DE LA LUZ)
+// ESTRUCTURA PARA GUARDAR LAS LUCES
 struct TLight {
-	vec3 Position;
-	vec3 Diffuse;
-	vec3 Specular;
+	vec3 Position;				// Position of the light source
+	vec3 Diffuse;				// Color of the light
+	vec3 Specular;				// Highlight color
 	
-	// Only for POINT
-	float Attenuation;
+	// For POINT
+	float Attenuation;			// Attenuation factor
 	
-	// Is it DIRECTIONAL
-	bool Directional;
-	vec3 Direction;
+	// For DIRECTIONAL
+	bool Directional;			// Is it directiona?
+	vec3 Direction;				// Direction of the light
+
+	// For SHADOW
+	bool ShadowLight;			// Does it has shadow?
+	sampler2DShadow ShadowMap;	// Shadow texture of the light
 };
 
 // IN UNIFORMS
 uniform TMaterial Material;		// MODEL MATERIAL
-uniform TLight Light[40];		// LIGHTS
+uniform TLight Light[12];		// LIGHTS
 uniform int nlights;			// NUMBER OF CURRENT LIGHTS
 uniform vec3 AmbientLight;		// AMBIENT LIGHT
 
@@ -44,11 +49,22 @@ uniform vec3 AmbientLight;		// AMBIENT LIGHT
 uniform sampler2D uvMap;
 uniform sampler2D specularMap;
 uniform sampler2D bumpMap;
-uniform sampler2DShadow shadowMap;
+
+// POISSON SAMPLING
+vec2 poissonDisk[4] = vec2[]( 
+   vec2( -0.94201624, -0.39906216 ), 
+   vec2( 0.94558609, -0.76890725 ), 
+   vec2( -0.094184101, -0.92938870 ), 
+   vec2( 0.34495938, 0.29387760 )
+);
+
+float RandomNumber(vec4 seed4){
+	float dot_product = dot(seed4, vec4(12.9898,78.233,45.164,94.673));
+	return fract(sin(dot_product) * 43758.5453);
+}
 
 // FUNCION QUE CALCULA EL MODELO DE REFLEXION DE PHONG
 vec3  Phong (int num) {
-	
 
 	// CALCULAR LOS DIFERENTES VECTORES	 
 	vec3 eyeDir = -Position;
@@ -94,14 +110,6 @@ vec3  Phong (int num) {
 	return (Attenuation * (Diffuse + Specular) * specTexure);
 }
 
-// POISSON SAMPLING
-vec2 poissonDisk[4] = vec2[]( 
-   vec2( -0.94201624, -0.39906216 ), 
-   vec2( 0.94558609, -0.76890725 ), 
-   vec2( -0.094184101, -0.92938870 ), 
-   vec2( 0.34495938, 0.29387760 )
-);
-
 void main() {
 	// Check alpha and discard fragments
 	vec4 texValue = texture(uvMap, TexCoords);
@@ -115,13 +123,17 @@ void main() {
 	float bias = 0.005;
 	float visibility = 1.0;
 	
-	// Sample the shadow map 4 times
-	for (int i = 0; i < 4; i++){
-		int index = i;
-		// being fully in the shadow will eat up 4*0.2 = 0.8
-		// 0.2 potentially remain, which is quite dark.
-		visibility -= 0.2*(1.0-texture( shadowMap, vec3(ShadowCoord.xy + poissonDisk[index]/700.0,  (ShadowCoord.z-bias)/ShadowCoord.w) ));
+	int shadowindex = 0;
+	for(int i = 0; i < nlights; i++){
+		if(Light[i].ShadowLight == true){
+			for (int j = 0; j < 4; j++){
+				int index = int(16.0*RandomNumber(vec4(gl_FragCoord.xyy, i)))%16;
+				visibility -= 0.2*(1.0-texture(Light[i].ShadowMap, vec3(ShadowCoordArray[shadowindex].xy + poissonDisk[index]/700.0, (ShadowCoordArray[shadowindex].z-bias)/ShadowCoordArray[shadowindex].w)));
+			}
+			shadowindex = shadowindex + 1;
+		}
 	}
+	
 	// ADD shadow
 	result *= visibility;	
 

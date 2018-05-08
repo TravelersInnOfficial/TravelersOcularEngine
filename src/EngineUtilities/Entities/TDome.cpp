@@ -21,27 +21,35 @@ TDome::TDome(std::string texturePath)
 {
 	// This shader draws without lights
 	m_program = TEXT_SHADER;
+	m_drawingShadows = false;
 	// @TODO: cambiar el nombre del shader a uno mas generico
 }
 
 // Destructor
-TDome::~TDome(){ }
+TDome::~TDome(){}
 
 void TDome::BeginDraw(){
-	// Bind and send the data to the VERTEX SHADER
-    glDepthMask(GL_FALSE);
-	SendShaderData();
-    
-	// Bind and draw elements depending of how many vbos
-	GLuint elementsBuffer = m_mesh->GetElementBuffer();
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBuffer);
-	glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
-    glDepthMask(GL_TRUE);
+	if(!m_drawingShadows){
+		// Bind and send the data to the VERTEX SHADER
+		glDepthMask(GL_FALSE);
+		SendShaderData();
+		
+		// Bind and draw elements depending of how many vbos
+		GLuint elementsBuffer = m_mesh->GetElementBuffer();
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBuffer);
+		glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
+		glDepthMask(GL_TRUE);
+	}
+}
 
+void TDome::EndDraw(){
+	m_drawingShadows = false;
 }
 
 // This object doesnt produces shadows so has to override parent's method (tmesh)
-void TDome::DrawShadow(){ }
+void TDome::DrawShadow(){
+	m_drawingShadows = true;
+}
 
 void TDome::SendShaderData(){
 	Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(m_program);

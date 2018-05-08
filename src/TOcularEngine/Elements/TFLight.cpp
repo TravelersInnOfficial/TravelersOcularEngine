@@ -26,9 +26,14 @@ TFLight::TFLight(TOEvector3df position, TOEvector3df rotation, TOEvector4df colo
 	m_LastLocation = glm::vec3(position.X, position.Y, position.Z);
 
 	m_entity = TLIGHT_ENTITY;
+
+	m_fbo = 0;
+	m_shadowMap = 0;
+	m_depthWVP = glm::mat4(0.0f);
 }
 
 TFLight::~TFLight(){
+	if(GetShadowsState()) EraseShadow();
 }
 
 void TFLight::SetColor(TOEvector4df color){
@@ -85,18 +90,18 @@ void TFLight::DrawLight(int num){
 	glm::vec3 direction = glm::vec3(0.0f);
 	float att = 0;
 	bool directional = false;
+	bool shadowlight = false;
 
 	if(ent->GetActive()){
-		 TOEvector4df color = GetColor();
-		 TOEvector3df dir = GetDirection();
-
+		TOEvector4df color = GetColor();
+		TOEvector3df dir = GetDirection();
 		position = m_LastLocation;
 		diffuse = glm::vec3(color.X, color.Y, color.X2);
 		specular = glm::vec3(color.X, color.Y, color.X2);
 		att = GetAttenuation();
 		directional = GetDirectional();
-
 		direction = glm::vec3(dir.X, dir.Y, dir.Z);
+		shadowlight = GetShadowsState();
 	}
 
 	VideoDriver* vd = VideoDriver::GetInstance();
@@ -120,39 +125,39 @@ void TFLight::DrawLight(int num){
 	aux = str +"Directional";
 	glUniform1i(glGetUniformLocation(progID, aux.c_str()), directional);
 
-	aux = str +"Direction";
-	glUniform3fv(glGetUniformLocation(progID, aux.c_str()), 1, &direction[0]);
-}
-
-void TFLight::DrawLightShadow(int num){
-	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
-
-	if(myEntity->GetActive()){
-		VideoDriver* vd = VideoDriver::GetInstance();
-		GLuint progID = vd->GetProgram(SHADOW_SHADER)->GetProgramID();
-
-		//std::string str = "Shadows["+std::to_string(num)+"].";
-		//std::string aux = "";
-
-		// Compute the MVP matrix from the light's point of view
-		// SPOTLIGHT
-		//glm::vec3 lightPos = m_LastLocation;
-		//glm::mat4 depthProjectionMatrix = glm::perspective(glm::radians(45.0f), 1.0f, 2.0f, 50.0f);
-		//glm::mat4 depthViewMatrix = glm::lookAt(lightPos, glm::vec3(0.0f,0.0f,0.0f), glm::vec3(0,1,0));
-
-		glm::vec3 lightInvDir = m_LastLocation;
-		glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, 5, 40);
-		glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0.0f,0.0f,0.0f), glm::vec3(0.0f,1.0f,0.0f));
-		glm::mat4 depthVP = depthProjectionMatrix * depthViewMatrix;
-
-		// Send our transformation to the currently bound shader,
-		// in the "MVP" uniform
-		//aux = "DepthMVP";
-		GLuint depthMatrixID = glGetUniformLocation(progID, "DepthMVP");
-		glUniformMatrix4fv(depthMatrixID, 1, GL_FALSE, &depthVP[0][0]);
-
-		TEntity::DepthWVP = depthVP;
+	if(directional){
+		aux = str +"Direction";
+		glUniform3fv(glGetUniformLocation(progID, aux.c_str()), 1, &direction[0]);
 	}
+
+	aux = str +"ShadowLight";
+	glUniform1i(glGetUniformLocation(progID, aux.c_str()), shadowlight);
+
+	if(shadowlight){
+		// SEND THE SHADOW MAP
+		aux = str +"ShadowMap";
+		GLint textureNumber = 50 + num;	// Empezamos en el 50 para dejar sitio a las demas texturas
+		glActiveTexture(GL_TEXTURE0 + textureNumber);
+		glBindTexture(GL_TEXTURE_2D, m_shadowMap);
+		glUniform1i(glGetUniformLocation(progID, aux.c_str()), textureNumber);
+	}
+}
+// SEND MVP TO THE SHADER
+void TFLight::DrawLightMVP(int num){
+	// CALCULATE
+	glm::mat4 biasMatrix(
+			0.5, 0.0, 0.0, 0.0,
+			0.0, 0.5, 0.0, 0.0,
+			0.0, 0.0, 0.5, 0.0,
+			0.5, 0.5, 0.5, 1.0
+	);
+	glm::mat4 depthBIASMVP = biasMatrix * m_depthWVP;
+
+	// SEND
+	std::string aux = "DepthBiasMVPArray["+std::to_string(num)+"]";
+	VideoDriver* vd = VideoDriver::GetInstance();
+	GLuint progID = vd->GetProgram(vd->GetCurrentProgram())->GetProgramID();
+	glUniformMatrix4fv(glGetUniformLocation(progID, aux.c_str()), 1, GL_FALSE, &depthBIASMVP[0][0]);
 }
 
 void TFLight::SetBoundBox(bool box){
@@ -170,7 +175,106 @@ void TFLight::SetDirection( TOEvector3df direction){
 	myEntity->SetDirection(direction);
 }
 
- TOEvector3df TFLight::GetDirection(){
+TOEvector3df TFLight::GetDirection(){
 	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
 	return myEntity->GetDirection();
 }
+
+// SHADOWS #####################################################################################################################
+//##############################################################################################################################
+
+void TFLight::SetShadowsState(bool shadowState){
+	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
+	
+	// Si de verdad se esta cambiando	
+	if(GetShadowsState() != shadowState){
+		// Iniciamos o borramos la informacion de las sombras
+		if(!shadowState) EraseShadow();
+		else InitShadow();
+		myEntity->SetShadowsState(shadowState);
+	}
+}
+
+bool TFLight::GetShadowsState(){
+	TLight* myEntity = (TLight*) m_entityNode->GetEntity();
+	return myEntity->GetShadowsState();
+}
+
+void TFLight::InitShadow(){
+	m_fbo = 0;
+	m_shadowMap = 0;
+
+	glGenFramebuffers(1, &m_fbo); 
+
+	glGenTextures(1, &m_shadowMap);
+	glBindTexture(GL_TEXTURE_2D, m_shadowMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, 1024, 1024, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_shadowMap, 0);
+
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+
+	GLenum Status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+	if (Status != GL_FRAMEBUFFER_COMPLETE) printf("FB error, status: 0x%x\n", Status);
+}
+
+void TFLight::EraseShadow(){
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glDeleteFramebuffers(1, &m_fbo);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDeleteTextures(1, &m_shadowMap);
+	m_depthWVP = glm::mat4(0.0f);
+	m_fbo = 0;
+	m_shadowMap = 0;
+}
+
+bool TFLight::CalculateShadowTexture(int num){
+	bool paintBuffer = false;
+
+	if(GetActive() && GetShadowsState()){
+		paintBuffer = true;
+		// Change render target
+		glViewport(0,0,1024,1024);						// Change viewport resolution for rendering in frame buffer 
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);	// BIND FRAME BUFFER FOR WRITING
+
+		// Clear the screen
+		glClear(GL_DEPTH_BUFFER_BIT);
+
+		// Options
+		glDisable(GL_CULL_FACE);	// DISABLE BACKFACE CULLING FOR BETER PLANNING (corners sometimes don't produce shadows)
+		glEnable(GL_DEPTH_TEST);	// ENABLE ZBUFFER
+
+		// Compute the MVP matrix from the light's point of view
+		DrawLightShadow(num);
+	}
+
+	return paintBuffer;
+}
+
+// DEBERIA SER DIFERENTE PARA LUCES DE PUNTO
+void TFLight::DrawLightShadow(int num){
+	// Fill variables
+	glm::vec3 lightInvDir = m_LastLocation;
+
+	// Get the orthogonal view of the light
+	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-50, 50, -50, 50, 1, 100);
+	
+	// ARREGLAR PARA QUE APUNTE AL MISMO LUGAR QUE LA LUZ, NO AL CENTRO SIEMPRE
+	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0,0,0), glm::vec3(0.0f,1.0f,0.0f));
+	glm::mat4 depthVP = depthProjectionMatrix * depthViewMatrix;
+
+	m_depthWVP = depthVP;
+	TEntity::DepthWVP = m_depthWVP;	//Only for the shadow texture calculation
+}
+
+// SHADOWS #####################################################################################################################
+//##############################################################################################################################

@@ -15,26 +15,34 @@
 #include <TOEvector4d.h>
 #include <TOEvector3d.h>
 #include "TFNode.h"
+#include <GL/glew.h>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 class TFLight: public TFNode{
 	friend class SceneManager;
 	friend class TFRoom;
 
 public:
-	void SetColor(TOEvector4df color);	// Changes the light color
+	void SetColor(TOEvector4df color);				// Changes the light color
 	void SetAttenuation(float attenuation);			// Changes the light attenuation
 	void SetActive(bool active);					// Changes the light active state
 	void SetDirectional(bool directional);			// Changes the light type
 
-	TOEvector4df GetColor();				// Returns the light color
+	TOEvector4df GetColor();						// Returns the light color
 	float GetAttenuation();							// Returns the light attenuation
 	bool GetActive();								// Returns the light active state
 	bool GetDirectional();							// Returns the light type
 	glm::vec3 CalculateLocation();
 
 	void SetBoundBox(bool) override;				// Shows or hide tmesh bounding box
-	void SetDirection( TOEvector3df direction);
-	 TOEvector3df GetDirection();
+	void SetDirection(TOEvector3df direction);
+	TOEvector3df GetDirection();
+
+	void SetShadowsState(bool shadowState);
+	bool GetShadowsState();
+
+	bool CalculateShadowTexture(int num);
 	
 private:
 	TFLight(
@@ -44,9 +52,19 @@ private:
 		float attenuation = 0.0f
 	);
 	~TFLight();
+
 	void DrawLight(int num);
 	void DrawLightShadow(int num);
+	void DrawLightMVP(int num);
+
+	void InitShadow();
+	void EraseShadow();
+
 	glm::vec3 m_LastLocation;
+
+	GLuint m_fbo;
+    unsigned int m_shadowMap;
+	glm::mat4 m_depthWVP;
 
 };
 

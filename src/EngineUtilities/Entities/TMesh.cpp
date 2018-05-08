@@ -44,7 +44,6 @@ void TMesh::SetBBVisibility(bool visible){
 
 void TMesh::BeginDraw(){
 	if(m_mesh != nullptr && !m_drawingShadows && CheckClipping()){
-
 		// Bind and send the data to the VERTEX SHADER
 		SendShaderData();
 		
@@ -130,8 +129,9 @@ void TMesh::SendShaderData(){
 
 	// -------------------------------------------------------- ENVIAMOS LAS MATRICES
 	// SEND MODEL MATRIX
-	GLint mmLocation = glGetUniformLocation(myProgram->GetProgramID(), "ModelMatrix");
-	glUniformMatrix4fv(mmLocation, 1, GL_FALSE, &m_stack.top()[0][0]);
+	glm::mat4 model =  m_stack.top();
+	GLint mLocation = glGetUniformLocation(myProgram->GetProgramID(), "ModelMatrix");
+	glUniformMatrix4fv(mLocation, 1, GL_FALSE, &model[0][0]);
 
 	// SEND NORMAL MATRIX (ROTAMOS LAS NORMALES)
 	glm::mat3 normalMatrix = m_stack.top();
@@ -142,11 +142,6 @@ void TMesh::SendShaderData(){
 	// SEND VIEW MATRIX
 	GLint vLocation = glGetUniformLocation(myProgram->GetProgramID(), "ViewMatrix");
 	glUniformMatrix4fv(vLocation, 1, GL_FALSE, &ViewMatrix[0][0]);
-
-	// SEND MODEL MATRIX
-	glm::mat4 model =  m_stack.top();
-	GLint mLocation = glGetUniformLocation(myProgram->GetProgramID(), "ModelMatrix");
-	glUniformMatrix4fv(mLocation, 1, GL_FALSE, &model[0][0]);
 
 	// SEND MODELVIEW MATRIX
 	glm::mat4 modelView = ViewMatrix * m_stack.top();
@@ -163,17 +158,6 @@ void TMesh::SendShaderData(){
 	GLint mvpLocation = glGetUniformLocation(myProgram->GetProgramID(), "MVP");
 	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, &mvpMatrix[0][0]);
 
-	// SEND DepthBiasMVP MATRIX
-	glm::mat4 biasMatrix(
-			0.5, 0.0, 0.0, 0.0,
-			0.0, 0.5, 0.0, 0.0,
-			0.0, 0.0, 0.5, 0.0,
-			0.5, 0.5, 0.5, 1.0
-	);
-	glm::mat4 depthBIASMVP = biasMatrix * TEntity::DepthWVP * m_stack.top();
-	GLint depthMID = glGetUniformLocation(myProgram->GetProgramID(), "DepthBiasMVP");
-	glUniformMatrix4fv(depthMID, 1, GL_FALSE, &depthBIASMVP[0][0]);
-
 	// -------------------------------------------------------- ENVIAMOS LA TEXTURA
 	TResourceTexture* currentTexture = nullptr;
 	if(m_texture != nullptr) currentTexture = m_texture;
@@ -181,16 +165,9 @@ void TMesh::SendShaderData(){
 
 	if(currentTexture != nullptr){
 		GLuint TextureID = glGetUniformLocation(myProgram->GetProgramID(), "uvMap");
-		GLuint ShadowMapID = glGetUniformLocation(myProgram->GetProgramID(), "shadowMap");
-
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, currentTexture->GetTextureId());
 		glUniform1i(TextureID, 0); 
-
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, TEntity::ShadowMap);
-		glUniform1i(ShadowMapID, 1);
-
 	}
 
 	// -------------------------------------------------------- ENVIAMOS EL SPECULAR MAP

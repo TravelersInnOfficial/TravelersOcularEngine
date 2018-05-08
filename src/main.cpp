@@ -68,7 +68,6 @@ void CreateTree(TFMesh* ms[], TFLight* ls[], TFLight*& shL){
 	sceneObjects.push_back(mesh);
 
 	// TEAPOTS ###################################################
-
 	pos = TOEvector3df(-7.0f, -1.8f, 20.0f);
 	scale = TOEvector3df(0.7f, 0.7f, 0.7f);
 	mesh = sm->AddMesh(pos, rot, scale, "./../assets/models/teapot.obj");
@@ -136,18 +135,26 @@ void CreateTree(TFMesh* ms[], TFLight* ls[], TFLight*& shL){
 	ms[2]->AddBillboard(pos, "SPHERE3", 0.35f);
 	ms[2]->AddChild(l);
 	sceneObjects.push_back(ms[2]);
-	
-	// STATIC BUT DYNAMIC LIGHT
-	pos = TOEvector3df(0.0f,5.0f,0.0f);
+
+	// SHADOW DIRECTIONAL LIGHT
+	pos = TOEvector3df(0.0f,0.0f,0.0f);
 	color = TOEvector4df(1.0f, 0.6f, 0.0f, 1.0f);
 	shL = sm->AddLight(pos, rot, color, attenuation);
-	shL->SetBoundBox(true);	
+	shL->SetBoundBox(true);
+	shL->SetDirectional(true);
+	shL->SetDirection(TOEvector3df(0.0f,-1.0f,0.0f));
+	shL->SetShadowsState(true);
+
+	pos = TOEvector3df(5.0f,5.0f,5.0f);
+	color = TOEvector4df(1.0f, 0.6f, 0.0f, 1.0f);
+	TFLight* shL2 = sm->AddLight(pos, rot, color, attenuation);
+	shL2->SetBoundBox(true);
+	shL2->SetDirectional(true);
+	shL2->SetDirection(TOEvector3df(0.0f,-1.0f,0.0f));
+	shL2->SetShadowsState(true);
 
 	// DOME ###################################################
 	sm->AddDome();
-	
-	// SHADOWS
-	sm->AddDynamicLight(shL);
 
 	/// SPRITES	###############################################
 	// TOE MANUAL
@@ -359,6 +366,10 @@ int main(){
 
 	// Main camera
 	TFCamera* myCamera = sm->AddCamera();
+	//myCamera->SetLeftRight(-10, 10);
+	//myCamera->SetTopBottom(-10, 10);
+	//myCamera->SetNearFar(-10, 100);
+	//myCamera->SetPerspective(false);
 
 	handler->screenCenterX = VDriv->GetScreenResolution().X/2;
 	handler->screenCenterY = VDriv->GetScreenResolution().Y/2;
@@ -455,6 +466,9 @@ int main(){
 		// CHANGE SHADERS AND UPDATE TIME
 		ChangeShader(EventHandler::shaderType);
 		UpdateDelta(deltaTime);
+
+		myCamera->SetTranslate(shadowLight->GetTranslation());
+		myCamera->LookAt(TOEvector3df(0.0f, 0.0f, 0.0f));
 	}
 
 	VDriv->CloseWindow();

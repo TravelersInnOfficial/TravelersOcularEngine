@@ -20,22 +20,14 @@ SceneManager::SceneManager(){
 	m_main_camera = nullptr;
 	m_dome = nullptr;
 	m_currentRoom = -1;
-
+	m_numshadowlights = 0;
 	m_vao = 0;
-	m_fbo = 0;
-	m_shadowMap = 0;
 }
-
 
 SceneManager::~SceneManager(){
 	ClearElements();
 	glBindVertexArray(0);
 	glDeleteVertexArrays(1, &m_vao);
-	
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glDeleteFramebuffers(1, &m_fbo);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glDeleteTextures(1, &m_shadowMap);
 }
 
 TFCamera* SceneManager::AddCamera(TOEvector3df position, TOEvector3df rotation, bool perspective){
@@ -114,7 +106,6 @@ TFRoom* SceneManager::AddRoom(TOEvector3df position, TOEvector3df rotation, TOEv
 	return toRet;
 }
 
-
 void SceneManager::PushToBkg(TFDrawable* obj){
 	std::vector<TFDrawable*>::iterator it = m_2Delems.begin();
 	for(; it!=m_2Delems.end(); ++it){
@@ -183,15 +174,6 @@ bool SceneManager::DeleteLight(TFLight* light){
 	for(; it!= m_lights.end() && !toRet; ++it){
 		if(*it == light){
 			m_lights.erase(it);
-			delete light;
-			toRet = true;
-		}
-	}
-
-	it = m_dynamicLights.begin();
-	for(; it!= m_dynamicLights.end() && !toRet; ++it){
-		if(*it == light){
-			m_dynamicLights.erase(it);
 			delete light;
 			toRet = true;
 		}
@@ -300,33 +282,6 @@ void SceneManager::ChangeMainCamera(TFCamera* camera){
 void SceneManager::InitScene(){
 	glGenVertexArrays(1, &m_vao); // CREAMOS EL ARRAY DE VERTICES PARA LOS OBJETOS
 	glBindVertexArray(m_vao);
-
-	glGenFramebuffers(1, &m_fbo); 
-
-	glGenTextures(1, &m_shadowMap);
-	TEntity::ShadowMap = m_shadowMap;
-	glBindTexture(GL_TEXTURE_2D, m_shadowMap);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, 1024, 1024, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
-
-	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_shadowMap, 0);
-
-	glDrawBuffer(GL_NONE);
-	glReadBuffer(GL_NONE);
-
-	GLenum Status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-
-	if (Status != GL_FRAMEBUFFER_COMPLETE) {
-		printf("FB error, status: 0x%x\n", Status);
-		//return false;
-	} 
 }
 
 void SceneManager::Update(){
@@ -460,8 +415,6 @@ void SceneManager::DrawLine(TOEvector3df start, TOEvector3df end, TOEvector3df c
 	vertexVector.push_back(end.Y); 
 	vertexVector.push_back(end.Z);
 	vertexVector.push_back(1.0f);
-	
-	// el color me lo paso por lo h*ev*s
 }
 
 void SceneManager::ChangeShader(SHADERTYPE shader, ENTITYTYPE entity){
@@ -470,19 +423,6 @@ void SceneManager::ChangeShader(SHADERTYPE shader, ENTITYTYPE entity){
 		TFNode* currentNode = m_objects[i];
 		currentNode->SetProgram(shader, entity);
 	}
-}
-
-bool SceneManager::AddDynamicLight(TFLight* light){
-	bool ret = true;
-	// Find light then add at the back
-	if ( std::find(m_dynamicLights.begin(), m_dynamicLights.end(), light) != m_dynamicLights.end() ){
-		ret = false;
-	}
-	else{
-		m_dynamicLights.push_back(light);		
-	}
-
-	return ret;
 }
 
 void SceneManager::SetClipping(bool value){
@@ -536,24 +476,46 @@ void SceneManager::RecalculateLightPosition(){
 	for(int i = 0; i < size; i++) m_lights[i]->CalculateLocation();
 }
 
+void SceneManager::RecalculateShadowLightsNumber(){
+	m_numshadowlights = 0;
+	GLint size = m_lights.size();
+	for(int i = 0; i < size; i++){
+		if(m_lights[i] != nullptr && m_lights[i]->GetActive() && m_lights[i]->GetShadowsState()) m_numshadowlights++;
+	}
+}
+
 void SceneManager::SendLights(){
 	// Change light last position
 	RecalculateLightPosition();
+	RecalculateShadowLightsNumber();
 	
 	VideoDriver* vd = VideoDriver::GetInstance();
+	GLuint progID = 0;
 
 	// SEND ALL LIGHTS TO ALL SHADERS
 	vd->SetShaderProgram(BARREL_SHADER);
 	SendLightsToShader();
+	SendLightMVP();
+	progID = vd->GetProgram(vd->GetCurrentProgram())->GetProgramID();
+	glUniform1i(glGetUniformLocation(progID, "nshadowlights"), m_numshadowlights);
 
 	vd->SetShaderProgram(FISHEYE_SHADER);
 	SendLightsToShader();
+	SendLightMVP();
+	progID = vd->GetProgram(vd->GetCurrentProgram())->GetProgramID();
+	glUniform1i(glGetUniformLocation(progID, "nshadowlights"), m_numshadowlights);
 
 	vd->SetShaderProgram(DISTORSION_SHADER);
 	SendLightsToShader();
+	SendLightMVP();
+	progID = vd->GetProgram(vd->GetCurrentProgram())->GetProgramID();
+	glUniform1i(glGetUniformLocation(progID, "nshadowlights"), m_numshadowlights);
 
 	vd->SetShaderProgram(STANDARD_SHADER);
 	SendLightsToShader();
+	SendLightMVP();
+	progID = vd->GetProgram(vd->GetCurrentProgram())->GetProgramID();
+	glUniform1i(glGetUniformLocation(progID, "nshadowlights"), m_numshadowlights);
 }
 
 void SceneManager::SendLightsToShader(){
@@ -564,7 +526,6 @@ void SceneManager::SendLightsToShader(){
 	// Sends the Ambient Light
 	GLint ambLocation = glGetUniformLocation(programID, "AmbientLight");
 	glUniform3fv(ambLocation, 1, &m_ambientLight[0]);
-
 
 	// Draw all lights
 	int i=0;
@@ -580,35 +541,13 @@ void SceneManager::SendLightsToShader(){
 	glUniform1i(nlightspos, size);
 }
 
-
-void SceneManager::DrawSceneShadows()
-{
-	// Set shadow program
-	VideoDriver::GetInstance()->SetShaderProgram(SHADOW_SHADER);
-	// Update lights position
-	RecalculateLightPosition();
-
-	int size = m_dynamicLights.size();
+void SceneManager::SendLightMVP(){
+	int mvpIndex = 0;
+	GLint size = m_lights.size();
 	for(int i = 0; i < size; i++){
-		if(m_dynamicLights[i]->GetActive()){
-			// Change render target
-			glViewport(0,0,1024,1024);						// Change viewport resolution for rendering in frame buffer 
-			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);	// BIND FRAME BUFFER FOR WRITING
-
-			// Clear the screen
-			glClear(GL_DEPTH_BUFFER_BIT);
-
-			// Options
-			glDisable(GL_CULL_FACE);	// DISABLE BACKFACE CULLING FOR PETER PLANNING (corners sometimes doesn't produce shadows)
-			glEnable(GL_DEPTH_TEST);	// ENABLE ZBUFFER
-		
-			// Compute the MVP matrix from the light's point of view
-			m_dynamicLights[i]->DrawLightShadow(i);
-			
-			m_SceneTreeRoot->DrawShadows();
-		}
-		else{
-			TEntity::DepthWVP = glm::mat4(0.0f);
+		if(m_lights[i] != nullptr && m_lights[i]->GetActive() && m_lights[i]->GetShadowsState()){
+			m_lights[i]->DrawLightMVP(mvpIndex);
+			mvpIndex++;
 		}
 	}
 }
@@ -617,7 +556,6 @@ void SceneManager::ResetManager(){
 	ClearElements();
 	TTransform* myTransform = new TTransform();
 	m_SceneTreeRoot = new TNode(myTransform);
-	//m_ambientLight = glm::vec3(0.25f);
 	m_main_camera = nullptr;
 }
 
@@ -628,15 +566,6 @@ bool SceneManager::Light2Room(TFNode* node){
 		if(m_lights[i] == node){
 			m_lightRooms.push_back(m_lights[i]);
 			m_lights.erase(m_lights.begin() + i);
-			return true;
-		}
-	}
-
-	size = m_dynamicLights.size();
-	for(int i=0; i<size; i++){
-		if(m_dynamicLights[i] == node){
-			m_lightRooms.push_back(m_dynamicLights[i]);
-			m_dynamicLights.erase(m_dynamicLights.begin() + i);
 			return true;
 		}
 	}
@@ -686,4 +615,25 @@ void SceneManager::DrawAllLines(){
 
 	glDeleteBuffers(1, &vbo_vertices);
 	vertexVector.clear();
+}
+
+void SceneManager::DrawSceneShadows(){
+	// Set shadow program
+	VideoDriver::GetInstance()->SetShaderProgram(SHADOW_SHADER);
+
+	// Update lights position
+	RecalculateLightPosition();
+
+	// Calculate the shadow map
+	for(int i = 0; i < m_lights.size(); i++){
+		TFLight* toCheck = m_lights[i];
+		if(toCheck != nullptr){
+			// Caulculamos si esta activa y tiene sombras
+			// Si esta activa y necesita sombra, las pintamos
+			// Se pintan desde el SceneTreeRot en el buffer vinculado en
+			// La funcion CalculateShadowTexture y con la MVP calculada
+			// Tambien en esa funcion
+			if(toCheck->CalculateShadowTexture(i)) m_SceneTreeRoot->DrawShadows();
+		}
+	}
 }
