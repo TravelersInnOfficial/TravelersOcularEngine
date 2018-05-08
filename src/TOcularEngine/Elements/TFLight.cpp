@@ -201,9 +201,6 @@ bool TFLight::GetShadowsState(){
 }
 
 void TFLight::InitShadow(){
-
-	std::cout<<"Generamos el FBO y bindeamos el shadow map"<<std::endl;
-
 	m_fbo = 0;
 	m_shadowMap = 0;
 
@@ -231,9 +228,6 @@ void TFLight::InitShadow(){
 }
 
 void TFLight::EraseShadow(){
-
-	std::cout<<"Borramos los datos de las sombras"<<std::endl;
-
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glDeleteFramebuffers(1, &m_fbo);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -247,9 +241,6 @@ bool TFLight::CalculateShadowTexture(int num){
 	bool paintBuffer = false;
 
 	if(GetActive() && GetShadowsState()){
-
-		std::cout<<"Bindeamos el frame buffer para pintar la textura de sombras de la luz numero "<<num<<std::endl;
-
 		paintBuffer = true;
 		// Change render target
 		glViewport(0,0,1024,1024);						// Change viewport resolution for rendering in frame buffer 
@@ -271,18 +262,11 @@ bool TFLight::CalculateShadowTexture(int num){
 
 // DEBERIA SER DIFERENTE PARA LUCES DE PUNTO
 void TFLight::DrawLightShadow(int num){
-
-	std::cout<<"Calculamos la DepthMVP de la luz numero "<<num<<" y se la pasamos a TENTITY (de donde la cogera el shader de sombras para pintar la textura de sombras)"<<std::endl;
-
 	// Fill variables
 	glm::vec3 lightInvDir = m_LastLocation;
 
 	// Get the orthogonal view of the light
-	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-25, 25, -25, 25, 1, 100);
-	
-	// Calculate the direction of the light
-	//TOEvector3df dir = GetDirection();
-	//glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(dir.X,dir.Y,dir.Z), glm::vec3(0.0f,1.0f,0.0f));
+	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-50, 50, -50, 50, 1, 100);
 	
 	// ARREGLAR PARA QUE APUNTE AL MISMO LUGAR QUE LA LUZ, NO AL CENTRO SIEMPRE
 	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0,0,0), glm::vec3(0.0f,1.0f,0.0f));
@@ -290,12 +274,6 @@ void TFLight::DrawLightShadow(int num){
 
 	m_depthWVP = depthVP;
 	TEntity::DepthWVP = m_depthWVP;	//Only for the shadow texture calculation
-
-	// Enviar al shader actual
-	//VideoDriver* vd = VideoDriver::GetInstance();
-	//GLuint progID = vd->GetProgram(SHADOW_SHADER)->GetProgramID();
-	//GLuint depthMatrixID = glGetUniformLocation(progID, "DepthMVP");
-	//glUniformMatrix4fv(depthMatrixID, 1, GL_FALSE, &depthVP[0][0]);
 }
 
 // SHADOWS #####################################################################################################################

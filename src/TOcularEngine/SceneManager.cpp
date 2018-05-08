@@ -466,8 +466,6 @@ void SceneManager::RecalculateShadowLightsNumber(){
 	for(int i = 0; i < size; i++){
 		if(m_lights[i] != nullptr && m_lights[i]->GetActive() && m_lights[i]->GetShadowsState()) m_numshadowlights++;
 	}
-	std::cout<<size<<std::endl;std::cout<<size<<std::endl;std::cout<<size<<std::endl;std::cout<<size<<std::endl;std::cout<<size<<std::endl;
-	std::cout<<"Calculamos el numero de luces con sombra que tenemos: "<<m_numshadowlights<<std::endl;
 }
 
 void SceneManager::SendLights(){
@@ -483,29 +481,25 @@ void SceneManager::SendLights(){
 	SendLightsToShader();
 	SendLightMVP();
 	progID = vd->GetProgram(vd->GetCurrentProgram())->GetProgramID();
-	glUniform1i(glGetUniformLocation(progID, "nshadowlights"), m_numshadowlights); // SE ENVIA EL NUMERO -- TOTAL -- DE LUCES CON SOMBRA (Sin tener en cuenta habitaciones)
-	std::cout<<"Enviamos el numero de luces con sombra ("<<m_numshadowlights<<") al shader actual"<<std::endl;
+	glUniform1i(glGetUniformLocation(progID, "nshadowlights"), m_numshadowlights);
 
 	vd->SetShaderProgram(FISHEYE_SHADER);
 	SendLightsToShader();
 	SendLightMVP();
 	progID = vd->GetProgram(vd->GetCurrentProgram())->GetProgramID();
-	glUniform1i(glGetUniformLocation(progID, "nshadowlights"), m_numshadowlights); // SE ENVIA EL NUMERO -- TOTAL -- DE LUCES CON SOMBRA (Sin tener en cuenta habitaciones)
-	std::cout<<"Enviamos el numero de luces con sombra ("<<m_numshadowlights<<") al shader actual"<<std::endl;
+	glUniform1i(glGetUniformLocation(progID, "nshadowlights"), m_numshadowlights);
 
 	vd->SetShaderProgram(DISTORSION_SHADER);
 	SendLightsToShader();
 	SendLightMVP();
 	progID = vd->GetProgram(vd->GetCurrentProgram())->GetProgramID();
-	glUniform1i(glGetUniformLocation(progID, "nshadowlights"), m_numshadowlights); // SE ENVIA EL NUMERO -- TOTAL -- DE LUCES CON SOMBRA (Sin tener en cuenta habitaciones)
-	std::cout<<"Enviamos el numero de luces con sombra ("<<m_numshadowlights<<") al shader actual"<<std::endl;
+	glUniform1i(glGetUniformLocation(progID, "nshadowlights"), m_numshadowlights);
 
 	vd->SetShaderProgram(STANDARD_SHADER);
 	SendLightsToShader();
 	SendLightMVP();
 	progID = vd->GetProgram(vd->GetCurrentProgram())->GetProgramID();
-	glUniform1i(glGetUniformLocation(progID, "nshadowlights"), m_numshadowlights); // SE ENVIA EL NUMERO -- TOTAL -- DE LUCES CON SOMBRA (Sin tener en cuenta habitaciones)
-	std::cout<<"Enviamos el numero de luces con sombra ("<<m_numshadowlights<<") al shader actual"<<std::endl;
+	glUniform1i(glGetUniformLocation(progID, "nshadowlights"), m_numshadowlights);
 }
 
 void SceneManager::SendLightsToShader(){
@@ -540,7 +534,6 @@ void SceneManager::SendLightMVP(){
 			mvpIndex++;
 		}
 	}
-	std::cout<<"Enviamos "<<mvpIndex<<" Matrices MVP al shader actual"<<std::endl;
 }
 
 void SceneManager::ResetManager(){
@@ -615,8 +608,6 @@ void SceneManager::DrawSceneShadows(){
 	// Update lights position
 	RecalculateLightPosition();
 
-	std::cout<<"Vamos a pintar la textura de las sombras"<<std::endl;
-
 	// Calculate the shadow map
 	for(int i = 0; i < m_lights.size(); i++){
 		TFLight* toCheck = m_lights[i];
@@ -626,10 +617,7 @@ void SceneManager::DrawSceneShadows(){
 			// Se pintan desde el SceneTreeRot en el buffer vinculado en
 			// La funcion CalculateShadowTexture y con la MVP calculada
 			// Tambien en esa funcion
-			if(toCheck->CalculateShadowTexture(i)){
-				std::cout<<"Empezamos a pintar la textura de sombras de la luz numero "<<i<<std::endl;
-				m_SceneTreeRoot->DrawShadows();
-			}
+			if(toCheck->CalculateShadowTexture(i)) m_SceneTreeRoot->DrawShadows();
 		}
 	}
 }

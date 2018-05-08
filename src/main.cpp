@@ -48,7 +48,7 @@ void CreateTree(TFMesh* ms[], TFLight* ls[], TFLight*& shL){
 	scale = TOEvector3df(50.0f, 0.25f, 50.0f);
 	mesh = sm->AddMesh(pos, rot, scale, "");
 	sceneObjects.push_back(mesh);
-/*
+
 	// IZDA
 	pos = TOEvector3df(-25.0f, 8.0f, 0.0f);
 	scale = TOEvector3df(0.25f, 20.0f, 50.0f);
@@ -66,7 +66,7 @@ void CreateTree(TFMesh* ms[], TFLight* ls[], TFLight*& shL){
 	scale = TOEvector3df(50.0f, 20.0f, 0.25f);
 	mesh = sm->AddMesh(pos, rot, scale, "");
 	sceneObjects.push_back(mesh);
-*/
+
 	// TEAPOTS ###################################################
 	pos = TOEvector3df(-7.0f, -1.8f, 20.0f);
 	scale = TOEvector3df(0.7f, 0.7f, 0.7f);
@@ -137,27 +137,21 @@ void CreateTree(TFMesh* ms[], TFLight* ls[], TFLight*& shL){
 	sceneObjects.push_back(ms[2]);
 
 	// SHADOW DIRECTIONAL LIGHT
-	std::cout<<"Creamos una luz"<<std::endl;
 	pos = TOEvector3df(0.0f,0.0f,0.0f);
 	color = TOEvector4df(1.0f, 0.6f, 0.0f, 1.0f);
 	shL = sm->AddLight(pos, rot, color, attenuation);
 	shL->SetBoundBox(true);
 	shL->SetDirectional(true);
 	shL->SetDirection(TOEvector3df(0.0f,-1.0f,0.0f));
-	std::cout<<"Le activamos la sombra"<<std::endl;
 	shL->SetShadowsState(true);
-	std::cout<<"Terminamos la creacion"<<std::endl;
 
-	std::cout<<"Creamos una luz"<<std::endl;
 	pos = TOEvector3df(5.0f,5.0f,5.0f);
 	color = TOEvector4df(1.0f, 0.6f, 0.0f, 1.0f);
 	TFLight* shL2 = sm->AddLight(pos, rot, color, attenuation);
 	shL2->SetBoundBox(true);
 	shL2->SetDirectional(true);
 	shL2->SetDirection(TOEvector3df(0.0f,-1.0f,0.0f));
-	std::cout<<"Le activamos la sombra"<<std::endl;
 	shL2->SetShadowsState(true);
-	std::cout<<"Terminamos la creacion"<<std::endl;
 
 	// DOME ###################################################
 	sm->AddDome();
