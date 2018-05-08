@@ -33,6 +33,11 @@ void TMesh::ChangeTexture(std::string texturePath){
 	else m_texture = nullptr;
 }
 
+void TMesh::ChangeBumpMap(std::string texturePath){
+	if(texturePath.compare("")!=0) m_bumpMap = TResourceManager::GetInstance()->GetResourceTexture(texturePath);
+	else m_bumpMap = nullptr;
+}
+
 void TMesh::ChangeSpecularMap(std::string texturePath){
 	if(texturePath.compare("")!=0) m_specularMap = TResourceManager::GetInstance()->GetResourceTexture(texturePath);
 	else m_specularMap = nullptr;
@@ -185,7 +190,7 @@ void TMesh::SendShaderData(){
 
 	// -------------------------------------------------------- ENVIAMOS EL BUMP MAP
 	currentTexture = nullptr;
-	if(m_specularMap != nullptr) currentTexture = m_bumpMap;
+	if(m_bumpMap != nullptr) currentTexture = m_bumpMap;
 	else if(m_mesh != nullptr) currentTexture = m_mesh->GetBumpMap();
 
 	if(currentTexture != nullptr){

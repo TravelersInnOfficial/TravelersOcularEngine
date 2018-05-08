@@ -165,19 +165,22 @@ bool TObjectLoader::LoadObj(TResourceMesh* mesh, int option){
 	10º UINT	- ELEMENTOS
 	11º INT		- SIZE DEL STRING DE TEXTURA
 	12º CHAR	- CADA CHAR DEL STRING
-	13º INT		- SIZE DEL STRING DE MATERIAL
+	13º INT		- SIZE DEL STRING DEL NORMAL MAP
 	14º CHAR	- CADA CHAR DEL STRING
+	15º INT 	- SIZE DEL STRING DEL SPECULAR MAP
+	16º CHAR	- CADA CHAR DEL STRING
+	17º INT		- SIZE DEL STRING DE MATERIAL
+	18º CHAR	- CADA CHAR DEL STRING
 */
 
 bool TObjectLoader::LoadObjBinary(TResourceMesh* mesh){
 
 	bool output = false;
 
-	std::string path = mesh->GetName();
-	std::cout<<"Cargado binario" <<path<<std::endl;
+	std::string objPath = mesh->GetName();
 
 	std::ifstream objFile;
-	objFile.open(path, std::ios::binary);
+	objFile.open(objPath, std::ios::binary);
 
 	if(objFile.is_open()){
 		std::vector<glm::vec3> vertex;
@@ -186,7 +189,6 @@ bool TObjectLoader::LoadObjBinary(TResourceMesh* mesh){
 		std::vector<unsigned int> index;
 
 		// -------------------------------------------------------------- 1º
-		std::cout<<"1"<<std::endl;
 		glm::vec3 vecRead;
 		objFile.read(reinterpret_cast<char*>(&vecRead.x), sizeof(float));  
 		objFile.read(reinterpret_cast<char*>(&vecRead.y), sizeof(float));
@@ -194,17 +196,14 @@ bool TObjectLoader::LoadObjBinary(TResourceMesh* mesh){
 		mesh->SetSize(vecRead);
 
 		// -------------------------------------------------------------- 2º
-		std::cout<<"2"<<std::endl;
 		objFile.read(reinterpret_cast<char*>(&vecRead.x), sizeof(float));  
 		objFile.read(reinterpret_cast<char*>(&vecRead.y), sizeof(float));
 		objFile.read(reinterpret_cast<char*>(&vecRead.z), sizeof(float));
 		mesh->SetCenter(vecRead);
 		// -------------------------------------------------------------- 3º
-		std::cout<<"3"<<std::endl;
 		int size;
 		objFile.read(reinterpret_cast<char*>(&size), sizeof(int));
 		// -------------------------------------------------------------- 4º
-		std::cout<<"4 "<<size<<std::endl;
 			// vertices
 		for(int i=0; i<size; i++){
 			objFile.read(reinterpret_cast<char*>(&vecRead.x), sizeof(float));  
@@ -213,10 +212,8 @@ bool TObjectLoader::LoadObjBinary(TResourceMesh* mesh){
 			vertex.push_back(vecRead);
 		}
 		// -------------------------------------------------------------- 5º
-		std::cout<<"5"<<std::endl;
 		objFile.read(reinterpret_cast<char*>(&size), sizeof(int));
 		// -------------------------------------------------------------- 6º
-		std::cout<<"6 "<<size<<std::endl;
 			// uvs
 			glm::vec2 vecRead2;
 		for(int i=0; i<size; i++){
@@ -225,10 +222,8 @@ bool TObjectLoader::LoadObjBinary(TResourceMesh* mesh){
 			uv.push_back(vecRead2);
 		}
 		// -------------------------------------------------------------- 7º
-		std::cout<<"7"<<std::endl;
 		objFile.read(reinterpret_cast<char*>(&size), sizeof(int));
 		// -------------------------------------------------------------- 8º
-		std::cout<<"8 "<<size<<std::endl;
 			//normales
 		for(int i=0; i<size; i++){
 			objFile.read(reinterpret_cast<char*>(&vecRead.x), sizeof(float));  
@@ -237,10 +232,8 @@ bool TObjectLoader::LoadObjBinary(TResourceMesh* mesh){
 			normal.push_back(vecRead);
 		}
 		// -------------------------------------------------------------- 9º
-		std::cout<<"9"<<std::endl;	
 		objFile.read(reinterpret_cast<char*>(&size), sizeof(int));
 		// -------------------------------------------------------------- 10º
-		std::cout<<"10 "<<size<<std::endl;
 			// elementos
 		unsigned int element;
 		for(int i=0; i<size; i++){
@@ -248,10 +241,8 @@ bool TObjectLoader::LoadObjBinary(TResourceMesh* mesh){
 			index.push_back(element);
 		}
 		// -------------------------------------------------------------- 11º
-		std::cout<<"11"<<std::endl;
 		objFile.read(reinterpret_cast<char*>(&size), sizeof(int));
 		// -------------------------------------------------------------- 12º
-		std::cout<<"12 "<<size<<std::endl;
 			// path textura
 		std::string path;
 		char currentChar;
@@ -265,20 +256,48 @@ bool TObjectLoader::LoadObjBinary(TResourceMesh* mesh){
 				mesh->AddTexture(texture);
 			}
 		}
-
 		// -------------------------------------------------------------- 13º
-		std::cout<<"13"<<std::endl;
 		objFile.read(reinterpret_cast<char*>(&size), sizeof(int));
 		// -------------------------------------------------------------- 14º
-		std::cout<<"14 "<<size<<std::endl;
-			// path material
-			path.clear();
+			// path normal_map
+		path.clear();
 		for(int i=0; i<size; i++){
 			objFile.read(reinterpret_cast<char*>(&currentChar), sizeof(char));
 			path.push_back(currentChar);
 		}
-		TMaterialLoader::LoadMaterial(path, mesh);
+		if(size>0){
+			TResourceTexture* texture = TResourceManager::GetInstance()->GetResourceTexture(path);
+			if(texture != nullptr){
+				mesh->AddBumpMap(texture);
+			}
+		}
+		// -------------------------------------------------------------- 15º
+		objFile.read(reinterpret_cast<char*>(&size), sizeof(int));
+		// -------------------------------------------------------------- 16º
+			// path specular_map
+		path.clear();
+		for(int i=0; i<size; i++){
+			objFile.read(reinterpret_cast<char*>(&currentChar), sizeof(char));
+			path.push_back(currentChar);
+		}
+		if(size>0){
+			TResourceTexture* texture = TResourceManager::GetInstance()->GetResourceTexture(path);
+			if(texture != nullptr){
+				mesh->AddSpecularMap(texture);
+			}
+		}
+		// -------------------------------------------------------------- 17º
+		objFile.read(reinterpret_cast<char*>(&size), sizeof(int));
+		// -------------------------------------------------------------- 18º
+			// path material
+		path.clear();
+		for(int i=0; i<size; i++){
+			objFile.read(reinterpret_cast<char*>(&currentChar), sizeof(char));
+			path.push_back(currentChar);
+		}
+		TMaterialLoader::LoadMaterial(path, objPath, mesh);
 
+		// -------------------------------------------------------------- RELLENAR BUFFERS
 		// Cargamos el buffer de vertices
 		GLuint currentBuffer = mesh->GetVertexBuffer();
 		glBindBuffer(GL_ARRAY_BUFFER, currentBuffer);
@@ -301,7 +320,10 @@ bool TObjectLoader::LoadObjBinary(TResourceMesh* mesh){
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, index.size()*sizeof(unsigned int), &index[0], GL_STATIC_DRAW);
 
 		output = true;
+	}else{
+		std::cout<<"Error al abrir el archivo: "<<objPath<<std::endl;
 	}
+
 	objFile.close();
 	return output;
 }
@@ -319,7 +341,7 @@ bool TObjectLoader::LoadObjAssimp(TResourceMesh* mesh){
 bool TObjectLoader::LoadObjFromFileAssimp(TResourceMesh* mesh, std::vector<glm::vec3>* vertexVec, std::vector<glm::vec2>* uvVec, std::vector<glm::vec3>* normalVec){
 
 	std::string path = mesh->GetName(); 
-	std::cout<<"Cargado assimp: "<<path<<std::endl;
+	
 	std::ifstream file(path);									// |
 	if(!file.fail()) file.close();								// |
 	else{														// |

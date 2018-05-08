@@ -7,7 +7,7 @@ TResourceMaterial::TResourceMaterial(std::string name){
 	m_colorDifuse 		= glm::vec3(1.0f, 1.0f, 1.0f);
 	m_colorSpecular 	= glm::vec3(1.0f, 1.0f, 1.0f);
 	m_colorAmbient 		= glm::vec3(1.0f, 1.0f, 1.0f);
-	m_colorEmmisive		= glm::vec3(0.0f, 0.0f, 0.0f);
+	m_colorEmmisive		= glm::vec3(1.0f, 1.0f, 1.0f);
 	m_colorTransparent	= glm::vec3(1.0f, 1.0f, 1.0f);
 	m_twosided = 1;
 	m_shadingModel = 2;

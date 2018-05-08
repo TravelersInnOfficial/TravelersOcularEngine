@@ -11,59 +11,141 @@
 #include <string.h>
 #include <stdio.h>
 
-bool TMaterialLoader::LoadMaterial(std::string path, TResourceMesh* mesh){
+class TResourceTexture;
+
+void TMaterialLoader::Read3Elements(float* value1, float* value2, float* value3, std::string line){
+	std::string token;
+	std::string delimiter = " ";
+
+	token = line.substr(0, line.find(delimiter));
+	line.erase(0, token.length() + delimiter.length());
+	*value1 = std::stof(token);
+
+	token = line.substr(0, line.find(delimiter));
+	line.erase(0, token.length() + delimiter.length());
+	*value2 = std::stof(token);
+
+	token = line.substr(0, line.find(delimiter));
+	line.erase(0, token.length() + delimiter.length());
+	*value3 = std::stof(token);
+}
+
+std::string TMaterialLoader::TreatPath(std::string objPath){
+	std::size_t pos = objPath.find(".obj");
+
+	objPath.erase(pos, objPath.length()-1);
+	objPath = objPath + ".mtl";
+
+	return objPath;
+}
+
+bool TMaterialLoader::LoadMaterial(std::string name, std::string path, TResourceMesh* mesh){
 	bool output = false;
 
-	std::ifstream readFile;
-	readFile.open(path, std::ifstream::out);
+	// Comprobamos que el nombre pasado no este ya en nuestra base de datos
+	TResourceMaterial* recMaterial = nullptr;
+	recMaterial = TResourceManager::GetInstance()->GetResourceMaterial(name);
+	if(recMaterial->GetLoaded()){output = true;}
+	else{
 
-	if(readFile.is_open()){
-		std::string line;
+		path = TreatPath(path);
 
-		std::string token;
-		std::string mode;
+		std::ifstream readFile;
+		readFile.open(path, std::ifstream::out);
 
-		while(std::getline(readFile, line)){
-			//token = std::strtok(line," ");
+		if(readFile.is_open()){
+			std::string line;
 
-			if(token[0]=='#')break;
-			else mode = token;
+			std::string token;
+			std::string mode;
+			std::string delimiter = " ";
 
-			if(mode.compare("newmtl")==0){
+			while(std::getline(readFile, line)){
+				token = line.substr(0, line.find(delimiter));
+				line.erase(0, token.length() + delimiter.length());
+
+				if(token[0]=='#')continue;
+				else mode = token;
+
+
+				if(mode.compare("newmtl")==0){
+					token = line.substr(0, line.find(delimiter));
+
+					// Comprobamos si ya existia un material con el mismo nombre
+					// En caso positivo salimos del bucle y se lo pasamos al mesh
+					recMaterial = TResourceManager::GetInstance()->GetResourceMaterial(token);
+					if(recMaterial->GetLoaded())break;
+					else recMaterial->LoadFile();
+				}
+				else if(recMaterial!=nullptr && mode.compare("Ns")==0){
+					token = line.substr(0, line.find(delimiter));
+
+					float value = std::stof(token);
+					recMaterial->SetShininess(value);
+
+				}
+	  			else if(recMaterial!=nullptr && mode.compare("Ka")==0){
+	  				float value1, value2, value3;
+	  				Read3Elements(&value1, &value2, &value3, line);
+
+					recMaterial->SetColorAmbient(glm::vec3(value1, value2, value3));
+	  			}
+	  			else if(recMaterial!=nullptr && mode.compare("Kd")==0){
+	  				float value1, value2, value3;
+	  				Read3Elements(&value1, &value2, &value3, line);
+
+	  				recMaterial->SetColorDifuse(glm::vec3(value1, value2, value3));
+	  			}
+	  			else if(recMaterial!=nullptr && mode.compare("Ks")==0){
+	  				float value1, value2, value3;
+	  				Read3Elements(&value1, &value2, &value3, line);
+	  				
+					recMaterial->SetColorSpecular(glm::vec3(value1, value2, value3));
+	  			}
+	  			else if(recMaterial!=nullptr && mode.compare("Ke")==0){
+	  				float value1, value2, value3;
+	  				Read3Elements(&value1, &value2, &value3, line);
+
+	  				recMaterial->SetColorEmmisive(glm::vec3(value1, value2, value3));
+	  			}
+	  			else if(recMaterial!=nullptr && mode.compare("Ni")==0){
+
+	  			}
+	  			else if(recMaterial!=nullptr && mode.compare("d")==0){
+
+	  			}
+	  			else if(recMaterial!=nullptr && mode.compare("illum")==0){
+
+	  			}
+	  			else if(recMaterial!=nullptr && mode.compare("map_Kd")==0){
+	  				token = line.substr(0, line.find(delimiter));
+	  				TResourceTexture* texture = TResourceManager::GetInstance()->GetResourceTexture(token);
+	  				if(texture != nullptr){
+	  					mesh->AddTexture(texture);
+	  				}
+	  			}else if(recMaterial!=nullptr && mode.compare("map_Ns")==0){
+	  				token = line.substr(0, line.find(delimiter));
+	  				TResourceTexture* texture = TResourceManager::GetInstance()->GetResourceTexture(token);
+	  				if(texture != nullptr){
+	  					mesh->AddSpecularMap(texture);
+	  				}
+	  			}else if(recMaterial!=nullptr && mode.compare("map_Bump")==0){
+	  				token = line.substr(0, line.find(delimiter));
+	  				TResourceTexture* texture = TResourceManager::GetInstance()->GetResourceTexture(token);
+	  				if(texture != nullptr){
+	  					mesh->AddBumpMap(texture);
+	  				}
+	  			}
+
 			}
-			else if(mode.compare("Ns")==0){
-
-			}
-  			else if(mode.compare("Ka")==0){
-
-  			}
-  			else if(mode.compare("Kd")==0){
-
-  			}
-  			else if(mode.compare("Ks")==0){
-
-  			}
-  			else if(mode.compare("Ke")==0){
-
-  			}
-  			else if(mode.compare("Ni")==0){
-
-  			}
-  			else if(mode.compare("d")==0){
-
-  			}
-  			else if(mode.compare("illum")==0){
-
-  			}
-  			else if(mode.compare("map_Kd")==0){
-
-  			}
-
+			output = true;
+		}else{
+			std::cout<<"No se ha encontrado el material: "<<name<<std::endl;
 		}
-		output = true;
+		readFile.close();
 	}
-	readFile.close();
-
+	
+	mesh->AddMaterial(recMaterial);
 	return output;
 }
 
@@ -124,6 +206,10 @@ bool TMaterialLoader::LoadMaterial(std::string name, TResourceMesh* mesh, const 
 		if(AI_SUCCESS == material->Get(AI_MATKEY_REFRACTI, fvalue))
 			recMaterial->SetReflact(fvalue);
 			//std::cout<<"Refracti: "<<fvalue<<std::endl;
+		aiString currentPath;
+		if(AI_SUCCESS == material->GetTexture(aiTextureType_SHININESS,0, &currentPath)){}//std::cout<<"Mapa de normales: "<<currentPath.C_Str()<<std::endl;
+		if(AI_SUCCESS == material->GetTexture(aiTextureType_HEIGHT, 0, &currentPath)){}//std::cout<<"Mapa de alturas: "<<currentPath.C_Str()<<std::endl;
+
 
 		// Damos el material como cargado
 		recMaterial->LoadFile();

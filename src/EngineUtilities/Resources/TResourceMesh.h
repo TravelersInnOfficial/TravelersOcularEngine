@@ -22,6 +22,7 @@ public:
     bool LoadFile();
 
     void AddTexture(TResourceTexture* texture);
+    void AddBumpMap(TResourceTexture* texture);
     void AddSpecularMap(TResourceTexture* texture);
     void AddMaterial(TResourceMaterial* material);
     void SetElementSize(int value);

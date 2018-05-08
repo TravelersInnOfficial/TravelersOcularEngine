@@ -103,8 +103,7 @@ vec3  Phong (int num) {
 
 	// CALCULAMOS ATENUACION
 	float Attenuation = 1.0 / (1.0 + Light[num].Attenuation * pow(length(objToToLight), 2));
-	if(Light[num].Directional) Attenuation = 1;
-	
+	if(Light[num].Directional) Attenuation = 1;	
 
 	// ENVIAMOS EL RESULTADO
 	return (Attenuation * (Diffuse + Specular) * specTexure);

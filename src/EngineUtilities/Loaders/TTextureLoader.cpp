@@ -1,8 +1,10 @@
 #include "TTextureLoader.h"
 #include <SOIL2/SOIL2.h>
 #include <fstream>
+#include <string.h>
 
 bool TTextureLoader::LoadTexture(std::string path, unsigned char** imageData, int* width, int* height){
+
 	std::ifstream file(path);									// |
 	if(!file.fail()) file.close();								// |
 	else{														// |
@@ -22,4 +24,29 @@ bool TTextureLoader::LoadTexture(std::string path, unsigned char** imageData, in
 	}
 
 	return toRet;
+}
+
+bool TTextureLoader::LoadTextureBinary(std::string path, std::vector<unsigned char>* imageData, int* width, int* height){
+	bool output = false;
+
+	std::ifstream texFile;
+	texFile.open(path, std::ios::binary);
+
+	if(texFile.is_open()){
+		texFile.read(reinterpret_cast<char*>(width), sizeof(int));
+		texFile.read(reinterpret_cast<char*>(height), sizeof(int));
+
+		int size = (*width)*(*height) * 4;
+
+		unsigned char currentChar;
+		for(int i=0; i<size; i++){
+			texFile.read(reinterpret_cast<char*>(&currentChar), sizeof(unsigned char));
+			imageData->push_back(currentChar);
+		}
+
+		output = true;
+	}
+	texFile.close();
+
+	return output;
 }

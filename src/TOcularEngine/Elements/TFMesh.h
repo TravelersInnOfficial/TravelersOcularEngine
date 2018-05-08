@@ -9,6 +9,7 @@ class TFMesh: public TFNode{
 public:
 	void SetTexture(std::string texturePath = "");		// Replaces the Texture with a new one
 	void SetSpecularMap(std::string texturePath = ""); 	// Replaces the specular map
+	void SetBumpMap(std::string texturePath = ""); 		// Replaces the bump map
 	void SetMesh(std::string meshPath = "");			// Replaces the Mesh with a new one
 	void CreateCube();									// Replaces the Mesh with a Cube
 	void CreateSphere();								// Replaces the Mesh with a Sphere

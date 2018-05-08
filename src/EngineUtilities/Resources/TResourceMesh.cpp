@@ -38,7 +38,7 @@ TResourceMesh::TResourceMesh(std::string name){
 	}
 
 	if(m_bumpMap == nullptr){
-		m_bumpMap = TResourceManager::GetInstance()->GetResourceTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/mainWall_normal.png");
+		m_bumpMap = TResourceManager::GetInstance()->GetResourceTexture(VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_bump.png");
 	}
 }
 
@@ -74,6 +74,10 @@ TResourceMesh::~TResourceMesh(){
 	glDeleteBuffers(1, &m_nbo);
 }
 
+void TResourceMesh::AddBumpMap(TResourceTexture* texture){
+	m_bumpMap = texture;
+}
+
 void TResourceMesh::AddSpecularMap(TResourceTexture* texture){
 	m_specularMap = texture;
 }
@@ -87,7 +91,7 @@ void TResourceMesh::AddMaterial(TResourceMaterial* material){
 }
 
 bool TResourceMesh::LoadFile(){
-	bool toRet = TObjectLoader::LoadObjAssimp(this);
+	bool toRet = TObjectLoader::LoadObjBinary(this);
 	SetLoaded(toRet);
 	return toRet;
 }

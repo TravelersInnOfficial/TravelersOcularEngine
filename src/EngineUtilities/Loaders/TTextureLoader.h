@@ -10,7 +10,7 @@
 class TTextureLoader{
 public:
 	static bool LoadTexture(std::string path, unsigned char** imageData, int* width, int* height);
-
+	static bool LoadTextureBinary(std::string path,  std::vector<unsigned char>* imageData, int* width, int* height);
 private:
 	
 };

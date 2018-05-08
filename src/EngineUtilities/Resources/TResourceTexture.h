@@ -2,6 +2,7 @@
 #define TRESOURCETEXTURE_H
 
 #include "TResource.h"
+#include <vector>
 
 // Forward declaration
 typedef unsigned int GLuint;
@@ -26,6 +27,7 @@ public:
     
 private:
     unsigned char* m_imageData;
+    std::vector<unsigned char> m_h;
     int m_width;
     int m_height;
     bool m_loaded;

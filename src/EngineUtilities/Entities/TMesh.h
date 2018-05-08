@@ -31,6 +31,8 @@ public:
 
 	void ChangeSpecularMap(std::string texturePath = "");
 
+	void ChangeBumpMap(std::string texturePath = "");
+
 	/**
 	 * @brief Shows or hide mesh bounding box
 	 * 
