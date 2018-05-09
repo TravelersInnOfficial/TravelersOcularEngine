@@ -17,9 +17,28 @@ TFCamera::TFCamera(TOEvector3df position, TOEvector3df rotation, bool perspectiv
 	m_entityNode->SetEntity(new TCamera(perspective));
 
 	m_entity = TCAMERA_ENTITY;
+	m_RotationLocked = false;
 }
 
 TFCamera::~TFCamera(){
+}
+
+void TFCamera::SetRotation(TOEvector3df rotation){
+	if(!m_RotationLocked){
+		TTransform* myTransform = (TTransform*) m_rotationNode->GetEntity();
+		myTransform->Identity();
+		myTransform->Rotate(rotation.X, rotation.Y, rotation.Z);
+	}
+}
+void TFCamera::Rotate(TOEvector3df rotation){
+	if(!m_RotationLocked){
+		TTransform* myTransform = (TTransform*) m_rotationNode->GetEntity();
+		myTransform->Rotate(rotation.X, rotation.Y, rotation.Z);
+	}
+}
+
+void TFCamera::SetRotationLocked(bool locked){
+	m_RotationLocked = locked;
 }
 
 void TFCamera::SetPerspective(bool perspectiveCamera){

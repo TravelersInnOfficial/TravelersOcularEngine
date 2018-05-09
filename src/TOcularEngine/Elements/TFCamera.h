@@ -7,6 +7,15 @@ class TFCamera: public TFNode{
 	friend class SceneManager;
 
 public:
+	void SetRotation(TOEvector3df rotation) override; 		// Sets the position of the Node
+	void Rotate(TOEvector3df rotation) override; 			// Adds the rotation to the current rotation
+	/**
+	 * @brief Set the Rotation Locked
+	 * 
+	 * @param locked: lock rotation or not
+	 */
+	void SetRotationLocked(bool locked);
+
 	void SetPerspective(bool perspectiveCamera);	// Sets the camera to Perspective
 	void SetNearFar(float near, float far);			// Sets the Near and Far components of the camera
 	void SetLeftRight(float left, float right);		// Sets the Left and Right components
@@ -29,6 +38,7 @@ protected:
 	);
 	~TFCamera();
 
+	bool m_RotationLocked;	
 };
 
 #endif
