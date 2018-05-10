@@ -180,6 +180,7 @@ public:
      * @param ambientLight 
      */
     void SetAmbientLight(TOEvector3df ambientLight);
+    void SetAmbientLight(float ambientLight);
 
     /**
      * @brief Change the main camera
@@ -267,18 +268,48 @@ public:
      */
     void ResetManager();
     
+    /**
+     * @brief De/Active the clipping for the objects of the game
+     * 
+     * @param value True-Activate / False-Deactivate
+     */
     void SetClipping(bool value);
+
+    /**
+     * @brief Push the TFDrawable object to the background of the elements
+     * 
+     * @param  Object Drawable
+     */
     void PushToBkg(TFDrawable*);
+
+    /**
+     * @brief Push the TFDrawable object to the front of the elements
+     * 
+     * @param  Object Drawable
+     */
     void PushToFront(TFDrawable*);
 
+    /**
+     * @brief Change the shader that are using one type of entity
+     * 
+     * @param shader Shader ENUM
+     * @param entity Entity Type
+     */
     void ChangeShader(SHADERTYPE shader, ENTITYTYPE entity);
 
-    void DrawRooms();
-    int SendRoomLights(int value);
-    void UpdateCurrentRoom();
-    bool Light2Room(TFNode* node);
+    /**
+     * @brief Delete the light from the room
+     * 
+     * @param light The lights to delete
+     */
     void DeleteRoomLight(TFNode* light);
 
+    /**
+     * @brief De/Active the sending of ligths to the shader
+     * 
+     * @param value True - Activate / False - Deactivate
+     */
+    void SetSendLights(bool value);
 
 private:
     GLuint m_vao;
@@ -298,12 +329,41 @@ private:
     TFCamera* m_main_camera;
     TFDome* m_dome;
     int m_numshadowlights;
+    bool m_sendLights;
 
+
+    /**
+     * @brief Draw the elements from the rooms
+     */
+    void DrawRooms();
+
+    /**
+     * @brief Send the lights from the room
+     * 
+     * @param value the ID from the last light sended to the shader
+     * @return the number of lights sended
+     */
+    int SendRoomLights(int value);
+
+    /**
+     * @brief Update the current room of the sceneManager
+     */
+    void UpdateCurrentRoom();
+
+
+    /**
+     * @brief Change the light from the sceneRoot to the rooms
+     * 
+     * @param node - Lights
+     * @return True - Done correctly
+     */
+    bool Light2Room(TFNode* node);
     void RecalculateLightPosition();
     void RecalculateShadowLightsNumber();
     void SendLights();
     void SendLightsToShader();
-    void SendLightMVP();
+    void SendShadowLightsToShader();
+    int SendLightMVP();
     void DrawSceneShadows();
     void DrawAllLines(); 
     std::vector<GLfloat> vertexVector; 

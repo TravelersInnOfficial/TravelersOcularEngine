@@ -91,7 +91,7 @@ void TResourceMesh::AddMaterial(TResourceMaterial* material){
 }
 
 bool TResourceMesh::LoadFile(){
-	bool toRet = TObjectLoader::LoadObjAssimp(this);
+	bool toRet = TObjectLoader::LoadObjBinary(this);
 	SetLoaded(toRet);
 	return toRet;
 }

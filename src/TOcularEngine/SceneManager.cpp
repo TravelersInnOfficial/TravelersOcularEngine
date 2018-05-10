@@ -18,9 +18,10 @@ SceneManager::SceneManager(){
 	m_SceneTreeRoot = new TNode(myTransform);
 	m_ambientLight = glm::vec3(0.25f);
 	m_main_camera = nullptr;
-	m_dome = nullptr;
-	m_currentRoom = -1;
 	m_numshadowlights = 0;
+	m_sendLights = true;
+	m_currentRoom = -1;
+	m_dome = nullptr;
 	m_vao = 0;
 }
 
@@ -231,6 +232,10 @@ void SceneManager::SetAmbientLight(TOEvector3df ambientLight){
 	m_ambientLight = glm::vec3(ambientLight.X, ambientLight.Y, ambientLight.Z);
 }
 
+void SceneManager::SetAmbientLight(float ambientLight){
+	m_ambientLight = glm::vec3(ambientLight, ambientLight, ambientLight);
+}
+
 TOEvector3df SceneManager::GetAmbientLight(){
 	return TOEvector3df(m_ambientLight.x, m_ambientLight.y, m_ambientLight.z);
 }
@@ -434,7 +439,10 @@ void SceneManager::SetClipping(bool value){
 	TEntity::m_checkClipping = value;
 }
 
-// PRIVATE FUNCTIONS
+void SceneManager::SetSendLights(bool value){
+	m_sendLights = value;
+}
+
 void SceneManager::ClearElements(){
 	int size = m_cameras.size();
 	for(int i = size - 1; i >= 0; i--){
@@ -495,33 +503,37 @@ void SceneManager::SendLights(){
 	RecalculateShadowLightsNumber();
 	
 	VideoDriver* vd = VideoDriver::GetInstance();
-	GLuint progID = 0;
 
 	// SEND ALL LIGHTS TO ALL SHADERS
 	vd->SetShaderProgram(BARREL_SHADER);
 	SendLightsToShader();
-	SendLightMVP();
-	progID = vd->GetProgram(vd->GetCurrentProgram())->GetProgramID();
-	glUniform1i(glGetUniformLocation(progID, "nshadowlights"), m_numshadowlights);
+	SendShadowLightsToShader();
 
 	vd->SetShaderProgram(FISHEYE_SHADER);
 	SendLightsToShader();
-	SendLightMVP();
-	progID = vd->GetProgram(vd->GetCurrentProgram())->GetProgramID();
-	glUniform1i(glGetUniformLocation(progID, "nshadowlights"), m_numshadowlights);
+	SendShadowLightsToShader();
 
 	vd->SetShaderProgram(DISTORSION_SHADER);
 	SendLightsToShader();
-	SendLightMVP();
-	progID = vd->GetProgram(vd->GetCurrentProgram())->GetProgramID();
-	glUniform1i(glGetUniformLocation(progID, "nshadowlights"), m_numshadowlights);
+	SendShadowLightsToShader();
 
 	vd->SetShaderProgram(STANDARD_SHADER);
 	SendLightsToShader();
-	SendLightMVP();
-	progID = vd->GetProgram(vd->GetCurrentProgram())->GetProgramID();
-	glUniform1i(glGetUniformLocation(progID, "nshadowlights"), m_numshadowlights);
+	SendShadowLightsToShader();
 }
+
+void SceneManager::SendShadowLightsToShader(){
+	// Gets the programs
+	VideoDriver* vd = VideoDriver::GetInstance();
+
+	int size = 0;
+	if(m_sendLights){
+		size = SendLightMVP();
+	}
+	GLuint progID = vd->GetProgram(vd->GetCurrentProgram())->GetProgramID();
+	glUniform1i(glGetUniformLocation(progID, "nshadowlights"), size);
+}
+
 
 void SceneManager::SendLightsToShader(){
 	// Gets the Programs
@@ -533,20 +545,24 @@ void SceneManager::SendLightsToShader(){
 	glUniform3fv(ambLocation, 1, &m_ambientLight[0]);
 
 	// Draw all lights
-	int i=0;
-	int size = m_lights.size();
-    while(i < size){ 
-    	m_lights[i]->DrawLight(i);
-    	i++;
-    }
-    size = SendRoomLights(i);
+	int size = 0;
+	if(m_sendLights){
+		size = m_lights.size();
+
+		int i=0;
+    	while(i < size){ 
+    		m_lights[i]->DrawLight(i);
+    		i++;
+    	}
+    	size = SendRoomLights(i);
+	}
 
     // Send size of lights
 	GLuint nlightspos = glGetUniformLocation(programID, "nlights");
 	glUniform1i(nlightspos, size);
 }
 
-void SceneManager::SendLightMVP(){
+int SceneManager::SendLightMVP(){
 	int mvpIndex = 0;
 	GLint size = m_lights.size();
 	for(int i = 0; i < size; i++){
@@ -555,6 +571,7 @@ void SceneManager::SendLightMVP(){
 			mvpIndex++;
 		}
 	}
+	return mvpIndex;
 }
 
 void SceneManager::ResetManager(){
@@ -623,22 +640,24 @@ void SceneManager::DrawAllLines(){
 }
 
 void SceneManager::DrawSceneShadows(){
-	// Set shadow program
-	VideoDriver::GetInstance()->SetShaderProgram(SHADOW_SHADER);
-
-	// Update lights position
-	RecalculateLightPosition();
-
-	// Calculate the shadow map
-	for(int i = 0; i < m_lights.size(); i++){
-		TFLight* toCheck = m_lights[i];
-		if(toCheck != nullptr){
-			// Caulculamos si esta activa y tiene sombras
-			// Si esta activa y necesita sombra, las pintamos
-			// Se pintan desde el SceneTreeRot en el buffer vinculado en
-			// La funcion CalculateShadowTexture y con la MVP calculada
-			// Tambien en esa funcion
-			if(toCheck->CalculateShadowTexture(i)) m_SceneTreeRoot->DrawShadows();
+	if(m_sendLights){
+		// Set shadow program
+		VideoDriver::GetInstance()->SetShaderProgram(SHADOW_SHADER);
+	
+		// Update lights position
+		RecalculateLightPosition();
+	
+		// Calculate the shadow map
+		for(int i = 0; i < m_lights.size(); i++){
+			TFLight* toCheck = m_lights[i];
+			if(toCheck != nullptr){
+				// Caulculamos si esta activa y tiene sombras
+				// Si esta activa y necesita sombra, las pintamos
+				// Se pintan desde el SceneTreeRot en el buffer vinculado en
+				// La funcion CalculateShadowTexture y con la MVP calculada
+				// Tambien en esa funcion
+				if(toCheck->CalculateShadowTexture(i)) m_SceneTreeRoot->DrawShadows();
+			}
 		}
 	}
 }
