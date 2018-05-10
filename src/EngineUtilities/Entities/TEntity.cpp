@@ -10,6 +10,8 @@ std::stack<glm::mat4> TEntity::InitializeStack(){
 
 std::stack<glm::mat4> TEntity::m_stack = TEntity::InitializeStack();
 
+unsigned int TEntity::currentFrame = 1;
+
 void TEntity::SetProgram(SHADERTYPE program){
     m_program = program;
 }

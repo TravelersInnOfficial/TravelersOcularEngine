@@ -46,6 +46,7 @@ void TRoom::Draw(){
 		}
 		PopClippingLimits();
 	}
+	drawed = false;
 }
 
 void TRoom::SetDrawed(bool value){

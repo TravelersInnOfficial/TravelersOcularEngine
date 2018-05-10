@@ -44,6 +44,7 @@ public:
 
 protected:
 
+	unsigned int 		m_frameDrawed;
 	TResourceMesh* 		m_mesh;
 	TResourceTexture* 	m_texture;
 	TResourceTexture*	m_specularMap;

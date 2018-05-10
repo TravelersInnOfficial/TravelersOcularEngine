@@ -293,6 +293,14 @@ void SceneManager::Update(){
 }
 
 void SceneManager::Draw(){
+	unsigned int currentFrame = TEntity::currentFrame;
+	currentFrame++;
+	if(currentFrame == std::numeric_limits<unsigned int>::max()) currentFrame = 0;
+	TEntity::currentFrame = currentFrame;
+
+	// Select active camera and set view and projection matrix
+	SetMainCameraData();
+
 	// Draw into frame for shadows
 	DrawSceneShadows();
 
@@ -310,9 +318,6 @@ void SceneManager::Draw(){
 	// ENABLE BACK FACE CULLING
 	glEnable(GL_CULL_FACE);
 	//glCullFace(GL_BACK); // Cull back-facing triangles -> draw only front-facing triangles
-
-	// Select active camera and set view and projection matrix
-	SetMainCameraData();
 
 	// Actualizamos la habitacion actual
 	UpdateCurrentRoom();

@@ -84,7 +84,7 @@ void TFLight::DrawLight(int num){
 	TLight* ent = (TLight*) m_entityNode->GetEntity();
 
 	// Initialize vectors to 0 if light is turned off
-	glm::vec3 position = glm::vec3(0.0f);
+	glm::vec4 position = glm::vec4(0.0f);
 	glm::vec3 diffuse = glm::vec3(0.0f);
 	glm::vec3 specular = glm::vec3(0.0f);
 	glm::vec3 direction = glm::vec3(0.0f);
@@ -95,7 +95,7 @@ void TFLight::DrawLight(int num){
 	if(ent->GetActive()){
 		TOEvector4df color = GetColor();
 		TOEvector3df dir = GetDirection();
-		position = m_LastLocation;
+		position = glm::vec4(m_LastLocation, 1.0f);
 		diffuse = glm::vec3(color.X, color.Y, color.X2);
 		specular = glm::vec3(color.X, color.Y, color.X2);
 		att = GetAttenuation();
@@ -111,6 +111,7 @@ void TFLight::DrawLight(int num){
 	std::string aux = "";
 
 	aux = str +"Position";
+	position = TEntity::ViewMatrix * position;
 	glUniform3fv(glGetUniformLocation(progID, aux.c_str()), 1, &position[0]);
 
 	aux = str +"Diffuse";

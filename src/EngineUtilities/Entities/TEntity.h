@@ -27,6 +27,8 @@ public:
 	static glm::mat4 ViewMatrix;
 	static glm::mat4 ProjMatrix;
 	static glm::mat4 DepthWVP;
+
+	static unsigned int currentFrame;
 	
     SHADERTYPE m_program = NONE_SHADER;
 

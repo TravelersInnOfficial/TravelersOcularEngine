@@ -15,6 +15,7 @@ TMesh::TMesh(std::string meshPath, std::string texturePath){
 	m_drawingShadows = false;
 	m_textureScaleX = 1.0f;
 	m_textureScaleY = 1.0f;
+	m_frameDrawed = 0;
 
 	LoadMesh(meshPath);
 	ChangeTexture(texturePath);
@@ -49,15 +50,20 @@ void TMesh::SetBBVisibility(bool visible){
 
 void TMesh::BeginDraw(){
 	if(m_mesh != nullptr && !m_drawingShadows && CheckClipping()){
-		// Bind and send the data to the VERTEX SHADER
-		SendShaderData();
-		
-		// Bind and draw elements depending of how many vbos
-		GLuint elementsBuffer = m_mesh->GetElementBuffer();
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBuffer);
-		glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
+		unsigned int currentFrame = TEntity::currentFrame;
+		if(currentFrame != m_frameDrawed){
+			m_frameDrawed = currentFrame;
 
-		if(m_visibleBB) DrawBoundingBox();
+			// Bind and send the data to the VERTEX SHADER
+			SendShaderData();
+			
+			// Bind and draw elements depending of how many vbos
+			GLuint elementsBuffer = m_mesh->GetElementBuffer();
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBuffer);
+			glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
+
+			if(m_visibleBB) DrawBoundingBox();
+		}
 	}
 }
 
