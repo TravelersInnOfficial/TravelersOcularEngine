@@ -22,6 +22,7 @@ private:
     ~TFRect();
 
     GLuint m_VBO;
+    TOEvector2df m_mask_size;
     TOEvector4df m_mask_rect;
     TResourceTexture* m_mask;
 };

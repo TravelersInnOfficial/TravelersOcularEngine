@@ -10,9 +10,9 @@ TFRect::TFRect(TOEvector2df position, TOEvector2df size, float rotation){
     m_position = TOEvector2df((position.X*2 - w_dims.X) / w_dims.X , (position.Y*2 - w_dims.Y) / w_dims.Y);
     m_size = TOEvector2df((std::abs(size.X *2) / w_dims.X), (std::abs(size.Y *2) / w_dims.Y));
     m_rotation = 0;
-
     m_color.SetRGBA(0,0,0,1);
     
+    m_mask_size = size;
     std::string mask = VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_texture.png";
     m_mask = TResourceManager::GetInstance()->GetResourceTexture(mask);
     m_mask_rect = TOEvector4df(0.0f, 0.0f,1.0f, 1.0f);
@@ -106,44 +106,34 @@ void TFRect::SetWidth(float w){
     m_size.X = (std::abs(w *2) / w_dims.X);
     m_InData.size.X = w;
 
-    float x = m_position.X;
-    float y = m_position.Y;
-    float sheetWidth = m_InData.size.X;                        //texture width
-    float sheetHeight = m_InData.size.Y;                       //texture height
+    float x = m_mask_size.Y - w;
+    float y = 0;
+    float sheetWidth = m_mask_size.X;                           //texture width
+    float sheetHeight = m_mask_size.Y;                          //texture height
     float cellWidth = w;                                        //cell widht
     float cellHeight = sheetHeight;                             //cell height
     float left = x/sheetWidth;                                  //left texture uv point
     float top = y/sheetHeight;                                  //top texture uv point
     float cw = left + cellWidth/sheetWidth;                     //uv texture width
     float ch = top + cellHeight/sheetHeight;                    //uv texture height
-    //m_rect = TOEvector4df(left, top, cw, ch);
-    m_mask_rect = TOEvector4df(0, 0, 0.5, 0.5);
+    m_mask_rect = TOEvector4df(left, top, cw, ch);
 }
 
 void TFRect::SetHeight(float h){
     m_size.Y =  (std::abs(h *2) / w_dims.Y);
     m_InData.size.Y = h;
 
-    float x = -1;
-    float y = -1;
-    float sheetWidth = 1;                         //texture width
-    float sheetHeight = 1;                        //texture height
+    float x = 0;
+    float y = m_mask_size.Y - h;
+    float sheetWidth = m_mask_size.X;                           //texture width
+    float sheetHeight = m_mask_size.Y;                          //texture height
     float cellWidth = sheetWidth;                               //cell widht
     float cellHeight = h;                                       //cell height
     float left = x/sheetWidth;                                  //left texture uv point
     float top = y/sheetHeight;                                  //top texture uv point
     float cw = left + cellWidth/sheetWidth;                     //uv texture width
     float ch = top + cellHeight/sheetHeight;                    //uv texture height
-    //m_rect = TOEvector4df(left, top, cw, ch);
-    /*
-    std::string s(30,'-');
-    std::cout<<s<<"\n"
-    <<"left:\t"<<left<<"\n"
-    <<"top:\t"<<top<<"\n"
-    <<"cw:\t"<<cw<<"\n"
-    <<"ch:\t"<<ch<<"\n"
-    <<s<<"\n";
-    */
+    
     m_mask_rect = TOEvector4df(left, top, cw, ch);
 }
 
