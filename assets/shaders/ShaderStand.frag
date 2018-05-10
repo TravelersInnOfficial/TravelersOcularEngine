@@ -72,7 +72,7 @@ vec3  Phong (int num) {
 
 	vec3 n = normalize (RotationNormal * vec4(normalTexture,1.0)).xyz;
 
-	vec3 lightPos = (FragViewMatrix * vec4(Light[num].Position, 1)).xyz;
+	vec3 lightPos = Light[num].Position; // Lo pasan ya multiplicado por la viewMatrix
 	
 
 	// Vector from SURFACE to LIGHT
@@ -87,9 +87,7 @@ vec3  Phong (int num) {
 	}
 	
 	vec3 specTexure = texture(specularMap, TexCoords).rgb;
-
 	vec3 s = normalize(objToToLight);
-	vec3 r = reflect(-s, n);
   	
 	// COMPONENTE DIFUSA
 	vec3 Diffuse = vec3(0);
@@ -102,8 +100,9 @@ vec3  Phong (int num) {
 	if(dot(s, n) > 0) Specular = Light[num].Specular * pow(clamp(dot(E,R),0,1), Material.Shininess) * Material.Specular;
 
 	// CALCULAMOS ATENUACION
-	float Attenuation = 1.0 / (1.0 + Light[num].Attenuation * pow(length(objToToLight), 2));
-	if(Light[num].Directional) Attenuation = 1;	
+	float Attenuation;
+	if(Light[num].Directional) Attenuation = 1;
+	else  Attenuation = 1.0 / (1.0 + Light[num].Attenuation * pow(length(objToToLight), 2));
 
 	// ENVIAMOS EL RESULTADO
 	return (Attenuation * (Diffuse + Specular) * specTexure);
