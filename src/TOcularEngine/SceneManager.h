@@ -22,6 +22,7 @@
 class Program;
 
 class SceneManager{
+    friend class TFRoom;
 public:
     /**
      * @brief Scene Manager constructor
