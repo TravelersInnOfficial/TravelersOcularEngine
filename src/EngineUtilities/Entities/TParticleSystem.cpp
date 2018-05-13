@@ -78,7 +78,7 @@ int TParticleSystem::GetNewPerSecond(){
 }
 
 void TParticleSystem::BeginDraw(){
-	if(!m_drawingShadows && CheckClipping()){
+	if(!m_drawingShadows){
 		SendShaderData();
 		glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, m_particleCount);
 		ResetShaderData();
