@@ -228,6 +228,21 @@ bool SceneManager::DeleteRoom(TFNode* node){
 	return toRet;
 }
 
+bool SceneManager::DeleteAnimation(TFNode* node){
+	bool toRet = false;
+
+	int size = m_objects.size();
+	for(int i=0; i<size; i++){
+		if(node == m_objects[i]){
+			m_objects.erase(m_objects.begin() + i);
+			delete node;
+			toRet = true;
+		}
+	}
+
+	return toRet;
+}
+
 void SceneManager::SetAmbientLight(TOEvector3df ambientLight){
 	m_ambientLight = glm::vec3(ambientLight.X, ambientLight.Y, ambientLight.Z);
 }

@@ -175,6 +175,8 @@ public:
      */
     bool DeleteRoom(TFNode*);
 
+    bool DeleteAnimation(TFNode*);
+
     /**
      * @brief Sets the Ambient Light
      * 
@@ -312,6 +314,14 @@ public:
      */
     void SetSendLights(bool value);
 
+        /**
+     * @brief Change the light from the sceneRoot to the rooms
+     * 
+     * @param node - Lights
+     * @return True - Done correctly
+     */
+    bool Light2Room(TFNode* node);
+
 private:
     GLuint m_vao;
     
@@ -352,13 +362,7 @@ private:
     void UpdateCurrentRoom();
 
 
-    /**
-     * @brief Change the light from the sceneRoot to the rooms
-     * 
-     * @param node - Lights
-     * @return True - Done correctly
-     */
-    bool Light2Room(TFNode* node);
+
     void RecalculateLightPosition();
     void RecalculateShadowLightsNumber();
     void SendLights();
