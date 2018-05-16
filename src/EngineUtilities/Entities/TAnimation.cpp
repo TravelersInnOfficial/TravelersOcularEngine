@@ -10,7 +10,8 @@ TAnimation::TAnimation() : TMesh("","") {
 }
 
 // Destructor
-TAnimation::~TAnimation(){ }
+TAnimation::~TAnimation(){ 
+}
 
 void TAnimation::SetPaths(std::string ID, int frames, const std::vector<std::string> &paths, int fps){
 	AnimData data;
@@ -23,7 +24,8 @@ void TAnimation::SetPaths(std::string ID, int frames, const std::vector<std::str
     m_anims[ID].meshes.clear();	
 	// add all paths to the animation vector
     for (int i = 0; i < frames; i++){
-        m_anims[ID].meshes.push_back(TResourceManager::GetInstance()->GetResourceMesh(paths[i]));
+    	TResourceMesh* mesh = TResourceManager::GetInstance()->GetResourceMesh(paths[i]);
+        m_anims[ID].meshes.push_back(mesh);
 	}
 	
 	// Change actual mesh to the actual animation first frame
@@ -56,6 +58,7 @@ void TAnimation::UpdateAnimation(float deltatime){
 		
 		// If next frame is diferent from actual frame, set actual frame
 		if(nextFrame != m_actualFrame){
+			nextFrame = nextFrame % m_anims[m_queue.back()].meshes.size();
 			// Update animation mesh to correpondent
 			m_mesh = m_anims[m_queue.back()].meshes[nextFrame];
 			m_actualFrame = nextFrame;
