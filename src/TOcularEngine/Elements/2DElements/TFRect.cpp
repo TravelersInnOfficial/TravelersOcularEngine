@@ -106,7 +106,7 @@ void TFRect::SetWidth(float w){
     m_size.X = (std::abs(w *2) / w_dims.X);
     m_InData.size.X = w;
 
-    float x = m_mask_size.Y - w;
+    float x = 0;
     float y = 0;
     float sheetWidth = m_mask_size.X;                           //texture width
     float sheetHeight = m_mask_size.Y;                          //texture height
@@ -116,6 +116,7 @@ void TFRect::SetWidth(float w){
     float top = y/sheetHeight;                                  //top texture uv point
     float cw = left + cellWidth/sheetWidth;                     //uv texture width
     float ch = top + cellHeight/sheetHeight;                    //uv texture height
+
     m_mask_rect = TOEvector4df(left, top, cw, ch);
 }
 
