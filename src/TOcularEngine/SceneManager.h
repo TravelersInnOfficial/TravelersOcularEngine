@@ -175,6 +175,12 @@ public:
      */
     bool DeleteRoom(TFNode*);
 
+    /**
+     * @brief       Delete the Animationo given
+     * 
+     * @return      true - the mesh has been deleted
+     * @return      false - the mesh couldn't be deleted
+     */
     bool DeleteAnimation(TFNode*);
 
     /**

@@ -200,6 +200,7 @@ void SceneManager::DeleteRoomLight(TFNode* light){
 	}
 }
 
+
 bool SceneManager::DeleteMesh(TFNode* node){
 	bool toRet = false;
 

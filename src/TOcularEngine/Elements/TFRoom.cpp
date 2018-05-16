@@ -56,15 +56,17 @@ int TFRoom::DrawLights(int value, int nextTo){
 		lightsSend = true;
 
 		int size = m_roomLights.size();
-		for(int i=0;i<size; i++){
+		for(int i=0;i<size && value+i<=12; i++){
 			m_roomLights[i]->DrawLight(value + i);
+			output++;
 		}
-		output += size;
 
-		size = m_portals.size();
-		for(int i=0; i<size; i++){
-			if(m_portals[i]->GetVisible() && (nextTo > 0 || m_portals[i]->CheckVisibility())){
-				output = m_portals[i]->GetSecondRoom()->DrawLights(output, nextTo-1);
+		if(output<=12){	
+			size = m_portals.size();
+			for(int i=0; i<size; i++){
+				if(m_portals[i]->GetVisible() && (nextTo > 0 || m_portals[i]->CheckVisibility())){
+					output = m_portals[i]->GetSecondRoom()->DrawLights(output, nextTo-1);
+				}
 			}
 		}
 	}
