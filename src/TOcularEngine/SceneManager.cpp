@@ -49,6 +49,8 @@ TFLight* SceneManager::AddLight(TOEvector3df position, TOEvector3df rotation, TO
 }
 
 TFMesh* SceneManager::AddMesh(TOEvector3df position, TOEvector3df rotation, TOEvector3df scale, std::string meshPath){
+	if(meshPath.compare("")==0) meshPath = VideoDriver::GetInstance()->GetAssetsPath() + "/models/cube.obj";
+
 	TFMesh* toRet = nullptr;
 	toRet = new TFMesh(position, rotation, scale, meshPath);
 	m_objects.push_back(toRet);

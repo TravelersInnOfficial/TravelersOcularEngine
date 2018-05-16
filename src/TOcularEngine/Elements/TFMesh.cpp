@@ -44,7 +44,7 @@ void TFMesh::SetMesh(std::string meshPath){
 
 void TFMesh::CreateCube(){
 	TMesh* myMesh = (TMesh*) m_entityNode->GetEntity();
-	myMesh->LoadMesh("");
+	myMesh->LoadMesh(VideoDriver::GetInstance()->GetAssetsPath() + "/models/cube.obj");
 }
 
 void TFMesh::CreateSphere(){
