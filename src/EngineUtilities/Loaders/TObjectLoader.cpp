@@ -183,7 +183,6 @@ bool TObjectLoader::LoadObjBinary(TResourceMesh* mesh){
 	objFile.open(objPath, std::ios::binary);
 
 	if(objFile.is_open()){
-		std::cout<<"Loading: "<<objPath<<std::endl;
 
 		std::vector<glm::vec3> vertex;
 		std::vector<glm::vec2> uv;

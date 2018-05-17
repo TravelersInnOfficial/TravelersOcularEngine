@@ -117,25 +117,26 @@ bool TMaterialLoader::LoadMaterial(std::string name, std::string path, TResource
 	  			else if(recMaterial!=nullptr && mode.compare("illum")==0){
 
 	  			}
+	  			/*
 	  			else if(recMaterial!=nullptr && mode.compare("map_Kd")==0){
 	  				token = line.substr(0, line.find(delimiter));
 	  				TResourceTexture* texture = TResourceManager::GetInstance()->GetResourceTexture(token);
-	  				if(texture != nullptr){
+	  				if(texture->GetLoaded() && texture != nullptr){
 	  					mesh->AddTexture(texture);
 	  				}
 	  			}else if(recMaterial!=nullptr && mode.compare("map_Ns")==0){
 	  				token = line.substr(0, line.find(delimiter));
 	  				TResourceTexture* texture = TResourceManager::GetInstance()->GetResourceTexture(token);
-	  				if(texture != nullptr){
+	  				if(texture->GetLoaded() && texture != nullptr){
 	  					mesh->AddSpecularMap(texture);
 	  				}
 	  			}else if(recMaterial!=nullptr && mode.compare("map_Bump")==0){
 	  				token = line.substr(0, line.find(delimiter));
 	  				TResourceTexture* texture = TResourceManager::GetInstance()->GetResourceTexture(token);
-	  				if(texture != nullptr){
+	  				if(texture->GetLoaded() && texture != nullptr){
 	  					mesh->AddBumpMap(texture);
 	  				}
-	  			}
+	  			}*/
 
 			}
 			output = true;
