@@ -183,7 +183,7 @@ bool TObjectLoader::LoadObjBinary(TResourceMesh* mesh){
 	objFile.open(objPath, std::ios::binary);
 
 	if(objFile.is_open()){
-		std::cout<<"Loading: "<<objPath<<std::endl;
+		//std::cout<<"Loading: "<<objPath<<std::endl;
 
 		std::vector<glm::vec3> vertex;
 		std::vector<glm::vec2> uv;
@@ -342,7 +342,7 @@ bool TObjectLoader::LoadObjAssimp(TResourceMesh* mesh){
 
 bool TObjectLoader::LoadObjFromFileAssimp(TResourceMesh* mesh, std::vector<glm::vec3>* vertexVec, std::vector<glm::vec2>* uvVec, std::vector<glm::vec3>* normalVec){
 
-	std::string path = mesh->GetName(); 
+	std::string path = mesh->GetName();
 	
 	std::ifstream file(path);									// |
 	if(!file.fail()) file.close();								// |
