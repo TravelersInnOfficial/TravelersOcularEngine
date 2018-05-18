@@ -56,7 +56,7 @@ int TFRoom::DrawLights(int value, int nextTo){
 		lightsSend = true;
 
 		int size = m_roomLights.size();
-		for(int i=0;i<size && value+i<=12; i++){
+		for(int i=0;i<size && value+i<12; i++){
 			m_roomLights[i]->DrawLight(value + i);
 			output++;
 		}
