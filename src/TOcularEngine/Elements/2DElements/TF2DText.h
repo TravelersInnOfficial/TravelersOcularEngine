@@ -25,6 +25,7 @@ public:
     void SetText(std::string txt);
     void SetTextSize(float size);
     void SetPosition(float x, float y) override;
+    void SetTextureFont(std::string path);
 
     //GETTERS
     std::string GetText();

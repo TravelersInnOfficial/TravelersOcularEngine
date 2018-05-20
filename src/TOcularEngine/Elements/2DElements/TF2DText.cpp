@@ -45,6 +45,9 @@ TF2DText::~TF2DText(){
 }
 
 void TF2DText::Draw() const {
+	glEnable (GL_BLEND); 
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(m_program);
 
     //posicion
@@ -69,7 +72,8 @@ void TF2DText::Draw() const {
     glBindTexture(GL_TEXTURE_2D, m_texture->GetTextureId());
 
     glDrawArrays(GL_TRIANGLES, 0, m_vertexSize);
-
+	
+	glDisable(GL_BLEND);
 }
 
 void TF2DText::Erase(){
@@ -167,6 +171,10 @@ std::string TF2DText::GetText(){
 
 float TF2DText::GetTextSize(){
 	return m_textSize;
+}
+
+void TF2DText::SetTextureFont(std::string path){
+	m_texture = TResourceManager::GetInstance()->GetResourceTexture(path);
 }
 
 void TF2DText::SetPosition(float x, float y){
