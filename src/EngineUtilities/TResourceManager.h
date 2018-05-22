@@ -32,6 +32,8 @@ public:
 	TResourceShader* 	GetResourceShader	(std::string name, GLenum shaderType);
 	//*********************************************
 
+	bool DeleteResourceTexture(std::string);
+
 private:
 	TResourceManager();
 

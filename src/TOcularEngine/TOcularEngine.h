@@ -28,6 +28,7 @@ namespace toe{
 
     void LoadMesh(std::string path);
     void LoadTexture(std::string path);
+    void UnloadTexture(std::string path);
     GLuint GetTextureID(std::string path);
     TOEvector2di GetTextureDims(std::string path);
     int GetTextureWidth(std::string path);

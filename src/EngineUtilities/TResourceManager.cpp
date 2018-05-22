@@ -81,6 +81,20 @@ TResourceShader* TResourceManager::GetResourceShader(std::string name, GLenum sh
 	return toRet;
 }
 
+bool TResourceManager::DeleteResourceTexture(std::string name){
+	std::string path = TreatName(name);
+
+	std::map<std::string, TResource*>::iterator it = m_resources.begin();
+	for(; it != m_resources.end(); ++it){
+		if(path.compare(it->first) == 0){
+			delete it->second;
+			m_resources.erase(it);
+			return true;
+		}
+	}
+	return false;
+}
+
 std::string TResourceManager::TreatName(std::string newName) {
 
 	std::string toSearch = "./";	//Pattern to delete

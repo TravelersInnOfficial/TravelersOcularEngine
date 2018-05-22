@@ -63,18 +63,17 @@ float RandomNumber(vec4 seed4){
 	return fract(sin(dot_product) * 43758.5453);
 }
 
+vec3 n = vec3(0,0,0);
+vec3 specTexture = vec3(0,0,0);
+
 // FUNCION QUE CALCULA EL MODELO DE REFLEXION DE PHONG
 vec3  Phong (int num) {
 
 	// CALCULAR LOS DIFERENTES VECTORES	 
 	vec3 eyeDir = -Position;
-	vec3 normalTexture = normalize(2.0 * texture(bumpMap, TexCoords).rgb - 1.0);
-
-	vec3 n = normalize (RotationNormal * vec4(normalTexture,1.0)).xyz;
 
 	vec3 lightPos = Light[num].Position; // Lo pasan ya multiplicado por la viewMatrix
 	
-
 	// Vector from SURFACE to LIGHT
 	vec3 objToToLight = lightPos + eyeDir;
 
@@ -86,7 +85,6 @@ vec3  Phong (int num) {
 		objToToLight = normalize(pointB - pointA);		// Calculamos el vector en espacio de vision
 	}
 	
-	vec3 specTexure = texture(specularMap, TexCoords).rgb;
 	vec3 s = normalize(objToToLight);
   	
 	// COMPONENTE DIFUSA
@@ -105,10 +103,16 @@ vec3  Phong (int num) {
 	else  Attenuation = 1.0 / (1.0 + Light[num].Attenuation * pow(length(objToToLight), 2));
 
 	// ENVIAMOS EL RESULTADO
-	return (Attenuation * (Diffuse + Specular) * specTexure);
+	return (Attenuation * (Diffuse + Specular) * specTexture);
 }
 
 void main() {
+	// Calculamos la normal de este fragmento
+	vec3 normalTexture = normalize(2.0 * texture(bumpMap, TexCoords).rgb - 1.0);
+	n = normalize (RotationNormal * vec4(normalTexture,1.0)).xyz;
+	// Almacenamos el valor especular del mapa
+	specTexture = texture(specularMap, TexCoords).rgb;
+
 	// Check alpha and discard fragments
 	vec4 texValue = texture(uvMap, TexCoords);
 	if(texValue.a < 0.5) discard;
