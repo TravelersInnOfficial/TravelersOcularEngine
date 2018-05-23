@@ -28,31 +28,31 @@ TResourceManager::~TResourceManager(){
  *********************************************/
 TResource* TResourceManager::FindResource(std::string name){
 	TResource* output = nullptr;
-	std::map<std::string, TResource*>::iterator it = m_resources.find(name); //Search the resource
-	if (it != m_resources.end()) output = it->second;
-	return output;
+	std::map<std::string, TResource*>::iterator it = m_resources.find(name); // Buscamos el recurso
+	if (it != m_resources.end()) output = it->second;	// En el caso de que exista lo almacenamos en el output y lo devolvemos
+	return output;						
 }
 
 TResourceTexture* TResourceManager::GetResourceTexture(std::string name){ 
 	TResourceTexture* toRet = nullptr;
-	std::string path = TreatName(name);
-	toRet = (TResourceTexture*)FindResource(path);
-	if(toRet == nullptr){
-		toRet = new TResourceTexture(path);
-		m_resources[path] = toRet;
+	std::string path = TreatName(name);				// Tratamos la ruta para quitar elementos innecesarios de la ruta
+	toRet = (TResourceTexture*)FindResource(path);	// Buscamos el recurso
+	if(toRet == nullptr){							
+		toRet = new TResourceTexture(path);			//
+		m_resources[path] = toRet;					// Si no existe lo creamos y cargamos
 	}
-	return toRet;
+	return toRet;									// Devolvemos el recurso
 }
 
 TResourceMesh* TResourceManager::GetResourceMesh(std::string name){ 
 	TResourceMesh* toRet = nullptr;
-	std::string path = TreatName(name);
-	toRet = (TResourceMesh*)FindResource(path);
+	std::string path = TreatName(name);				// Tratamos la ruta para quitar elemenots innecesarios d la ruta
+	toRet = (TResourceMesh*)FindResource(path);		// Buscamos el recurso
 	if(toRet == nullptr) {
-		toRet = new TResourceMesh(path);
-		m_resources[path] = toRet;
+		toRet = new TResourceMesh(path);			//
+		m_resources[path] = toRet;					// Si no existe lo creamos y cargamos
 	}
-	return toRet;
+	return toRet;									// Devolvemos el recurso
 }
 
 TResourceMaterial* TResourceManager::GetResourceMaterial(std::string name){
@@ -72,24 +72,25 @@ TResourceMaterial* TResourceManager::GetResourceMaterial(std::string name){
 
 TResourceShader* TResourceManager::GetResourceShader(std::string name, GLenum shaderType){ 
 	TResourceShader* toRet = nullptr;
-	std::string path = TreatName(name);
-	toRet = (TResourceShader*)FindResource(path);
+	std::string path = TreatName(name);				// Tratamos la ruta para quitar elemenots innecesarios d la ruta
+	toRet = (TResourceShader*)FindResource(path);	// Buscamos el recurso
 	if(toRet == nullptr) {
-		toRet = new TResourceShader(path, shaderType);
-		m_resources[path] = toRet;
+		toRet = new TResourceShader(path, shaderType);	//
+		m_resources[path] = toRet;						// En caso de no encontrarlo lo creamos y cargamos
 	}
-	return toRet;
-}
+	return toRet;									// Devolvemos el recurso
+}		
 
 bool TResourceManager::DeleteResourceTexture(std::string name){
-	std::string path = TreatName(name);
+	std::string path = TreatName(name);	// Tratamos la ruta
 
+	// Buscamos entre los recursos uno que se llame igual que la ruta pasada
 	std::map<std::string, TResource*>::iterator it = m_resources.begin();
 	for(; it != m_resources.end(); ++it){
 		if(path.compare(it->first) == 0){
-			delete it->second;
-			m_resources.erase(it);
-			return true;
+			delete it->second;				//
+			m_resources.erase(it);			//
+			return true;					// En el caso de encontrarlo lo eliminamos
 		}
 	}
 	return false;

@@ -8,16 +8,19 @@
 TRoom::TRoom(glm::vec3 size, glm::vec3 center, glm::vec3 rotation):TNode(){
 	drawed = false;
 
+	// Nos guardamos las variables pasadas por defecto
 	m_size = size;
 	m_center = center;
 	m_rotation = rotation;
 	m_transform = glm::mat4(1.0f);
 
+	// Almacenamos los limites por defecto de clipping
 	m_stackClipping[0] = +1.0f;
 	m_stackClipping[1] = -1.0f;
 	m_stackClipping[2] = +1.0f;
 	m_stackClipping[3] = -1.0f;
 
+	// Calculamos la matriz transforamcion
 	CalculateTransform();
 }
 
@@ -31,21 +34,27 @@ TRoom::~TRoom(){
 }
 
 void TRoom::Draw(){
+	// Marcamos la habitacion como pintada
 	drawed = true;
 
-	//DrawDebug();
-
+	// Pintamos todos los hijos de la habitacion
 	TNode::Draw();
 	
+	// COmprobamos el clipping de todos los portales
 	int size = m_portals.size();
 	for(int i=0; i<size; i++){
 		TPortal* currentPortal = m_portals[i];
+		// Nos guardamos los limites de clipping de la habitacion
 		PushClippingLimits();
+		// COmprobamos si el portal esta en pantalla
 		if(currentPortal->CheckVisibility()){
+			// Si lo esta pintamos la segunda habitacion
 			currentPortal->DrawSecondRoom();
 		}
+		// VOlvemos a poner los limites de clipping de la habitacion actual
 		PopClippingLimits();
 	}
+	// Volvemos a marcar la habitacion como no pintada por si hay dos portales con la misma habitacion
 	drawed = false;
 }
 
@@ -54,6 +63,7 @@ void TRoom::SetDrawed(bool value){
 }
 
 void TRoom::PushClippingLimits(){
+	// Nos guardamos todos los limites del clipping en la habitacion actual
 	m_stackClipping[0] = TEntity::m_clippingLimits[0];
 	m_stackClipping[1] = TEntity::m_clippingLimits[1];
 	m_stackClipping[2] = TEntity::m_clippingLimits[2];
@@ -61,6 +71,7 @@ void TRoom::PushClippingLimits(){
 }
 
 void TRoom::PopClippingLimits(){
+	// POnemos en la entidad los limites de clipping almacenados en la clase
 	TEntity::m_clippingLimits[0] = m_stackClipping[0];
 	TEntity::m_clippingLimits[1] = m_stackClipping[1];
 	TEntity::m_clippingLimits[2] = m_stackClipping[2];
@@ -70,6 +81,7 @@ void TRoom::PopClippingLimits(){
 TPortal* TRoom::AddPortal(TRoom* connection, glm::vec3 size, glm::vec3 center, glm::vec3 rotation){
 	TPortal* portal = nullptr;
 	if(connection != this){
+		// Creamos el portal con las variables
 		portal = new TPortal(this, connection, size, center, rotation);
 		m_portals.push_back(portal);
 	}
@@ -77,6 +89,7 @@ TPortal* TRoom::AddPortal(TRoom* connection, glm::vec3 size, glm::vec3 center, g
 }
 
 bool TRoom::DeletePortal(TPortal* portal){
+	// Buscamos el portal y en el caso de encontralo lo eliminamos
 	int size = m_portals.size();
 	for(int i=0; i<size; i++){
 		TPortal* currentPortal = m_portals[i];

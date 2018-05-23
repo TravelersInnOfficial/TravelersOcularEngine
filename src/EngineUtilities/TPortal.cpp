@@ -13,27 +13,33 @@ int TPortal::Sign(int v){
 }
 
 TPortal::TPortal(TRoom* first, TRoom* second, glm::vec3 size, glm::vec3 center, glm::vec3 rotation){
+	// Nos guardamos las variables pasadas por parametros
 	m_firstConnection = first;
 	m_secondConnection = second;
 	m_size = size;
 	m_center = center;
 	m_rotation = rotation;
+
+	// Inicializamos la matriz de transformacion
 	m_transform = glm::mat4(1.0f);
 
+	// Ponemos la visibilidad a true
 	m_visible = true;
 
+	// Calculamos la transformacion con los valores recibidos por parametros
 	CalculateTransform();
+
+	// Prepara los limits del clipping del portal
 	PrepareLimits();
 }
 
 TPortal::~TPortal(){}
 
-// COMPROBAR FUNCIONAMIENTO
 void TPortal::CalculateTransform(){
-	// 3º Translation
+	// 3º Aplicamos la translacion a la transformacion identidad que hay cargada
 	m_transform = glm::translate(m_transform, glm::vec3(m_center.x, m_center.y, m_center.z));
 
-	// 2º Rotation
+	// 2º Aplicamos la rotacion a la matriz actual
 	glm::quat axisX = glm::angleAxis(glm::radians(m_rotation.x), glm::vec3(1,0,0));
 	glm::quat axisY = glm::angleAxis(glm::radians(m_rotation.y), glm::vec3(0,1,0));
 	glm::quat axisZ = glm::angleAxis(glm::radians(m_rotation.z), glm::vec3(0,0,1));
@@ -45,19 +51,21 @@ void TPortal::CalculateTransform(){
 
  	m_transform =  m_transform * final1 * final2;
 
- 	// 1º Size
+ 	// 1º Para finalizar aplicamos el escalado
 	m_transform = glm::scale(m_transform, glm::vec3(m_size.x, m_size.y, m_size.z));
 }
 
 bool TPortal::CheckVisibility(){
 	bool output = true;
-	//DrawDebug();
-	if(m_secondConnection->GetDrawed() || !m_visible){
+
+	// En el caso de que ya se haya pintado la segunda habitacion o que no sea visible no hacemos la comprobacion
+	if(m_secondConnection->GetDrawed() || !m_visible){	
 		output = false;
 	}else{	
 		PrepareLimits();
 
-		// Se supone que el m_stack.top() debe estar como identidad, sin aplicar ninguna transformacion
+		// NOTA: Se supone que el m_stack.top() debe estar como identidad, sin aplicar ninguna transformacion
+		// Calculamos la matriz MVP del portal
 		glm::mat4 mvp = TEntity::ProjMatrix * TEntity::ViewMatrix * TEntity::m_stack.top() * m_transform;
 
 		int upDown, leftRight, nearFar;
@@ -69,6 +77,8 @@ bool TPortal::CheckVisibility(){
 				// +Y -Y
 				for(int k= -1; k<=0; k++){
 					// +Z -Z
+
+					// Probamos la visibilidad en los 8 puntos que forma el cubo del portal
 					glm::vec3 point = glm::vec3(0.5f*Sign(i), 0.5f*Sign(j), 0.5f*Sign(k));
 					glm::vec4 mvpPoint = mvp * glm::vec4(point.x, point.y, point.z, 1.0f);
 
@@ -77,15 +87,15 @@ bool TPortal::CheckVisibility(){
 			}
 		}
 
-		// Comprobacion visibilidad
+		// Comprobacion visibilidad, en el caso de que algun valor valga 8 o -8 es que el portal no esta en la pantalla
 		int sides = 8;
 		if(upDown == sides || upDown == -sides || leftRight == sides || leftRight == -sides || nearFar == sides || nearFar == -sides){
 			output = false;
 		}
 	}
 
-	// PINTAR LA SEGUNA HABITACION DE LA CONEXION SIEMPRE QUE AUN NO SE HAYA PINTADO
 	if(output){
+		// En el caso de que haya pasado la prueba del clipping actualizamos los valores del clipping
 		ChangeEntityClipping();
 	}
 
@@ -93,6 +103,8 @@ bool TPortal::CheckVisibility(){
 }
 
 void TPortal::ChangeEntityClipping(){
+	// Actualizamos las variables de los limites del clipping de las entidades con los limites del portal
+	// Solamente se actualizan si el rectangulo formante por los limites es menos que el actual
 	if(m_limits[0] < TEntity::m_clippingLimits[0] && m_limits[0] > TEntity::m_clippingLimits[1]) TEntity::m_clippingLimits[0] = m_limits[0];
 	if(m_limits[1] < TEntity::m_clippingLimits[0] && m_limits[1] > TEntity::m_clippingLimits[1]) TEntity::m_clippingLimits[1] = m_limits[1];
 	if(m_limits[2] < TEntity::m_clippingLimits[2] && m_limits[2] > TEntity::m_clippingLimits[3]) TEntity::m_clippingLimits[2] = m_limits[2];
@@ -104,7 +116,7 @@ void TPortal::CheckVisibility(glm::vec4 point, int* upDown, int* leftRight, int*
    	float valueY = point.y / abs(point.w);
    	float valueZ = point.z / abs(point.w);
 
-   	// Calculamos a ver si se ve el portal 
+   	// Calculamos a ver si se ve el punto 
    	if(valueX > TEntity::m_clippingLimits[0]) (*leftRight)++;
     else if(valueX < TEntity::m_clippingLimits[1]) (*leftRight)--;
 
@@ -114,7 +126,9 @@ void TPortal::CheckVisibility(glm::vec4 point, int* upDown, int* leftRight, int*
     if(valueZ > 1) (*nearFar)++;
     else if(valueZ < 0) (*nearFar)--;
 
-    // Actualizamos los limites del portal
+    // Actualizamos los limites del 
+    // En el caso de salir por el near resetamos los valores del clipping del portal
+    // puesto que al salirse por el near los valores que nos dan los demás limites no nos valen
     if(valueZ < 0){
     	m_limits[0] = +1.0f;
     	m_limits[1] = -1.0f;
@@ -122,6 +136,7 @@ void TPortal::CheckVisibility(glm::vec4 point, int* upDown, int* leftRight, int*
     	m_limits[3] = -1.0f;
     }
 
+    // Actualizamos los limites del portal
     if(valueX > m_limits[0]) m_limits[0] = valueX; 
     if(valueX < m_limits[1]) m_limits[1] = valueX;
 		

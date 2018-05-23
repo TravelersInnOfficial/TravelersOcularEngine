@@ -18,12 +18,13 @@ TNode::TNode(TEntity* entity){
 TNode::TNode(TNode* parent, TEntity* entity){
 	m_parent = parent;
 	m_entity = entity;
+	// La adjuntamos al nodo padre el nodo actual
 	parent->AddChild(this);
 }
 
 TNode::~TNode(){
+	// A la hora de eliminar un nodo eliminamos tambien todos los nodos hijo
 	int size = m_children.size();
-	
 	for(int i = size - 1; i>=0; i--){
 		TNode* node = m_children[i];
 		if(node != nullptr){
@@ -32,14 +33,15 @@ TNode::~TNode(){
 			node = nullptr;
 		}
 	}
-
 	m_children.clear();
 	
+	// Eliminamos la entidad del nodo
 	if(m_entity != nullptr){
 		delete m_entity;
 		m_entity = nullptr;
 	}
 	 
+	// Quitamos el nodo actual de la lista de hijos del padre
 	if(m_parent!=nullptr) m_parent->RemoveChild(this);
 }
 
@@ -71,6 +73,7 @@ int TNode::RemoveChild(TNode* child){
 bool TNode::SetEntity(TEntity* entity){
 	bool toReturn = false;
 	
+	// En el caso de que ya hubiera una entidad no la cambiamos
 	if(m_entity == nullptr){
 		m_entity = entity;
 		toReturn = true;
@@ -87,12 +90,11 @@ bool TNode::SetParent(TNode* parent){
 	bool toReturn = false;
 	if(parent != nullptr){
 	
+		// En el caso que ya tuviera un padre, le quitamos el nodo actual como hijo
 		if(m_parent != nullptr){
 			m_parent->RemoveChild(this);
 		}
 		m_parent = parent;
-		// This is made in tfnode attach
-		//m_parent->AddChild(this);
 		
 		toReturn = true;
 	}
@@ -136,21 +138,25 @@ glm::mat4 TNode::GetTransformMatrix(){
 
 	auxParent = GetParent();
 	if(auxParent != nullptr){
+		// Inicializamos la variable toReturn con la transformacion del nodo padre
 		toReturn = ((TTransform*)auxParent->GetEntity())->GetTransform();
 		auxParent = auxParent->GetParent();
 	}
 
 	while(auxParent != nullptr){
+		// Vamos acumulando transformaciones mientras vamos subiendo por el arbol
 		toReturn = toReturn * ((TTransform*)auxParent->GetEntity())->GetTransform();
 		auxParent = auxParent->GetParent();
 	}
 	
+	// Al acabar tendremos la transformacion del nodo actual desde la raiz del arbol
 	return toReturn;
 }
 
 glm::vec3 TNode::GetTranslation(){
 	glm::mat4 myTransform = GetTransformMatrix();
 	
+	// Descomponemos la transformacion del nodo y devolvemos la translacion
 	glm::vec3 scale;
 	glm::quat rotation;
 	glm::vec3 translation;
@@ -164,6 +170,7 @@ glm::vec3 TNode::GetTranslation(){
 glm::vec3 TNode::GetRotation(){
 	glm::mat4 myTransform = GetTransformMatrix();
 
+	// Descomponemos la transformacion del nodo y nos quedamos con la rotacion
 	glm::vec3 scale;
 	glm::quat rotation;
 	glm::vec3 translation;
@@ -172,8 +179,10 @@ glm::vec3 TNode::GetRotation(){
 
 	glm::decompose(myTransform, scale, rotation, translation, skew, perspective);
 
+	// Cambiamos los valores del quad para que el angulo de elevacion se corresponda con la rotacion en X
 	rotation = glm::conjugate(rotation);
 	rotation = glm::quat(rotation.z, rotation.x, rotation.y, rotation.w);
+	// Ya con el nuevo QUAT calculamos la rotacion de este en angulos de euler
 	glm::vec3 toRet = glm::eulerAngles(rotation);
 
 	toRet = glm::vec3(toRet.y, -toRet.x, toRet.z);
@@ -183,7 +192,7 @@ glm::vec3 TNode::GetRotation(){
 	toRet.y = -toRet.y;
 	toRet.z = 180+toRet.z;
 
-	//std::cout<<toRet.x<<" "<<toRet.y<<" "<<toRet.z<<std::endl;
+	// Despues de las operaciones tenemos en toRet la rotacion del nodo en grados
 
 	return toRet;
 }
@@ -191,6 +200,7 @@ glm::vec3 TNode::GetRotation(){
 glm::vec3 TNode::GetScale(){
 	glm::mat4 myTransform = GetTransformMatrix();
 	
+	// Descomponemos la transforamcion del nodo y nos quedamos con el escalado
 	glm::vec3 scale;
 	glm::quat rotation;
 	glm::vec3 translation;

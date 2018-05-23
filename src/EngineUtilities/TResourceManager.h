@@ -21,7 +21,6 @@ public:
 	
 	/**
 	 * @brief Get the curren singleton instance
-	 * 
 	 */
 	static TResourceManager* GetInstance();	//Singleton class
 
@@ -32,7 +31,13 @@ public:
 	TResourceShader* 	GetResourceShader	(std::string name, GLenum shaderType);
 	//*********************************************
 
-	bool DeleteResourceTexture(std::string);
+	/**
+	 * @brief	- Elimina el recurso pasado por parametros 
+	 * 
+	 * @param 	- path - Ruta del recurso a eliminar 
+	 * @return 	- bool - Si se ha eliminado correctamente el recurso
+	 */
+	bool DeleteResourceTexture(std::string path);
 
 private:
 	TResourceManager();
@@ -49,7 +54,7 @@ private:
 	 ********************************************/
 	std::string TreatName(std::string newName);
 
-	std::map<std::string, TResource*> m_resources;
+	std::map<std::string, TResource*> m_resources;	// m_resources - mapa con todos los recursos ordenados por la ruta
 	
 };
 
