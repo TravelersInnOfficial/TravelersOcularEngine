@@ -189,6 +189,12 @@ public:
      * @param ambientLight 
      */
     void SetAmbientLight(TOEvector3df ambientLight);
+    
+    /**
+     * @brief   - Cambia el valor de luz ambiente del juego 
+     * 
+     * @param   - ambientLight - valor ambiente 
+     */
     void SetAmbientLight(float ambientLight);
 
     /**
@@ -226,54 +232,48 @@ public:
     TFCamera* GetMainCamera();
 
     /**
-     * @brief TODO: finish comment
-     * 
+     * @brief   - Inicializa el array de vertices para los objetos
      */
     void InitScene();
 
     /**
-     * @brief TODO: finish comment
+     * @brief   - Hacemos update del de los objetos del motor
+     *              como la posicion del Dome que debe moverse con la camara
      * 
      */
     void Update();
     
     /**
-     * @brief TODO: finish comment
+     * @brief   - Pinta la escena
      * 
      */
     void Draw();
 
-    /**
-     * @brief TODO: finish comment
-     * 
-     * @param light 
-     * @param num 
-     */
-    void DrawLight(TFLight* light, int num);
 
     /**
-     * @brief TODO: finish comment
-     * 
+     * @brief   - Pinta los elementos 2D
      */
     void Draw2DElements();
 
+    /**
+     * @brief   - Pinta los elementos 2D del fondo 
+     */
     void DrawBkg2DElements();
 
     /**
-     * @brief TODO: finish comment
+     * @brief   - Des/Activamos el pintar todas las bounding box
      * 
      */
     void DrawBoundingBoxes(bool draw);
     
     /**
-     * @brief TODO: finish comment
+     * @brief   - Pintamos una linea 
      * 
      */
     void DrawLine(TOEvector3df start, TOEvector3df end, TOEvector3df color);
 
     /**
-     * @brief TODO: finish comment
-     * 
+     * @brief   - Reseteamos el arbol de escena
      */
     void ResetManager();
     
@@ -329,24 +329,24 @@ public:
     bool Light2Room(TFNode* node);
 
 private:
-    GLuint m_vao;
+    GLuint m_vao;                                   // m_vao - Buffer de vertices
     
-    TNode* m_SceneTreeRoot;                         // Root of the scene
-    std::vector<TFRoom*>        m_rooms;            // Rooms in the scene  
-    int                         m_currentRoom;      // Current room of the Camera
-    std::vector<TFLight*>       m_lightRooms;       // Lights of the rooms
+    TNode* m_SceneTreeRoot;                         // m_SceneTreeRoot - Root of the scene
+    std::vector<TFRoom*>        m_rooms;            // m_rooms - Rooms in the scene  
+    int                         m_currentRoom;      // m_currentRoom - room of the Camera
+    std::vector<TFLight*>       m_lightRooms;       // m_lightRooms - Lights of the rooms
 
-    std::vector<TFCamera*>      m_cameras;          // Pointers to the cameras created
-    std::vector<TFLight*>       m_lights;           // Pointers to the lights created
-    std::vector<TFNode*>        m_objects;          // Pointers to the nodes created
-    std::vector<TFDrawable*>    m_2Delems;
-    std::vector<TFDrawable*>    m_bkg2Delems;
+    std::vector<TFCamera*>      m_cameras;          // m_cameras - Pointers to the cameras created
+    std::vector<TFLight*>       m_lights;           // m_lights - Pointers to the lights created
+    std::vector<TFNode*>        m_objects;          // m_objects - Pointers to the nodes created
+    std::vector<TFDrawable*>    m_2Delems;          // m_2Delems - Pointers to the 2Delements created
+    std::vector<TFDrawable*>    m_bkg2Delems;       // m_bkg2Delems - Pointers to the 2Delements created situated at the background
 
-    glm::vec3 m_ambientLight;
-    TFCamera* m_main_camera;
-    TFDome* m_dome;
-    int m_numshadowlights;
-    bool m_sendLights;
+    glm::vec3 m_ambientLight;   // m_ambientLight - Ambient Light values
+    TFCamera* m_main_camera;    // m_main_camera - Pointer to the main camera
+    TFDome* m_dome;             // m_dome - Pointer to the dome of the scene
+    int m_numshadowlights;      // m_numshadowlights - NUmber of shadow lights
+    bool m_sendLights;          // m_sendLights - Send the lights to the shaders?
 
 
     /**
@@ -367,18 +367,50 @@ private:
      */
     void UpdateCurrentRoom();
 
-
-
+    /**
+     * @brief   - Recalculate all the lights position 
+     */
     void RecalculateLightPosition();
-    void RecalculateShadowLightsNumber();
-    void SendLights();
-    void SendLightsToShader();
-    void SendShadowLightsToShader();
-    int SendLightMVP();
-    void DrawSceneShadows();
-    void DrawAllLines(); 
-    std::vector<GLfloat> vertexVector; 
 
+    /**
+     * @brief   - Recalcular el numero de luces que emiten sombra 
+     */
+    void RecalculateShadowLightsNumber();
+
+    /**
+     * @brief   - Enviamos las luces a los shaders 
+     */
+    void SendLights();
+
+    /**
+     * @brief   - Enviamos las luces al shader actual 
+     */
+    void SendLightsToShader();
+
+    /**
+     * @brief   - Enviamos las luces que emiten sombra al shader actual 
+     */
+    void SendShadowLightsToShader();
+
+    /**
+     * @brief   - Envia al shader la matriz MVP de la luz para calcular la sombra 
+     */
+    int SendLightMVP();
+
+    /**
+     * @brief   - Dibuja las texturas de la sombra 
+     */
+    void DrawSceneShadows();
+    
+    /**
+     * @brief   - Pinta todas las lineas 
+     */
+    void DrawAllLines(); 
+    std::vector<GLfloat> vertexVector;  // vertexVector - Vertices de las lineas 
+
+    /**
+     * @brief   - Eliminamos los elementos del SceneManager 
+     */
     void ClearElements();
 };
 #endif
