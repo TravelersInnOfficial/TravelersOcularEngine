@@ -1,6 +1,12 @@
 #ifndef TLIGHT_H
 #define TLIGHT_H
 
+/**
+ * @brief Light Entity that will illuminate other meshes.
+ * 
+ * @file TLight.h
+ */
+
 #include "./TEntity.h"
 #include <TColor.h>
 #include <TOEvector3d.h>

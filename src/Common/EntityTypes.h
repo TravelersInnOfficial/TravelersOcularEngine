@@ -1,8 +1,9 @@
 #ifndef ENTITY_TYPES_H
 #define ENTITY_TYPES_H
 
-/*  
- *		Tipo de entidades que se encuentran en el motor
+/**
+ * @brief Entity types availeables in TOE.
+ * 
  */
 
 enum ENTITYTYPE {

@@ -1,6 +1,12 @@
 #ifndef TRESOURCETEXTURE_H
 #define TRESOURCETEXTURE_H
 
+/**
+ * @brief Texture Resource containing all pixels info.
+ * 
+ * @file TResourceTexture.h
+ */
+
 #include "TResource.h"
 #include <vector>
 

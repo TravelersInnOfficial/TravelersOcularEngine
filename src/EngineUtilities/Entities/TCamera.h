@@ -1,6 +1,12 @@
 #ifndef TCAMERA_H
 #define TCAMERA_H
 
+/**
+ * @brief Camera Entity that will render its view.
+ * 
+ * @file TCamera.h
+ */
+
 #include "TEntity.h"
 #include <glm/mat4x4.hpp>
 #include "../Resources/Program.h"

@@ -1,6 +1,12 @@
 #ifndef TRESOURCE_H
 #define TRESOURCE_H
 
+/**
+ * @brief Father class of all resources that will be obtained from disk.
+ * 
+ * @file TResource.h
+ */
+
 #include <string>
 
 class TResource{

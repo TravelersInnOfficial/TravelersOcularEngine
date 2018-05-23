@@ -1,6 +1,12 @@
 #ifndef TOEvector4d_H
 #define TOEvector4d_H
 
+/**
+ * @brief TOE vector4d template class.
+ * 
+ * @file TOEvector4d.h
+ */
+
 #include <iostream>
 
 template<typename T>

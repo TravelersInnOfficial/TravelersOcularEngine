@@ -1,6 +1,12 @@
 #ifndef TTRANSFORM_H
 #define TTRANSFORM_H
 
+/**
+ * @brief Transformation of each Entity in scene tree.
+ * 
+ * @file TTransform.h
+ */
+
 #include "./TEntity.h"
 #include <glm/mat4x4.hpp>
 

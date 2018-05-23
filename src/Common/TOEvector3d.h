@@ -1,6 +1,12 @@
 #ifndef TOEvector3D_H
 #define TOEvector3D_H
 
+/**
+ * @brief TOE vector3d template class.
+ * 
+ * @file TOEvector3d.h
+ */
+
 #include <iostream>
 #include <math.h>
 #include <Constants.h>

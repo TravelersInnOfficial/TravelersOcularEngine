@@ -1,5 +1,12 @@
 #ifndef TRESOURCESHADER_H
 #define TRESOURCESHADER_H
+
+/**
+ * @brief Shader Resource containing Shader ID. 
+ * 
+ * @file TResourceShader.h
+ */
+
 #include "TResource.h"
 #include <GL/glew.h>
 

@@ -1,6 +1,12 @@
 #ifndef TANIMATION_H
 #define TANIMATION_H
 
+/**
+ * @brief Animation class which inherites TMesh and manages internal mesh.
+ * 
+ * @file TAnimation.h
+ */
+
 #include "TMesh.h"
 
 struct AnimData{

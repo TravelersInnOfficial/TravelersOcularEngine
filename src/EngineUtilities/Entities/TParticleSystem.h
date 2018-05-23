@@ -1,6 +1,12 @@
 #ifndef TPARTICLESYSTEM_H
 #define TPARTICLESYSTEM_H
 
+/**
+ * @brief ParticleSystem Entity that will emit particles and manage them.
+ * 
+ * @file TParticleSystem.h
+ */
+
 #include <glm/vec3.hpp>
 #include "./TEntity.h"
 #include "./../Resources/TResourceTexture.h"

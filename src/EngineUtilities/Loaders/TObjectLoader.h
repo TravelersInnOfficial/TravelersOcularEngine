@@ -1,6 +1,12 @@
 #ifndef TOBJECTLOADER_H
 #define TOBJECTLOADER_H
 
+/**
+ * @brief Loads all Meshes.
+ * 
+ * @file TObjectLoader.h
+ */
+
 #include "./../Resources/TResourceMesh.h"
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
