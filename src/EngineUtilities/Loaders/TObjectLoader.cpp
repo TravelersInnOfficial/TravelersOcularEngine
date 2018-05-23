@@ -13,20 +13,22 @@
 #include <stdio.h>
 
 // VBO = VERTEX BUFFER OBJECT
-
 bool PackedVertex::operator<(const PackedVertex that) const{
 	return memcmp((void*)this, (void*)&that, sizeof(PackedVertex))>0;
 };
 
 bool TObjectLoader::GetSimilarVertexIndex_fast(PackedVertex* packed, std::map<PackedVertex,unsigned int>* VertexToOutIndex, unsigned int* result){
+	// Buscamos a ver si existe un packete igual al actual
 	std::map<PackedVertex,unsigned int>::iterator it = VertexToOutIndex->find(*packed);
 	bool output = false;
 	if ( it == VertexToOutIndex->end() ){
 		output = false;
 	}else{
+		// En el caso de haberlo encontrado nos guardamos el elemento en la variable result
 		*result = it->second;
 		output = true;
 	}
+	// Devolvemos el resultado de la busqueda
 	return output;
 }
 
@@ -71,10 +73,12 @@ void TObjectLoader::IndexVBO(TResourceMesh* mesh, std::vector<glm::vec3>* vertex
 bool TObjectLoader::LoadBoundingBox(TResourceMesh* mesh, std::vector<glm::vec3>* vertexVec){
 	float min_x, max_x, min_y, max_y, min_z, max_z; 
 
+	// Ponemos como valores iniciales de los minimos y maximos el primer verices
 	min_x = max_x = vertexVec->at(0).x;	
 	min_y = max_y = vertexVec->at(0).y;
 	min_z = max_z = vertexVec->at(0).z;
 	
+	// Miramos cuales son los vertices mas alejados en cada eje
 	int size = vertexVec->size();
 	for (int i = 0; i < size; i++) {
 		if (vertexVec->at(i).x < min_x) min_x = vertexVec->at(i).x;
@@ -85,9 +89,11 @@ bool TObjectLoader::LoadBoundingBox(TResourceMesh* mesh, std::vector<glm::vec3>*
 		if (vertexVec->at(i).z > max_z) max_z = vertexVec->at(i).z;
 	}
 
+	// A partir de estos valores calculamos el tamanyo y el centro del bounding box
 	glm::vec3 sizeV = glm::vec3(max_x-min_x, max_y-min_y, max_z-min_z);
 	glm::vec3 center = glm::vec3((min_x+max_x)/2.0f, (min_y+max_y)/2.0f, (min_z+max_z)/2.0f);
 
+	// Se los pasamos al recurso mesh
 	mesh->SetSize(sizeV);
 	mesh->SetCenter(center);
 
@@ -100,6 +106,7 @@ bool TObjectLoader::LoadObj(TResourceMesh* mesh, int option){
 	std::vector<glm::vec3> normal;
 	std::vector<unsigned int> index;
 
+	// Cargamos el obj haciendo uso de la opcion pasada por parametros
 	bool loaded = false;
 	switch(option){
 		case 0:
@@ -380,6 +387,7 @@ bool TObjectLoader::LoadObjFromFileAssimp(TResourceMesh* mesh, std::vector<glm::
 		}
 	}
 
+	// En el caso de que se hayan encontrado materiales los cargamos
 	if (scene->HasMaterials()){
 		for (unsigned int i = 0; i < scene->mNumMaterials; i++){
 			const aiMaterial* material = scene->mMaterials[i];
@@ -388,6 +396,7 @@ bool TObjectLoader::LoadObjFromFileAssimp(TResourceMesh* mesh, std::vector<glm::
 
 			aiString name;
 			material->Get(AI_MATKEY_NAME, name);
+			// Cargamos el material a partir el obj material de assimp
 			TMaterialLoader::LoadMaterial(name.C_Str(), mesh, material);
 
 			// Cargamos las texturas que tenga el modelo
@@ -400,9 +409,9 @@ bool TObjectLoader::LoadObjFromFileAssimp(TResourceMesh* mesh, std::vector<glm::
 						//std::string finalPath = auxPath + "/textures/" + file;
 						std::string finalPath = auxPath + "/" + file;
 						
-						// Load texture (But do nothing with it)
 						TResourceTexture* texture = TResourceManager::GetInstance()->GetResourceTexture(finalPath);
 						if(texture != nullptr){
+							// Anyadimos la textura al recurso
 							mesh->AddTexture(texture);
 						}
 					}
