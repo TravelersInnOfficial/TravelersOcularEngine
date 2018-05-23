@@ -2,11 +2,14 @@
 #define IODRIVER_H
 #include <EventEnum.h>
 
+
+/**
+ * @brief   - Clase en la que almacenan todos los tipos de eventos que trata el motor 
+ */
 class TEvent{
 public:
 	TEvent();
 	~TEvent();
-
 
 	struct SizeEvent{
         unsigned int 	width;  
@@ -85,21 +88,63 @@ public:
 		SensorEvent				m_sensor;
 	};
 
-	EventType m_type;
-	
+	EventType m_type;	
 };
 
 class IODriver{
 public:
     IODriver();
     virtual ~IODriver();
+
+    /**
+     * @brief   - Enviamos el evento de tecla de keyboard pulsada
+     * 
+     * @param   - key - Valor de la tecla 
+     * @param   - action - Accion que se ha llevado a cabo
+     */
     bool UpdateKeyboard(int key, int action);
+
+    /**
+     * @brief   - Evento de movimento del raton 
+     * 
+     * @param   - xpos - Posicion en X del raton 
+     * @param   - ypos - Posicion en Y del raton
+     */
     bool UpdateMousePosition(int xpos, int ypos);
+
+    /**
+     * @brief   - Evento de tecla de raton pulsado 
+     * 
+     * @param   - button - Boton del evento 
+     * @param   - action - Accion que se ha llevado a cabo
+     */
     bool UpdateMouseButtons(int button, int action);
+
+    /**
+     * @brief   - Evento de girar la rueda del raton 
+     * 
+     * @param   - xoffset - Cambio en X 
+     * @param   - yoffset - Cambio en Y
+     */
     bool UpdateMouseWheel(int xoffset, int yoffset);
+
+    /**
+     * @brief   - Evento de cerrar la ventana 
+     */
     bool UpdateShouldClose();
 protected:
+    /**
+     * @brief   - Convierte las teclas glfw a nuestro propio numerador 
+     * 
+     * @param   - key - Valor de glfw 
+     */
     KeyboardKey ConvertKeyGLFW(int key);
+
+    /**
+     * @brief   - Metodo que lee los eventos recibidos de glfw 
+     * 
+     * @param   - event - Evento recibido 
+     */
 	virtual bool OnEvent(const TEvent& event);
 };
 

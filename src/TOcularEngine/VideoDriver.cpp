@@ -251,6 +251,8 @@ void VideoDriver::SetIODriver(IODriver* driver){
 }
 
 void VideoDriver::SetMouseVisibility(bool visible){
+	// A la hora de dejar el raton invisible lo hacer de 1x1 para que no se pueda ver
+	// La funcion de glfw para no mostrar el raton no nos funcionaba
 	if(visible == 0){
 		int w = 1;
 		int h = 1;
