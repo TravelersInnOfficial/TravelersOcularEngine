@@ -3,14 +3,19 @@
 #include "./../VideoDriver.h"
 
 TFRoom::TFRoom(TOEvector3df position, TOEvector3df rotation, TOEvector3df scale) : TFNode(){
+	
 	glm::vec3 size(scale.X, scale.Y, scale.Z);
 	glm::vec3 center(position.X, position.Y, position.Z);
 	glm::vec3 rot(rotation.X, rotation.Y, rotation.Z);
 
+	// Creamos la habitacion con los varoles pasados por parametros
 	TRoom* newRoom = new TRoom(size, center, rot);
 
+	// Eliminanos el actual entityNode para cargar un TRoom
 	if(m_entityNode!=nullptr) delete m_entityNode;
 
+	// Ponemos en m_entityNode nuestra nueva entidad
+	// Ajustande el padre
 	m_entityNode = newRoom;
 	newRoom->SetParent(m_positionNode);
 	m_positionNode->AddChild(newRoom);
@@ -21,26 +26,29 @@ TFRoom::TFRoom(TOEvector3df position, TOEvector3df rotation, TOEvector3df scale)
 }
 
 TFRoom::~TFRoom(){
+	// Eliminamos todos los portales
 	int size = m_portals.size();
 	for(int i=0; i<size; i++){
 		delete m_portals[i];
 	}
 	m_portals.clear();
 
+	// Limpiamos el vector de luces
 	m_roomLights.clear();
 }
 
 TFPortal* TFRoom::AddConnection(TFRoom* room, TOEvector3df position, TOEvector3df rotation, TOEvector3df scale){
-	// Que hago con el TPortal que devuelve el AddPortal?
 	ENTITYTYPE type = room->m_entity;
 	if(type == TROOM_ENTITY){
 		TRoom* connectionRoom = (TRoom*)room->GetEntityNode();
 		TRoom* currentRoom = (TRoom*)m_entityNode;
 
+		// Creamos un portal con las variables pasadas por parametros
 		TPortal* portal = currentRoom->AddPortal(connectionRoom,  glm::vec3(scale.X, scale.Y, scale.Z),
 												glm::vec3(position.X, position.Y, position.Z),
 												glm::vec3(rotation.X, rotation.Y, rotation.Z));
 
+		// CReamos un TFportal con este portal y lo anyadimos al vector de portales
 		TFPortal* fPortal = new TFPortal(portal, this, room);
 		m_portals.push_back(fPortal);
 
@@ -55,14 +63,17 @@ int TFRoom::DrawLights(int value, int nextTo){
 	if(!lightsSend){
 		lightsSend = true;
 
+		// Enviamos las luces de la habitacion actual
 		int size = m_roomLights.size();
 		for(int i=0;i<size && value+i<12; i++){
 			m_roomLights[i]->DrawLight(value + i);
 			output++;
 		}
 
+		// Comprobamos que no nos salgamos del limite de luces que se puedan enviar
 		if(output<=12){	
 			size = m_portals.size();
+			// Enviamos las luces de las habitaciones contiguas si estan dentro de la pantalla
 			for(int i=0; i<size; i++){
 				if(m_portals[i]->GetVisible() && (nextTo > 0 || m_portals[i]->CheckVisibility())){
 					output = m_portals[i]->GetSecondRoom()->DrawLights(output, nextTo-1);
@@ -155,7 +166,9 @@ TNode* TFRoom::GetConnectionNode(){
 bool TFRoom::AddChild(TFNode* children){
 	bool output = TFNode::AddChild(children);
 
+
 	if(output && children->GetEntityType() == TLIGHT_ENTITY){
+		// En el caso de que se haya anyadido y sea una luz, pasamos esta luz al vector de luces de las habitaciones
 		VideoDriver::GetInstance()->GetSceneManager()->Light2Room(children);
 		m_roomLights.push_back((TFLight*)children);
 	}
@@ -164,6 +177,7 @@ bool TFRoom::AddChild(TFNode* children){
 }
 
 void TFRoom::DeleteLight(TFNode* light){
+	// Buscamos la luz y la eliminamos el vector de luces
 	int size = m_roomLights.size();
 	for(int i=0; i<size; i++){
 		if(m_roomLights[i] == light){
