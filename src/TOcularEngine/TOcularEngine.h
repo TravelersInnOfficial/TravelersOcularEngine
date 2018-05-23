@@ -141,8 +141,6 @@ namespace toe{
             float m_w = 0.0f;
             float m_h = 0.0f;
         };
-
-       
     }
 
     namespace{
