@@ -99,6 +99,7 @@ TOEvector3df TFNode::GetScale(){
 bool TFNode::RemoveChild(TFNode* children){
 	bool exists = false;
 
+	// Buscamos el TFNode y lo desligamos del nodo actual
 	for(int i = 0; i < m_children.size() && !exists; i++){
 		if (m_children.at(i) == children){
 			m_children.erase(m_children.begin() + i);
@@ -120,10 +121,12 @@ std::vector<TFNode*> TFNode::GetChildren(){
 bool TFNode::AddChild(TFNode* children){
 	bool exists = false;
 	
+	// COmprobamos si ya esta ligado el TFNode actual
 	for(int i = 0; i < m_children.size() && !exists ; i++){
 		if (m_children.at(i) == children) exists = true;
 	}
 
+	// En el caso de que no este lo anyadimos
 	if(!exists){
 		m_children.push_back(children);
 		children->SetParent(this);
@@ -133,9 +136,12 @@ bool TFNode::AddChild(TFNode* children){
 
 void TFNode::SetParent(TFNode* parent){
 	if(parent != m_parent){
+		// Desligamos al nodo de su padre actual
 		if(m_parent != nullptr){
 			m_parent->RemoveChild(this);
 		}
+
+		// Lo ligamos al nuevo padre
 		m_parent = parent;
 		Attach(m_parent->GetConnectionNode());
 		m_parent->AddChild(this);
@@ -217,8 +223,8 @@ int TFNode::AddBillboard(TOEvector3df position, std::string text, float charSize
 	// La escala por defecto la pondremos a 1
 	TOEvector3df scale 		= TOEvector3df(1, 1, 1);
 
+	// Creamos un TFText y lo anyadimos al nodo actual
 	TFText* myText = new TFText(position, rotation, scale, text, charSize, texture);
-	
 	myText->Attach(m_positionNode);
 
 	// Miramos si hay un hueco vacio en el vector de billboards
@@ -238,6 +244,8 @@ int TFNode::AddBillboard(TOEvector3df position, std::string text, float charSize
 void TFNode::SetBoundBox(bool visible){ }
 
 void TFNode::SetProgram(SHADERTYPE shader, ENTITYTYPE entity){ 
+	// EN el caso de que el tipo de entidad corresponda con el pasado
+	// o que el tipo de entidad sea para todos cambiamos el shader que utiliza
 	if(m_entity == entity || entity == NONE_ENTITY){
 		TEntity* myEntity = m_entityNode->GetEntity();
 		myEntity->SetProgram(shader);
