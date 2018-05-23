@@ -94,11 +94,23 @@ public:
 
 
 protected:
+	/**
+	 * @brief Construct a new Animation object
+	 * 
+	 * @param position: initial position of the animation
+	 * @param rotation: initial rotation of the animation
+	 * @param scale: initial scale of the animation
+	 */
 	TFAnimation(
 		TOEvector3df position = TOEvector3df(0, 0, 0),
 		TOEvector3df rotation = TOEvector3df(0, 0, 0),
 		TOEvector3df scale = TOEvector3df(1, 1, 1)
 	);
+
+	/**
+	 * @brief Destroy the Animation object
+	 * 
+	 */
 	~TFAnimation();
     
 };
