@@ -30,7 +30,7 @@ void ChangeShader(int newShader){
 	}
 }
 
-void CreateTree(TFMesh* ms[]){
+void CreateTree(TFMesh* ms[], TFLight* ls[], TFLight*& shL){
 	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
 	TOEvector3df pos = TOEvector3df(0, 0, 0);
 	TOEvector3df rot = TOEvector3df(0, 180, 0);
@@ -95,6 +95,64 @@ void CreateTree(TFMesh* ms[]){
 	//mesh->SetBoundBox(true);
 	sceneObjects.push_back(mesh);
 
+	// LUCES ###################################################
+	scale = TOEvector3df(0.5f, 0.5f, 0.5f);
+	rot = TOEvector3df(0, 0, 0);
+
+	// R
+	pos = TOEvector3df(0.0f, 0.0f, 0.0f);
+	color = TOEvector4df(1.0f, 0.0f, 0.0f, 1.0f);
+	ls[0] = l = sm->AddLight(pos, rot, color, attenuation);
+
+	ms[0] = sm->AddMesh();
+	ms[0]->CreateSphere();
+	pos = TOEvector3df(0.0f, 1.0f, 0.0f);
+	ms[0]->AddBillboard(pos, "LIGHT SOURCE", 0.35f);
+	ms[0]->SetTexture("./../assets/textures/red.png");
+	ms[0]->AddChild(l);
+	sceneObjects.push_back(ms[0]);
+
+	// G
+	pos = TOEvector3df(0.0f, 0.0f, 0.0f);
+	color = TOEvector4df(0.0f, 1.0f, 0.0f, 1.0f);
+	ls[1] = l = sm->AddLight(pos, rot, color, attenuation);
+	
+	ms[1] = sm->AddMesh();
+	ms[1]->CreateSphere();
+	pos = TOEvector3df(0.0f, 1.0f, 0.0f);
+	ms[1]->AddBillboard(pos, "SPHERE2", 0.35f);
+	ms[1]->AddChild(l);
+	sceneObjects.push_back(ms[1]);
+
+	// B
+	pos = TOEvector3df(0.0f, 0.0f, 0.0f);
+	color = TOEvector4df(0.0f, 0.0f, 1.0f, 1.0f);
+	ls[2] = l = sm->AddLight(pos, rot, color, attenuation);
+	
+	ms[2] = sm->AddMesh();
+	ms[2]->CreateSphere();
+	pos = TOEvector3df(0.0f, 1.0f, 0.0f);
+	ms[2]->AddBillboard(pos, "SPHERE3", 0.35f);
+	ms[2]->AddChild(l);
+	sceneObjects.push_back(ms[2]);
+
+	// SHADOW DIRECTIONAL LIGHT
+	pos = TOEvector3df(0.0f,0.0f,0.0f);
+	color = TOEvector4df(1.0f, 0.6f, 0.0f, 1.0f);
+	shL = sm->AddLight(pos, rot, color, attenuation);
+	shL->SetBoundBox(true);
+	shL->SetDirectional(true);
+	shL->SetDirection(TOEvector3df(0.0f,-1.0f,0.0f));
+	shL->SetShadowsState(true);
+
+	pos = TOEvector3df(5.0f,5.0f,5.0f);
+	color = TOEvector4df(1.0f, 0.6f, 0.0f, 1.0f);
+	TFLight* shL2 = sm->AddLight(pos, rot, color, attenuation);
+	shL2->SetBoundBox(true);
+	shL2->SetDirectional(true);
+	shL2->SetDirection(TOEvector3df(0.0f,-1.0f,0.0f));
+	shL2->SetShadowsState(true);
+
 	// DOME ###################################################
 	sm->AddDome();
 
@@ -121,6 +179,83 @@ void CreateTree(TFMesh* ms[]){
 	// TIO LOGO
 	TFSprite* logo = toe::AddSprite("",TOEvector2df(toe::GetVideoDriver()->GetScreenResolution().X - 534/3.5f, 0), TOEvector2df(534/3.5f,624/3.5f));
 	logo->SetTexture("./../assets/textures/default_sprite.png");
+}
+
+void CreateAnimations(TFAnimation* anims[], TFMesh* ms[]){
+	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
+
+	TOEvector3df rot = TOEvector3df(0, 0, 0);
+	TOEvector3df scale = TOEvector3df(2.0f, 2.0f, 2.0f);
+
+	// MAGE ANIMATION
+	TOEvector3df pos = TOEvector3df(-4, 1, -12);
+	anims[0] = sm->AddAnimation(pos, rot, scale);
+	anims[1] = sm->AddAnimation(pos, rot, scale);
+
+	// BILLBOARDS 
+	pos.Y += 2;
+	pos.X += -1;
+	ms[3] = sm->AddMesh(pos);
+	ms[3]->CreateSphere();
+
+	pos.X += 2;
+	ms[4] = sm->AddMesh(pos);
+	ms[4]->CreateSphere();
+
+	pos = TOEvector3df(0.0f, 1.0f, 0.0f);
+	ms[3]->AddBillboard(pos, "0", 0.35f);
+	ms[4]->AddBillboard(pos, "0", 0.35f);
+	
+	// OTHER ANIMATION
+	pos = TOEvector3df(4, 1, 12);
+	anims[2] = sm->AddAnimation(pos, rot, scale);
+
+	// SET TEXTURES
+	anims[0]->SetTexture("./../assets/textures/wizard.png");
+	anims[1]->SetTexture("./../assets/textures/wizard.png");
+	anims[2]->SetTexture("./../assets/textures/wizard.png");
+
+	// ADD ANIMATIONS
+	anims[0]->SetAnimationPaths("topwalk", AMAGE_TWALK, 25);
+	anims[0]->SetAnimationPaths("shoot1", AMAGE_TSHOOT1);
+	anims[0]->SetAnimationPaths("shoot2", AMAGE_TSHOOT2);
+	anims[0]->SetAnimationPaths("topiddle", AMAGE_TIDDLE);
+
+	anims[2]->SetAnimationPaths("topwalk",  AMAGE_TWALK, 25);
+
+	anims[1]->SetAnimationPaths("botwalk", AMAGE_BWALK);
+	anims[1]->SetAnimationPaths("botiddle", AMAGE_BIDDLE);
+
+	//anims[0]->SetBoundBox(true);
+	//anims[1]->SetBoundBox(true);
+	anims[2]->SetBoundBox(true);
+
+	// PLAY ANIMATION
+	//anims[0]->PlayAnimation("topiddle");
+	//anims[1]->PlayAnimation("botiddle");
+
+	//anims[0]->PlayAnimation("topwalk");
+	//anims[1]->PlayAnimation("botwalk");
+	//anims[2]->PlayAnimation("topwalk");
+	
+	// SYNC ANIMATIONS
+	anims[0]->BindSyncAnimation(anims[1]);
+}
+
+void RotateLights(const TOEvector3df& rot, TFMesh* l1, TFMesh* l2, TFMesh* l3){
+	float radius = 12.0f;
+	float height = 8.0f;
+	float x = sin(glm::radians(-rot.Y)) * radius;
+	float z = cos(glm::radians(-rot.Y)) * radius;
+	l1->SetTranslate(TOEvector3df(x, height, z));
+
+	x = sin(glm::radians(-rot.Y + 360.0f / 3.0f)) * radius;
+	z = cos(glm::radians(-rot.Y + 360.0f / 3.0f)) * radius;
+	l2->SetTranslate(TOEvector3df(x, height, z));
+
+	x = sin(glm::radians(-rot.Y + 360.0f / 1.5f)) * radius;
+	z = cos(glm::radians(-rot.Y + 360.0f / 1.5f)) * radius;
+	l3->SetTranslate(TOEvector3df(x, height, z));
 }
 
 void UpdateDelta(float &deltaTime){
@@ -224,11 +359,17 @@ int main(){
 	VDriv->SetMouseVisibility(false);
 
 	TFMesh* meshes[] = {nullptr, nullptr, nullptr, nullptr, nullptr};
+	TFLight* lights[] = {nullptr, nullptr, nullptr};
+	TFLight* shadowLight = nullptr;
 	
-	CreateTree(meshes);
+	CreateTree(meshes, lights, shadowLight);
 
 	// Main camera
 	TFCamera* myCamera = sm->AddCamera();
+	//myCamera->SetLeftRight(-10, 10);
+	//myCamera->SetTopBottom(-10, 10);
+	//myCamera->SetNearFar(-10, 100);
+	//myCamera->SetPerspective(false);
 
 	handler->screenCenterX = VDriv->GetScreenResolution().X/2;
 	handler->screenCenterY = VDriv->GetScreenResolution().Y/2;
@@ -247,9 +388,14 @@ int main(){
 	sceneObjects.push_back(mesh);
 	
 	// CREATE ANIMATION
+	//TFAnimation* animations[] = {nullptr, nullptr, nullptr};
+	//CreateAnimations(animations, meshes);
 
 	float deltaTime = 0.0f;
 	bool lastMain = true;
+
+	// INIT Lights position
+	RotateLights(mesh->GetRotation(), meshes[0], meshes[1], meshes[2]);
 
 	while(!EventHandler::m_close){
 		// EVENT HANDLER UPDATE
@@ -260,9 +406,16 @@ int main(){
 			// called once
 			if(lastMain){
 			}
+
+			//// TOGGLE LIGHTS
+			shadowLight->SetActive(true);
+			lights[0]->SetActive(false);
+			lights[1]->SetActive(false);
+			lights[2]->SetActive(false);
 			
 			lastMain = false;
 		}
+		// ROTATING LIGHTS SCENE
 		else{
 			// called once
 			if(!lastMain){
@@ -272,11 +425,19 @@ int main(){
 			rot.Y += 0.5;
 			mesh->SetRotation(rot);
 
+			// ROTATE LIGHTS
+			RotateLights(rot, meshes[0], meshes[1], meshes[2]);
+
 			// UPDATE PARTICLES
 			ps->Update(0.16f);
 			ps1->Update(0.16f);
 			ps2->Update(0.16f);
 
+			//// TOGGLE LIGHTS
+			shadowLight->SetActive(false);
+			lights[0]->SetActive(true);
+			lights[1]->SetActive(true);
+			lights[2]->SetActive(true);
 
 			lastMain = true;
 		}
@@ -288,6 +449,9 @@ int main(){
 		}
 
 		//UpdatePlayer(animations, meshes, deltaTime, EventHandler::PlayerX, EventHandler::PlayerZ);
+
+		// TRANSLATE SHADOW LIGHT
+		shadowLight->SetTranslate(TOEvector3df(EventHandler::xlight, EventHandler::ylight, EventHandler::zlight));
 		
 		// UPDATE CAMERA
 		myCamera->SetRotation(TOEvector3df(EventHandler::xdistGiro, EventHandler::ydistGiro, EventHandler::zdistGiro));
@@ -303,6 +467,7 @@ int main(){
 		ChangeShader(EventHandler::shaderType);
 		UpdateDelta(deltaTime);
 
+		myCamera->SetTranslate(shadowLight->GetTranslation());
 		myCamera->LookAt(TOEvector3df(0.0f, 0.0f, 0.0f));
 	}
 
