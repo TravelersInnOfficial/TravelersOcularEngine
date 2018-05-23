@@ -9,6 +9,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h> //SIEMPRE DESPUES DE INCLUIR GLEW
 
+// Inicializa las variables estaticas
 std::string	VideoDriver::m_assetsPath = "";
 SceneManager* VideoDriver::privateSceneManager = nullptr;
 IODriver* VideoDriver::privateIODriver = nullptr;
@@ -30,6 +31,7 @@ VideoDriver::VideoDriver(){
 }
 
 VideoDriver::~VideoDriver(){
+	// Eliminamos las variables del videoDriver
 	Drop();
 }
 
@@ -60,6 +62,7 @@ bool VideoDriver::CreateWindows(std::string window_name, TOEvector2di dimensions
 	GLenum err = glewInit();
 	if(GLEW_OK != err){
 		std::cout<<"Something wrong happen in glewInit"<<std::endl;
+		return false;
 	}
 	
 	SetReceiver();
@@ -71,8 +74,9 @@ bool VideoDriver::CreateWindows(std::string window_name, TOEvector2di dimensions
 	glCullFace(GL_BACK);			// Hacerlo Backface
 	glFrontFace(GL_CW);				// Hacer las caras que miran a al camara Counter Clockwise
 
-	initShaders();
+	initShaders();					// Cargamos los shaders
 	privateSceneManager->InitScene();
+
 	return true;
 }
 
@@ -90,18 +94,18 @@ void VideoDriver::BeginDraw(){
 	privateSceneManager->Draw();
 
 	//DRAW BKG 2D ELEMENTS
-	start2DDrawState();
+	start2DDrawState();		// Preparamos Opengl para pintar 2D
 	privateSceneManager->DrawBkg2DElements();
-	end2DDrawState();
+	end2DDrawState();		// Lo volvemos a dejar listo para 3D
 
 }
 
 void VideoDriver::EndDraw(){
 
 	//DRAW 2D ELEMENTS
-	start2DDrawState();
+	start2DDrawState();		// Preparamos Opengl para pintar 2D
 	privateSceneManager->Draw2DElements();
-	end2DDrawState();
+	end2DDrawState();		// Lo volvemos a dejar listo para 3D
 
 	glfwSwapBuffers(m_window);
 }
@@ -111,22 +115,25 @@ void VideoDriver::Minimize(){
 }
 
 void VideoDriver::ClearScreen(){
+	// Limpiamos la pantalla
 	glClearColor(m_clearSceenColor.X, m_clearSceenColor.Y, m_clearSceenColor.X2, m_clearSceenColor.Y2);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void VideoDriver::Drop(){
+	// Eliminamos los shaders
 	std::map<SHADERTYPE, Program*>::iterator it = m_programs.begin();
 	for(;it!=m_programs.end();++it) delete it->second;
 	m_programs.clear();
 
+	// Eliminamos el IODriver
 	if(privateIODriver != nullptr) delete privateIODriver;
+	// Eliminamos el SceneManager
 	if(privateSceneManager != nullptr) delete privateSceneManager;
 
+	// Eliminamos la ventana
 	glfwDestroyWindow(m_window);
 	glfwTerminate();
-
-	//delete m_window; // Ya la elimina GLFW con el DestroyWindow
 }
 
 void VideoDriver::CloseWindow(){
@@ -134,6 +141,7 @@ void VideoDriver::CloseWindow(){
 }
 
 void VideoDriver::SetReceiver(){
+	// Le decimos a glfw que metodos tiene que llamar para cada tipo de evento
 	glfwSetKeyCallback(m_window, VideoDriver::keyboard_callback);
 	glfwSetCursorPosCallback(m_window, VideoDriver::mouse_position_callback);
 	glfwSetMouseButtonCallback(m_window, VideoDriver::mouse_button_callback);
@@ -223,6 +231,7 @@ void VideoDriver::SetWindowName(std::string name){
 }
 
 Program* VideoDriver::SetShaderProgram(SHADERTYPE p){
+	// Cambiamos el shader que se esta usando y actualizamos m_lastShaderUsed
 	Program* toRet = m_programs.find(p)->second;
 	if(m_lastShaderUsed != p){
 		m_lastShaderUsed = p;
@@ -254,7 +263,6 @@ void VideoDriver::SetMouseVisibility(bool visible){
 		GLFWcursor* newCursor = glfwCreateCursor(&image, 0, 0);
 		glfwSetCursor(m_window, newCursor);
 	}
-
 	else{
 		GLFWcursor* newCursor = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
 		glfwSetCursor(m_window, newCursor);
