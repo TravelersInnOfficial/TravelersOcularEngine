@@ -13,10 +13,7 @@ http://www.lighthouse3d.com/tutorials/view-frustum-culling/geometric-approach-te
 SHADOW MAPPING (TFLight::DrawLightMVP y ShaderStand.fs)
 http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-16-shadow-mapping/#rendering-the-shadow-map
 
-TODO DE TFDRAWABLE (toda la carpeta de 2d elements)
-| * https://open.gl/drawing
-| * https://www.opengl.org/archives/resources/faq/technical/transparency.htm
-| * https://stackoverflow.com/questions/1568559/opengl-spritesheets-beginner-needs-some-guidance
+TODO DE TFDRAWABLE (toda la carpeta de 2D Elements)
 | 
 | 2D DIBUJADO ORTOGRAFICO
 | https://open.gl/drawing
@@ -26,3 +23,12 @@ TODO DE TFDRAWABLE (toda la carpeta de 2d elements)
 | 
 | SELECCION DE TRIANGULOS
 \ https://stackoverflow.com/questions/1568559/opengl-spritesheets-beginner-needs-some-guidance
+
+
+Información Básica para:
+|
+| Texturas --> http://www.opengl-tutorial.org/es/beginners-tutorials/tutorial-5-a-textured-cube/
+| Cargador de Objetos (1) --> http://www.opengl-tutorial.org/es/beginners-tutorials/tutorial-7-model-loading/
+| Carga de Objetos (2) --> http://www.opengl-tutorial.org/es/intermediate-tutorials/tutorial-9-vbo-indexing/
+| Billboards --> http://www.opengl-tutorial.org/es/intermediate-tutorials/billboards-particles/billboards/
+\ Partículas --> http://www.opengl-tutorial.org/es/intermediate-tutorials/billboards-particles/particles-instancing/
