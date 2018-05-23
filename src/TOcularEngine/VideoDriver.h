@@ -1,6 +1,12 @@
 #ifndef VIDEODRIVER_H
 #define VIDEODRIVER_H
 
+/**
+ * @brief Manages Window creation and Rendering Programs.
+ * 
+ * @file VideoDriver.h
+ */
+
 #include "SceneManager.h"
 #include "IODriver.h"
 #include <ShaderTypes.h>

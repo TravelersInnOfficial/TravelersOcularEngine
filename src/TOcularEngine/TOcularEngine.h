@@ -1,6 +1,12 @@
 #ifndef TOCULARENGINE_h
 #define TOCULARENGINE_h
 
+/**
+ * @brief Main file to include. Has all needed for the Engine Fachade. 
+ * 
+ * @file TOcularEngine.h
+ */
+
 #include "VideoDriver.h"
 
 namespace toe{

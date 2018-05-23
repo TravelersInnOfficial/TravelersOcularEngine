@@ -129,7 +129,8 @@ void main() {
 	for(int i = 0; i < nlights; i++){
 		if(Light[i].ShadowLight == true){
 			for (int j = 0; j < 4; j++){
-				int index = int(16.0*RandomNumber(vec4(gl_FragCoord.xyy, i)))%16;
+				//int index = int(16.0*RandomNumber(vec4(gl_FragCoord.xyy, i)))%16;
+				int index = j;
 				visibility -= 0.2*(1.0-texture(Light[i].ShadowMap, vec3(ShadowCoordArray[shadowindex].xy + poissonDisk[index]/700.0, (ShadowCoordArray[shadowindex].z-bias)/ShadowCoordArray[shadowindex].w)));
 			}
 			shadowindex = shadowindex + 1;
