@@ -1,0 +1,28 @@
+SHADER DISTORSION (ShaderDistorsion.vs)
+http://playdeck.net/blog/interactive-intro-glsl-shaders-p1
+
+SHADER OJO DE PEZ (ShaderFishEye.vs)
+http://www.geeks3d.com/20140213/glsl-shader-library-fish-eye-and-dome-and-barrel-distortion-post-processing-filters/
+
+BOUNDING BOXES (TMesh::DrawBoundingBox)
+https://en.wikibooks.org/wiki/OpenGL_Programming/Bounding_box
+
+CLIPPING (TMesh::CheckClipping)
+http://www.lighthouse3d.com/tutorials/view-frustum-culling/geometric-approach-testing-boxes-ii/
+
+SHADOW MAPPING (TFLight::DrawLightMVP y ShaderStand.fs)
+http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-16-shadow-mapping/#rendering-the-shadow-map
+
+TODO DE TFDRAWABLE (toda la carpeta de 2d elements)
+| * https://open.gl/drawing
+| * https://www.opengl.org/archives/resources/faq/technical/transparency.htm
+| * https://stackoverflow.com/questions/1568559/opengl-spritesheets-beginner-needs-some-guidance
+| 
+| 2D DIBUJADO ORTOGRAFICO
+| https://open.gl/drawing
+| 
+| TRANSPARENCIAS
+| https://www.opengl.org/archives/resources/faq/technical/transparency.htm
+| 
+| SELECCION DE TRIANGULOS
+\ https://stackoverflow.com/questions/1568559/opengl-spritesheets-beginner-needs-some-guidance
