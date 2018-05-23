@@ -1,8 +1,9 @@
 #ifndef EVENT_ENUM_H
 #define EVENT_ENUM_H
 
-/*
- *	Tipo de eventos que recibimos en nuestro motor
+/**
+ * @brief All event types availeables in TOE.
+ * 
  */
 
 enum EventType{

@@ -1,6 +1,12 @@
 #ifndef TMESH_H
 #define TMESH_H
 
+/**
+ * @brief Mesh Entity that will draw all polygons.
+ * 
+ * @file TMesh.h
+ */
+
 #include "TEntity.h"
 #include "../Resources/Program.h"
 #include "./../TResourceManager.h"

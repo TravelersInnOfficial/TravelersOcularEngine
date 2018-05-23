@@ -1,6 +1,14 @@
 #ifndef TTEXTURELOADER_H
 #define TTEXTURELOADER_H
 
+/**
+ * @brief Loads a image and saves it as a Texture.
+ * 
+ * @file TTextureLoader.h
+ * @author your name
+ * @date 2018-05-23
+ */
+
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
 #include <iostream>

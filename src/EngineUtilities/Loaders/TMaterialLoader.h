@@ -1,6 +1,12 @@
 #ifndef TMATERIALLOADER_H
 #define TMATERIALLOADER_H
 
+/**
+ * @brief Loads all Materials of a Mesh.
+ * 
+ * @file TMaterialLoader.h
+ */
+
 #include "./../Resources/TResourceMesh.h"
 #include <string>
 class aiMaterial;

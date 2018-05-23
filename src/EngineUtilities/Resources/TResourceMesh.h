@@ -1,6 +1,12 @@
 #ifndef TRESOURCEMESH_H
 #define TRESOURCEMESH_H
 
+/**
+ * @brief Mesh Resource containing all vertices and triangles.
+ * 
+ * @file TResourceMesh.h
+ */
+
 #include "TResource.h"
 #include "TResourceTexture.h"
 #include "TResourceMaterial.h"

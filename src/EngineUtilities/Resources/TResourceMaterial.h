@@ -1,6 +1,12 @@
 #ifndef TRESOURCEMATERIAL_H
 #define TRESOURCEMATERIAL_H
 
+/**
+ * @brief Material Resource which contains all mesh properties.
+ * 
+ * @file TResourceMaterial.h
+ */
+
 #include "TResource.h"
 #include <glm/vec3.hpp>
 

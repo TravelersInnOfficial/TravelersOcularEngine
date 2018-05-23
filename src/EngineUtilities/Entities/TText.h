@@ -1,6 +1,12 @@
 #ifndef TTEXT_H
 #define TTEXT_H
 
+/**
+ * @brief Text that will rotate depending of camera position. AKA Billboard.
+ * 
+ * @file TText.h
+ */
+
 #include "TEntity.h"
 #include "./../Resources/TResourceTexture.h"
 #include "../Resources/Program.h"

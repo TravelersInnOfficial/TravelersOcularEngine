@@ -1,6 +1,12 @@
 #ifndef TDOME_H
 #define TDOME_H
 
+/**
+ * @brief SkyDome of TOE, will be rendered before every node in scene.
+ * 
+ * @file TDome.h
+ */
+
 #include "TMesh.h"
 
 class TDome: public TMesh{

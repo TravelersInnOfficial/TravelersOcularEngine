@@ -1,6 +1,12 @@
 #ifndef TOEvector2D_H
 #define TOEvector2D_H
 
+/**
+ * @brief TOE vector2d template class.
+ * 
+ * @file TOEvector2d.h
+ */
+
 #include <iostream>
 #include <cmath>
 #include <Constants.h>

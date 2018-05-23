@@ -1,8 +1,9 @@
 #ifndef SHADER_TYPES_H
 #define SHADER_TYPES_H
 
-/*
- * 	Shaders que utiliza el motor para pintar sus objetos
+/**
+ * @brief All Shaders TOE can draw with.
+ * 
  */
 
 enum SHADERTYPE {

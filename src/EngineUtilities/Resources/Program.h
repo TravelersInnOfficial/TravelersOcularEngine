@@ -1,6 +1,12 @@
 #ifndef PROGRAM_H
 #define PROGRAM_H
 
+/**
+ * @brief Loads a Shader from path and compiles it.
+ * 
+ * @file Program.h
+ */
+
 #include <ShaderTypes.h>
 #include <map>
 #include <vector>

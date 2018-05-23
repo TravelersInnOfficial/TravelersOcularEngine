@@ -1,6 +1,12 @@
 #ifndef TENTITY_H
 #define TENTITY_H
 
+/**
+ * @brief Entity father class that will fill scene tree.
+ * 
+ * @file TEntity.h
+ */
+
 #include <ShaderTypes.h>
 #include "../Resources/Program.h"
 #include <stack>

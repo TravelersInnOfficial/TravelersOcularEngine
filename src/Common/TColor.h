@@ -1,12 +1,14 @@
 #ifndef TCOLOR_H
 #define TCOLOR_H
 
+/**
+ * @brief Color class which contains vector4 of floats.
+ * 
+ * @file TColor.h
+ */
+
 #include <glm/vec4.hpp>
 #include <glm/vec3.hpp>
-
-/*
- *	Clase color
- */
 
 class TColor {
 public:
