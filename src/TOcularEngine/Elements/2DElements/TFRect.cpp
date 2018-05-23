@@ -7,31 +7,37 @@
 TFRect::TFRect(TOEvector2df position, TOEvector2df size, float rotation){
     w_dims = VideoDriver::GetInstance()->GetWindowDimensions();
 
+    //Calculate the OpenGL position and size units
     m_position = TOEvector2df((position.X*2 - w_dims.X) / w_dims.X , (position.Y*2 - w_dims.Y) / w_dims.Y);
     m_size = TOEvector2df((std::abs(size.X *2) / w_dims.X), (std::abs(size.Y *2) / w_dims.Y));
+
     m_rotation = 0;
     m_color.SetRGBA(0,0,0,1);
     
+    //Mask initial size
     m_mask_size = size;
+
+    //Load the texture mask resource
     std::string mask = VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_texture.png";
     m_mask = TResourceManager::GetInstance()->GetResourceTexture(mask);
-    m_mask_rect = TOEvector4df(0.0f, 0.0f,1.0f, 1.0f);
+    m_mask_rect = TOEvector4df(0.0f, 0.0f,1.0f, 1.0f); //initially the whole mask is loaded (OpenGL units from 0 to 1)
 
+    //Save the object position adn size data in pixel units
     m_InData.position = position;
     m_InData.size = size;
+
+    //Rectangles dont use texture
     m_InData.texture = "";
 
+    //Bind vertex buffer
     m_VBO = 0;
     glGenBuffers( 1, &m_VBO );
 }
 
 TFRect::~TFRect(){
+    //Unbind buffers
     glBindBuffer(GL_ARRAY_BUFFER, 0);   
     glDeleteBuffers(1, &m_VBO);
-}
-
-void TFRect::Erase(){
-    std::cout<<"Erase TFRect"<<std::endl;
 }
 
 void TFRect::Draw() const{
@@ -72,8 +78,7 @@ void TFRect::Draw() const{
         m_position.X + upLeftCorner.x,      m_position.Y + upLeftCorner.y,      m_mask_rect.X ,  m_mask_rect.Y,    m_color.GetR(), m_color.GetG(), m_color.GetB(), m_color.GetA()
     };
 
-    // Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
-    
+    //Bind vertex buffer and attribute pointers
     glBindBuffer( GL_ARRAY_BUFFER, m_VBO );
     glBufferData( GL_ARRAY_BUFFER, sizeof( vertices ), vertices, GL_STATIC_DRAW );
     
@@ -81,7 +86,7 @@ void TFRect::Draw() const{
     glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof( float ), ( GLvoid * ) 0 );
     glEnableVertexAttribArray(posAttrib);
 
-    //mask coords
+    //Mask coords
     GLuint uvMaskAttrib = glGetAttribLocation(myProgram->GetProgramID(), "MaskCoords");
     glEnableVertexAttribArray(uvMaskAttrib);
     glVertexAttribPointer(uvMaskAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (const GLvoid*)(2 * sizeof(float)));
@@ -90,7 +95,7 @@ void TFRect::Draw() const{
     glEnableVertexAttribArray(colAttrib);
     glVertexAttribPointer(colAttrib, 4, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(4*sizeof(float)));
 
-    // Enviamos la mascara si tiene
+    //Load the mask texture
     GLuint MaskID = glGetUniformLocation(myProgram->GetProgramID(), "myMask");
     glUniform1i(MaskID, 1);
 
@@ -99,6 +104,7 @@ void TFRect::Draw() const{
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
+    //Disable blend mode
     glDisable(GL_BLEND);
 }
 
