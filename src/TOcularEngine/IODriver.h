@@ -1,7 +1,13 @@
 #ifndef IODRIVER_H
 #define IODRIVER_H
-#include <EventEnum.h>
 
+/**
+ * @brief Input and Output driver that controls all events.
+ * 
+ * @file IODriver.h
+ */
+
+#include <EventEnum.h>
 
 /**
  * @brief   - Clase en la que almacenan todos los tipos de eventos que trata el motor 

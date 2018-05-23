@@ -1,6 +1,12 @@
 #ifndef SCENEMANAGER_H
 #define SCENEMANAGER_H
 
+/**
+ * @brief Manages everything inside the scene, meshes, cameras, lights, etc.
+ * 
+ * @file SceneManager.h
+ */
+
 #include "./Elements/Particles/TFParticleSystem.h"
 #include "./Elements/2DElements/TFSprite.h"
 #include "./Elements/2DElements/TFRect.h"

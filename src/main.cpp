@@ -12,8 +12,6 @@
 #include <thread>
 #include <chrono>
 
-#include "animation_string.h"
-
 std::vector<TFMesh*> sceneObjects;
 int currentShader = 0;
 bool movingPlayer = true;
@@ -181,67 +179,6 @@ void CreateTree(TFMesh* ms[], TFLight* ls[], TFLight*& shL){
 	logo->SetTexture("./../assets/textures/default_sprite.png");
 }
 
-void CreateAnimations(TFAnimation* anims[], TFMesh* ms[]){
-	SceneManager* sm = VideoDriver::GetInstance()->GetSceneManager();
-
-	TOEvector3df rot = TOEvector3df(0, 0, 0);
-	TOEvector3df scale = TOEvector3df(2.0f, 2.0f, 2.0f);
-
-	// MAGE ANIMATION
-	TOEvector3df pos = TOEvector3df(-4, 1, -12);
-	anims[0] = sm->AddAnimation(pos, rot, scale);
-	anims[1] = sm->AddAnimation(pos, rot, scale);
-
-	// BILLBOARDS 
-	pos.Y += 2;
-	pos.X += -1;
-	ms[3] = sm->AddMesh(pos);
-	ms[3]->CreateSphere();
-
-	pos.X += 2;
-	ms[4] = sm->AddMesh(pos);
-	ms[4]->CreateSphere();
-
-	pos = TOEvector3df(0.0f, 1.0f, 0.0f);
-	ms[3]->AddBillboard(pos, "0", 0.35f);
-	ms[4]->AddBillboard(pos, "0", 0.35f);
-	
-	// OTHER ANIMATION
-	pos = TOEvector3df(4, 1, 12);
-	anims[2] = sm->AddAnimation(pos, rot, scale);
-
-	// SET TEXTURES
-	anims[0]->SetTexture("./../assets/textures/wizard.png");
-	anims[1]->SetTexture("./../assets/textures/wizard.png");
-	anims[2]->SetTexture("./../assets/textures/wizard.png");
-
-	// ADD ANIMATIONS
-	anims[0]->SetAnimationPaths("topwalk", AMAGE_TWALK, 25);
-	anims[0]->SetAnimationPaths("shoot1", AMAGE_TSHOOT1);
-	anims[0]->SetAnimationPaths("shoot2", AMAGE_TSHOOT2);
-	anims[0]->SetAnimationPaths("topiddle", AMAGE_TIDDLE);
-
-	anims[2]->SetAnimationPaths("topwalk",  AMAGE_TWALK, 25);
-
-	anims[1]->SetAnimationPaths("botwalk", AMAGE_BWALK);
-	anims[1]->SetAnimationPaths("botiddle", AMAGE_BIDDLE);
-
-	//anims[0]->SetBoundBox(true);
-	//anims[1]->SetBoundBox(true);
-	anims[2]->SetBoundBox(true);
-
-	// PLAY ANIMATION
-	//anims[0]->PlayAnimation("topiddle");
-	//anims[1]->PlayAnimation("botiddle");
-
-	//anims[0]->PlayAnimation("topwalk");
-	//anims[1]->PlayAnimation("botwalk");
-	//anims[2]->PlayAnimation("topwalk");
-	
-	// SYNC ANIMATIONS
-	anims[0]->BindSyncAnimation(anims[1]);
-}
-
 void RotateLights(const TOEvector3df& rot, TFMesh* l1, TFMesh* l2, TFMesh* l3){
 	float radius = 12.0f;
 	float height = 8.0f;
@@ -288,64 +225,6 @@ void UpdateDelta(float &deltaTime){
 	VideoDriver::GetInstance()->SetWindowName(myFps);
 }
 
-void UpdatePlayer(TFAnimation* anims[], TFMesh* meshes[], float deltaT, int px, int pz){
-
-	// UPDATE ANIMATIONS
-	anims[0]->Update(deltaT);			// called 60 times per second aprox
-	anims[1]->Update(deltaT);			// called 60 times per second aprox
-	anims[2]->Update(deltaT);			// called 60 times per second aprox
-	
-	if(px != 0 || pz != 0){
-
-		if(!movingPlayer){
-			// Is moving
-			anims[0]->ChangeAnimation("topwalk");
-			anims[1]->ChangeAnimation("botwalk");
-			movingPlayer = true;
-		}
-	
-		float angle = 0.0f;
-		
-		if(px == 0){
-			if(pz == +1) angle = 180.0f;
-			if(pz == -1) angle = 0.0f;
-		}
-		else if (px == 1){
-			if(pz == -1) angle = 45.0f;
-			if(pz ==  0) angle = 90.0f; 
-			if(pz == +1) angle = 135.0f;
-		}
-		else{
-			if(pz == +1) angle = 225.0f;
-			if(pz ==  0) angle = 270.0f; 
-			if(pz == -1) angle = 315.0f;
-		}
-
-		float speed = 0.1f;
-		float movex = sin(glm::radians(angle)) * speed;
-		float movez = -cos(glm::radians(angle)) * speed;
-
-		anims[0]->Translate(TOEvector3df(movex, 0, movez));
-		anims[1]->Translate(TOEvector3df(movex, 0, movez));
-		anims[0]->SetRotation(TOEvector3df(0, -angle, 0));
-		anims[1]->SetRotation(TOEvector3df(0, -angle, 0));
-	}
-	else{
-		if(movingPlayer){
-			// Is not moving
-			anims[0]->ChangeAnimation("topiddle");
-			anims[1]->ChangeAnimation("botiddle");
-
-			movingPlayer = false;
-		}
-	}
-
-	// UPDATE BILLBOARDS
-	meshes[3]->SetBillboardText(std::to_string(anims[0]->GetAnimationFrame()));
-	meshes[4]->SetBillboardText(std::to_string(anims[1]->GetAnimationFrame()));
-	//meshes[4]->SetBillboardText(std::to_string(movingPlayer));
-}
-
 int main(){
 	VideoDriver::m_assetsPath = "./../assets";
 	EventHandler* handler = new EventHandler();	
@@ -387,10 +266,6 @@ int main(){
 	mesh->AddBillboard(TOEvector3df(0.0f, 3.0f, 0.0f), "SUZANNE", 0.5f);
 	sceneObjects.push_back(mesh);
 	
-	// CREATE ANIMATION
-	//TFAnimation* animations[] = {nullptr, nullptr, nullptr};
-	//CreateAnimations(animations, meshes);
-
 	float deltaTime = 0.0f;
 	bool lastMain = true;
 
@@ -442,13 +317,10 @@ int main(){
 			lastMain = true;
 		}
 
-		// CHANGE ANIMATION
+		// KEY PAD ENTER PRESSED
 		if(EventHandler::KP_ENTER){
-			//animations[0]->PlayAnimation("shoot2", 25);
 			EventHandler::KP_ENTER = false;
 		}
-
-		//UpdatePlayer(animations, meshes, deltaTime, EventHandler::PlayerX, EventHandler::PlayerZ);
 
 		// TRANSLATE SHADOW LIGHT
 		shadowLight->SetTranslate(TOEvector3df(EventHandler::xlight, EventHandler::ylight, EventHandler::zlight));
