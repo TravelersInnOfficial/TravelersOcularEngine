@@ -1,6 +1,12 @@
 #ifndef TFMESH_H
 #define TFMESH_H
 
+/**
+ * @brief Mesh Entity Facade.
+ * 
+ * @file TFMesh.h
+ */
+
 #include "TFNode.h"
 
 class TFMesh: public TFNode{

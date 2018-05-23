@@ -1,6 +1,12 @@
 #ifndef TFPORTAL_H
 #define TFPORTAL_H
 
+/**
+ * @brief Clipping Portal Facade.
+ * 
+ * @file TFPortal.h
+ */
+
 #include <TOEvector3d.h>
 
 class TPortal;

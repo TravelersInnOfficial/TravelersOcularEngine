@@ -1,6 +1,12 @@
 #ifndef TFSPRITE_H
 #define TFSPRITE_H
 
+/**
+ * @brief Draws 2D sprite in screen.
+ * 
+ * @file TFSprite.h
+ */
+
 #include "TFDrawable.h"
 #include <TOEvector4d.h>
 

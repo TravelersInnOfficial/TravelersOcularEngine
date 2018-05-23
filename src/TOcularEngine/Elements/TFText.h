@@ -1,6 +1,12 @@
 #ifndef TFTEXT_H
 #define TFTEXT_H
 
+/**
+ * @brief Text Entity Facade.
+ * 
+ * @file TFText.h
+ */
+
 #include "TFNode.h"
 #include <TOEvector4d.h>
 

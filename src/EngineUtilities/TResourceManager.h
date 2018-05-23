@@ -1,6 +1,13 @@
 #ifndef TRESOURCEMANAGER_H
 #define TRESOURCEMANAGER_H
 
+/**
+ * @brief ResourceManager will load all resources and control
+ * 		  that resources only are read once.
+ * 
+ * @file TResourceManager.h
+ */
+
 #include "Resources/TResource.h"
 #include "Resources/TResourceTexture.h"
 #include "Resources/TResourceMesh.h"

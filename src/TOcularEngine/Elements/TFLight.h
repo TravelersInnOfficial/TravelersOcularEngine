@@ -2,13 +2,11 @@
 #define TFLIGHT_H
 
 /**
- * @brief 
+ * @brief Light Entity Facade.
  * 
  * @file TFLight.h
- * @author Travelers INN
- * @date 2018-03-20
  * 
- *  Shadows bassed in #16 opengl tutorial 
+ *  Shadows bassed in #16 opengl tutorial
  * 	http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-16-shadow-mapping/#rendering-the-shadow-map
  */
 

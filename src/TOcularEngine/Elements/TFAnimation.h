@@ -1,6 +1,12 @@
 #ifndef TFANIMATION_H
 #define TFANIMATION_H
 
+/**
+ * @brief Animation Entity Facade.
+ * 
+ * @file TFAnimation.h
+ */
+
 #include "TFNode.h"
 
 class TFAnimation: public TFNode{

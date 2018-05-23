@@ -1,6 +1,12 @@
 #ifndef TROOM_H
 #define TROOM_H
 
+/**
+ * @brief Group of objects in a determined position
+ * 
+ * @file TRoom.h
+ */
+
 #include <vector>
 #include "./TNode.h"
 #include <glm/gtc/type_ptr.hpp>

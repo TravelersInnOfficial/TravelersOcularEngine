@@ -1,6 +1,12 @@
 #ifndef PARTICLEMANAGER_H
 #define PARTICLEMANAGER_H
 
+/**
+ * @brief Updates and manages all Particle Systems.
+ * 
+ * @file ParticleManager.h
+ */
+
 #include <TOEvector3d.h>
 
 struct Particle{

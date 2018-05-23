@@ -1,6 +1,12 @@
 #ifndef TFROOM_H
 #define TFROOM_H
 
+/**
+ * @brief Clipping Room Facade.
+ * 
+ * @file TFRoom.h
+ */
+
 #include "./TFNode.h"
 #include "./TFPortal.h"
 

@@ -1,6 +1,12 @@
 #ifndef TFDRAWABLE_H
 #define TFDRAWABLE_H
 
+/**
+ * @brief Father class of all 2D stuff.
+ * 
+ * @file TFDrawable.h
+ */
+
 #include <TOEvector2d.h>
 #include <ShaderTypes.h>
 #include <TColor.h>

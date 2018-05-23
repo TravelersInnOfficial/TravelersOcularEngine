@@ -1,8 +1,13 @@
 #ifndef TNODE_H
 #define TNODE_H
 
-#include "./Entities/TEntity.h"
+/**
+ * @brief Main tree node structure.
+ * 
+ * @file TNode.h
+ */
 
+#include "./Entities/TEntity.h"
 #include <vector>
 
 class TNode{

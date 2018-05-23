@@ -1,6 +1,12 @@
 #ifndef TFCAMERA_H
 #define TFCAMERA_H
 
+/**
+ * @brief Camera Entity Facade.
+ * 
+ * @file TFCamera.h
+ */
+
 #include "TFNode.h"
 
 class TFCamera: public TFNode{

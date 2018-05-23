@@ -1,6 +1,12 @@
 #ifndef TF2DTEXT_H
 #define TF2DTEXT_H
 
+/**
+ * @brief Draws 2D text in screen.
+ * 
+ * @file TF2DText.h
+ */
+
 #include "TFDrawable.h"
 #include <vector>
 #include <TOEvector2d.h>

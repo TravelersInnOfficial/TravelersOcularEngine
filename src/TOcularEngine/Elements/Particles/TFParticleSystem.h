@@ -1,6 +1,12 @@
 #ifndef TFPARTICLESYSTEM_H
 #define TFPARTICLESYSTEM_H
 
+/**
+ * @brief Particle System Facade.
+ * 
+ * @file TFParticleSystem.h
+ */
+
 #include "./../TFNode.h"
 #include "ParticleManager.h"
 

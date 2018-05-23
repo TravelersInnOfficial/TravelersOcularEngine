@@ -1,6 +1,12 @@
 #ifndef TFDOME_H
 #define TFDOME_H
 
+/**
+ * @brief Dome Entity Facade.
+ * 
+ * @file TFDome.h
+ */
+
 #include "TFNode.h"
 
 class TFDome: public TFNode{
@@ -8,11 +14,6 @@ class TFDome: public TFNode{
 public:
     
     void SetTexture(std::string texturePath = "");		// Replaces the Texture with a new one
-	/*
-	void SetMesh(std::string meshPath = "");			// Replaces the Mesh with a new one
-	void CreateCube();									// Replaces the Mesh with a Cube
-	void CreateSphere();								// Replaces the Mesh with a Sphere
-    */
 
 private:
 	TFDome(

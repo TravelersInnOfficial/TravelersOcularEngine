@@ -1,6 +1,13 @@
 #ifndef TPORTAL_H
 #define TPORTAL_H
 
+/**
+ * @brief TPortal joins 2 TRooms and will clip everthing 
+ * 		  behind the portal if its close.
+ * 
+ * @file TPortal.h
+ */
+
 #include <glm/gtc/type_ptr.hpp>
 
 class TRoom;

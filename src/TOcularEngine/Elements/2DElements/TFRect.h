@@ -1,6 +1,12 @@
 #ifndef TFRECT_H
 #define TFRECT_H
 
+/**
+ * @brief Draws a rectangle in screen.
+ * 
+ * @file TFRect.h
+ */
+
 #include "TFDrawable.h"
 #include <TOEvector4d.h>
 

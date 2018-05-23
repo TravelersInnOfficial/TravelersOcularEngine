@@ -1,6 +1,12 @@
 #ifndef TFNODE_H
 #define TFNODE_H
 
+/**
+ * @brief Tree Node Facade.
+ * 
+ * @file TFNode.h
+ */
+
 #include <TOEvector3d.h>
 #include <TColor.h>
 #include <EntityTypes.h>
