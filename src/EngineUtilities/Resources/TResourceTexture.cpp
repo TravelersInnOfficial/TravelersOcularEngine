@@ -16,9 +16,6 @@ TResourceTexture::TResourceTexture(std::string name){
 	LoadFile();
 }
 
-TResourceTexture::TResourceTexture(){
-	
-}
 
 TResourceTexture::~TResourceTexture(){
 	if(m_loaded) SOIL_free_image_data(m_imageData);	// Liberar el array de datos

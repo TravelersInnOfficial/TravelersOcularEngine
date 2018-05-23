@@ -10,9 +10,6 @@ TResourceShader::TResourceShader(std::string name, GLenum shaderType){
 	LoadFile();
 }
 
-TResourceShader::TResourceShader(){
-}
-
 TResourceShader::~TResourceShader(){
 
 }

@@ -27,12 +27,6 @@ Program::Program(std::map<std::string, GLenum> shaderData){
         glAttachShader(m_programID, m_shaders[i]);
     }
 
-    // No es necesario porque no se escribe en mas de un buffer
-    //glBindFragDataLocation(m_programID, 0, "outColor");
-    // insert location binding code here
-    //glBindAttribLocation(m_programID, 0, "position");
-    //glBindAttribLocation(m_programID, 1, "vertexColor");
-
     // Se linkea el programa a los shaders
     glLinkProgram(m_programID);
 

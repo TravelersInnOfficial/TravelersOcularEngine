@@ -21,7 +21,21 @@ TResourceMaterial::TResourceMaterial(std::string name){
 }
 
 TResourceMaterial::TResourceMaterial(){
-
+	m_name = "";
+	
+	// Cargamos los valores por defecto
+	m_colorDifuse 		= glm::vec3(1.0f, 1.0f, 1.0f);
+	m_colorSpecular 	= glm::vec3(1.0f, 1.0f, 1.0f);
+	m_colorAmbient 		= glm::vec3(1.0f, 1.0f, 1.0f);
+	m_colorEmmisive		= glm::vec3(1.0f, 1.0f, 1.0f);
+	m_colorTransparent	= glm::vec3(1.0f, 1.0f, 1.0f);
+	m_twosided = 1;
+	m_shadingModel = 2;
+	m_blendFunc = 2;
+	m_opacity = 1.0f;
+	m_shininess = 1.0f;
+	m_shininessStrength = 10.0f;
+	m_reflact = 1.0f;
 }
 
 TResourceMaterial::~TResourceMaterial(){
