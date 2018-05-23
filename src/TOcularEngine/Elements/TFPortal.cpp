@@ -11,8 +11,6 @@ TFPortal::~TFPortal(){
 	m_portal = nullptr;
 	m_firstRoom = nullptr;
 	m_secondRoom = nullptr;
-	// Los portales los eliminara, o bien el propio programador a través de TFRoom o al eliminar TFRoom
-	// Esta clase solamente es fachada
 }
 
 void TFPortal::SetVisible(bool visible){
