@@ -1,6 +1,10 @@
 #ifndef EVENT_ENUM_H
 #define EVENT_ENUM_H
 
+/*
+ *	Tipo de eventos que recibimos en nuestro motor
+ */
+
 enum EventType{
 	Type_Unknow					= -1,
 	Type_Closed 				=  0,
@@ -27,6 +31,9 @@ enum EventType{
 	Type_SensorChanged          = 21
 };
 
+/*
+ * 	Toda las teclas que el motor puede identificar como input
+ */
 
 enum KeyboardKey{
 	Key_Unknown   			= -1, 
@@ -166,6 +173,10 @@ enum KeyboardKey{
 	Key_KeyCount,
 };
 
+/*
+ *	Los eventos del motor que identifica el motor
+ */
+
 enum ButtonMouse{
 	ButtonMouse_Unknown 	= -1,
 	ButtonMouse_Left 		=  0,       
@@ -175,6 +186,10 @@ enum ButtonMouse{
 	ButtonMouse_XButton2	=  4,   
 	ButtonMouse_ButtonCount	=  5 
 };
+
+/*
+ *	Eventos de Joystick que reconoce el motor
+ */
 
 enum JoystickAxis{
 	X 		= 0,    
@@ -186,6 +201,12 @@ enum JoystickAxis{
 	PovX	= 6, 
 	PovY	= 7  
 };
+
+/*
+ *	Sensores que recononce el motor
+ *	Estos sensores son de la version con SFML, con glfw no los leemos
+ *	aunque dejamos los enumeradores preparados por si lo incorporamos
+ */
 
 enum SensorType{
 	Accelerometer 		= 0,    

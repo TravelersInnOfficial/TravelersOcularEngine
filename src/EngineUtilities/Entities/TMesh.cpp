@@ -6,25 +6,26 @@
 #include <GL/glew.h>
 
 TMesh::TMesh(std::string meshPath, std::string texturePath){
-	m_mesh = nullptr;
-	m_texture = nullptr;
-	m_specularMap = nullptr;
-	m_bumpMap = nullptr;
-	m_material = nullptr;
-	m_visibleBB = false;
-	m_drawingShadows = false;
-	m_textureScaleX = 1.0f;
-	m_textureScaleY = 1.0f;
-	m_frameDrawed = 0;
+	m_mesh = nullptr;					// 
+	m_texture = nullptr;				//
+	m_specularMap = nullptr;			//
+	m_bumpMap = nullptr;				//
+	m_material = nullptr;				// Recursos del TMesh inicializados a nullptr
+	m_visibleBB = false;				// Por defecto no se pinta la bounding box
+	m_drawingShadows = false;			// Valor por defecto de pintar las sombras
+	m_textureScaleX = 1.0f;				//
+	m_textureScaleY = 1.0f;				// Por defecto las texturas no estan escaladas
+	m_frameDrawed = 0;					// Ultimo frame en el que se pintado el mesh
 
-	LoadMesh(meshPath);
-	ChangeTexture(texturePath);
-	m_program = STANDARD_SHADER;
+	LoadMesh(meshPath);					// Cargamos el mesh
+	ChangeTexture(texturePath);			// Cargamos la textura
+	m_program = STANDARD_SHADER;		// Programa estandar con el que va a pintarse
 }
 
 TMesh::~TMesh(){}
 
 void TMesh::LoadMesh(std::string meshPath){
+	// En el caso de pasar un string vacio cargamos un cubo como mesh
 	if(meshPath.compare("")==0) meshPath = VideoDriver::GetInstance()->GetAssetsPath() + "/models/cube.obj";
 	m_mesh = TResourceManager::GetInstance()->GetResourceMesh(meshPath);
 }
@@ -49,20 +50,18 @@ void TMesh::SetBBVisibility(bool visible){
 }
 
 void TMesh::BeginDraw(){
-	if(m_mesh != nullptr && !m_drawingShadows && CheckClipping()){
-		unsigned int currentFrame = TEntity::currentFrame;
-		if(currentFrame != m_frameDrawed){
-			m_frameDrawed = currentFrame;
+	if(m_mesh != nullptr && !m_drawingShadows && CheckClipping()){	// Comprobamos que haya mesh, que no vayan a pintarse las sombras y que el objeto este dentro de la pantalla
+		unsigned int currentFrame = TEntity::currentFrame;			// Cargamos el frame en el que se ha pintado el mesh
+		if(currentFrame != m_frameDrawed){							//  
+			m_frameDrawed = currentFrame;							// En el caso de que sea diferente al del mesh lo actualizamos y pintamos
 
-			// Bind and send the data to the VERTEX SHADER
-			SendShaderData();
+			SendShaderData();										// Enviamos la informacion a los shaders
 			
-			// Bind and draw elements depending of how many vbos
-			GLuint elementsBuffer = m_mesh->GetElementBuffer();
+			GLuint elementsBuffer = m_mesh->GetElementBuffer();		// Cargamos y pintamos los elementos del mesh
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBuffer);
 			glDrawElements(GL_TRIANGLES, m_mesh->GetElementSize(), GL_UNSIGNED_INT, 0);
 
-			if(m_visibleBB) DrawBoundingBox();
+			if(m_visibleBB) DrawBoundingBox();						// En el caso de que sea necesario pintamos el bounding box
 		}
 	}
 }
@@ -73,7 +72,7 @@ void TMesh::EndDraw(){
 
 void TMesh::DrawShadow(){
 	m_drawingShadows = true;
-	/// ACTIVE SHADOW PROGRAM
+	// Nos guardamos un puntero al programa para pintar sombras y enviamos las variables
 	Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(SHADOW_SHADER);
 
 	/// SEND THE VERTEX (1-Bind, 2-VertexAttribPointer)
@@ -228,7 +227,6 @@ void TMesh::SendShaderData(){
 
 }
 
-// Funcion basada en https://en.wikibooks.org/wiki/OpenGL_Programming/Bounding_box
 void TMesh::DrawBoundingBox() {
 	Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(BB_SHADER);
 
@@ -314,10 +312,10 @@ bool TMesh::CheckClipping(){
 	if(!m_checkClipping) return true;
 
 	bool output = true;
-	glm::vec3 center = m_mesh->GetCenter();
-	glm::vec3 size = m_mesh->GetSize();
+	glm::vec3 center = m_mesh->GetCenter();		//
+	glm::vec3 size = m_mesh->GetSize();			// Cargamos el centro y el tamanyo del mesh
 
-	glm::mat4 mvpMatrix = ProjMatrix * ViewMatrix * m_stack.top();
+	glm::mat4 mvpMatrix = ProjMatrix * ViewMatrix * m_stack.top();	// Calculamos la matriz MVP
 	// Comprobamos el cliping con los 8 puntos 
 
 	int upDown, leftRight, nearFar;
@@ -329,6 +327,7 @@ bool TMesh::CheckClipping(){
 			// +Y -Y
 			for(int k=-1; k<=0; k++){
 				// +Z -Z
+				// Funcion que comprueba si los ocho lados del bounding box estan fuera de la pantalla
 				glm::vec3 point = center + glm::vec3(size.x/2.0f * Sign(i), size.y/2.0f * Sign(j), size.z/2.0f * Sign(k));
 				glm::vec4 mvpPoint = mvpMatrix * glm::vec4(point.x, point.y, point.z, 1.0f);
 
@@ -339,6 +338,7 @@ bool TMesh::CheckClipping(){
 
 	// Comprobacion clipping
 	int sides = 8;
+	// En el caso de que alguna de las variables valga 8 o -8 significa que se sale por un lado
 	if(upDown == sides || upDown == -sides || leftRight == sides || leftRight == -sides || nearFar == sides){
 		output = false;
 	}

@@ -4,10 +4,13 @@
 #include "TMesh.h"
 
 struct AnimData{
-	int frames;								// Max frames of animation
-	int fps;									// Speed of animation
-	std::vector <TResourceMesh*> meshes;		// All resources of each frame of the animation
+	int frames;								// frames - Maximo de frames de la animacion
+	int fps;								// fps - Velocidad de la animacion
+	std::vector <TResourceMesh*> meshes;	// meshess - Todos los recursos de cada frame de la animacion
 
+	/**
+	 * @brief	- Constructor del struct AnimData donde inicializamos sus variables a 0 
+	 */
 	AnimData() : frames(0), fps(0) {}
 };
 
@@ -15,12 +18,6 @@ class TAnimation: public TMesh{
 public:
 	TAnimation();
 	~TAnimation();
-
-	/**
-	 * @brief Begin draw called on tree drawing
-	 * 
-	 */
-	//void BeginDraw() override;
 
 	/**
 	 * @brief Set animation Paths of each frame 
@@ -94,12 +91,12 @@ private:
 	void LoadMesh(std::string meshPath = "");
 
 	// Animation data
-	std::map<std::string, AnimData> m_anims;	// all animations availeables
+	std::map<std::string, AnimData> m_anims;	// m_anims - All animations availeables
 
 	// Updating animation
-    int m_actualFrame;							// Actual frame beeing drawn in the scene
-    float m_animTime;							// Actual time of animation (0 - m_frames)
-	std::vector <std::string> m_queue;			// Queue of animation
+    int m_actualFrame;							// m_actualFrame - Actual frame beeing drawn in the scene
+    float m_animTime;							// m_animTime - Actual time of animation (0 - m_frames)
+	std::vector <std::string> m_queue;			// m_boundMaster - Queue of animation
 	TAnimation* m_boundMaster;
 };
 

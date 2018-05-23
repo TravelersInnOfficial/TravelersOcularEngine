@@ -4,6 +4,7 @@
 #include <GL/glew.h>
 
 TLight::TLight(TColor color, float attenuation){
+	// Inicializamos las variables de la luz
 	m_color = color;
 	m_attenuation = attenuation;
 	m_program = STANDARD_SHADER;
@@ -69,8 +70,8 @@ void TLight::DrawShadow(){
 	m_drawingShadows = true;
 }
 
-// TODO: Optimize buffer by filling them only one time
 void TLight::DrawBB(){
+	// Pintamos el bounding box
 	Program* myProgram = VideoDriver::GetInstance()->SetShaderProgram(BB_SHADER);
 
 	// Cube 1x1x1, centered on origin

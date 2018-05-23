@@ -1,6 +1,10 @@
 #ifndef SHADER_TYPES_H
 #define SHADER_TYPES_H
 
+/*
+ * 	Shaders que utiliza el motor para pintar sus objetos
+ */
+
 enum SHADERTYPE {
 	NONE_SHADER				=-1,
 	STANDARD_SHADER 		= 0,

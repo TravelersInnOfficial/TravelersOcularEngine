@@ -4,8 +4,8 @@
 #include <iostream>
 
 TTransform::TTransform(){
-	m_matrix = glm::mat4(1.0f);
-	m_program = STANDARD_SHADER;
+	m_matrix = glm::mat4(1.0f);		// Cargamos la matriz identidad
+	m_program = STANDARD_SHADER;	
 }
 
 TTransform::~TTransform(){}
@@ -37,20 +37,20 @@ void TTransform::Rotate(float X, float Y, float Z, float W){
 }
 
 void TTransform::Rotate(float X, float Y, float Z){
+	// Calculamos los quaternion de cada eje
 	glm::quat axisX = glm::angleAxis(glm::radians(X), glm::vec3(1,0,0));
 	glm::quat axisY = glm::angleAxis(glm::radians(Y), glm::vec3(0,1,0));
 	glm::quat axisZ = glm::angleAxis(glm::radians(Z), glm::vec3(0,0,1));
 
 	glm::quat crossed = glm::cross(axisZ, axisY);
 
+	// Los separamos en dos matrices de rotacion diferentes
  	glm::mat4 final1 = glm::toMat4(crossed);
  	glm::mat4 final2 = glm::toMat4(axisX);
 
+ 	// Multiplicamos la matriz actual por las dos rotaciones nuevas
  	m_matrix = final1 * m_matrix * final2;
 
-	//Rotate(1, 0, 0, X);
-	//Rotate(0, 1, 0, Y);
-	//Rotate(0, 0, 1, Z);
 }
 
 void TTransform::Scale(float X, float Y, float Z){

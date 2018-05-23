@@ -28,10 +28,12 @@ TText::TText(std::string text, float charSize, std::string texture){
 	if(texture.compare("")==0) texture = VideoDriver::GetInstance()->GetAssetsPath() + "/textures/default_font.png";
 	m_texture = TResourceManager::GetInstance()->GetResourceTexture(texture); 
 
+	// Nos guardamos el programa a utilizar
 	m_program = TEXT_SHADER;
 }
 
 TText::~TText(){
+	// Vaciamos y eliminamos los buffers
 	glBindBuffer(GL_ARRAY_BUFFER, 0);   
     glDeleteBuffers(1, &m_vbo);
 

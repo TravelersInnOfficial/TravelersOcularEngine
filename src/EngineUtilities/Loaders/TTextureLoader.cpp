@@ -32,18 +32,24 @@ bool TTextureLoader::LoadTextureBinary(std::string path, std::vector<unsigned ch
 	std::ifstream texFile;
 	texFile.open(path, std::ios::binary);
 
+	// Miramos si se ha abierto el documento correctamente
 	if(texFile.is_open()){
+		// Cargamos el ancho de la imagen
 		texFile.read(reinterpret_cast<char*>(width), sizeof(int));
+		// Cargamos el alto de la imagen
 		texFile.read(reinterpret_cast<char*>(height), sizeof(int));
 
+		// Calculamos el numero de valores a cargar
 		int size = (*width)*(*height) * 4;
 
+		// Cargamos todos los caracteres de la imagen
 		unsigned char currentChar;
 		for(int i=0; i<size; i++){
 			texFile.read(reinterpret_cast<char*>(&currentChar), sizeof(unsigned char));
 			imageData->push_back(currentChar);
 		}
 
+		// Damos la textura por cargada
 		output = true;
 	}
 	texFile.close();

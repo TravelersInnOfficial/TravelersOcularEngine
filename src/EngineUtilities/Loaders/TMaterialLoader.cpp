@@ -13,10 +13,14 @@
 
 class TResourceTexture;
 
+
 void TMaterialLoader::Read3Elements(float* value1, float* value2, float* value3, std::string line){
 	std::string token;
 	std::string delimiter = " ";
 
+	// Vamos cogiendo el string desde el inicio de la cadena hasta el siguiente espacio
+	// Y guardandonos el valor en un float
+	// Ademas de acortar el string
 	token = line.substr(0, line.find(delimiter));
 	line.erase(0, token.length() + delimiter.length());
 	*value1 = std::stof(token);
@@ -31,11 +35,14 @@ void TMaterialLoader::Read3Elements(float* value1, float* value2, float* value3,
 }
 
 std::string TMaterialLoader::TreatPath(std::string objPath){
+	// Sacamos la posicion del string donde se encuentra la parte .obj
 	std::size_t pos = objPath.find(".obj");
 
+	// Eliminamos .obj de la cadena e insertamos .mtl
 	objPath.erase(pos, objPath.length()-1);
 	objPath = objPath + ".mtl";
 
+	// Devolvemos el path ya tratado
 	return objPath;
 }
 
@@ -45,14 +52,18 @@ bool TMaterialLoader::LoadMaterial(std::string name, std::string path, TResource
 	// Comprobamos que el nombre pasado no este ya en nuestra base de datos
 	TResourceMaterial* recMaterial = nullptr;
 	recMaterial = TResourceManager::GetInstance()->GetResourceMaterial(name);
+
+	// En el caso de haberlo encontrado y este cargado damos el metodo por finalizado
 	if(recMaterial->GetLoaded()){output = true;}
 	else{
-
+		// Primero de todo calculamos el path para el mtl, en este caso substituimos la parte final
+		// del path de .obj a .mtl
 		path = TreatPath(path);
 
 		std::ifstream readFile;
 		readFile.open(path, std::ifstream::out);
 
+		// Miramos si el archivo se ha abierto correctamente
 		if(readFile.is_open()){
 			std::string line;
 
@@ -60,14 +71,18 @@ bool TMaterialLoader::LoadMaterial(std::string name, std::string path, TResource
 			std::string mode;
 			std::string delimiter = " ";
 
+			// Leemos cada linea del fichero
 			while(std::getline(readFile, line)){
 				token = line.substr(0, line.find(delimiter));
 				line.erase(0, token.length() + delimiter.length());
 
+				// En el caso de encontrarnos # saltamos al siguiente valor
 				if(token[0]=='#')continue;
 				else mode = token;
+				// En caso contrario nos guardamos el valor como token
 
 
+				// Vamos leyendo cada una de las propiedades del material y a la vez cargando sus valores
 				if(mode.compare("newmtl")==0){
 					token = line.substr(0, line.find(delimiter));
 
@@ -117,27 +132,6 @@ bool TMaterialLoader::LoadMaterial(std::string name, std::string path, TResource
 	  			else if(recMaterial!=nullptr && mode.compare("illum")==0){
 
 	  			}
-	  			/*
-	  			else if(recMaterial!=nullptr && mode.compare("map_Kd")==0){
-	  				token = line.substr(0, line.find(delimiter));
-	  				TResourceTexture* texture = TResourceManager::GetInstance()->GetResourceTexture(token);
-	  				if(texture->GetLoaded() && texture != nullptr){
-	  					mesh->AddTexture(texture);
-	  				}
-	  			}else if(recMaterial!=nullptr && mode.compare("map_Ns")==0){
-	  				token = line.substr(0, line.find(delimiter));
-	  				TResourceTexture* texture = TResourceManager::GetInstance()->GetResourceTexture(token);
-	  				if(texture->GetLoaded() && texture != nullptr){
-	  					mesh->AddSpecularMap(texture);
-	  				}
-	  			}else if(recMaterial!=nullptr && mode.compare("map_Bump")==0){
-	  				token = line.substr(0, line.find(delimiter));
-	  				TResourceTexture* texture = TResourceManager::GetInstance()->GetResourceTexture(token);
-	  				if(texture->GetLoaded() && texture != nullptr){
-	  					mesh->AddBumpMap(texture);
-	  				}
-	  			}*/
-
 			}
 			output = true;
 		}else{
@@ -157,6 +151,7 @@ bool TMaterialLoader::LoadMaterial(std::string name, TResourceMesh* mesh, const 
 	if(!recMaterial->GetLoaded() && material != nullptr){
 		//std::cout<<"Cargamos el material: "<<name<<std::endl;
 
+		// Cargamos cada una de las propiedades del material
 		aiColor3D  vec3;
 		if(AI_SUCCESS == material->Get(AI_MATKEY_COLOR_DIFFUSE, vec3))
 			recMaterial->SetColorDifuse(glm::vec3(vec3.r, vec3.g, vec3.b));
@@ -215,6 +210,7 @@ bool TMaterialLoader::LoadMaterial(std::string name, TResourceMesh* mesh, const 
 		// Damos el material como cargado
 		recMaterial->LoadFile();
 	}
+	// Le anyadimos el mateial al mesh
 	mesh->AddMaterial(recMaterial);
 
 	return true;

@@ -7,7 +7,7 @@
 #include <GL/glew.h>
 #include <algorithm>
 
-// Mesh que van a compartir todas las texturas
+// Mesh que van a compartir todas las particulas
 static const GLfloat g_vertex_buffer_data[] = {
  -0.5f, -0.5f, 0.0f,
  -0.5f, 0.5f, 0.0f,
@@ -16,25 +16,27 @@ static const GLfloat g_vertex_buffer_data[] = {
 };
 
 TParticleSystem::~TParticleSystem(){
-	delete m_manager;
+	delete m_manager;					// Eliminamos el manager del sistema de particulas
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);   
-    glDeleteBuffers(1, &m_vbo);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);   
-    glDeleteBuffers(1, &m_pbo);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);   
-    glDeleteBuffers(1, &m_cbo);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);   
-    glDeleteBuffers(1, &m_ebo);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);   //
+    glDeleteBuffers(1, &m_vbo);			//
+    									//
+    glBindBuffer(GL_ARRAY_BUFFER, 0);   //
+    glDeleteBuffers(1, &m_pbo);			//
+    									//
+    glBindBuffer(GL_ARRAY_BUFFER, 0);   //
+    glDeleteBuffers(1, &m_cbo);			//
+    									//
+    glBindBuffer(GL_ARRAY_BUFFER, 0);   //
+    glDeleteBuffers(1, &m_ebo);			// Vaciamos y eliminamos los buffers
 }
 
 TParticleSystem::TParticleSystem(std::string path){
+	// Inicializamos las variables
 	m_drawingShadows = false;
 	m_newParticlesPerSecond = 100;
 	m_particleAcumulation = 0;
+
 	//Inicializamos el manager de particulas y las particulas
 	m_manager = new ParticleManager();
 
@@ -65,6 +67,7 @@ TParticleSystem::TParticleSystem(std::string path){
 	m_particleCount = 0;
 	m_lastUsedParticle = 0;
 
+	// Cargamos la textura
 	SetTexture(path);
 
 }
@@ -79,9 +82,9 @@ int TParticleSystem::GetNewPerSecond(){
 
 void TParticleSystem::BeginDraw(){
 	if(!m_drawingShadows){
-		SendShaderData();
+		SendShaderData();	// Enviamos la informacion al shader y pintamos las particulas
 		glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, m_particleCount);
-		ResetShaderData();
+		ResetShaderData();	// Reseteamos las variables del shader
 	}
 }
 
@@ -94,13 +97,19 @@ void TParticleSystem::EndDraw(){
 }
 
 void TParticleSystem::ResetShaderData(){
+	// Conseguimos el programa del que vamos a pintar
 	Program* myProgram = VideoDriver::GetInstance()->GetProgram(m_program);
 	GLuint idProgram = myProgram->GetProgramID();
 
+	// Enviamos los centros de las particulas
 	GLint indexAttrib = glGetAttribLocation(idProgram, "ParticleCenter");
 	glVertexAttribDivisor(indexAttrib, 0);
+
+	// Enviamos los colores de las particulas
 	indexAttrib = glGetAttribLocation(idProgram, "ParticleColor");
 	glVertexAttribDivisor(indexAttrib, 0);
+
+	// Enviamos las variables extra de las particulas
 	indexAttrib = glGetAttribLocation(idProgram, "ParticleExtra");
 	glVertexAttribDivisor(indexAttrib, 0);
 }
@@ -190,16 +199,19 @@ void TParticleSystem::SendShaderData(){
 }
 
 void TParticleSystem::AddNewParticles(float deltaTime){
+	// Calculamos el numero de nuevas particulas a generar
 	float newParticle = m_newParticlesPerSecond * deltaTime;
 	newParticle += m_particleAcumulation;
 	
+	// Vamos generando una a una las particulas hasta que nos quede un valor menor de 0
+	// Este valor se guardara para el siguiente frame
 	while(newParticle >= 1){
-		int pos = FindUnusedParticle();
-		m_manager->InitParticle(m_particleContainer[pos]);
+		int pos = FindUnusedParticle();						// Busca en que posicion anyadir la nueva particula
+		m_manager->InitParticle(m_particleContainer[pos]);	// Inicializamos esta particula
 		newParticle--;
 	}
 
-	m_particleAcumulation = newParticle;
+	m_particleAcumulation = newParticle;	
 }
 
 void TParticleSystem::Update(float deltaTime){
@@ -207,19 +219,22 @@ void TParticleSystem::Update(float deltaTime){
 	AddNewParticles(deltaTime);
 
 	m_particleCount = 0;
+	// Actualizamos las particulas
 	for(int i=0; i<m_maxParticles; i++){
 
 	    Particle& p = m_particleContainer[i]; // shortcut
 
+	    // COmprobamos que la particula este viva
 	    if(p.life > 0.0f){
 
-	        // Decrease life
+	        // Decrementamos su nivel de vida
 	        p.life -= deltaTime;
 	        if (p.life > 0.0f){
 
+	        	// Enviamos la particula al manager para que este la actualice
 	        	m_manager->UpdateParticle(p, deltaTime);
 
-	            // Fill the GPU buffer
+	            // Rellenamos los arrays de posicion, color y variables extras
 	            m_particlePositionData[3*m_particleCount+0] = p.pos.X + p.translation.X;
 	            m_particlePositionData[3*m_particleCount+1] = p.pos.Y + p.translation.Y;
 	            m_particlePositionData[3*m_particleCount+2] = p.pos.Z + p.translation.Z;
@@ -237,7 +252,7 @@ void TParticleSystem::Update(float deltaTime){
 	    }
 	}
 
-	// Rellenamos los buffers
+	// Una vez los arrays estan llenos utilizamos sus valores para rellenar los buffers
 	glBindBuffer(GL_ARRAY_BUFFER, m_pbo);
 	glBufferData(GL_ARRAY_BUFFER, m_maxParticles * 3 * sizeof(GLfloat), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
 	glBufferSubData(GL_ARRAY_BUFFER, 0, m_particleCount * sizeof(GLfloat) * 3, m_particlePositionData);
@@ -274,6 +289,8 @@ int TParticleSystem::FindUnusedParticle(){
 }
 
 void TParticleSystem::SetTranslate(glm::vec3 position){
+	// Actualizamos la posicion de todas las particulas en funcion del nuevo centro
+	// De esta forma no se teletransportan al llamar al metodo
 	for(int i=0; i<m_maxParticles; i++){
 		m_particleContainer[i].translation.X += position.x;
 		m_particleContainer[i].translation.Y += position.y;

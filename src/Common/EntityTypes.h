@@ -1,6 +1,10 @@
 #ifndef ENTITY_TYPES_H
 #define ENTITY_TYPES_H
 
+/*  
+ *		Tipo de entidades que se encuentran en el motor
+ */
+
 enum ENTITYTYPE {
 	NONE_ENTITY			=-1,
 	TMESH_ENTITY		= 0,

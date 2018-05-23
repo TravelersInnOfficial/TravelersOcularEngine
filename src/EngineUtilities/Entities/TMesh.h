@@ -9,47 +9,87 @@
 
 class TMesh: public TEntity{
 public:
+
+	/**
+	 * @brief	- Constructor del mesh 
+	 *
+	 * @param	- meshPath - ruta al mesh que va a mostrar
+	 * @param 	- texturePath - ruta a la textura que va a utilizar
+	 */
 	TMesh(std::string meshPath = "", std::string texturePath = "");
+	
+	/**
+	 * @brief	- Destructor virtual del mesh, las variables dinamicas que tiene el mesh
+	 * 				se eliminan en el gesto de recursos 
+	 */
 	virtual ~TMesh();
 
+	/**
+	 * @brief	- Metodo en el que se pinta el mesh enviando todos los datos a los shaders
+	 */
 	virtual void BeginDraw() override;
+
+	/**
+	 * @brief	- Metodo de dejar de acabar de pintar el mesh, en este metodo se resetean las variables necesarias 
+	 */
 	virtual void EndDraw() override;
+
+	/**
+	 * @brief	- Pinta el mesh para calcular las sombras que este hace
+	 */
 	virtual void DrawShadow() override;
 
 	/**
-	 * @brief Changes all mesh of this mesh 
+	 * @brief	- Cambia el mesh que se pinta
 	 * 
-	 * @param meshPath: Path to mesh from executable
+	 * @param	- meshPath - Ruta al mesh
 	 */
 	void LoadMesh(std::string meshPath = "");
+
 	/**
-	 * @brief Changes texture of this mesh
+	 * @brief 	- Cambia la textura que utiliza el mesh
 	 * 
-	 * @param texturePath: Path to texture from executable
+	 * @param 	- texturePath - Ruta a la textura
 	 */
 	void ChangeTexture(std::string texturePath = "");
 
+	/**
+	 * @brief 	- Cambia el mapa de especulares que utiliza el mesh
+	 * 
+	 * @param 	- texturePath - Ruta al mapa de especulares
+	 */
 	void ChangeSpecularMap(std::string texturePath = "");
 
+	/**
+	 * @brief 	- Cambia el mapa de normales que utiliza el mesh
+	 * 
+	 * @param 	- texturePath - Ruta al mapa de normales 
+	 */
 	void ChangeBumpMap(std::string texturePath = "");
 
 	/**
-	 * @brief Shows or hide mesh bounding box
+	 * @brief 	- Muestra o esconde el bounding box del mesh
 	 * 
-	 * @param visible: visibility of bounding box 
+	 * @param 	- visible - Visibiliddad del bounding box
 	 */
 	void SetBBVisibility(bool visible);
 
+	/**
+	 * @brief	- Cambia el escalado de la textura  
+	 * 
+	 * @param 	- valueX - Escalado en X de la textura 
+	 * @param 	- valueY - Escalado en Y de la textura
+	 */
 	void SetTextureScale(float valueX, float valueY);
 
 protected:
 
-	unsigned int 		m_frameDrawed;
-	TResourceMesh* 		m_mesh;
-	TResourceTexture* 	m_texture;
-	TResourceTexture*	m_specularMap;
-	TResourceTexture*	m_bumpMap;
-	TResourceMaterial* 	m_material;
+	unsigned int 		m_frameDrawed;	// m_frameDrawed - Ultimo frame en el que se ha pintado
+	TResourceMesh* 		m_mesh;			// m_mesh - Recurso de mesh a pintar
+	TResourceTexture* 	m_texture;		// m_texture - Recurso textura a utilizar
+	TResourceTexture*	m_specularMap;	// m_specularMap - Mapa de especulares a utilizar
+	TResourceTexture*	m_bumpMap;		// m_bumpMap - Mapa de normales a utilizar
+	TResourceMaterial* 	m_material;		// m_material - Material del mesh
 
 	bool m_visibleBB;
 	bool m_drawingShadows;
@@ -58,35 +98,43 @@ protected:
 	float m_textureScaleY;
 
 	/**
-	 * @brief Sends shader all needed information
+	 * @brief	- Envia a los shaders toda la informacion necesaria 
 	 * 
 	*/
 	void SendShaderData();
 
 	/**
-	 * @brief Draws bounding box of the mesh
+	 * @brief	- Dibuja el bounding box del mesh 
 	 * 
 	 */
 	void DrawBoundingBox();	
 
 	/**
-	 * @brief Check if this is mesh is clipped from camera so doesn't has to be drawn
+	 * @brief	- Comprueba si los 8 puntos del bounding box del objeo se encuentran dentro de la pantalla
+	 *				para sabe si puede dejar de pintarse o no   
 	 * 
-	 * @return true: is inside the viewport
-	 * @return false: is outside the viewport 
+	 * @return 	- bool - True: Se encuentra dentro de la pantall
+	 * @return 	- bool - False: Esta fuera de la pantalla 
 	 */
 	virtual	bool CheckClipping() override;
 	
 	/**
-	 * @brief Check if this is mesh is occluded by other object so doesn't has to be drawn
+	 * @brief 	- Comprueba si un objeto esta ocluido por otro para poder dejar de pintarlo
 	 * 
-	 * @return true: is visible in the viewport
-	 * @return false:  is totally occluded
+	 * @return 	- bool - True: El objeto es visible
+	 * @return 	- bool - False: El objeto esta ocluido
 	 */
 	virtual	bool CheckOcclusion();
 
 private:
-	int Sign(int v);
+	/**
+	 * @brief	- Devuelve el signo del valor pasado por parametros 
+	 * 				Los valores mayores o igual a 0 devolveran un 1, mientras que los demas un -1
+	 * 
+	 * @param 	- value - Valor del que sacar el signo
+	 * @return 	- int - Signo del valor
+	 */
+	int Sign(int value);
 };
 
 #endif
