@@ -3,3 +3,6 @@ obj/*
 
 # Executable
 bin/EngineTest*
+
+# All .vscode folders
+**/.vscode
