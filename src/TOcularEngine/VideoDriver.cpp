@@ -27,7 +27,7 @@ VideoDriver::VideoDriver(){
 
 	// Iinitialize GLFW
 	glfwSetErrorCallback(VideoDriver::glwf_error_callback);
-    //if(glfwInit()) std::cout <<"GLFW Initiation Problem (Update your graphics card driver!)"<<std::endl;
+    if(!glfwInit()) std::cout <<"GLFW Initiation Problem (Update your graphics card driver!)"<<std::endl;
 }
 
 VideoDriver::~VideoDriver(){
