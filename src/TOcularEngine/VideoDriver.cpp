@@ -27,7 +27,7 @@ VideoDriver::VideoDriver(){
 
 	// Iinitialize GLFW
 	glfwSetErrorCallback(VideoDriver::glwf_error_callback);
-    glfwInit();
+    if(glfwInit()) std::cout <<"GLFW Initiation Problem (Update your graphics card driver!)"<<std::endl;
 }
 
 VideoDriver::~VideoDriver(){
@@ -61,7 +61,7 @@ bool VideoDriver::CreateWindows(std::string window_name, TOEvector2di dimensions
 	glewExperimental = GL_TRUE;
 	GLenum err = glewInit();
 	if(GLEW_OK != err){
-		std::cout<<"Something wrong happen in glewInit"<<std::endl;
+		std::cout<<"Something wrong happened in glewInit (Update your graphic card driver!)"<<std::endl;
 		return false;
 	}
 	
