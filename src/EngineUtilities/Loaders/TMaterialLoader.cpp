@@ -135,7 +135,7 @@ bool TMaterialLoader::LoadMaterial(std::string name, std::string path, TResource
 			}
 			output = true;
 		}else{
-			//std::cout<<"No se ha encontrado el material: "<<name<<std::endl;
+			std::cout<<"No se ha encontrado el material: "<<name<<std::endl;
 		}
 		readFile.close();
 	}
